@@ -1,0 +1,12 @@
+{
+  "site_boundary_coverage": true,
+  "settlement_relationship": true,
+  "site_specific_strategies": true,
+  "disaster_resilience_strategy": true,
+  "protection_board_or_commission_decision": "Decision 2026-42",
+  "unregistered_asset_inventory": true,
+  "historic_building_and_street_decisions": true,
+  "harmful_function_change_screening": true,
+  "overlapping_protection_statuses": true,
+  "competent_authority_opinions": ["Culture authority", "Nature protection authority"]
+}

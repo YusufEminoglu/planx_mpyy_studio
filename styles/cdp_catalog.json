@@ -1,0 +1,2538 @@
+{
+  "total_slds": 72,
+  "entries": [
+    {
+      "sld_name": "CDP_ACIK_YESIL_ALAN.sld",
+      "layer_code": "ACIK_YESIL_ALAN",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "KENTSEL_BOLGESEL_YESIL_SPOR_ALANI",
+          "property_name": "acik_yesil_tip",
+          "property_value": "0",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "ec1b7f56-4515-4bc7-ba7f-8d42484d2fd7.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "MILLET_BAHCESI",
+          "property_name": "acik_yesil_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://Intelli Eplan Extra#0x0041",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "a8449595-b945-40eb-b5da-35fb62d29de0.png"
+        },
+        {
+          "rule_name": "",
+          "title": "FuarPanayirFestival",
+          "property_name": "acik_yesil_tip",
+          "property_value": "2",
+          "well_known_name": "",
+          "fill_color": "#249c22",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "FuarPanayirFestival.svg"
+        },
+        {
+          "rule_name": "",
+          "title": "AGACLANDIRILACAK_ALAN",
+          "property_name": "acik_yesil_tip",
+          "property_value": "3",
+          "well_known_name": "triangle",
+          "fill_color": "#62ba52",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "AgaclandirilacakAlan.svg"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_AFET_HIZMET_ALANI.sld",
+      "layer_code": "AFET_HIZMET_ALANI",
+      "rules": [
+        {
+          "rule_name": "",
+          "title": "AfetLojistikAlani",
+          "property_name": "afet_hizmet_tip",
+          "property_value": "0",
+          "well_known_name": "",
+          "fill_color": "#dddddd",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "AfetLojistikAlani.svg"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_AFET_TEHLIKELI_ALANLAR.sld",
+      "layer_code": "AFET_TEHLIKELI_ALANLAR",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "SEL_TASKIN",
+          "property_name": "afet_tip",
+          "property_value": "3",
+          "well_known_name": "ttf://CDP_10_1#0x0061",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "4eeb06df-2881-4909-9450-b40b0d07f94d.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "JEOLOJIK_SAKINCALI_ALAN",
+          "property_name": "afet_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://CDP_10_1#0x0061",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "72822a84-fd48-4d64-9c9d-506ad61da09d.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "DEPREM",
+          "property_name": "afet_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://CDP_10_1#0x0061",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "3136a5f3-bce3-407b-8c37-f84620ade569.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "CIG",
+          "property_name": "afet_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://CDP_10_1#0x0061",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "28cc89fe-90ae-438f-8858-434900649f58.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ANA_ISTASYON_GAR.sld",
+      "layer_code": "ANA_ISTASYON_GAR",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_ANA_ISTASYON_GAR",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x006d",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ARAZI_KULLANIMI_KORUNACAK_ALAN.sld",
+      "layer_code": "ARAZI_KULLANIMI_KORUNACAK_ALAN",
+      "rules": [
+        {
+          "rule_name": "",
+          "title": "Dogal Ekolojik Korunacak Alan",
+          "property_name": "arazi_koruma_kullanim_tip",
+          "property_value": "0",
+          "well_known_name": "",
+          "fill_color": "#D1FF9B",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "DogalKarakteriKorunacakAlan.svg"
+        },
+        {
+          "rule_name": "",
+          "title": "EkolojikOnemeSahipAlan",
+          "property_name": "arazi_koruma_kullanim_tip",
+          "property_value": "1",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "EkolojikOnemeSahipAlan.svg"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ASKERI_YSK_GUVENLIK_BLG.sld",
+      "layer_code": "ASKERI_YSK_GUVENLIK_BLG",
+      "rules": [
+        {
+          "rule_name": "askeri-yasak-bolge",
+          "title": "ASKERI YASAK BOLGE",
+          "property_name": "askeri_bolge_tip",
+          "property_value": "AskeriYasakBolge",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "f303e6f1-d070-4cd3-9f7c-266d7d9e5d84.png"
+        },
+        {
+          "rule_name": "askeri-yasak-ve-guvenlik-bolgesi",
+          "title": "ASKERI YASAK VE GUVENLIK BOLGESI",
+          "property_name": "askeri_bolge_tip",
+          "property_value": "AskeriYasakVeGuvenlikBolgesi",
+          "well_known_name": "wkt://MULTILINESTRING((-0.5 0,0.2 0),(0.2 -0.15,0.5 0.15),(0.2 0.15,0.5 -0.15),(-0.5 -0.5,-0.5 -0.5),(-0.5 0.5,-0.5 0.5))",
+          "fill_color": "",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1.13",
+          "graphic_fill": "f303e6f1-d070-4cd3-9f7c-266d7d9e5d84.png"
+        },
+        {
+          "rule_name": "guvenlik-bolgesi",
+          "title": "GUVENLIK BOLGESI",
+          "property_name": "askeri_bolge_tip",
+          "property_value": "GuvenlikBolgesi",
+          "well_known_name": "wkt://MULTILINESTRING((-0.5 0,0.2 0),(0.2 -0.15,0.5 0.15),(0.2 0.15,0.5 -0.15),(-0.5 -0.5,-0.5 -0.5),(-0.5 0.5,-0.5 0.5))",
+          "fill_color": "",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1.13",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "eski-kayit-uyumlulugu",
+          "title": "TIP BILGISI OLMAYAN ESKI ASKERI ALAN",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "wkt://MULTILINESTRING((-0.5 0,0.2 0),(0.2 -0.15,0.5 0.15),(0.2 0.15,0.5 -0.15),(-0.5 -0.5,-0.5 -0.5),(-0.5 0.5,-0.5 0.5))",
+          "fill_color": "",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1.13",
+          "graphic_fill": "f303e6f1-d070-4cd3-9f7c-266d7d9e5d84.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ATIKSU_TESIS.sld",
+      "layer_code": "ATIKSU_TESIS",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "ARITMA",
+          "property_name": "atiksu_tur",
+          "property_value": "0",
+          "well_known_name": "ttf://OG_V_1_1#0x0072",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "eea06399-9206-4c93-b769-91263c1386fc.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "TERFI_MERKEZI",
+          "property_name": "atiksu_tur",
+          "property_value": "1",
+          "well_known_name": "ttf://OG_V_1_1#0x0072",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "f32c16a7-d539-4fbf-a0cb-7afe377ea4db.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ATIK_GERI_KAZ_TES_ALANI.sld",
+      "layer_code": "ATIK_GERI_KAZ_TES_ALANI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_ATIK_GERI_KAZ_TES_ALANI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x0054",
+          "fill_color": "#008040",
+          "stroke_color": "#008040",
+          "stroke_width": "1",
+          "graphic_fill": "aa449725-ec46-43da-a32e-5b35c5223a7b.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_BELEDIYE_SINIRI.sld",
+      "layer_code": "BELEDIYE_SINIRI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_BELEDIYE_SINIRI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x0073",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_BOGAZICI_SINIRLARI.sld",
+      "layer_code": "BOGAZICI_SINIRLARI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "BOGAZICI_ETKILENME_BOLGE_SINIRI",
+          "property_name": "bogazici_bolge_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://OG_V_1_1#0x0074",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "BOGAZICI_GERI_GORUNUM_BOLGE_SINIRI",
+          "property_name": "bogazici_bolge_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://OG_V_1_1#0x0075",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "BOGAZICI_ON_GORUNUM_BOLGE_SINIRI",
+          "property_name": "bogazici_bolge_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://OG_V_1_1#0x0076",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_BORU_HATTI.sld",
+      "layer_code": "BORU_HATTI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_BORU_HATTI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x0077",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_BUYUKSEHIR_SINIRI.sld",
+      "layer_code": "BUYUKSEHIR_SINIRI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_BUYUKSEHIR_SINIRI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x0073",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_DEMIRYOLU.sld",
+      "layer_code": "DEMIRYOLU",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "DEMIRYOLU",
+          "property_name": "demir_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://UIP_10_1#0x0058",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "HIZLI_TREN_HATTI",
+          "property_name": "demir_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://UIP_10_3#0x002f",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "rail-500000-100000",
+          "title": "RAYLI_TOPLU_TASIMA_GUZERGAHI - uzak olcek",
+          "property_name": "demir_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://UIP_10_3#0x0061",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "rail-100000-25000",
+          "title": "RAYLI_TOPLU_TASIMA_GUZERGAHI - orta olcek",
+          "property_name": "demir_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://UIP_10_3#0x0061",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "rail-25000-5000",
+          "title": "RAYLI_TOPLU_TASIMA_GUZERGAHI - yakin olcek",
+          "property_name": "demir_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://UIP_10_3#0x0061",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "rail-5000",
+          "title": "RAYLI_TOPLU_TASIMA_GUZERGAHI - cok yakin olcek",
+          "property_name": "demir_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://UIP_10_3#0x0061",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_DENIZ_ULASIM_BAGLANTI.sld",
+      "layer_code": "DENIZ_ULASIM_BAGLANTI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_DENIZ_ULASIM_BAGLANTI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "#000000",
+          "stroke_width": "0.8",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_DIGER_OZEL_SINIR.sld",
+      "layer_code": "DIGER_OZEL_SINIR",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_DIGER_OZEL_SINIR",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://UIP_10_1#0x0049",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_DOGAL_KARAKTER.sld",
+      "layer_code": "DOGAL_KARAKTER",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "MAKILIK_FUNDALIK_CALILIK",
+          "property_name": "dogal_karakter_tip",
+          "property_value": "2",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "205c6e71-b11e-447e-83d9-410ec5e5dc64.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "DOGAL_KARAKTERI_KORUNACAK_ALAN",
+          "property_name": "dogal_karakter_tip",
+          "property_value": "7",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "27b95291-0023-4a2a-bf5a-fcd25c2c7c19.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "AGACLIK",
+          "property_name": "dogal_karakter_tip",
+          "property_value": "0",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "8d1e1762-20f4-486c-87ff-1e47e2cddbac.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "KAYALIK_TASLIK_KUMUL",
+          "property_name": "dogal_karakter_tip",
+          "property_value": "1",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "b09e52fa-f3ae-42f0-a160-21832f86c1d8.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "TUZLA",
+          "property_name": "dogal_karakter_tip",
+          "property_value": "3",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "af261d23-71b6-4ac3-bb08-8e72f0111e05.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "AZMAK",
+          "property_name": "dogal_karakter_tip",
+          "property_value": "4",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "78ee4cac-9653-402f-be91-c87be18ea195.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "JEOLOJIK_OZELLIGI_NEDENIYLE_KORUNACAK_ALAN",
+          "property_name": "dogal_karakter_tip",
+          "property_value": "5",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "76a738c9-9888-4ed0-8683-43d483bcaf1f.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "SAZLIK_BATAKLIK",
+          "property_name": "dogal_karakter_tip",
+          "property_value": "6",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "46962a25-4efc-408c-8bb2-9c295bfeded2.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "PLAJ_KUMSAL",
+          "property_name": "dogal_karakter_tip",
+          "property_value": "8",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "7316794a-c28d-4042-be96-38eae223d009.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_EGITIM_TESIS_ALANI.sld",
+      "layer_code": "EGITIM_TESIS_ALANI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "YUKSEK_OGRETIM_ALANI",
+          "property_name": "egitim_tesis_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://uygulama_imar_03#0x0047",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "05e860d5-bb96-40a5-93b8-309cbc782f6d.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ENERJI_DAGITIM_DEPOLAMA.sld",
+      "layer_code": "ENERJI_DAGITIM_DEPOLAMA",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_ENERJI_DAGITIM_DEPOLAMA",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_3#0x0042",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "be8756c9-6adf-4c14-ad55-6734d14b38bc.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ENERJI_NAKIL_HATTI.sld",
+      "layer_code": "ENERJI_NAKIL_HATTI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_ENERJI_NAKIL_HATTI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x0044",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ENERJI_URETIM.sld",
+      "layer_code": "ENERJI_URETIM",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "ENERJI_URETIM_ALANI",
+          "property_name": "enerji_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://OG_V_1_1#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "758ee52e-e72c-4d1b-846e-85bdc88e3921.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "HIDROELEKTRIK_SANTRAL_ALANI",
+          "property_name": "enerji_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://OG_V_1_1#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "7ebfdf98-ef9d-40ae-bf8f-f7ad63211ed1.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "DIGER_URETIM_ALANI",
+          "property_name": "enerji_tip",
+          "property_value": "9",
+          "well_known_name": "ttf://OG_V_1_1#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "496183b7-6c0c-4cb9-bb2b-68669d17124c.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "SANTRAL_ALANI",
+          "property_name": "enerji_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://OG_V_1_1#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "7cfcf660-db23-4802-ab53-1900d3e6ca77.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "DOGALGAZ_CEVRIM_SANTRALI",
+          "property_name": "enerji_tip",
+          "property_value": "3",
+          "well_known_name": "ttf://OG_V_1_1#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "d15a43df-9bab-4d5a-a543-b2c5e610c867.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "FOSIL_YAKIT_CIKARIM_ALANI",
+          "property_name": "enerji_tip",
+          "property_value": "4",
+          "well_known_name": "ttf://OG_V_1_1#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "fbf911a1-85f3-4e7e-9cef-7fa81da8fd87.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "TERMIK_SANTRAL",
+          "property_name": "enerji_tip",
+          "property_value": "5",
+          "well_known_name": "ttf://OG_V_1_1#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "14c2add9-4a53-4678-b6f4-28ad04af6956.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "RUZGAR_ENERJISI_SANTRALI",
+          "property_name": "enerji_tip",
+          "property_value": "6",
+          "well_known_name": "ttf://OG_V_1_1#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "bfc9b953-aec9-4d63-a954-cfda3a7c6605.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "JEOTERMAL_TESIS_ALANI",
+          "property_name": "enerji_tip",
+          "property_value": "7",
+          "well_known_name": "ttf://OG_V_1_1#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "488fced4-185d-4c4a-b7e6-e548be01f8f8.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "NUKLEER_ENERJI_SANTRALI",
+          "property_name": "enerji_tip",
+          "property_value": "8",
+          "well_known_name": "ttf://OG_V_1_1#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "853d13fd-8372-44af-9c00-ac30c7c1aabf.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ETAPLAMA_SINIRI.sld",
+      "layer_code": "ETAPLAMA_SINIRI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_ETAPLAMA_SINIRI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x0047",
+          "fill_color": "#005CE6",
+          "stroke_color": "#005CE6",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_HAVAALANI_HAVALIMANI.sld",
+      "layer_code": "HAVAALANI_HAVALIMANI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_HAVAALANI_HAVALIMANI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x0048",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "bc867c71-e822-4cfa-befb-4e5f261c000a.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ICMESU_ANA_HAT.sld",
+      "layer_code": "ICMESU_ANA_HAT",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_ICMESU_ANA_HAT",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x004a",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ICMESU_TESIS.sld",
+      "layer_code": "ICMESU_TESIS",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_ICMESU_TESIS",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x004b",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "b4e7236f-edfe-4224-bd79-a689978fc191.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ICME_KULLANMA_SU_KORUMA.sld",
+      "layer_code": "ICME_KULLANMA_SU_KORUMA",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "MUTLAK_KORUMA_ALANI",
+          "property_name": "koruma_derecesi",
+          "property_value": "0",
+          "well_known_name": "ttf://OG_V_1_1#0x004d",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "KISA_MESAFELI_KORUMA_ALANI",
+          "property_name": "koruma_derecesi",
+          "property_value": "1",
+          "well_known_name": "ttf://OG_V_1_1#0x004c",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "ORTA_MESAFELI_KORUMA_ALANI",
+          "property_name": "koruma_derecesi",
+          "property_value": "2",
+          "well_known_name": "ttf://OG_V_1_1#0x004e",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "UZUN_MESAFELI_KORUMA_ALANI",
+          "property_name": "koruma_derecesi",
+          "property_value": "3",
+          "well_known_name": "ttf://OG_V_1_1#0x004f",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_IDARI_MERKEZ.sld",
+      "layer_code": "IDARI_MERKEZ",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "KOY",
+          "property_name": "idari_merkez_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://Intelli Eplan#0x0051",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "IL",
+          "property_name": "idari_merkez_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://Intelli Eplan#0x0051",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "ILCE",
+          "property_name": "idari_merkez_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://Intelli Eplan#0x0051",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "BELDE",
+          "property_name": "idari_merkez_tip",
+          "property_value": "3",
+          "well_known_name": "ttf://Intelli Eplan#0x0051",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ILCE_SINIRI.sld",
+      "layer_code": "ILCE_SINIRI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_ILCE_SINIRI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x0052",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_IL_SINIRI.sld",
+      "layer_code": "IL_SINIRI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_IL_SINIRI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x0050",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_KATI_ATIK_TESIS.sld",
+      "layer_code": "KATI_ATIK_TESIS",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "BERTARAF",
+          "property_name": "kati_atik_tur",
+          "property_value": "1",
+          "well_known_name": "ttf://OG_V_1_1#0x0054",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "b5abcf85-5e56-417a-80e3-30d14a044f42.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "DEPOLAMA",
+          "property_name": "kati_atik_tur",
+          "property_value": "4",
+          "well_known_name": "ttf://OG_V_1_1#0x0054",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "dca1f995-cea7-4555-8c04-1f09a7317270.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "BOSALTMA",
+          "property_name": "kati_atik_tur",
+          "property_value": "0",
+          "well_known_name": "ttf://OG_V_1_1#0x0054",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "31f7b5f4-0c27-41bb-82d4-c9cd96aa4fc2.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "ISLEME",
+          "property_name": "kati_atik_tur",
+          "property_value": "2",
+          "well_known_name": "ttf://OG_V_1_1#0x0054",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "11e3a089-e43d-47ec-ba35-85ad678e5ebe.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "TRANSFER",
+          "property_name": "kati_atik_tur",
+          "property_value": "3",
+          "well_known_name": "ttf://OG_V_1_1#0x0054",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "ebe4632e-9b2f-4104-b5f8-455eabb49cb5.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "VAHSI_COP_DEPOLAMA_ALANI",
+          "property_name": "kati_atik_tur",
+          "property_value": "5",
+          "well_known_name": "circle",
+          "fill_color": "#000000",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "VahsiCopVeRehabilitasyonMerkezi.svg"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_KENTSEL_CALISMA.sld",
+      "layer_code": "KENTSEL_CALISMA",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "KENTSEL_SERVIS_ALANI",
+          "property_name": "calisma_tip",
+          "property_value": "0",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "eb2f7fcf-c4cf-4706-9599-ae7e2578d971.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "LOJISTIK_BOLGE",
+          "property_name": "calisma_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://CDP_10_1#0x0070",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "eab7a753-360b-443c-8e12-28fde20f51a4.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "MERKEZI_IS_ALANI",
+          "property_name": "calisma_tip",
+          "property_value": "3",
+          "well_known_name": "ttf://CDP_10_1#0x0073",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "e22a60cf-e865-41e3-a32d-af6f76eb6ffe.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "SANAYI_VE_DEPOLAMA_BOLGESI",
+          "property_name": "calisma_tip",
+          "property_value": "4",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "3f1ba53c-7b8e-4751-895c-7cd28dcbca3f.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "ENDUSTRI_BOLGESI",
+          "property_name": "calisma_tip",
+          "property_value": "5",
+          "well_known_name": "ttf://OG_V_1_1#0x0042",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "0.3",
+          "graphic_fill": "aad1ad9e-2e93-416f-b44e-7fddee2e6c92.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "SERBEST_BOLGE",
+          "property_name": "calisma_tip",
+          "property_value": "6",
+          "well_known_name": "ttf://OG_V_1_2#0x0072",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "0.3",
+          "graphic_fill": "9074edb5-e8cd-44ee-b9e6-f5968b8bfa35.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "OSB",
+          "property_name": "calisma_tip",
+          "property_value": "7",
+          "well_known_name": "ttf://OG_V_1_2#0x006b",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "0.3",
+          "graphic_fill": "f3855233-a2b9-4c7e-83b9-d5ed1f34110d.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "TEKNOLOJI_GELISTIRME_BOLGESI",
+          "property_name": "calisma_tip",
+          "property_value": "8",
+          "well_known_name": "ttf://OG_V_1_2#0x0047",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "0.3",
+          "graphic_fill": "7ebcba86-2711-46f2-8926-0c74645bb7d0.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "TALI_MERKEZ",
+          "property_name": "calisma_tip",
+          "property_value": "9",
+          "well_known_name": "ttf://CDP_10_1#0x0076",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "bfeb54cd-32b0-457c-b67d-e7322ee6a9b1.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "ENDUSTRIYEL_GELISME_BOLGESI",
+          "property_name": "calisma_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://UIP_10_1#0x004e",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "0.3",
+          "graphic_fill": "96728b7d-a966-4a37-a232-f46a36b65f61.png"
+        },
+        {
+          "rule_name": "",
+          "title": "Depolama AlanÄ±",
+          "property_name": "calisma_tip",
+          "property_value": "10",
+          "well_known_name": "wkt://MULTILINESTRING((0.05 1.05,1.05 0.05),(-0.05 0.95,0.95 -0.05),(0.05 -0.05,1.05 0.95),(-0.05 0.05,0.95 1.05))",
+          "fill_color": "#c29ed7",
+          "stroke_color": "#000000",
+          "stroke_width": "0.8",
+          "graphic_fill": "DepolamaAlani.svg"
+        },
+        {
+          "rule_name": "",
+          "title": "KamuHizmetAlani",
+          "property_name": "calisma_tip",
+          "property_value": "11",
+          "well_known_name": "circle",
+          "fill_color": "#000000",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "KamuHizmetAlani.svg"
+        },
+        {
+          "rule_name": "",
+          "title": "TUZLA_ALANI",
+          "property_name": "calisma_tip",
+          "property_value": "12",
+          "well_known_name": "circle",
+          "fill_color": "#000000",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_KENTSEL_GELISME_KONUT.sld",
+      "layer_code": "KENTSEL_GELISME_KONUT",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_KENTSEL_GELISME_KONUT",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "d8d3833d-c10b-492d-93d9-aca5413efeb5.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_KENTSEL_YERLESIK.sld",
+      "layer_code": "KENTSEL_YERLESIK",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_KENTSEL_YERLESIK",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "2ae2cfd3-17e6-4127-95d7-0e70910df87a.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_KIRSAL_YERLESIK_KONUT.sld",
+      "layer_code": "KIRSAL_YERLESIK_KONUT",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "",
+          "property_name": "symbolizer",
+          "property_value": "",
+          "well_known_name": "ttf://CDP_10_1#0x0071",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "",
+          "property_name": "symbolizer",
+          "property_value": "",
+          "well_known_name": "ttf://CDP_10_1#0x0071",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_KIYI_YAPILARI.sld",
+      "layer_code": "KIYI_YAPILARI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "KIYI_TESIS_ALANI",
+          "property_name": "kiyi_yapi_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://CDP_10_1#0x0041",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "TERSANE_ALANI",
+          "property_name": "kiyi_yapi_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://OG_V_1_2#0x004d",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "f812a6aa-10c5-4e4c-9583-6b50465844b6.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_MANIA_PLANI.sld",
+      "layer_code": "MANIA_PLANI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_MANIA_PLANI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "wkt://MULTILINESTRING((0.00 1.09,1.00 1.09),(0.00 -0.09,1.00 -0.09))",
+          "fill_color": "",
+          "stroke_color": "#000000",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_MANIA_SINIRI.sld",
+      "layer_code": "MANIA_SINIRI",
+      "rules": [
+        {
+          "rule_name": "",
+          "title": "MANIA SINIRI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "#000000",
+          "stroke_width": "1.5",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_MERA.sld",
+      "layer_code": "MERA",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "IYI",
+          "property_name": "mera_sinif",
+          "property_value": "1",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "cef9eceb-b22c-45ab-81dd-acec7c7248f2.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "COK_IYI",
+          "property_name": "mera_sinif",
+          "property_value": "0",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "9dc3637e-a201-4d69-9da3-b6441f3d02e3.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "ORTA",
+          "property_name": "mera_sinif",
+          "property_value": "2",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "e4a4dfe8-08e0-45d5-a455-30a4076af4cb.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "KOTU",
+          "property_name": "mera_sinif",
+          "property_value": "3",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "304664ae-2c85-44b1-a040-80088ca53fe5.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_MILLI_PARK.sld",
+      "layer_code": "MILLI_PARK",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "TABIAT_PARKI_ALANI",
+          "property_name": "milli_park_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://OG_V_1_2#0x007a",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "TABIATI_KORUMA_ALANI",
+          "property_name": "milli_park_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://OG_V_1_2#0x0042",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "MILLI_PARK",
+          "property_name": "milli_park_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://OG_V_1_1#0x0031",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "YABAN_HAYATI_KORUMA_GELISTIRME_ALANI",
+          "property_name": "milli_park_tip",
+          "property_value": "3",
+          "well_known_name": "ttf://OG_V_1_2#0x0052",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_MUCAVIR_ALAN_SINIRI.sld",
+      "layer_code": "MUCAVIR_ALAN_SINIRI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_MUCAVIR_ALAN_SINIRI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x0033",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_OCK_BOLGE.sld",
+      "layer_code": "OCK_BOLGE",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_OCK_BOLGE",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_2#0x006e",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_OCK_HASSAS_ALAN.sld",
+      "layer_code": "OCK_HASSAS_ALAN",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "OCK_BOLGESI_HASSAS_ALAN_A",
+          "property_name": "hassaslik_derecesi",
+          "property_value": "0",
+          "well_known_name": "ttf://MCDP_10_1#0x004f",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": "17d954a1-50d9-4381-874a-ea241da8ac9e.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "OCK_BOLGESI_HASSAS_ALAN_B",
+          "property_name": "hassaslik_derecesi",
+          "property_value": "1",
+          "well_known_name": "ttf://MUIP_10_1#0x0068",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": "39ac86f2-612f-477f-9780-e9f3bb56a562.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "OCK_BOLGESI_HASSAS_ALAN_C",
+          "property_name": "hassaslik_derecesi",
+          "property_value": "2",
+          "well_known_name": "ttf://OG_V_1_2#0x0066",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": "531c9dee-f082-4a57-9801-3556808786ac.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ORMAN.sld",
+      "layer_code": "ORMAN",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_ORMAN",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "bc35c3f0-1509-4ac3-8e6c-7f6b5a6f2f03.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_OZEL_EKOSISTEM.sld",
+      "layer_code": "OZEL_EKOSISTEM",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "EKOLOJIK_KORUMA",
+          "property_name": "ekosistem_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://OG_V_1_1#0x0041",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": "62ca316c-2296-4d68-8801-14b722f42e1f.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "FLORA_FAUNA",
+          "property_name": "ekosistem_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://OG_V_1_1#0x0058",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": "2890892b-86a9-4cb0-aada-4efe57711e94.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "AKDENIZ_FOKU",
+          "property_name": "ekosistem_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://OG_V_1_1#0x006b",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "bb672a44-4192-4959-928d-e916055e0e92.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "DENIZ_KAPLUMBAGASI",
+          "property_name": "ekosistem_tip",
+          "property_value": "3",
+          "well_known_name": "ttf://OG_V_1_1#0x0078",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "92b9fd38-16bf-451d-8483-b44c5a0e3dda.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_OZEL_KANUNLARLA_BELIRLENEN_ALAN.sld",
+      "layer_code": "OZEL_KANUNLARLA_BELIRLENEN_ALAN",
+      "rules": [
+        {
+          "rule_name": "",
+          "title": "SinirKapisi",
+          "property_name": "ozel_kanun_alan_tip",
+          "property_value": "0",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "SinirKapisi.svg"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_OZEL_PROJE_ALANI_SINIRI.sld",
+      "layer_code": "OZEL_PROJE_ALANI_SINIRI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_OZEL_PROJE_ALANI_SINIRI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_1#0x0062",
+          "fill_color": "#005CE6",
+          "stroke_color": "#005CE6",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_PLANLAMA_ALT_BOLGE.sld",
+      "layer_code": "PLANLAMA_ALT_BOLGE",
+      "rules": [
+        {
+          "rule_name": "",
+          "title": "PLANLAMA ALT BÖLGE",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "circle",
+          "fill_color": "#ff0000",
+          "stroke_color": "#ff0000",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_PLAN_DEGISIKLIK_SINIRI.sld",
+      "layer_code": "PLAN_DEGISIKLIK_SINIRI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_PLAN_DEGISIKLIK_SINIRI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_2#0x006f",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "0.6",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_PLAN_SINIRI.sld",
+      "layer_code": "PLAN_SINIRI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "PLAN",
+          "property_name": "nitelik_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://UIP_10_3#0x0074",
+          "fill_color": "#005CE6",
+          "stroke_color": "#005CE6",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "REVIZYON",
+          "property_name": "nitelik_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://UIP_10_3#0x0074",
+          "fill_color": "#005CE6",
+          "stroke_color": "#005CE6",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "ILAVE",
+          "property_name": "nitelik_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://UIP_10_3#0x0074",
+          "fill_color": "#005CE6",
+          "stroke_color": "#005CE6",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "ILAVE_REVIZYON",
+          "property_name": "nitelik_tip",
+          "property_value": "3",
+          "well_known_name": "ttf://UIP_10_3#0x0074",
+          "fill_color": "#005CE6",
+          "stroke_color": "#005CE6",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_SIT_ALANLARI.sld",
+      "layer_code": "SIT_ALANLARI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "1_DERECE_ARKEOLOJIK_SIT",
+          "property_name": "sit_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://OG_V_1_1#0x0061",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.1",
+          "graphic_fill": "43405ab7-8a04-4f91-86ce-b95fdaedff1a.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "2_DERECE_ARKEOLOJIK_SIT",
+          "property_name": "sit_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://OG_V_1_1#0x0064",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": "b95def2c-93df-47dd-975a-f817898a0f1d.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "3_DERECE_ARKEOLOJIK_SIT",
+          "property_name": "sit_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://OG_V_1_1#0x0067",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": "ac0a88b7-d552-4237-b845-eb30f50e58fd.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "KESIN_KORUNACAK_HASSAS_ALAN",
+          "property_name": "sit_tip",
+          "property_value": "3",
+          "well_known_name": "ttf://OG_V_1_1#0x0057",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": "a69ffc14-43b1-499f-9f36-bf4807ca6b15.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "NITELIKLI_DOGAL_KORUMA_ALANI",
+          "property_name": "sit_tip",
+          "property_value": "4",
+          "well_known_name": "ttf://OG_V_1_2#0x0061",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": "e7282cc2-17ec-4884-9ecf-78002d89fc1f.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "SURDURULEBILIR_KORUMA_KONTROLLU_KULLANIM_ALANI",
+          "property_name": "sit_tip",
+          "property_value": "5",
+          "well_known_name": "ttf://OG_V_1_2#0x0077",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": "235c4402-9686-4ddd-a177-8d6e4d85a611.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "KENTSEL_SIT",
+          "property_name": "sit_tip",
+          "property_value": "6",
+          "well_known_name": "ttf://OG_V_1_1#0x0055",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": "af029dc3-0049-482a-8ae4-1a44b6b543f5.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "TARIHI_SIT",
+          "property_name": "sit_tip",
+          "property_value": "7",
+          "well_known_name": "ttf://OG_V_1_2#0x0044",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": "d527ac06-420c-4712-b104-e6078c1b04d3.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "1_DERECE_DOGAL_SIT",
+          "property_name": "sit_tip",
+          "property_value": "8",
+          "well_known_name": "ttf://UIP_10_1#0x0061",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": "8572ee45-9fc9-4315-bc8a-c79cf04823ce.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "2_DERECE_DOGAL_SIT",
+          "property_name": "sit_tip",
+          "property_value": "9",
+          "well_known_name": "ttf://UIP_10_1#0x0030",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": "492270cf-1769-4438-978c-45b7f40b78d5.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "3_DERECE_DOGAL_SIT",
+          "property_name": "sit_tip",
+          "property_value": "10",
+          "well_known_name": "ttf://UIP_10_1#0x0066",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": "56201bdc-923e-4eb7-a11e-3acfcb0184f6.png"
+        },
+        {
+          "rule_name": "",
+          "title": "KENTSEL_ARKEOLOJIK_SIT",
+          "property_name": "sit_tip",
+          "property_value": "11",
+          "well_known_name": "wkt://MULTILINESTRING((0.00 1.09,1.00 1.09),(0.00 -0.09,1.00 -0.09))",
+          "fill_color": "#ff0000",
+          "stroke_color": "#ff0000",
+          "stroke_width": "1",
+          "graphic_fill": "KentselArkeolojikSitAlani.svg"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_SOSYAL_KULTUREL_ALAN.sld",
+      "layer_code": "SOSYAL_KULTUREL_ALAN",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "UNIVERSITE_ALANI",
+          "property_name": "sosyal_kulturel_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://uygulama_imar_07_3#0x0044",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "9c492a6f-7f5a-41c9-8fde-4b87ee33ac78.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "KENTSEL_BOLGESEL_SOSYAL_ALTYAPI_ALANI",
+          "property_name": "sosyal_kulturel_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://CDP_10_1#0x006d",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "c819b70c-84d4-4f50-aa3a-a69108bea1aa.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "MESIRE_ALANI",
+          "property_name": "sosyal_kulturel_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://UIP_10_2#0x004e",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "421694ff-e928-4020-8cbe-5cccbbda635b.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_SOZLESME_KORUMA.sld",
+      "layer_code": "SOZLESME_KORUMA",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_SOZLESME_KORUMA",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_2#0x0050",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_STRATEJIK_ALT_BOLGE.sld",
+      "layer_code": "STRATEJIK_ALT_BOLGE",
+      "rules": [
+        {
+          "rule_name": "",
+          "title": "STRATEJİK ALT BÖLGE",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "circle",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_STRATEJIK_KARAR.sld",
+      "layer_code": "STRATEJIK_KARAR",
+      "rules": [
+        {
+          "rule_name": "",
+          "title": "STRATEJİK KARAR",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "StratejikKarar.svg"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_SULAK_ALAN.sld",
+      "layer_code": "SULAK_ALAN",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "SULAK_ALAN_BOLGESI",
+          "property_name": "sulak_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://OG_V_1_2#0x0079",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "SULAK_ALAN_TAMPON_BOLGESI",
+          "property_name": "sulak_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://OG_V_1_2#0x0078",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "SULAK_ALAN_EKOLOJIK_ETKILENME_BOLGESI",
+          "property_name": "sulak_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://OG_V_1_2#0x0075",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "SULAK_ALAN_MUTLAK_KORUMA_BOLGESI",
+          "property_name": "sulak_tip",
+          "property_value": "3",
+          "well_known_name": "ttf://OG_V_1_2#0x0076",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "SULAK_ALAN_OZEL_HUKUM_BOLGESI",
+          "property_name": "sulak_tip",
+          "property_value": "4",
+          "well_known_name": "ttf://OG_V_1_2#0x0076",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "SULAK_ALAN_SINIRI",
+          "property_name": "sulak_tip",
+          "property_value": "5",
+          "well_known_name": "ttf://OG_V_1_2#0x0079",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_SU_KAPTAJ.sld",
+      "layer_code": "SU_KAPTAJ",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_SU_KAPTAJ",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_2#0x0074",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "71252d9d-7ae4-4859-b436-47ae188d92cf.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_SU_ULASIM_BAGLANTISI.sld",
+      "layer_code": "SU_ULASIM_BAGLANTISI",
+      "rules": [
+        {
+          "rule_name": "water-link-500000-100000",
+          "title": "CDP_SU_ULASIM_BAGLANTISI - uzak olcek",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "#004da8",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "water-link-100000-25000",
+          "title": "CDP_SU_ULASIM_BAGLANTISI - orta olcek",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "#004da8",
+          "stroke_width": "1.6",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "water-link-25000-5000",
+          "title": "CDP_SU_ULASIM_BAGLANTISI - yakin olcek",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "#004da8",
+          "stroke_width": "2.4",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "water-link-5000",
+          "title": "CDP_SU_ULASIM_BAGLANTISI - cok yakin olcek",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "#004da8",
+          "stroke_width": "3.4",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_SU_YUZEYI.sld",
+      "layer_code": "SU_YUZEYI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "GOL",
+          "property_name": "su_yuzeyi_tip",
+          "property_value": "0",
+          "well_known_name": "",
+          "fill_color": "#73E9EB",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "GOLET",
+          "property_name": "su_yuzeyi_tip",
+          "property_value": "1",
+          "well_known_name": "",
+          "fill_color": "#73DFEB",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "DENIZ",
+          "property_name": "su_yuzeyi_tip",
+          "property_value": "3",
+          "well_known_name": "",
+          "fill_color": "#73DFEB",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "BARAJ",
+          "property_name": "su_yuzeyi_tip",
+          "property_value": "2",
+          "well_known_name": "",
+          "fill_color": "#73E9EB",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_SU_YUZEYI_CIZGI.sld",
+      "layer_code": "SU_YUZEYI_CIZGI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "AKARSU_NEHIR_DERE",
+          "property_name": "su_yuzeyi_cizgi_tip",
+          "property_value": "2",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "#73DFEB",
+          "stroke_width": "2.8344672",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "KANAL_KANALET",
+          "property_name": "su_yuzeyi_cizgi_tip",
+          "property_value": "0",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "#73DFEB",
+          "stroke_width": "2.8344672",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "SULAMA_KANALI",
+          "property_name": "su_yuzeyi_cizgi_tip",
+          "property_value": "1",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "#73DFEB",
+          "stroke_width": "2.8344672",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_TARIM.sld",
+      "layer_code": "TARIM",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "ZEYTINLIK",
+          "property_name": "tarim_tip",
+          "property_value": "0",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "19c10aae-1037-4c7f-abc8-2a8aba70964e.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "SULAMA_ALANI",
+          "property_name": "tarim_tip",
+          "property_value": "1",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "a280d285-27ac-4b22-bc83-5fa7959efd57.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "ORGANIZE_TARIM_VE_HAYVANCILIK_ALANI",
+          "property_name": "tarim_tip",
+          "property_value": "2",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "cadb5afd-2d0b-4d35-b18a-bfbfb5aa57e8.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "TARIM_ALANI",
+          "property_name": "tarim_tip",
+          "property_value": "3",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "6397ec17-e1e3-4574-9a8f-2f5597ce3741.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_TEHLIKELI_TESIS.sld",
+      "layer_code": "TEHLIKELI_TESIS",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "BERTARAF",
+          "property_name": "tehlike_tur",
+          "property_value": "0",
+          "well_known_name": "ttf://OG_V_1_2#0x0045",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "548053eb-9d16-4e88-9d7b-7062426f88b6.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "DEPOLAMA",
+          "property_name": "tehlike_tur",
+          "property_value": "1",
+          "well_known_name": "ttf://OG_V_1_2#0x0045",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "fabf53ab-3979-4c09-9e6c-441aecebf170.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_TEKNIK_ALTYAPI.sld",
+      "layer_code": "TEKNIK_ALTYAPI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "KANALIZASYON",
+          "property_name": "altyapi_tur",
+          "property_value": "4",
+          "well_known_name": "ttf://OG_V_1_2#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "58a1a3f1-6c3f-4ef5-9f8e-998a8dd4d8d6.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "ENERJI",
+          "property_name": "altyapi_tur",
+          "property_value": "0",
+          "well_known_name": "ttf://OG_V_1_2#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "8434b673-c622-4caf-8375-5f50ad3864ba.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "ICMESUYU",
+          "property_name": "altyapi_tur",
+          "property_value": "1",
+          "well_known_name": "ttf://OG_V_1_2#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "671c828b-33e6-40f8-b549-037ec101141c.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "ATIKSU",
+          "property_name": "altyapi_tur",
+          "property_value": "2",
+          "well_known_name": "ttf://OG_V_1_2#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "c489734e-8727-42f7-9144-5ee3480015df.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "KATI_ATIK",
+          "property_name": "altyapi_tur",
+          "property_value": "3",
+          "well_known_name": "ttf://OG_V_1_2#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "e58b51c4-103b-4e83-aa44-66c8bea20978.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "ULASTIRMA",
+          "property_name": "altyapi_tur",
+          "property_value": "5",
+          "well_known_name": "ttf://OG_V_1_2#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "2e394a18-5c4f-4970-8580-5d3be7dbd24a.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "HABERLESME",
+          "property_name": "altyapi_tur",
+          "property_value": "6",
+          "well_known_name": "ttf://OG_V_1_2#0x0046",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "79df3b5a-935f-40f6-aced-5b04325b4770.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_TERCIHLI_KULLANIM_BOLGESI.sld",
+      "layer_code": "TERCIHLI_KULLANIM_BOLGESI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "",
+          "property_name": "symbolizer",
+          "property_value": "",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "34b60fd8-9ef6-44ba-9f22-5253995e5c20.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_TERMINAL_OTOGAR.sld",
+      "layer_code": "TERMINAL_OTOGAR",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_TERMINAL_OTOGAR",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_2#0x004b",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": "1a8f3603-e2f6-4005-9b39-bbf10a40af50.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_TM_KTKGB_ALANLARI.sld",
+      "layer_code": "TM_KTKGB_ALANLARI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_TM_KTKGB_ALANLARI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_2#0x004e",
+          "fill_color": "#005CE6",
+          "stroke_color": "#005CE6",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_TURIZM_ALANI.sld",
+      "layer_code": "TURIZM_ALANI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "TURIZM_BOLGESI",
+          "property_name": "turizm_tip",
+          "property_value": "2",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "0ac90c42-7dca-40b9-8899-26468338c34b.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "GUNUBIRLIK_TURIZM",
+          "property_name": "turizm_tip",
+          "property_value": "3",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "a8dda4b0-34c9-416c-9dd8-c175c1c127c4.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "YAYLA_TURIZMI",
+          "property_name": "turizm_tip",
+          "property_value": "6",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "8939c6f0-8534-4abe-a1f4-4b87926eb352.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "KIS_TURIZMI",
+          "property_name": "turizm_tip",
+          "property_value": "0",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "0059bd4f-a7e1-48ae-97b6-8ae40fd67ba5.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "GOLF_TURIZMI",
+          "property_name": "turizm_tip",
+          "property_value": "1",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "47360f2c-a6fd-44fd-a960-eb05f2363453.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "EKOTURIZM",
+          "property_name": "turizm_tip",
+          "property_value": "4",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "dd9b592b-c1cd-43c1-8464-68440161ff9f.png"
+        },
+        {
+          "rule_name": "0",
+          "title": "SAGLIK_TURIZMI",
+          "property_name": "turizm_tip",
+          "property_value": "5",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "fe8f13b3-9b38-4267-861b-73a1b8b20725.png"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_TURIZM_NOKTASI.sld",
+      "layer_code": "TURIZM_NOKTASI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_TURIZM_NOKTASI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "",
+          "fill_color": "#8F779C",
+          "stroke_color": "#904464",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_ULKE_SINIRI.sld",
+      "layer_code": "ULKE_SINIRI",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_ULKE_SINIRI",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://OG_V_1_2#0x004f",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "0.8",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_YAPAY_ADA.sld",
+      "layer_code": "YAPAY_ADA",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_YAPAY_ADA",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://Intelli Eplan#0x0048",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_YENILENEBILIR_ENERJI_KAYNAGINA_DAYALI_URETIM_TESIS_ALANI.sld",
+      "layer_code": "YENILENEBILIR_ENERJI_KAYNAGINA_DAYALI_URETIM_TESIS_ALANI",
+      "rules": [
+        {
+          "rule_name": "",
+          "title": "YED CDP",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": "YenilenebilirEnerjiKaynaklarinaDayaliEnerjiUretimTesisAlani.svg"
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_YERALTI_SU_KAYNAK_KORUMA.sld",
+      "layer_code": "YERALTI_SU_KAYNAK_KORUMA",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "CDP_YERALTI_SU_KAYNAK_KORUMA",
+          "property_name": "",
+          "property_value": "",
+          "well_known_name": "ttf://UIP_10_3#0x0034",
+          "fill_color": "#FF0000",
+          "stroke_color": "#FF0000",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_YERLESIM_ALANI.sld",
+      "layer_code": "YERLESIM_ALANI",
+      "rules": [
+        {
+          "rule_name": "",
+          "title": "BAGLIK BAHCELIK",
+          "property_name": "yerlesim_tip",
+          "property_value": "0",
+          "well_known_name": "shape://horline",
+          "fill_color": "#c8eb00",
+          "stroke_color": "",
+          "stroke_width": "0.3",
+          "graphic_fill": ""
+        }
+      ]
+    },
+    {
+      "sld_name": "CDP_YOLORTA.sld",
+      "layer_code": "YOLORTA",
+      "rules": [
+        {
+          "rule_name": "0",
+          "title": "ERISME_KONTROLLU_KARAYOLU_OTOYOL",
+          "property_name": "yol_tip",
+          "property_value": "0",
+          "well_known_name": "ttf://Intelli Eplan#0x0055",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "0",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "1_DERECE_YOL",
+          "property_name": "yol_tip",
+          "property_value": "1",
+          "well_known_name": "ttf://Intelli Eplan#0x0053",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "0",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "2_DERECE_YOL",
+          "property_name": "yol_tip",
+          "property_value": "2",
+          "well_known_name": "ttf://Intelli Eplan#0x0053",
+          "fill_color": "#000000",
+          "stroke_color": "#000000",
+          "stroke_width": "0",
+          "graphic_fill": ""
+        },
+        {
+          "rule_name": "0",
+          "title": "3_DERECE_YOL",
+          "property_name": "yol_tip",
+          "property_value": "3",
+          "well_known_name": "",
+          "fill_color": "",
+          "stroke_color": "#000000",
+          "stroke_width": "1",
+          "graphic_fill": ""
+        }
+      ]
+    }
+  ]
+}

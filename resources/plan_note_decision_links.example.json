@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "plan_level": "UIP",
+  "decision_codes": [
+    "KONUT",
+    "PARK"
+  ],
+  "require_every_decision_linked": true,
+  "notes": [
+    {
+      "note_id": "N1",
+      "text": "Housing implementation conditions.",
+      "decision_codes": [
+        "KONUT"
+      ]
+    },
+    {
+      "note_id": "N2",
+      "text": "Park implementation conditions.",
+      "decision_codes": [
+        "PARK"
+      ]
+    }
+  ]
+}

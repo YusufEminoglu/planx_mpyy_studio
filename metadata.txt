@@ -1,0 +1,17 @@
+[general]
+name=PlanX MPYY Studio
+qgisMinimumVersion=3.44
+qgisMaximumVersion=4.99
+description=Plan çalışma alanları, PlanGML stilleri, plan denetimleri ve dosya araçları.
+version=2.5.3
+author=Yusuf Eminoğlu
+email=yusuf.eminoglu@deu.edu.tr
+about=Turkish MPYY and PlanGML compliant urban spatial planning suite: portable GeoPackage workspaces, code-mapped native symbology, analytical zoning tools, and official validation workflows. Online User Manual & Documentation: https://geophilo.com/planx_mpyy_studio/
+category=Vector
+tags=planx,planning,uip,nip,cdp,plangml,tucbs,symbology
+icon=icons/icon.png
+experimental=True
+deprecated=False
+hasProcessingProvider=yes
+license=GPL-2.0-or-later
+changelog=2.5.2 - Arayüz, işlem yardımı, parametreler, seçenekler, bildirimler, formlar, lejantlar, harita bilgi kartları ve rapor metinleri Türkçeleştirildi. Mevzuat kodları, alan kimlikleri ve kaynak kataloglar korundu. Dil denetimleri Türkçeye göre güncellendi.

@@ -1,0 +1,92 @@
+{
+ "version": 1,
+ "note": "Anlamsal eşleşme kararları. tools/compile_plangml_eplan_styles.py tarafından uygulanır; her karar gerekçesiyle son kontrole sunulur.",
+ "title_over_index": {
+  "karar": "uygula",
+  "gerekce": "Kural başlığı nesnenin adını taşır; sıra numarası Bakanlık SLD'lerinde bazı kod listelerinde kaymıştır (UİP OzelEkosistem, TopluTasimaHatti; ÇDP EnerjiUretim, KentselCalisma). Başlık, kodla birebir aynı anlamı veren tek bilgidir."
+ },
+ "abbreviated_style_names": {
+  "karar": "uygula",
+  "gerekce": "Bakanlık uzun stil adlarını kısaltmıştır (UIP_IMAR_HAK_AKTARIM_SINIR). Kelime sayısı aynı ve her kelime tipin kelimesinin başıdır; aynı kademede başka aday yoktur."
+ },
+ "unresolved_rules": {
+  "karar": "atla",
+  "gerekce": "Bu kuralların gösterdiği kod (ilgili kod) ilgili kademenin PlanGML 1.1.7 kod listesinde yoktur; bu değeri taşıyan PlanGML nesnesi üretilemeyeceği için çizilecek nesne de yoktur."
+ },
+ "literal_rules": [
+  {
+   "level": "NIP",
+   "type": "GelismeKonut",
+   "sld_property": "gelisme_konut_alani_yogunluk",
+   "literal": "-222",
+   "action": "is_null",
+   "gerekce": "-222 bir kod değil, yoğunluk kademesi girilmemiş gelişme konut alanı için yer tutucudur; alan boş olduğunda uygulanır."
+  }
+ ],
+ "style_aliases": {
+  "NIP": {
+   "StatusuOzelKanunlarlaBelirlenenAlanlar": {
+    "style": "NIP_STATU_OZEL_KANUN_ALAN",
+    "gerekce": "Stil adı 'Statü Özel Kanun Alan' kısaltmasıdır; filtresiz tek sembol, aynı kademe."
+   },
+   "AraziKullanimiDevamEttirilerekKorunacakAlanlar": {
+    "style": "NIP_ARAZI_KULLANIMI_KORUNACAK_ALAN",
+    "gerekce": "Bakanlık setinde stil adı 'ARAZI_KULLANIMI_KORUNACAK_ALAN'dır; filtre alanı arazi_koruma_kullanim_tip bu tipin AraziKorumaKullanimTip alanıdır (PlanGML 1.1.7'de eklenen tip)."
+   }
+  },
+  "UIP": {
+   "TopluTasimTurleriArasiDegisimAktarmaAlani": {
+    "style": "NIP_TOPLU_TASIMA_AKTAR_ALAN",
+    "gerekce": "UİP setinde karşılığı yok; NİP'teki 'Toplu Taşıma Aktarma Alanı' aynı kullanımdır ve filtresizdir. Kademe dışı ödünç stil."
+   },
+   "YapiYaklasC": {
+    "style": "UIP_YAPI_YAKLASMA_MES",
+    "property_aliases": {
+     "yapi_yaklasma_mesafesi": "Mesafe"
+    },
+    "gerekce": "YapiYaklasC tek alanlı (Mesafe) yapı yaklaşma çizgisidir; UIP_YAPI_YAKLASMA_MES aynı çizgiyi mesafe yazısıyla çizer."
+   },
+   "AraziKullanimiDevamEttirilerekKorunacakAlanlar": {
+    "style": "UIP_ARAZI_KULLANIMI_KORUNACAK_ALAN",
+    "gerekce": "Bakanlık setinde stil adı 'ARAZI_KULLANIMI_KORUNACAK_ALAN'dır; filtre alanı arazi_koruma_kullanim_tip bu tipin AraziKorumaKullanimTip alanıdır (PlanGML 1.1.7'de eklenen tip)."
+   }
+  },
+  "CDP": {
+   "AraziKullanimiDevamEttirilerekKorunacakAlanlar": {
+    "style": "CDP_ARAZI_KULLANIMI_KORUNACAK_ALAN",
+    "gerekce": "Bakanlık setinde stil adı 'ARAZI_KULLANIMI_KORUNACAK_ALAN'dır; filtre alanı arazi_koruma_kullanim_tip bu tipin AraziKorumaKullanimTip alanıdır (PlanGML 1.1.7'de eklenen tip)."
+   }
+  }
+ },
+ "catalog_symbols": {
+  "UIP": {
+   "KentselTasarimProjeSiniri": {
+    "kaynak": "Mekânsal Planlar Yapım Yönetmeliği detay kataloğu, Planlama Sınırları: KENTSEL TASARIM PROJESİ SINIRI (UİP)",
+    "tanim": "ÇİZGİ KALINLIĞI: 0.3 mm, 5 mm çapında 2.5 mm ara ile 1 dolu 1 boş daire",
+    "rgb": "0/92/230",
+    "line_width_mm": 0.3,
+    "pattern": [
+     {
+      "kind": "circle",
+      "diameter_mm": 5,
+      "filled": true
+     },
+     {
+      "kind": "gap",
+      "length_mm": 2.5
+     },
+     {
+      "kind": "circle",
+      "diameter_mm": 5,
+      "filled": false
+     },
+     {
+      "kind": "gap",
+      "length_mm": 2.5
+     }
+    ],
+    "gerekce": "Bakanlık SLD setinde bu tip için stil yok; sembol detay kataloğundaki çizgi tanımından kuruldu."
+   }
+  }
+ }
+}

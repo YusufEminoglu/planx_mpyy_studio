@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "distribution_status": "unverified; local development only until source redistribution rights are established",
+  "sources": [
+    {
+      "filename": "UIPMPYYSTYLE-2026_02_27.xml",
+      "bytes": 5565775,
+      "sha256": "e7da049b8494424962a36d900fc8af2331216ffd620d8c8c0ad9a4cca02faea3"
+    },
+    {
+      "filename": "MpyyUipDb_2026_02_27.gpkg",
+      "bytes": 3665920,
+      "sha256": "63c796d081d0f099edd8ac87e7e1362412ad8f46db86506b90ed1ae307b94c28"
+    }
+  ],
+  "mapping_method": "Exact name and geometry first (including source whitespace); unique Turkish uppercase name fallback; explicit HAVAALANI/HAVA ALANI spelling alias; duplicate codes omitted.",
+  "normalized_name_collisions": [["OTEL ALANI", "OTEL ALANI "]],
+  "aliases": {
+    "HAVAALANI HAVA KORİDORU": "HAVA ALANI HAVA KORİDORU"
+  },
+  "ambiguous_codes_omitted": [
+    {
+      "code": "118200",
+      "function": "GOLF TURİZMİ",
+      "geometry_type": "POLYGON",
+      "tabaka": "YOK"
+    },
+    {
+      "code": "118200",
+      "function": "EKOTURİZM/KIRSAL TURİZM",
+      "geometry_type": "POLYGON",
+      "tabaka": "YOK"
+    }
+  ],
+  "geometry_mismatches_omitted": [
+    {
+      "code": "119004",
+      "function": "HAVA ALANI HAVA KORİDORU",
+      "geometry_type": "POLYGON",
+      "reason": "No symbol of required geometry type"
+    },
+    {
+      "code": "114200",
+      "function": "SAHİL ŞERİDİ",
+      "geometry_type": "POLYGON",
+      "reason": "No symbol of required geometry type"
+    }
+  ],
+  "top_level_symbols": 300,
+  "all_symbol_nodes": 1100,
+  "nested_only_symbol_nodes": 800,
+  "external_svg_references": {
+    "Font Awesome icons (Font Awesome Free icons)/svg/solid/water.svg": 7,
+    "crosses/Cross4.svg": 1
+  },
+  "font_families": [
+    "Arial",
+    "Arial Black",
+    "Times New Roman",
+    "Calibri"
+  ],
+  "source_ownership_evidence": "zero2cadgis/THIRD_PARTY_NOTICES.md attributes source database compilation to Yusuf Eminoğlu; XML contains no explicit license declaration.",
+  "limitations": [
+    "No legal conformity certification.",
+    "No point code mappings: source lookup tables cover polygon and line only.",
+    "The source references external SVGs. The engine embeds packaged water.svg and Cross4.svg during import.",
+    "Original system fonts are used if installed; absent families use a reported text fallback.",
+    "79 legacy setback geometry generators are disabled; code field aliases are normalized at import.",
+    "Native metre-based map units are preserved. Styling requires a projected metre layer and project CRS."
+  ]
+}

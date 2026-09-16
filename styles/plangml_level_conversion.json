@@ -1,0 +1,3179 @@
+{
+ "version": 1,
+ "source": "UİP/NİP/ÇDP tabaka eşdeğerlik tablosu + MPYY tabaka eşleşmesi",
+ "pairs": {
+  "UIP>NIP": {
+   "rules": {
+    "AcikYesilAlan|AcikYesilTip=AgaclandirilacakAlan": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "AgaclandirilacakAlan"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=ArboretumBotanikParki": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "RekreasyonAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=BakiSeyirTerasi": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "ParkVeYesilAlan"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=CocukBahcesiOyunAlani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "ParkVeYesilAlan"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=FuarPanayirFestivalAlani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "FuarPanayirFestivalAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=HayvanatBahcesi": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "ParkVeYesilAlan"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=Hipodrom": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "ParkVeYesilAlan"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=KentOrmani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "KentOrmani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=MesireYeri": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "MesireYeri"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=Meydan": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "ParkVeYesilAlan"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=MezarlikAlani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "MezarlikAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=MilletBahcesi": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "MilletBahcesi"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=Park": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "ParkVeYesilAlan"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=PasifYesilAlan": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "PasifYesilAlan"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=RekreasyonAlani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "RekreasyonAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=RekreatifAlan": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "YesilTip": "RekreasyonAlani"
+     }
+    },
+    "AfetTehlikeliAlanlar|AfetTip=HeyelanAlani": {
+     "feature": "OnlemliAlan",
+     "attrs": {}
+    },
+    "AfetTehlikeliAlanlar|AfetTip=TaskinaMaruzAlan": {
+     "feature": "AfetTehlikeliAlanlar",
+     "attrs": {
+      "AfetTip": "TaskinaMaruzAlan"
+     }
+    },
+    "AfetTehlikeliAlanlar|AfetTip=YapiYasakliAlan": {
+     "feature": "AfetTehlikeliAlanlar",
+     "attrs": {
+      "AfetTip": "YapiYasakliAlan"
+     }
+    },
+    "AskeriYasakBolge": {
+     "feature": "AskeriYasakBolge",
+     "attrs": {}
+    },
+    "AtiksuTesis": {
+     "feature": "AtiksuTesis",
+     "attrs": {}
+    },
+    "BelediyeSiniri": {
+     "feature": "BelediyeSiniri",
+     "attrs": {}
+    },
+    "BogaziciSinirlari|BogaziciBolgeTip=BogaziciEtkilenmeBolgeSiniri": {
+     "feature": "BogaziciSinirlari",
+     "attrs": {
+      "BogaziciBolgeTip": "BogaziciEtkilenmeBolgeSiniri"
+     }
+    },
+    "BogaziciSinirlari|BogaziciBolgeTip=BogaziciGeriGorunumBolgeSiniri": {
+     "feature": "BogaziciSinirlari",
+     "attrs": {
+      "BogaziciBolgeTip": "BogaziciGeriGorunumBolgeSiniri"
+     }
+    },
+    "BogaziciSinirlari|BogaziciBolgeTip=BogaziciOnGorunumBolgeSiniri": {
+     "feature": "BogaziciSinirlari",
+     "attrs": {
+      "BogaziciBolgeTip": "BogaziciOnGorunumBolgeSiniri"
+     }
+    },
+    "Demiryolu": {
+     "feature": "Demiryolu",
+     "attrs": {}
+    },
+    "Demiryolu|DemirTip=HizliTrenHat": {
+     "feature": "Demiryolu",
+     "attrs": {
+      "DemirTip": "HizliTrenHatti"
+     }
+    },
+    "Demiryolu|DemirTip=TriyajAlani": {
+     "feature": "Demiryolu",
+     "attrs": {
+      "DemirTip": "TriyajAlani"
+     }
+    },
+    "DenizUlasimBaglanti": {
+     "feature": "SuYuzeyi",
+     "attrs": {
+      "SuYuzeyiTip": "Deniz"
+     }
+    },
+    "DigerOzelSinir": {
+     "feature": "DigerOzelSinir",
+     "attrs": {}
+    },
+    "DogalKarakter|DogalKarakterTip=Diger": {
+     "feature": "DogalKarakter",
+     "attrs": {
+      "DogalKarakterTip": "Diger"
+     }
+    },
+    "DogalKarakter|DogalKarakterTip=MakilikFundalik": {
+     "feature": "DogalKarakter",
+     "attrs": {
+      "DogalKarakterTip": "MakilikFundalik"
+     }
+    },
+    "DonusumKonutAlanlari|DonusumTip=GecekonduOnlemeBolgesi": {
+     "feature": "DonusumKonutAlanlari",
+     "attrs": {
+      "DonusumTip": "GecekonduOnlemeBolgesi"
+     }
+    },
+    "Durak|DurakTip=AnaIstasyonGar": {
+     "feature": "Terminal",
+     "attrs": {
+      "TerminalTip": "AnaIstasyonGar"
+     }
+    },
+    "Durak|DurakTip=HavaiHatIstasyonu": {
+     "feature": "Terminal",
+     "attrs": {
+      "TerminalTip": "HavaiHatIstasyonu"
+     }
+    },
+    "Durak|DurakTip=HavarayIstasyonu": {
+     "feature": "Terminal",
+     "attrs": {
+      "TerminalTip": "HavarayIstasyonu"
+     }
+    },
+    "Durak|DurakTip=RayliTopluTasimaIstasyonu": {
+     "feature": "Terminal",
+     "attrs": {
+      "TerminalTip": "RayliTopluTasimaIstasyonu"
+     }
+    },
+    "Durak|DurakTip=TerminalOtogar": {
+     "feature": "Terminal",
+     "attrs": {
+      "TerminalTip": "TerminalOtogar"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=AnaokuluAlani": {
+     "feature": "EgitimTesisAlani",
+     "attrs": {},
+     "doldurulacak": [
+      "EgitimTesisTip"
+     ]
+    },
+    "EgitimTesisAlani|EgitimTesisTip=HalkEgitimMerkezi": {
+     "feature": "EgitimTesisAlani",
+     "attrs": {
+      "EgitimTesisTip": "EgitimAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=IlkokulAlani": {
+     "feature": "EgitimTesisAlani",
+     "attrs": {
+      "EgitimTesisTip": "EgitimAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=LiseAlani": {
+     "feature": "EgitimTesisAlani",
+     "attrs": {
+      "EgitimTesisTip": "EgitimAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=MeslekiTeknikOgretimTesisAlani": {
+     "feature": "EgitimTesisAlani",
+     "attrs": {
+      "EgitimTesisTip": "EgitimAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=OrtaokulAlani": {
+     "feature": "EgitimTesisAlani",
+     "attrs": {
+      "EgitimTesisTip": "EgitimAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=OzelEgitimAlani": {
+     "feature": "EgitimTesisAlani",
+     "attrs": {
+      "EgitimTesisTip": "OzelEgitimAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=YuksekOgretimAlani": {
+     "feature": "EgitimTesisAlani",
+     "attrs": {
+      "EgitimTesisTip": "YuksekOgretimAlani"
+     }
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=DogalgazDagitimTesisAlani": {
+     "feature": "EnerjiDagitimDepolama",
+     "attrs": {
+      "EnerjiTesisTip": "DogalgazIletimDagitimTesisiAlani"
+     }
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=ElektronikHaberlesmeAltyapiAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=RegulatorAlani": {
+     "feature": "EnerjiDagitimDepolama",
+     "attrs": {
+      "EnerjiTesisTip": "RegulatorAlani"
+     }
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=TrafoAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=TurbinAlani": {
+     "feature": "EnerjiDagitimDepolama",
+     "attrs": {
+      "EnerjiTesisTip": "TurbinAlani"
+     }
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=YaniciParlayiciPatlayiciMaddeUretimDepoAlani": {
+     "feature": "EnerjiDagitimDepolama",
+     "attrs": {
+      "EnerjiTesisTip": "YaniciParlayiciPatlayiciMaddeUretimDepoAlani"
+     }
+    },
+    "EnerjiNakilHatti": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EnerjiUretim|EnerjiTip=EnerjiUretimAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EnerjiUretim|EnerjiTip=NukleerEnerjiSantralAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EnerjiUretim|EnerjiTip=TermikSantralAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EnerjiUretim|EnerjiTip=YenilenebilirEnerjiKaynaginaDayaliUretimTesisAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EtaplamaSiniri": {
+     "feature": "EtaplamaSiniri",
+     "attrs": {}
+    },
+    "FonksiyonluCalisma|FonksiyonluCalismaTip=BelediyeHizmetAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "BelediyeHizmetAlani"
+     }
+    },
+    "FonksiyonluCalisma|FonksiyonluCalismaTip=ResmiKurumAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KamuHizmetAlani"
+     }
+    },
+    "FonksiyonluCalisma|FonksiyonluCalismaTip=TopluIsyeri": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "TopluIsyerleri"
+     }
+    },
+    "HavaalaniHavaKoridoru": {
+     "feature": "HavaalaniHavaKoridoru",
+     "attrs": {}
+    },
+    "HavayoluTesisleri|HavaTip=HavalimaniHavaalani": {
+     "feature": "HavaalaniHavalimani",
+     "attrs": {}
+    },
+    "IbadetAlani|IbadetTip=Cami": {
+     "feature": "IbadetAlani",
+     "attrs": {
+      "IbadetTip": "IbadetAlani"
+     }
+    },
+    "IbadetAlani|IbadetTip=Kilise": {
+     "feature": "IbadetAlani",
+     "attrs": {
+      "IbadetTip": "IbadetAlani"
+     }
+    },
+    "IbadetAlani|IbadetTip=Mescit": {
+     "feature": "IbadetAlani",
+     "attrs": {
+      "IbadetTip": "IbadetAlani"
+     }
+    },
+    "IbadetAlani|IbadetTip=Sapel": {
+     "feature": "IbadetAlani",
+     "attrs": {
+      "IbadetTip": "IbadetAlani"
+     }
+    },
+    "IbadetAlani|IbadetTip=SinagogHavra": {
+     "feature": "IbadetAlani",
+     "attrs": {
+      "IbadetTip": "IbadetAlani"
+     }
+    },
+    "IcmeKullanmaSuyuKoruma|KorumaDerecesi=KisaMesafeliKorumaAlani": {
+     "feature": "IcmeKullanmaSuyuKoruma",
+     "attrs": {
+      "KorumaDerecesi": "KisaMesafeliKorumaAlani"
+     }
+    },
+    "IcmeKullanmaSuyuKoruma|KorumaDerecesi=MutlakKorumaAlani": {
+     "feature": "IcmeKullanmaSuyuKoruma",
+     "attrs": {
+      "KorumaDerecesi": "MutlakKorumaAlani"
+     }
+    },
+    "IcmeKullanmaSuyuKoruma|KorumaDerecesi=OrtaMesafeliKorumaAani": {
+     "feature": "IcmeKullanmaSuyuKoruma",
+     "attrs": {
+      "KorumaDerecesi": "OrtaMesafeliKorumaAlani"
+     }
+    },
+    "IcmeKullanmaSuyuKoruma|KorumaDerecesi=UzunMesafeliKorumaAlani": {
+     "feature": "IcmeKullanmaSuyuKoruma",
+     "attrs": {
+      "KorumaDerecesi": "UzunMesafeliKorumaAlani"
+     }
+    },
+    "IcmesuTesis|IcmesuTur=TerfiMerkezi": {
+     "feature": "IcmesuTesis",
+     "attrs": {
+      "IcmesuTur": "TerfiMerkezi"
+     }
+    },
+    "IlSiniri": {
+     "feature": "IlSiniri",
+     "attrs": {}
+    },
+    "IlanEdilenClsmaAlan": {
+     "feature": "IlanEdilenClsmaAlan",
+     "attrs": {}
+    },
+    "IlceSiniri": {
+     "feature": "IlceSiniri",
+     "attrs": {}
+    },
+    "IletimHatti|EnerjiHatTip=AkaryakitBoruHatti": {
+     "feature": "BoruHatti",
+     "attrs": {}
+    },
+    "IletimHatti|EnerjiHatTip=BoruHatti": {
+     "feature": "BoruHatti",
+     "attrs": {}
+    },
+    "IletimHatti|EnerjiHatTip=DogalgazBoruHatti": {
+     "feature": "BoruHatti",
+     "attrs": {}
+    },
+    "ImarHakkiAktarimSiniri": {
+     "feature": "ImarHakkiAktarimSiniri",
+     "attrs": {}
+    },
+    "KarayoluTesisleri|KaraTesisTip=GenelOtopark": {
+     "feature": "KarayoluTesisleri",
+     "attrs": {
+      "KarayoluTesisTip": "GenelOtopark"
+     }
+    },
+    "KarayoluTesisleri|KaraTesisTip=TirKamyonMakinaParkGarajAlani": {
+     "feature": "KarayoluTesisleri",
+     "attrs": {
+      "KarayoluTesisTip": "TirKamyonMakinaParkGarajAlani"
+     }
+    },
+    "KatiAtikTesis|KatiAtikTur=Bertaraf": {
+     "feature": "KatiAtikTesis",
+     "attrs": {
+      "KatiAtikTur": "Bertaraf"
+     }
+    },
+    "KatiAtikTesis|KatiAtikTur=Depolama": {
+     "feature": "KatiAtikTesis",
+     "attrs": {
+      "KatiAtikTur": "Depolama"
+     }
+    },
+    "KentselCalisma|CalismaTip=1KademeTicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "1DereceTicaretAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=2KademeTicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "2DereceTicaretAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=3KademeTicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "3DereceTicaretAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=AkaryakitServisIstasyonu": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "AkaryakitServisIstasyonuAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=AskeriAlan": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "AskeriAlan"
+     }
+    },
+    "KentselCalisma|CalismaTip=BetonSantrali": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "BetonSantrali"
+     }
+    },
+    "KentselCalisma|CalismaTip=DepolamaAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "DepolamaAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=EndustriyelGelismeBolgesi": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "EndustriyelGelismeBolgesi"
+     }
+    },
+    "KentselCalisma|CalismaTip=IdariHizmetAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KamuHizmetAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=ImalathaneTesisAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KonutDisiKentselCalismaAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=KucukSanayiAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KucukSanayiAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=LojistikTesisAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "LojistikTesisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=PazarAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "PazarAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=SanayiAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "SanayiAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=SuUrunleriUretimYetistirmeTesisi": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "SuUrunleriUretimVeYetistirmeTesisi"
+     }
+    },
+    "KentselCalisma|CalismaTip=TarimHayvancilikTesisAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "TarimHayvancilikTesisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=TicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "TicaretAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=TicaretKonutAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "TicaretKonutAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=TicaretTurizmAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "TicaretTurizmAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=TicaretTurizmKonutAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "TicaretTurizmKonutAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=ToptanTicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KonutDisiKentselCalismaAlani"
+     }
+    },
+    "KiyiKenarCizgisi": {
+     "feature": "KiyiKenarCizgisi",
+     "attrs": {}
+    },
+    "KiyiKorumaYapilari|KiyiKorumaTip=Mahmuz": {
+     "feature": "SuYuzeyi",
+     "attrs": {
+      "SuYuzeyiTip": "Deniz"
+     }
+    },
+    "KiyiKorumaYapilari|KiyiKorumaTip=Menfez": {
+     "feature": "SuYuzeyi",
+     "attrs": {
+      "SuYuzeyiTip": "Deniz"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=BalikciBarinagi": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "BalikciBarinagi"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=Barinak": {
+     "feature": "SuYuzeyi",
+     "attrs": {
+      "SuYuzeyiTip": "Deniz"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=DenizInisRampasi": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "DenizInisRampasi"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=DolfenPlatform": {
+     "feature": "SuYuzeyi",
+     "attrs": {
+      "SuYuzeyiTip": "Deniz"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=GemiSokumYeri": {
+     "feature": "SuYuzeyi",
+     "attrs": {
+      "SuYuzeyiTip": "Deniz"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=Iskele": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "Iskele"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=KonteynerLimani": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "Liman"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=KruvaziyerLimani": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "Liman"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=Rihtim": {
+     "feature": "SuYuzeyi",
+     "attrs": {
+      "SuYuzeyiTip": "Deniz"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=RoRoLimani": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "Liman"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=TekneImalBakimYeri": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "TekneImalCekekYeri"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=TekneImalCekekYeri": {
+     "feature": "SuYuzeyi",
+     "attrs": {
+      "SuYuzeyiTip": "Deniz"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=TersaneAlani": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "TersaneAlani"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=YatLimani": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "Liman"
+     }
+    },
+    "Konut|KonutTip=GelismeKonut": {
+     "feature": "GelismeKonut",
+     "attrs": {},
+     "doldurulacak": [
+      "GelismeKonutAlaniYogunluk"
+     ]
+    },
+    "Konut|KonutTip=YerlesikKonut": {
+     "feature": "MevcutKonut",
+     "attrs": {},
+     "doldurulacak": [
+      "MevcutKonutYogunluk"
+     ]
+    },
+    "KoySiniri": {
+     "feature": "KoySiniri",
+     "attrs": {}
+    },
+    "KumsalPlaj": {
+     "feature": "KumsalPlaj",
+     "attrs": {}
+    },
+    "ManiaSiniri": {
+     "feature": "ManiaSiniri",
+     "attrs": {}
+    },
+    "Mera": {
+     "feature": "Mera",
+     "attrs": {
+      "MeraTip": "Mera"
+     }
+    },
+    "MilliPark|MilliParkTip=MilliPark": {
+     "feature": "MilliPark",
+     "attrs": {
+      "MilliParkTip": "MilliPark"
+     }
+    },
+    "MilliPark|MilliParkTip=TabiatParkiAlani": {
+     "feature": "MilliPark",
+     "attrs": {
+      "MilliParkTip": "TabiatParkiAlani"
+     }
+    },
+    "MilliPark|MilliParkTip=TabiatiKorumaAlani": {
+     "feature": "MilliPark",
+     "attrs": {
+      "MilliParkTip": "TabiatiKorumaAlani"
+     }
+    },
+    "MilliPark|MilliParkTip=YabanHayatiKorumaGelistirmeAlani": {
+     "feature": "MilliPark",
+     "attrs": {
+      "MilliParkTip": "YabanHayatiKorumaGelistirmeAlani"
+     }
+    },
+    "MucavirAlanSiniri": {
+     "feature": "MucavirAlanSiniri",
+     "attrs": {}
+    },
+    "OckBolge": {
+     "feature": "OckBolge",
+     "attrs": {}
+    },
+    "OckHassasAlan|HassaslikDerecesi=OckBolgesiHassasAlanA": {
+     "feature": "OckHassasAlan",
+     "attrs": {
+      "HassaslikDerecesi": "OckBolgesiHassasAlanA"
+     }
+    },
+    "OckHassasAlan|HassaslikDerecesi=OckBolgesiHassasAlanB": {
+     "feature": "OckHassasAlan",
+     "attrs": {
+      "HassaslikDerecesi": "OckBolgesiHassasAlanB"
+     }
+    },
+    "OckHassasAlan|HassaslikDerecesi=OckBolgesiHassasAlanC": {
+     "feature": "OckHassasAlan",
+     "attrs": {
+      "HassaslikDerecesi": "OckBolgesiHassasAlanC"
+     }
+    },
+    "OnlemliAlan|OnlemliTip=OnlemliAlan": {
+     "feature": "OnlemliAlan",
+     "attrs": {}
+    },
+    "Orman": {
+     "feature": "Orman",
+     "attrs": {}
+    },
+    "OzelEkosistem|EkosistemTip=AkdenizFoku": {
+     "feature": "OzelEkosistem",
+     "attrs": {
+      "EkosistemTip": "AkdenizFoku"
+     }
+    },
+    "OzelEkosistem|EkosistemTip=EkolojikKoruma": {
+     "feature": "OzelEkosistem",
+     "attrs": {
+      "EkosistemTip": "EkolojikKoruma"
+     }
+    },
+    "OzelEkosistem|EkosistemTip=FloraFauna": {
+     "feature": "OzelEkosistem",
+     "attrs": {
+      "EkosistemTip": "FloraFauna"
+     }
+    },
+    "OzelProjeAlanSiniri": {
+     "feature": "OzelProjeAlanSiniri",
+     "attrs": {}
+    },
+    "PlanDegisiklikSiniri": {
+     "feature": "PlanDegisiklikSiniri",
+     "attrs": {}
+    },
+    "PlanSiniri": {
+     "feature": "PlanSiniri",
+     "attrs": {}
+    },
+    "SaglikTesisAlani|SaglikTip=AileSagligiMerkezi": {
+     "feature": "SaglikTesisAlani",
+     "attrs": {
+      "SaglikTip": "SaglikTesisAlani"
+     }
+    },
+    "SaglikTesisAlani|SaglikTip=Hastane": {
+     "feature": "SaglikTesisAlani",
+     "attrs": {
+      "SaglikTip": "SaglikTesisAlani"
+     }
+    },
+    "SaglikTesisAlani|SaglikTip=OzelSaglikTesisiAlani": {
+     "feature": "SaglikTesisAlani",
+     "attrs": {
+      "SaglikTip": "OzelSaglikTesisiAlani"
+     }
+    },
+    "SaglikTesisAlani|SaglikTip=SaglikTesisAlani": {
+     "feature": "SaglikTesisAlani",
+     "attrs": {
+      "SaglikTip": "SaglikTesisAlani"
+     }
+    },
+    "SahilSeridi": {
+     "feature": "SahilSeridi",
+     "attrs": {}
+    },
+    "SitAlanlari|SitTip=1DereceArkeolojikSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "1DereceArkeolojikSit"
+     }
+    },
+    "SitAlanlari|SitTip=1DereceDogalSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "1DereceDogalSit"
+     }
+    },
+    "SitAlanlari|SitTip=2DereceArkeolojikSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "2DereceArkeolojikSit"
+     }
+    },
+    "SitAlanlari|SitTip=2DereceDogalSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "2DereceDogalSit"
+     }
+    },
+    "SitAlanlari|SitTip=3DereceArkeolojikSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "3DereceArkeolojikSit"
+     }
+    },
+    "SitAlanlari|SitTip=3DereceDogalSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "3DereceDogalSit"
+     }
+    },
+    "SitAlanlari|SitTip=KentselSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "KentselSit"
+     }
+    },
+    "SitAlanlari|SitTip=KesinKorunacakHassasAlan": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "KesinKorunacakHassasAlan"
+     }
+    },
+    "SitAlanlari|SitTip=NitelikliDogalKorumaAlani": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "NitelikliDogalKorumaAlani"
+     }
+    },
+    "SitAlanlari|SitTip=SurdurulebilirKorumaKontrolluKullanimAlani": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "SurdurulebilirKorumaKontrolluKullanimAlani"
+     }
+    },
+    "SitAlanlari|SitTip=TarihiSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "TarihiSit"
+     }
+    },
+    "SogutmaSuyuAlmaHatti": {
+     "feature": "SogutmaSuyuAlmaHatti",
+     "attrs": {}
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=AcikSporTesisiAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "SporAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=KapaliSporTesisiAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "SporAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=KongreSergiMerkeziAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "SosyalTesisAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=KresGunduzBakimevi": {
+     "feature": "EgitimTesisAlani",
+     "attrs": {},
+     "doldurulacak": [
+      "EgitimTesisTip"
+     ]
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=KulturelTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KulturelTesisAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=OzelAcikSporTesisiAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "OzelSporAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=OzelKapaliSporTesisiAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "OzelSporAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=OzelKulturelTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "OzelKulturelTesisAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=OzelSosyalTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "OzelSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=SefkatEvleriAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "SosyalTesisAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=SosyalTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "SosyalTesisAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=YasliBakimeviAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "SosyalTesisAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=YurtAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {},
+     "doldurulacak": [
+      "SosyalKulturelTip"
+     ]
+    },
+    "SozlesmeKoruma": {
+     "feature": "SozlesmeKoruma",
+     "attrs": {}
+    },
+    "SuKaptaj": {
+     "feature": "SuKaptaj",
+     "attrs": {}
+    },
+    "SuYuzeyi|SuYuzeyiTip=Deniz": {
+     "feature": "SuYuzeyi",
+     "attrs": {
+      "SuYuzeyiTip": "Deniz"
+     }
+    },
+    "SuYuzeyi|SuYuzeyiTip=NehirDere": {
+     "feature": "SuYuzeyi",
+     "attrs": {
+      "SuYuzeyiTip": "NehirDere"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanBolgesi"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanEkolojikEtkilenmeBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanEkolojikEtkilenmeBolgesi"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanMutlakKorumaBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanMutlakKorumaBolgesi"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanOzelHukumBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanOzelHukumBolgesi"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanSiniri": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanSiniri"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanTamponBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanTamponBolgesi"
+     }
+    },
+    "Tarim|TarimTip=OrganikTarim": {
+     "feature": "Tarim",
+     "attrs": {}
+    },
+    "Tarim|TarimTip=OrtuAltiTarim": {
+     "feature": "Tarim",
+     "attrs": {}
+    },
+    "Tarim|TarimTip=TarımsalNitelikliAlan": {
+     "feature": "Tarim",
+     "attrs": {}
+    },
+    "Tarim|TarimTip=Zeytinlik": {
+     "feature": "Tarim",
+     "attrs": {
+      "TarimTip": "Zeytinlik"
+     }
+    },
+    "TeknikAltyapi|AltyapiTur=Enerji": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "TeknikAltyapi|AltyapiTur=Icmesuyu": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Icmesuyu"
+     }
+    },
+    "TmKtkgbAlan": {
+     "feature": "TmKtkgbAlan",
+     "attrs": {}
+    },
+    "TopluTasimTurleriArasiDegisimAktarmaAlani": {
+     "feature": "TopluTasimaAktarimAlani",
+     "attrs": {}
+    },
+    "TopluTasimaHatti|TopluHatTip=HavaiHat": {
+     "feature": "RayliTopluTasimaHatti",
+     "attrs": {
+      "RayliHatTip": "HavaiHat"
+     }
+    },
+    "TopluTasimaHatti|TopluHatTip=Havaray": {
+     "feature": "RayliTopluTasimaHatti",
+     "attrs": {
+      "RayliHatTip": "Havaray"
+     }
+    },
+    "TopluTasimaHatti|TopluHatTip=RayliTopluTasimaYerUstu": {
+     "feature": "RayliTopluTasimaHatti",
+     "attrs": {
+      "RayliHatTip": "RayliTopluTasimaHatti"
+     }
+    },
+    "TurizmAlani|TurizmTip=ApartOtelAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmAlani"
+     }
+    },
+    "TurizmAlani|TurizmTip=GolfAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmAlani"
+     }
+    },
+    "TurizmAlani|TurizmTip=GunubirlikTesisAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "GunubirlikTesisAlani"
+     }
+    },
+    "TurizmAlani|TurizmTip=HostelAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmAlani"
+     }
+    },
+    "TurizmAlani|TurizmTip=KampingAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmAlani"
+     }
+    },
+    "TurizmAlani|TurizmTip=KisSporlariKayakTesisAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmAlani"
+     }
+    },
+    "TurizmAlani|TurizmTip=MotelAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmAlani"
+     }
+    },
+    "TurizmAlani|TurizmTip=OtelAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmAlani"
+     }
+    },
+    "TurizmAlani|TurizmTip=PansiyonAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmAlani"
+     }
+    },
+    "TurizmAlani|TurizmTip=SaglikOdakliTatilKoyu": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmAlani"
+     }
+    },
+    "TurizmAlani|TurizmTip=TatilKoyuAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmAlani"
+     }
+    },
+    "TurizmAlani|TurizmTip=TermalTurizmAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmAlani"
+     }
+    },
+    "UlkeSiniri": {
+     "feature": "UlkeSiniri",
+     "attrs": {}
+    },
+    "YeraltiSuKaynakKoruma": {
+     "feature": "YeraltiSuKaynakKoruma",
+     "attrs": {}
+    }
+   },
+   "no_counterpart": [
+    "AcikYesilAlan|AcikYesilTip=KorunacakBahce",
+    "AdaKenari|AdaKenariCizgiTip=IfrazHatti",
+    "AdaKenari|AdaKenariCizgiTip=KademeHatti",
+    "AtiksuSistemi|AtiksuSistemTip=AtiksuAnaKollektoru",
+    "AtiksuSistemi|AtiksuSistemTip=AtiksuDerinDenizDesarjHatti",
+    "Durak|DurakTip=AraIstasyon",
+    "HavayoluTesisleri|HavaTip=HelikopterInisAlani",
+    "IletimHatti|EnerjiHatTip=CebriBoruHatti",
+    "IletimHatti|EnerjiHatTip=IletimTuneli",
+    "JeotermalKaynak",
+    "KarayoluTesisleri|KaraTesisTip=BisikletParki",
+    "KentselImge",
+    "KentselTasarimProjeSiniri",
+    "KiyiKorumaYapilari|KiyiKorumaTip=KiyiKoruma",
+    "KorumaKusaklari|KusakTip=BoruHattiKorumaKusagi",
+    "KorumaKusaklari|KusakTip=DemiryoluKorumaKusagi",
+    "KorumaKusaklari|KusakTip=EnerjiNakilHattiKorumaKusagi",
+    "KorumaKusaklari|KusakTip=HavaalaniKorumaKusagi",
+    "KorumaKusaklari|KusakTip=JeotermalKorumaKusagi",
+    "KorumaKusaklari|KusakTip=KarayoluKorumaKusagi",
+    "KorumaKusaklari|KusakTip=NukleerEnerjiKorumaKusagi",
+    "KorumaKusaklari|KusakTip=SaglikKorumaBandi",
+    "KorumaKusaklari|KusakTip=SuKanaliKorumaKusagi",
+    "KorumaKusaklari|KusakTip=YaniciPatlayiciMaddeKorumaKusagi",
+    "KorumaKusaklari|KusakTip=YeraltiSuKorumaKusagi",
+    "MahalleSiniri",
+    "OzelEkosistem|EkosistemTip=EndemikBiyotop",
+    "SitAlanlari|SitTip=SitEtkilesimAlani",
+    "TescilliAlan|TescilTip=TescilliAnitYapi",
+    "TescilliAlan|TescilTip=TescilliBina",
+    "TescilliAlan|TescilTip=TescilliParsel",
+    "TescilliAlan|TescilTip=TescilliTabiatVarligi",
+    "YapayAda",
+    "YapiYaklasmaSiniri",
+    "YoreselMimariKoruma"
+   ],
+   "ambiguous": {
+    "Konut|KonutTip=YerlesikKonut": {
+     "MevcutKonut{'MevcutKonutYogunluk': 'Orta151-300HA'}": 1,
+     "MevcutKonut{'MevcutKonutYogunluk': 'Yuksek301-600HA'}": 1,
+     "MevcutKonut{'MevcutKonutYogunluk': 'CokYuksek601HAUstunde'}": 1,
+     "MevcutKonut{'MevcutKonutYogunluk': 'Dusuk51-151HA'}": 1,
+     "MevcutKonut{'MevcutKonutYogunluk': 'Seyrek50HAAltinda'}": 1
+    },
+    "Konut|KonutTip=GelismeKonut": {
+     "GelismeKonut{'GelismeKonutAlaniYogunluk': 'Orta121-250HA'}": 1,
+     "GelismeKonut{'GelismeKonutAlaniYogunluk': 'Yuksek251-400HA'}": 1,
+     "GelismeKonut{'GelismeKonutAlaniYogunluk': 'CokYuksek401HAUstunde'}": 1,
+     "GelismeKonut{'GelismeKonutAlaniYogunluk': 'Dusuk51-120HA'}": 1,
+     "GelismeKonut{'GelismeKonutAlaniYogunluk': 'Seyrek50HAAltinda'}": 1
+    },
+    "EgitimTesisAlani|EgitimTesisTip=AnaokuluAlani": {
+     "EgitimTesisAlani{'EgitimTesisTip': 'EgitimAlani'}": 1,
+     "EgitimTesisAlani{'EgitimTesisTip': 'OzelEgitimAlani'}": 1
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=KresGunduzBakimevi": {
+     "EgitimTesisAlani{'EgitimTesisTip': 'EgitimAlani'}": 1,
+     "EgitimTesisAlani{'EgitimTesisTip': 'OzelEgitimAlani'}": 1
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=YurtAlani": {
+     "SosyalKulturelAlan{'SosyalKulturelTip': 'SosyalTesisAlani'}": 1,
+     "SosyalKulturelAlan{'SosyalKulturelTip': 'OzelSosyalAltyapiAlani'}": 1
+    }
+   }
+  },
+  "UIP>CDP": {
+   "rules": {
+    "AcikYesilAlan|AcikYesilTip=AgaclandirilacakAlan": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=ArboretumBotanikParki": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=BakiSeyirTerasi": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=CocukBahcesiOyunAlani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=FuarPanayirFestivalAlani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=HayvanatBahcesi": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=Hipodrom": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=KentOrmani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=Meydan": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=MezarlikAlani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=MilletBahcesi": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "MilletBahcesi"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=Park": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=PasifYesilAlan": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=RekreasyonAlani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|AcikYesilTip=RekreatifAlan": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AfetTehlikeliAlanlar|AfetTip=HeyelanAlani": {
+     "feature": "AfetTehlikeliAlanlar",
+     "attrs": {}
+    },
+    "AfetTehlikeliAlanlar|AfetTip=TaskinaMaruzAlan": {
+     "feature": "AfetTehlikeliAlanlar",
+     "attrs": {}
+    },
+    "AfetTehlikeliAlanlar|AfetTip=YapiYasakliAlan": {
+     "feature": "AfetTehlikeliAlanlar",
+     "attrs": {}
+    },
+    "AskeriYasakBolge": {
+     "feature": "AskeriYskGuvenlikBlg",
+     "attrs": {}
+    },
+    "AtiksuTesis": {
+     "feature": "AtiksuTesis",
+     "attrs": {}
+    },
+    "BelediyeSiniri": {
+     "feature": "BelediyeSiniri",
+     "attrs": {}
+    },
+    "BogaziciSinirlari|BogaziciBolgeTip=BogaziciEtkilenmeBolgeSiniri": {
+     "feature": "BogaziciSinirlari",
+     "attrs": {
+      "BogaziciBolgeTip": "BogaziciEtkilenmeBolgeSiniri"
+     }
+    },
+    "BogaziciSinirlari|BogaziciBolgeTip=BogaziciGeriGorunumBolgeSiniri": {
+     "feature": "BogaziciSinirlari",
+     "attrs": {
+      "BogaziciBolgeTip": "BogaziciGeriGorunumBolgeSiniri"
+     }
+    },
+    "BogaziciSinirlari|BogaziciBolgeTip=BogaziciOnGorunumBolgeSiniri": {
+     "feature": "BogaziciSinirlari",
+     "attrs": {
+      "BogaziciBolgeTip": "BogaziciOnGorunumBolgeSiniri"
+     }
+    },
+    "Demiryolu": {
+     "feature": "Demiryolu",
+     "attrs": {}
+    },
+    "Demiryolu|DemirTip=HizliTrenHat": {
+     "feature": "Demiryolu",
+     "attrs": {
+      "DemirTip": "HizliTrenHatti"
+     }
+    },
+    "DenizUlasimBaglanti": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "DigerOzelSinir": {
+     "feature": "DigerOzelSinir",
+     "attrs": {}
+    },
+    "DogalKarakter|DogalKarakterTip=Diger": {
+     "feature": "DogalKarakter",
+     "attrs": {
+      "DogalKarakterTip": "DogalKarakteriKorunacakAlan"
+     }
+    },
+    "Durak|DurakTip=AnaIstasyonGar": {
+     "feature": "AnaIstasyonGar",
+     "attrs": {}
+    },
+    "Durak|DurakTip=TerminalOtogar": {
+     "feature": "TerminalOtogar",
+     "attrs": {}
+    },
+    "EgitimTesisAlani|EgitimTesisTip=AnaokuluAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=HalkEgitimMerkezi": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=IlkokulAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=LiseAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=MeslekiTeknikOgretimTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=OrtaokulAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=OzelEgitimAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=YuksekOgretimAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "UniversiteAlani"
+     }
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=DogalgazDagitimTesisAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=ElektronikHaberlesmeAltyapiAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=RegulatorAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=TrafoAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=TurbinAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EnerjiNakilHatti": {
+     "feature": "EnerjiNakilHatti",
+     "attrs": {}
+    },
+    "EnerjiUretim|EnerjiTip=EnerjiUretimAlani": {
+     "feature": "EnerjiUretim",
+     "attrs": {
+      "EnerjiTip": "EnerjiUretimAlani"
+     }
+    },
+    "EnerjiUretim|EnerjiTip=NukleerEnerjiSantralAlani": {
+     "feature": "EnerjiUretim",
+     "attrs": {
+      "EnerjiTip": "EnerjiUretimAlani"
+     }
+    },
+    "EnerjiUretim|EnerjiTip=TermikSantralAlani": {
+     "feature": "EnerjiUretim",
+     "attrs": {
+      "EnerjiTip": "EnerjiUretimAlani"
+     }
+    },
+    "EnerjiUretim|EnerjiTip=YenilenebilirEnerjiKaynaginaDayaliUretimTesisAlani": {
+     "feature": "EnerjiUretim",
+     "attrs": {
+      "EnerjiTip": "EnerjiUretimAlani"
+     }
+    },
+    "EtaplamaSiniri": {
+     "feature": "EtaplamaSiniri",
+     "attrs": {}
+    },
+    "FonksiyonluCalisma|FonksiyonluCalismaTip=BelediyeHizmetAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "FonksiyonluCalisma|FonksiyonluCalismaTip=ResmiKurumAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "FonksiyonluCalisma|FonksiyonluCalismaTip=TopluIsyeri": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "HavayoluTesisleri|HavaTip=HavalimaniHavaalani": {
+     "feature": "HavaalaniHavalimani",
+     "attrs": {}
+    },
+    "IbadetAlani|IbadetTip=Cami": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "IbadetAlani|IbadetTip=Kilise": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "IbadetAlani|IbadetTip=Mescit": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "IbadetAlani|IbadetTip=Sapel": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "IbadetAlani|IbadetTip=SinagogHavra": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "IcmeKullanmaSuyuKoruma|KorumaDerecesi=KisaMesafeliKorumaAlani": {
+     "feature": "IcmeKullanmaSuyuKoruma",
+     "attrs": {
+      "KorumaDerecesi": "KisaMesafeliKorumaAlani"
+     }
+    },
+    "IcmeKullanmaSuyuKoruma|KorumaDerecesi=MutlakKorumaAlani": {
+     "feature": "IcmeKullanmaSuyuKoruma",
+     "attrs": {
+      "KorumaDerecesi": "MutlakKorumaAlani"
+     }
+    },
+    "IcmeKullanmaSuyuKoruma|KorumaDerecesi=OrtaMesafeliKorumaAani": {
+     "feature": "IcmeKullanmaSuyuKoruma",
+     "attrs": {
+      "KorumaDerecesi": "OrtaMesafeliKorumaAlani"
+     }
+    },
+    "IcmeKullanmaSuyuKoruma|KorumaDerecesi=UzunMesafeliKorumaAlani": {
+     "feature": "IcmeKullanmaSuyuKoruma",
+     "attrs": {
+      "KorumaDerecesi": "UzunMesafeliKorumaAlani"
+     }
+    },
+    "IcmesuTesis|IcmesuTur=TerfiMerkezi": {
+     "feature": "IcmesuTesis",
+     "attrs": {
+      "IcmesuTur": "TerfiMerkezi"
+     }
+    },
+    "IlSiniri": {
+     "feature": "IlSiniri",
+     "attrs": {}
+    },
+    "IlanEdilenClsmaAlan": {
+     "feature": "KentselCalisma",
+     "attrs": {},
+     "doldurulacak": [
+      "CalismaTip"
+     ]
+    },
+    "IlceSiniri": {
+     "feature": "IlceSiniri",
+     "attrs": {}
+    },
+    "IletimHatti|EnerjiHatTip=AkaryakitBoruHatti": {
+     "feature": "BoruHatti",
+     "attrs": {}
+    },
+    "IletimHatti|EnerjiHatTip=BoruHatti": {
+     "feature": "BoruHatti",
+     "attrs": {}
+    },
+    "IletimHatti|EnerjiHatTip=DogalgazBoruHatti": {
+     "feature": "BoruHatti",
+     "attrs": {}
+    },
+    "KatiAtikTesis|KatiAtikTur=Bertaraf": {
+     "feature": "KatiAtikTesis",
+     "attrs": {
+      "KatiAtikTur": "Bertaraf"
+     }
+    },
+    "KatiAtikTesis|KatiAtikTur=Depolama": {
+     "feature": "KatiAtikTesis",
+     "attrs": {
+      "KatiAtikTur": "Depolama"
+     }
+    },
+    "KentselCalisma|CalismaTip=1KademeTicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "MerkeziIsAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=2KademeTicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "TaliMerkez"
+     }
+    },
+    "KentselCalisma|CalismaTip=3KademeTicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "TaliMerkez"
+     }
+    },
+    "KentselCalisma|CalismaTip=AkaryakitServisIstasyonu": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=AskeriAlan": {
+     "feature": "AskeriYskGuvenlikBlg",
+     "attrs": {}
+    },
+    "KentselCalisma|CalismaTip=BetonSantrali": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=DepolamaAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "SanayiVeDepolamaBolgesi"
+     }
+    },
+    "KentselCalisma|CalismaTip=EndustriyelGelismeBolgesi": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "EndüstriyelGelismeBolgesi"
+     }
+    },
+    "KentselCalisma|CalismaTip=IdariHizmetAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=ImalathaneTesisAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=KucukSanayiAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=LojistikTesisAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "LojistikBolge"
+     }
+    },
+    "KentselCalisma|CalismaTip=PazarAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=SanayiAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "SanayiVeDepolamaBolgesi"
+     }
+    },
+    "KentselCalisma|CalismaTip=TarimHayvancilikTesisAlani": {
+     "feature": "Tarim",
+     "attrs": {
+      "TarimTip": "OrganizeTarimVeHayvancilikAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=TicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "MerkeziIsAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=TicaretKonutAlani": {
+     "feature": "TercihliKullanimBolgesi",
+     "attrs": {}
+    },
+    "KentselCalisma|CalismaTip=TicaretTurizmAlani": {
+     "feature": "TercihliKullanimBolgesi",
+     "attrs": {}
+    },
+    "KentselCalisma|CalismaTip=TicaretTurizmKonutAlani": {
+     "feature": "TercihliKullanimBolgesi",
+     "attrs": {}
+    },
+    "KentselCalisma|CalismaTip=ToptanTicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KiyiKorumaYapilari|KiyiKorumaTip=KiyiKoruma": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "KiyiTesisAlani"
+     }
+    },
+    "KiyiKorumaYapilari|KiyiKorumaTip=Mahmuz": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiKorumaYapilari|KiyiKorumaTip=Menfez": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=BalikciBarinagi": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=Barinak": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=DenizInisRampasi": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "KiyiTesisAlani"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=DolfenPlatform": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=GemiSokumYeri": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=Iskele": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=KonteynerLimani": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=KruvaziyerLimani": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=Rihtim": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=RoRoLimani": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=TekneImalBakimYeri": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "KiyiTesisAlani"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=TekneImalCekekYeri": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=TersaneAlani": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "TersaneAlani"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=YatLimani": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "Konut|KonutTip=GelismeKonut": {
+     "feature": "KentselGelismeKonut",
+     "attrs": {}
+    },
+    "Konut|KonutTip=YerlesikKonut": {
+     "feature": "KentselYerlesik",
+     "attrs": {}
+    },
+    "Mera": {
+     "feature": "Mera",
+     "attrs": {}
+    },
+    "MilliPark|MilliParkTip=MilliPark": {
+     "feature": "MilliPark",
+     "attrs": {
+      "MilliParkTip": "MilliPark"
+     }
+    },
+    "MilliPark|MilliParkTip=TabiatParkiAlani": {
+     "feature": "MilliPark",
+     "attrs": {
+      "MilliParkTip": "TabiatParkiAlani"
+     }
+    },
+    "MilliPark|MilliParkTip=TabiatiKorumaAlani": {
+     "feature": "MilliPark",
+     "attrs": {
+      "MilliParkTip": "TabiatiKorumaAlani"
+     }
+    },
+    "MilliPark|MilliParkTip=YabanHayatiKorumaGelistirmeAlani": {
+     "feature": "MilliPark",
+     "attrs": {
+      "MilliParkTip": "YabanHayatiKorumaGelistirmeAlani"
+     }
+    },
+    "MucavirAlanSiniri": {
+     "feature": "MucavirAlanSiniri",
+     "attrs": {}
+    },
+    "OckBolge": {
+     "feature": "OckBolge",
+     "attrs": {}
+    },
+    "OckHassasAlan|HassaslikDerecesi=OckBolgesiHassasAlanA": {
+     "feature": "OckHassasAlan",
+     "attrs": {
+      "HassaslikDerecesi": "OckBolgesiHassasAlanA"
+     }
+    },
+    "OckHassasAlan|HassaslikDerecesi=OckBolgesiHassasAlanB": {
+     "feature": "OckHassasAlan",
+     "attrs": {
+      "HassaslikDerecesi": "OckBolgesiHassasAlanB"
+     }
+    },
+    "OckHassasAlan|HassaslikDerecesi=OckBolgesiHassasAlanC": {
+     "feature": "OckHassasAlan",
+     "attrs": {
+      "HassaslikDerecesi": "OckBolgesiHassasAlanC"
+     }
+    },
+    "OnlemliAlan|OnlemliTip=OnlemliAlan": {
+     "feature": "AfetTehlikeliAlanlar",
+     "attrs": {}
+    },
+    "Orman": {
+     "feature": "Orman",
+     "attrs": {}
+    },
+    "OzelEkosistem|EkosistemTip=AkdenizFoku": {
+     "feature": "OzelEkosistem",
+     "attrs": {
+      "EkosistemTip": "AkdenizFoku"
+     }
+    },
+    "OzelEkosistem|EkosistemTip=EkolojikKoruma": {
+     "feature": "OzelEkosistem",
+     "attrs": {
+      "EkosistemTip": "EkolojikKoruma"
+     }
+    },
+    "OzelEkosistem|EkosistemTip=FloraFauna": {
+     "feature": "OzelEkosistem",
+     "attrs": {
+      "EkosistemTip": "FloraFauna"
+     }
+    },
+    "OzelProjeAlanSiniri": {
+     "feature": "OzelProjeAlaniSiniri",
+     "attrs": {}
+    },
+    "PlanDegisiklikSiniri": {
+     "feature": "PlanDegisiklikSiniri",
+     "attrs": {}
+    },
+    "PlanSiniri": {
+     "feature": "PlanSiniri",
+     "attrs": {}
+    },
+    "SaglikTesisAlani|SaglikTip=AileSagligiMerkezi": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SaglikTesisAlani|SaglikTip=Hastane": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SaglikTesisAlani|SaglikTip=OzelSaglikTesisiAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SaglikTesisAlani|SaglikTip=SaglikTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SitAlanlari|SitTip=1DereceArkeolojikSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "1DereceArkeolojikSit"
+     }
+    },
+    "SitAlanlari|SitTip=1DereceDogalSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "1DereceDogalSit"
+     }
+    },
+    "SitAlanlari|SitTip=2DereceArkeolojikSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "2DereceArkeolojikSit"
+     }
+    },
+    "SitAlanlari|SitTip=2DereceDogalSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "2DereceDogalSit"
+     }
+    },
+    "SitAlanlari|SitTip=3DereceArkeolojikSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "3DereceArkeolojikSit"
+     }
+    },
+    "SitAlanlari|SitTip=3DereceDogalSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "3DereceDogalSit"
+     }
+    },
+    "SitAlanlari|SitTip=KentselSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "KentselSit"
+     }
+    },
+    "SitAlanlari|SitTip=KesinKorunacakHassasAlan": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "KesinKorunacakHassasAlan"
+     }
+    },
+    "SitAlanlari|SitTip=NitelikliDogalKorumaAlani": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "NitelikliDogalKorumaAlani"
+     }
+    },
+    "SitAlanlari|SitTip=SurdurulebilirKorumaKontrolluKullanimAlani": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "SurdurulebilirKorumaKontrolluKullanimAlani"
+     }
+    },
+    "SitAlanlari|SitTip=TarihiSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "TarihiSit"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=AcikSporTesisiAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=KapaliSporTesisiAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=KongreSergiMerkeziAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=KresGunduzBakimevi": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=KulturelTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=OzelAcikSporTesisiAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=OzelKapaliSporTesisiAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=OzelKulturelTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=OzelSosyalTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=SefkatEvleriAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=SosyalTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=YasliBakimeviAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=YurtAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SozlesmeKoruma": {
+     "feature": "SozlesmeKoruma",
+     "attrs": {}
+    },
+    "SuKaptaj": {
+     "feature": "SuKaptaj",
+     "attrs": {}
+    },
+    "SuYuzeyi|SuYuzeyiTip=Deniz": {
+     "feature": "SuYuzeyi",
+     "attrs": {
+      "SuYuzeyiTip": "Deniz"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanBolgesi"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanEkolojikEtkilenmeBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanEkolojikEtkilenmeBolgesi"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanMutlakKorumaBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanMutlakKorumaBolgesi"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanOzelHukumBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanOzelHukumBolgesi"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanSiniri": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanSiniri"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanTamponBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanTamponBolgesi"
+     }
+    },
+    "Tarim|TarimTip=OrganikTarim": {
+     "feature": "Tarim",
+     "attrs": {}
+    },
+    "Tarim|TarimTip=OrtuAltiTarim": {
+     "feature": "Tarim",
+     "attrs": {}
+    },
+    "Tarim|TarimTip=TarımsalNitelikliAlan": {
+     "feature": "Tarim",
+     "attrs": {}
+    },
+    "Tarim|TarimTip=Zeytinlik": {
+     "feature": "Tarim",
+     "attrs": {
+      "TarimTip": "Zeytinlik"
+     }
+    },
+    "TeknikAltyapi|AltyapiTur=Enerji": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "TeknikAltyapi|AltyapiTur=Icmesuyu": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Icmesuyu"
+     }
+    },
+    "TmKtkgbAlan": {
+     "feature": "TmKtkgbAlanlari",
+     "attrs": {}
+    },
+    "TurizmAlani|TurizmTip=ApartOtelAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "TurizmAlani|TurizmTip=GolfAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "TurizmAlani|TurizmTip=GunubirlikTesisAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "TurizmAlani|TurizmTip=HostelAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "TurizmAlani|TurizmTip=KampingAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "TurizmAlani|TurizmTip=KisSporlariKayakTesisAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "TurizmAlani|TurizmTip=MotelAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "TurizmAlani|TurizmTip=OtelAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "TurizmAlani|TurizmTip=PansiyonAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "TurizmAlani|TurizmTip=SaglikOdakliTatilKoyu": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "TurizmAlani|TurizmTip=TatilKoyuAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "TurizmAlani|TurizmTip=TermalTurizmAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "UlkeSiniri": {
+     "feature": "UlkeSiniri",
+     "attrs": {}
+    },
+    "YeraltiSuKaynakKoruma": {
+     "feature": "YeraltiSuKaynakKoruma",
+     "attrs": {}
+    }
+   },
+   "no_counterpart": [
+    "AcikYesilAlan|AcikYesilTip=KorunacakBahce",
+    "AcikYesilAlan|AcikYesilTip=MesireYeri",
+    "AdaKenari|AdaKenariCizgiTip=IfrazHatti",
+    "AdaKenari|AdaKenariCizgiTip=KademeHatti",
+    "AtiksuSistemi|AtiksuSistemTip=AtiksuAnaKollektoru",
+    "AtiksuSistemi|AtiksuSistemTip=AtiksuDerinDenizDesarjHatti",
+    "Demiryolu|DemirTip=TriyajAlani",
+    "DogalKarakter|DogalKarakterTip=MakilikFundalik",
+    "DonusumKonutAlanlari|DonusumTip=GecekonduOnlemeBolgesi",
+    "Durak|DurakTip=AraIstasyon",
+    "Durak|DurakTip=HavaiHatIstasyonu",
+    "Durak|DurakTip=HavarayIstasyonu",
+    "Durak|DurakTip=RayliTopluTasimaIstasyonu",
+    "EnerjiDagitimDepolama|EnerjiTesisTip=YaniciParlayiciPatlayiciMaddeUretimDepoAlani",
+    "HavaalaniHavaKoridoru",
+    "HavayoluTesisleri|HavaTip=HelikopterInisAlani",
+    "IletimHatti|EnerjiHatTip=CebriBoruHatti",
+    "IletimHatti|EnerjiHatTip=IletimTuneli",
+    "ImarHakkiAktarimSiniri",
+    "JeotermalKaynak",
+    "KarayoluTesisleri|KaraTesisTip=BisikletParki",
+    "KarayoluTesisleri|KaraTesisTip=GenelOtopark",
+    "KarayoluTesisleri|KaraTesisTip=TirKamyonMakinaParkGarajAlani",
+    "KentselCalisma|CalismaTip=SuUrunleriUretimYetistirmeTesisi",
+    "KentselImge",
+    "KentselTasarimProjeSiniri",
+    "KiyiKenarCizgisi",
+    "KorumaKusaklari|KusakTip=BoruHattiKorumaKusagi",
+    "KorumaKusaklari|KusakTip=DemiryoluKorumaKusagi",
+    "KorumaKusaklari|KusakTip=EnerjiNakilHattiKorumaKusagi",
+    "KorumaKusaklari|KusakTip=HavaalaniKorumaKusagi",
+    "KorumaKusaklari|KusakTip=JeotermalKorumaKusagi",
+    "KorumaKusaklari|KusakTip=KarayoluKorumaKusagi",
+    "KorumaKusaklari|KusakTip=NukleerEnerjiKorumaKusagi",
+    "KorumaKusaklari|KusakTip=SaglikKorumaBandi",
+    "KorumaKusaklari|KusakTip=SuKanaliKorumaKusagi",
+    "KorumaKusaklari|KusakTip=YaniciPatlayiciMaddeKorumaKusagi",
+    "KorumaKusaklari|KusakTip=YeraltiSuKorumaKusagi",
+    "KoySiniri",
+    "KumsalPlaj",
+    "MahalleSiniri",
+    "ManiaSiniri",
+    "OzelEkosistem|EkosistemTip=EndemikBiyotop",
+    "SahilSeridi",
+    "SitAlanlari|SitTip=SitEtkilesimAlani",
+    "SogutmaSuyuAlmaHatti",
+    "SuYuzeyi|SuYuzeyiTip=NehirDere",
+    "TescilliAlan|TescilTip=TescilliAnitYapi",
+    "TescilliAlan|TescilTip=TescilliBina",
+    "TescilliAlan|TescilTip=TescilliParsel",
+    "TescilliAlan|TescilTip=TescilliTabiatVarligi",
+    "TopluTasimTurleriArasiDegisimAktarmaAlani",
+    "TopluTasimaHatti|TopluHatTip=HavaiHat",
+    "TopluTasimaHatti|TopluHatTip=Havaray",
+    "TopluTasimaHatti|TopluHatTip=RayliTopluTasimaYerUstu",
+    "YapayAda",
+    "YapiYaklasmaSiniri",
+    "YoreselMimariKoruma"
+   ],
+   "ambiguous": {
+    "IlanEdilenClsmaAlan": {
+     "KentselCalisma{'CalismaTip': 'TeknolojiGelistirmeBolgesi'}": 1,
+     "KentselCalisma{'CalismaTip': 'SerbestBolge'}": 1,
+     "KentselCalisma{'CalismaTip': 'OSB'}": 1,
+     "KentselCalisma{'CalismaTip': 'EndustriBolgesi'}": 1
+    }
+   }
+  },
+  "NIP>CDP": {
+   "rules": {
+    "AcikYesilAlan|YesilTip=AgaclandirilacakAlan": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|YesilTip=FuarPanayirFestivalAlani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|YesilTip=KentOrmani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|YesilTip=MezarlikAlani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|YesilTip=MilletBahcesi": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "MilletBahcesi"
+     }
+    },
+    "AcikYesilAlan|YesilTip=ParkVeYesilAlan": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|YesilTip=PasifYesilAlan": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AcikYesilAlan|YesilTip=RekreasyonAlani": {
+     "feature": "AcikYesilAlan",
+     "attrs": {
+      "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+     }
+    },
+    "AfetTehlikeliAlanlar|AfetTip=AfeteMaruzBolge": {
+     "feature": "AfetTehlikeliAlanlar",
+     "attrs": {}
+    },
+    "AfetTehlikeliAlanlar|AfetTip=TaskinaMaruzAlan": {
+     "feature": "AfetTehlikeliAlanlar",
+     "attrs": {}
+    },
+    "AfetTehlikeliAlanlar|AfetTip=YapiYasakliAlan": {
+     "feature": "AfetTehlikeliAlanlar",
+     "attrs": {}
+    },
+    "AskeriYasakBolge": {
+     "feature": "AskeriYskGuvenlikBlg",
+     "attrs": {}
+    },
+    "AtiksuTesis": {
+     "feature": "AtiksuTesis",
+     "attrs": {}
+    },
+    "BelediyeSiniri": {
+     "feature": "BelediyeSiniri",
+     "attrs": {}
+    },
+    "BogaziciSinirlari|BogaziciBolgeTip=BogaziciEtkilenmeBolgeSiniri": {
+     "feature": "BogaziciSinirlari",
+     "attrs": {
+      "BogaziciBolgeTip": "BogaziciEtkilenmeBolgeSiniri"
+     }
+    },
+    "BogaziciSinirlari|BogaziciBolgeTip=BogaziciGeriGorunumBolgeSiniri": {
+     "feature": "BogaziciSinirlari",
+     "attrs": {
+      "BogaziciBolgeTip": "BogaziciGeriGorunumBolgeSiniri"
+     }
+    },
+    "BogaziciSinirlari|BogaziciBolgeTip=BogaziciOnGorunumBolgeSiniri": {
+     "feature": "BogaziciSinirlari",
+     "attrs": {
+      "BogaziciBolgeTip": "BogaziciOnGorunumBolgeSiniri"
+     }
+    },
+    "BoruHatti": {
+     "feature": "BoruHatti",
+     "attrs": {}
+    },
+    "Demiryolu": {
+     "feature": "Demiryolu",
+     "attrs": {}
+    },
+    "Demiryolu|DemirTip=HizliTrenHatti": {
+     "feature": "Demiryolu",
+     "attrs": {
+      "DemirTip": "HizliTrenHatti"
+     }
+    },
+    "DigerOzelSinir": {
+     "feature": "DigerOzelSinir",
+     "attrs": {}
+    },
+    "DogalKarakter|DogalKarakterTip=Diger": {
+     "feature": "DogalKarakter",
+     "attrs": {
+      "DogalKarakterTip": "DogalKarakteriKorunacakAlan"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=EgitimAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=OzelEgitimAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "EgitimTesisAlani|EgitimTesisTip=YuksekOgretimAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {},
+     "doldurulacak": [
+      "SosyalKulturelTip"
+     ]
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=DogalgazIletimDagitimTesisiAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=RegulatorAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EnerjiDagitimDepolama|EnerjiTesisTip=TurbinAlani": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Enerji"
+     }
+    },
+    "EtaplamaSiniri": {
+     "feature": "EtaplamaSiniri",
+     "attrs": {}
+    },
+    "GelismeKonut|GelismeKonutAlaniYogunluk=CokYuksek401HAUstunde": {
+     "feature": "KentselGelismeKonut",
+     "attrs": {}
+    },
+    "GelismeKonut|GelismeKonutAlaniYogunluk=Dusuk51-120HA": {
+     "feature": "KentselGelismeKonut",
+     "attrs": {}
+    },
+    "GelismeKonut|GelismeKonutAlaniYogunluk=Orta121-250HA": {
+     "feature": "KentselGelismeKonut",
+     "attrs": {}
+    },
+    "GelismeKonut|GelismeKonutAlaniYogunluk=Seyrek50HAAltinda": {
+     "feature": "KentselGelismeKonut",
+     "attrs": {}
+    },
+    "GelismeKonut|GelismeKonutAlaniYogunluk=Yuksek251-400HA": {
+     "feature": "KentselGelismeKonut",
+     "attrs": {}
+    },
+    "HavaalaniHavalimani": {
+     "feature": "HavaalaniHavalimani",
+     "attrs": {}
+    },
+    "IbadetAlani|IbadetTip=IbadetAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "IcmeKullanmaSuyuKoruma|KorumaDerecesi=KisaMesafeliKorumaAlani": {
+     "feature": "IcmeKullanmaSuyuKoruma",
+     "attrs": {
+      "KorumaDerecesi": "KisaMesafeliKorumaAlani"
+     }
+    },
+    "IcmeKullanmaSuyuKoruma|KorumaDerecesi=MutlakKorumaAlani": {
+     "feature": "IcmeKullanmaSuyuKoruma",
+     "attrs": {
+      "KorumaDerecesi": "MutlakKorumaAlani"
+     }
+    },
+    "IcmeKullanmaSuyuKoruma|KorumaDerecesi=OrtaMesafeliKorumaAlani": {
+     "feature": "IcmeKullanmaSuyuKoruma",
+     "attrs": {
+      "KorumaDerecesi": "OrtaMesafeliKorumaAlani"
+     }
+    },
+    "IcmeKullanmaSuyuKoruma|KorumaDerecesi=UzunMesafeliKorumaAlani": {
+     "feature": "IcmeKullanmaSuyuKoruma",
+     "attrs": {
+      "KorumaDerecesi": "UzunMesafeliKorumaAlani"
+     }
+    },
+    "IcmesuTesis|IcmesuTur=TerfiMerkezi": {
+     "feature": "IcmesuTesis",
+     "attrs": {
+      "IcmesuTur": "TerfiMerkezi"
+     }
+    },
+    "IlSiniri": {
+     "feature": "IlSiniri",
+     "attrs": {}
+    },
+    "IlanEdilenClsmaAlan": {
+     "feature": "KentselCalisma",
+     "attrs": {},
+     "doldurulacak": [
+      "CalismaTip"
+     ]
+    },
+    "IlceSiniri": {
+     "feature": "IlceSiniri",
+     "attrs": {}
+    },
+    "KatiAtikTesis|KatiAtikTur=Bertaraf": {
+     "feature": "KatiAtikTesis",
+     "attrs": {
+      "KatiAtikTur": "Bertaraf"
+     }
+    },
+    "KatiAtikTesis|KatiAtikTur=Depolama": {
+     "feature": "KatiAtikTesis",
+     "attrs": {
+      "KatiAtikTur": "Depolama"
+     }
+    },
+    "KentselCalisma|CalismaTip=1DereceTicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "MerkeziIsAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=2DereceTicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "TaliMerkez"
+     }
+    },
+    "KentselCalisma|CalismaTip=3DereceTicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "TaliMerkez"
+     }
+    },
+    "KentselCalisma|CalismaTip=AkaryakitServisIstasyonuAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=AskeriAlan": {
+     "feature": "AskeriYskGuvenlikBlg",
+     "attrs": {}
+    },
+    "KentselCalisma|CalismaTip=BelediyeHizmetAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=BetonSantrali": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=DepolamaAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "SanayiVeDepolamaBolgesi"
+     }
+    },
+    "KentselCalisma|CalismaTip=EndustriyelGelismeBolgesi": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "EndüstriyelGelismeBolgesi"
+     }
+    },
+    "KentselCalisma|CalismaTip=KamuHizmetAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=KonutDisiKentselCalismaAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=KucukSanayiAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=LojistikTesisAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "LojistikBolge"
+     }
+    },
+    "KentselCalisma|CalismaTip=MerkeziIsAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "MerkeziIsAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=PazarAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=SanayiAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "SanayiVeDepolamaBolgesi"
+     }
+    },
+    "KentselCalisma|CalismaTip=TarimHayvancilikTesisAlani": {
+     "feature": "Tarim",
+     "attrs": {
+      "TarimTip": "OrganizeTarimVeHayvancilikAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=TicaretAlani": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "MerkeziIsAlani"
+     }
+    },
+    "KentselCalisma|CalismaTip=TicaretKonutAlani": {
+     "feature": "TercihliKullanimBolgesi",
+     "attrs": {}
+    },
+    "KentselCalisma|CalismaTip=TicaretTurizmAlani": {
+     "feature": "TercihliKullanimBolgesi",
+     "attrs": {}
+    },
+    "KentselCalisma|CalismaTip=TicaretTurizmKonutAlani": {
+     "feature": "TercihliKullanimBolgesi",
+     "attrs": {}
+    },
+    "KentselCalisma|CalismaTip=TopluIsyerleri": {
+     "feature": "KentselCalisma",
+     "attrs": {
+      "CalismaTip": "KentselServisAlani"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=BalikciBarinagi": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=DenizInisRampasi": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "KiyiTesisAlani"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=Iskele": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=Liman": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=TekneImalBakimYeri": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "KiyiTesisAlani"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=TekneImalCekekYeri": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "KiyiTesisAlani"
+     }
+    },
+    "KiyiYapilari|KiyiYapiTip=TersaneAlani": {
+     "feature": "KiyiYapilari",
+     "attrs": {
+      "KiyiYapiTip": "TersaneAlani"
+     }
+    },
+    "Mera|MeraTip=Mera": {
+     "feature": "Mera",
+     "attrs": {}
+    },
+    "MevcutKonut|MevcutKonutYogunluk=CokYuksek601HAUstunde": {
+     "feature": "KentselYerlesik",
+     "attrs": {}
+    },
+    "MevcutKonut|MevcutKonutYogunluk=Dusuk51-151HA": {
+     "feature": "KentselYerlesik",
+     "attrs": {}
+    },
+    "MevcutKonut|MevcutKonutYogunluk=Orta151-300HA": {
+     "feature": "KentselYerlesik",
+     "attrs": {}
+    },
+    "MevcutKonut|MevcutKonutYogunluk=Seyrek50HAAltinda": {
+     "feature": "KentselYerlesik",
+     "attrs": {}
+    },
+    "MevcutKonut|MevcutKonutYogunluk=Yuksek301-600HA": {
+     "feature": "KentselYerlesik",
+     "attrs": {}
+    },
+    "MilliPark|MilliParkTip=MilliPark": {
+     "feature": "MilliPark",
+     "attrs": {
+      "MilliParkTip": "MilliPark"
+     }
+    },
+    "MilliPark|MilliParkTip=TabiatParkiAlani": {
+     "feature": "MilliPark",
+     "attrs": {
+      "MilliParkTip": "TabiatParkiAlani"
+     }
+    },
+    "MilliPark|MilliParkTip=TabiatiKorumaAlani": {
+     "feature": "MilliPark",
+     "attrs": {
+      "MilliParkTip": "TabiatiKorumaAlani"
+     }
+    },
+    "MilliPark|MilliParkTip=YabanHayatiKorumaGelistirmeAlani": {
+     "feature": "MilliPark",
+     "attrs": {
+      "MilliParkTip": "YabanHayatiKorumaGelistirmeAlani"
+     }
+    },
+    "MucavirAlanSiniri": {
+     "feature": "MucavirAlanSiniri",
+     "attrs": {}
+    },
+    "OckBolge": {
+     "feature": "OckBolge",
+     "attrs": {}
+    },
+    "OckHassasAlan|HassaslikDerecesi=OckBolgesiHassasAlanA": {
+     "feature": "OckHassasAlan",
+     "attrs": {
+      "HassaslikDerecesi": "OckBolgesiHassasAlanA"
+     }
+    },
+    "OckHassasAlan|HassaslikDerecesi=OckBolgesiHassasAlanB": {
+     "feature": "OckHassasAlan",
+     "attrs": {
+      "HassaslikDerecesi": "OckBolgesiHassasAlanB"
+     }
+    },
+    "OckHassasAlan|HassaslikDerecesi=OckBolgesiHassasAlanC": {
+     "feature": "OckHassasAlan",
+     "attrs": {
+      "HassaslikDerecesi": "OckBolgesiHassasAlanC"
+     }
+    },
+    "OnlemliAlan": {
+     "feature": "AfetTehlikeliAlanlar",
+     "attrs": {}
+    },
+    "Orman": {
+     "feature": "Orman",
+     "attrs": {}
+    },
+    "OzelEkosistem|EkosistemTip=AkdenizFoku": {
+     "feature": "OzelEkosistem",
+     "attrs": {
+      "EkosistemTip": "AkdenizFoku"
+     }
+    },
+    "OzelEkosistem|EkosistemTip=EkolojikKoruma": {
+     "feature": "OzelEkosistem",
+     "attrs": {
+      "EkosistemTip": "EkolojikKoruma"
+     }
+    },
+    "OzelEkosistem|EkosistemTip=FloraFauna": {
+     "feature": "OzelEkosistem",
+     "attrs": {
+      "EkosistemTip": "FloraFauna"
+     }
+    },
+    "OzelProjeAlanSiniri": {
+     "feature": "OzelProjeAlaniSiniri",
+     "attrs": {}
+    },
+    "PlanDegisiklikSiniri": {
+     "feature": "PlanDegisiklikSiniri",
+     "attrs": {}
+    },
+    "PlanSiniri": {
+     "feature": "PlanSiniri",
+     "attrs": {}
+    },
+    "SaglikTesisAlani|SaglikTip=OzelSaglikTesisiAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SaglikTesisAlani|SaglikTip=SaglikTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SitAlanlari|SitTip=1DereceArkeolojikSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "1DereceArkeolojikSit"
+     }
+    },
+    "SitAlanlari|SitTip=1DereceDogalSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "1DereceDogalSit"
+     }
+    },
+    "SitAlanlari|SitTip=2DereceArkeolojikSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "2DereceArkeolojikSit"
+     }
+    },
+    "SitAlanlari|SitTip=2DereceDogalSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "2DereceDogalSit"
+     }
+    },
+    "SitAlanlari|SitTip=3DereceArkeolojikSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "3DereceArkeolojikSit"
+     }
+    },
+    "SitAlanlari|SitTip=3DereceDogalSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "3DereceDogalSit"
+     }
+    },
+    "SitAlanlari|SitTip=KentselSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "KentselSit"
+     }
+    },
+    "SitAlanlari|SitTip=KesinKorunacakHassasAlan": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "KesinKorunacakHassasAlan"
+     }
+    },
+    "SitAlanlari|SitTip=NitelikliDogalKorumaAlani": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "NitelikliDogalKorumaAlani"
+     }
+    },
+    "SitAlanlari|SitTip=SurdurulebilirKorumaKontrolluKullanimAlani": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "SurdurulebilirKorumaKontrolluKullanimAlani"
+     }
+    },
+    "SitAlanlari|SitTip=TarihiSit": {
+     "feature": "SitAlanlari",
+     "attrs": {
+      "SitTip": "TarihiSit"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=KulturelTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=OzelKulturelTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=OzelSosyalAltyapiAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=OzelSporAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=SosyalTesisAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SosyalKulturelAlan|SosyalKulturelTip=SporAlani": {
+     "feature": "SosyalKulturelAlan",
+     "attrs": {
+      "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+     }
+    },
+    "SozlesmeKoruma": {
+     "feature": "SozlesmeKoruma",
+     "attrs": {}
+    },
+    "SuKaptaj": {
+     "feature": "SuKaptaj",
+     "attrs": {}
+    },
+    "SuYuzeyi|SuYuzeyiTip=Deniz": {
+     "feature": "DenizUlasimBaglanti",
+     "attrs": {
+      "DenizUlasimTip": "DenizUlasimBaglanti"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanBolgesi"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanEkolojikEtkilenmeBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanEkolojikEtkilenmeBolgesi"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanMutlakKorumaBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanMutlakKorumaBolgesi"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanOzelHukumBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanOzelHukumBolgesi"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanSiniri": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanSiniri"
+     }
+    },
+    "SulakAlan|SulakTip=SulakAlanTamponBolgesi": {
+     "feature": "SulakAlan",
+     "attrs": {
+      "SulakTip": "SulakAlanTamponBolgesi"
+     }
+    },
+    "Tarim": {
+     "feature": "Tarim",
+     "attrs": {}
+    },
+    "Tarim|TarimTip=Zeytinlik": {
+     "feature": "Tarim",
+     "attrs": {
+      "TarimTip": "Zeytinlik"
+     }
+    },
+    "TeknikAltyapi|AltyapiTur=Enerji": {
+     "feature": "EnerjiUretim",
+     "attrs": {
+      "EnerjiTip": "EnerjiUretimAlani"
+     }
+    },
+    "TeknikAltyapi|AltyapiTur=Icmesuyu": {
+     "feature": "TeknikAltyapi",
+     "attrs": {
+      "AltyapiTur": "Icmesuyu"
+     }
+    },
+    "Terminal|TerminalTip=AnaIstasyonGar": {
+     "feature": "AnaIstasyonGar",
+     "attrs": {}
+    },
+    "Terminal|TerminalTip=TerminalOtogar": {
+     "feature": "TerminalOtogar",
+     "attrs": {}
+    },
+    "TmKtkgbAlan": {
+     "feature": "TmKtkgbAlanlari",
+     "attrs": {}
+    },
+    "TurizmAlani|TurizmTip=GunubirlikTesisAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "TurizmAlani|TurizmTip=TurizmAlani": {
+     "feature": "TurizmAlani",
+     "attrs": {
+      "TurizmTip": "TurizmBolgesi"
+     }
+    },
+    "UlkeSiniri": {
+     "feature": "UlkeSiniri",
+     "attrs": {}
+    },
+    "YeraltiSuKaynakKoruma": {
+     "feature": "YeraltiSuKaynakKoruma",
+     "attrs": {}
+    }
+   },
+   "no_counterpart": [
+    "AcikYesilAlan|YesilTip=MesireYeri",
+    "Demiryolu|DemirTip=TriyajAlani",
+    "DogalKarakter|DogalKarakterTip=MakilikFundalik",
+    "DonusumKonutAlanlari|DonusumTip=GecekonduOnlemeBolgesi",
+    "EnerjiDagitimDepolama|EnerjiTesisTip=EnerjiDepolamaAlani",
+    "EnerjiDagitimDepolama|EnerjiTesisTip=RafineriAlani",
+    "EnerjiDagitimDepolama|EnerjiTesisTip=YaniciParlayiciPatlayiciMaddeUretimDepoAlani",
+    "HavaalaniHavaKoridoru",
+    "ImarHakkiAktarimSiniri",
+    "KarayoluTesisleri|KarayoluTesisTip=GenelOtopark",
+    "KarayoluTesisleri|KarayoluTesisTip=TirKamyonMakinaParkGarajAlani",
+    "KentselCalisma|CalismaTip=SuUrunleriUretimVeYetistirmeTesisi",
+    "KentselDonusumSinirlari",
+    "KentselDonusumSinirlari|KentselDonusumSinirlariTip=RezervYapiAlanSiniri",
+    "KentselDonusumSinirlari|KentselDonusumSinirlariTip=RiskliAlanSiniri",
+    "KentselDonusumSinirlari|KentselDonusumSinirlariTip=YenilemeAlanSiniri",
+    "KirsalYerlesikAlanSinir",
+    "KiyiKenarCizgisi",
+    "KoySiniri",
+    "KumsalPlaj",
+    "ManiaSiniri",
+    "MudahaleSiniri|MudahaleSiniriTip=MevcutPlandakiDurumuKorunacakAlanSiniri",
+    "MudahaleSiniri|MudahaleSiniriTip=SagliklastirmaAlanSiniri",
+    "MudahaleSiniri|MudahaleSiniriTip=YenidenDuzenlenecekAlanSiniri",
+    "RayliTopluTasimaHatti|RayliHatTip=HavaiHat",
+    "RayliTopluTasimaHatti|RayliHatTip=Havaray",
+    "RayliTopluTasimaHatti|RayliHatTip=RayliTopluTasimaHatti",
+    "SahilSeridi",
+    "SogutmaSuyuAlmaHatti",
+    "StatusuOzelKanunlarlaBelirlenenAlanlar",
+    "SuYuzeyi|SuYuzeyiTip=NehirDere",
+    "Terminal|TerminalTip=HavaiHatIstasyonu",
+    "Terminal|TerminalTip=HavarayIstasyonu",
+    "Terminal|TerminalTip=RayliTopluTasimaIstasyonu",
+    "TopluTasimaAktarimAlani"
+   ],
+   "ambiguous": {
+    "IlanEdilenClsmaAlan": {
+     "KentselCalisma{'CalismaTip': 'TeknolojiGelistirmeBolgesi'}": 1,
+     "KentselCalisma{'CalismaTip': 'SerbestBolge'}": 1,
+     "KentselCalisma{'CalismaTip': 'OSB'}": 1,
+     "KentselCalisma{'CalismaTip': 'EndustriBolgesi'}": 1
+    },
+    "SuYuzeyi|SuYuzeyiTip=Deniz": {
+     "SuYuzeyi{'SuYuzeyiTip': 'Deniz'}": 1,
+     "DenizUlasimBaglanti{'DenizUlasimTip': 'DenizUlasimBaglanti'}": 8
+    },
+    "EgitimTesisAlani|EgitimTesisTip=YuksekOgretimAlani": {
+     "SosyalKulturelAlan{'SosyalKulturelTip': 'UniversiteAlani'}": 1,
+     "SosyalKulturelAlan{'SosyalKulturelTip': 'KentselBolgeselSosyalAltyapiAlani'}": 1
+    },
+    "TeknikAltyapi|AltyapiTur=Enerji": {
+     "EnerjiUretim{'EnerjiTip': 'EnerjiUretimAlani'}": 4,
+     "TeknikAltyapi{'AltyapiTur': 'Enerji'}": 3,
+     "EnerjiNakilHatti{}": 1
+    }
+   }
+  }
+ }
+}

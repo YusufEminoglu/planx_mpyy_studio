@@ -1,0 +1,14 @@
+{
+  "ek2_standards_assessed": true,
+  "future_requirements_assessed": true,
+  "transport_plan_considered_for_parking": true,
+  "resident_and_mobile_population_assessed": true,
+  "regional_parking_assessed": true,
+  "alternative_minimum_standard": false,
+  "settled_area_size_exception": false,
+  "conservation_site": false,
+  "seasonal_tourism_housing": true,
+  "permanent_population_assumption": true,
+  "seasonal_area_infrastructure": true,
+  "seasonal_area_parking": true
+}

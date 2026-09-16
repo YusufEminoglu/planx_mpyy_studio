@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "plan_level": "UIP",
+  "plan_transaction_number": "UIP-31001234",
+  "format_profile_id": "replace_with_ministry_profile_identifier",
+  "crs_authid": "EPSG:5254",
+  "delivery_receipt": "receipt-01",
+  "destination_authority": "PROVINCIAL_DIRECTORATE",
+  "finalization_date": "2026-09-01",
+  "delivery_date": "2026-09-10",
+  "files": [
+    {
+      "role": "GEOSPATIAL_PLAN_DATA",
+      "path": "06_digital_delivery/plan_data.gpkg",
+      "sha256": "replace_with_file_sha256",
+      "machine_readable": true
+    }
+  ]
+}

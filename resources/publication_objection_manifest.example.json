@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "plan_level": "UIP",
+  "publication": {
+    "approval_date": "2026-09-01",
+    "physical_start_date": "2026-09-02",
+    "web_start_date": "2026-09-02",
+    "end_date": "2026-10-02",
+    "start_minutes_two_signatures": true,
+    "end_minutes_two_signatures": true,
+    "unit_head_signed": true,
+    "local_announcement_evidenced": true,
+    "official_holidays": []
+  },
+  "objections": [
+    {
+      "received_date": "2026-09-10",
+      "forwarded_date": "2026-10-10",
+      "decision_date": "2026-11-01",
+      "plan_changed": false
+    }
+  ]
+}

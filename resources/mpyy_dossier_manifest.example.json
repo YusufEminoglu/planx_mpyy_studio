@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "plan_level": "UIP",
+  "purpose": "NEW_PLAN",
+  "lifecycle_status": "DRAFT",
+  "context_flags": {
+    "mixed_use": false,
+    "coastal": false,
+    "conservation": false,
+    "urban_design": false
+  },
+  "files": [
+    {
+      "role": "plan_sheet",
+      "path": "01_plan_components/plan_sheet.pdf",
+      "sha256": "replace_with_file_sha256"
+    }
+  ]
+}

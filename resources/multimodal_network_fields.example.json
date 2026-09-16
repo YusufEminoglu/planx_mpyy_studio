@@ -1,0 +1,18 @@
+{
+  "supported_modes": [
+    "WALK",
+    "BICYCLE",
+    "TRANSIT"
+  ],
+  "fields": {
+    "mode": "Required mode code.",
+    "speed_kmh": "Optional positive segment speed.",
+    "travel_time_min": "Optional positive explicit time for the full feature.",
+    "direction": "BOTH, FT, TF, FORWARD, or REVERSE."
+  },
+  "cost_policy": {
+    "edge_time": "Explicit travel time distributed by segment length, otherwise length divided by speed.",
+    "transfer_penalty": "Applied whenever consecutive edges change mode.",
+    "snap_access": "Demand and facility snap distance uses walking speed."
+  }
+}

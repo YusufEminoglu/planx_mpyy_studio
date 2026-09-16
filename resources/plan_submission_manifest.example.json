@@ -1,0 +1,25 @@
+{
+  "plan_level": "UIP",
+  "lifecycle_status": "FINALIZED",
+  "plan_transaction_number": "PIN-EXAMPLE",
+  "approval_date": "2026-01-02",
+  "approval_number": "EXAMPLE-10",
+  "suspension_start_date": "2026-01-05",
+  "suspension_end_date": "2026-02-04",
+  "finalization_date": "2026-02-05",
+  "provincial_delivery_date": "2026-02-10",
+  "official_holidays": [],
+  "documents": {
+    "plan_sheet": true,
+    "plan_notes": true,
+    "plan_report": true,
+    "author_signed": true,
+    "upper_plan_analysis": true,
+    "geological_survey": true,
+    "accessibility_analysis": true,
+    "current_base_map": true,
+    "suspension_start_minutes": true,
+    "suspension_end_minutes": true,
+    "digital_dataset": true
+  }
+}

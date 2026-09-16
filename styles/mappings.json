@@ -1,0 +1,1625 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "104100",
+      "symbol": "DEMİRYOLU"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "104101",
+      "symbol": "HIZLI TREN HATTI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "104102",
+      "symbol": "KATAR DÜZENLEME (TRİYAJ) ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "106101",
+      "symbol": "AKARYAKIT BORU HATTI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "106102",
+      "symbol": "BORU HATTI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "106103",
+      "symbol": "CEBRİ BORU HATTI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "106104",
+      "symbol": "DOĞALGAZ BORU HATTI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "106105",
+      "symbol": "ENERJİ NAKİL HATTI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "106106",
+      "symbol": "İLETİM TÜNELİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "111101",
+      "symbol": "HAVAİ HAT"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "111102",
+      "symbol": "HAVARAY"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "111103",
+      "symbol": "RAYLI TOPLU TAŞIMA HATTI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "114106",
+      "symbol": "KIYI KENAR ÇİZGİSİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "114107",
+      "symbol": "SAHİL ŞERİDİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "117101",
+      "symbol": "İÇME SUYU ANA HATTI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "117102",
+      "symbol": "ATIK SU DERİN DENİZ DEŞARJ HATTI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "117103",
+      "symbol": "ATIK SU ANA KOLLEKTÖRÜ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "117104",
+      "symbol": "SOĞUTMA SUYU ALMA HATTI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "119101",
+      "symbol": "MANİA PLANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "119103",
+      "symbol": "HAVA ALANI HAVA KORİDORU"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "120101",
+      "symbol": "DENİZ ULAŞIM BAĞLANTISI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "130100",
+      "symbol": "ADAKENARI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "130103",
+      "symbol": "KALDIRIM"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "132101",
+      "symbol": "KADEME HATTI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "132102",
+      "symbol": "İFRAZ HATTI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "132103",
+      "symbol": "KORUNAN CEPHE ÇİZGİSİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "132104",
+      "symbol": "DÜZELTİLEN CEPHE ÇİZGİSİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "132105",
+      "symbol": "ÖNERİLEN CEPHE ÇİZGİSİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "133001",
+      "symbol": "ERİŞME KONTROLLÜ KARAYOLU (OTOYOL)"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "133002",
+      "symbol": "BÖLÜNMÜŞ TAŞIT YOLU"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "133003",
+      "symbol": "TAŞIT YOLU"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "133004",
+      "symbol": "BİSİKLET YOLU"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "LINE",
+      "code": "133005",
+      "symbol": "YAYA YOLU VE BÖLGESİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101001",
+      "symbol": "AĞAÇLANDIRILACAK ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101002",
+      "symbol": "ARBORETUM - BOTANİK PARKI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101003",
+      "symbol": "ÇOCUK BAHÇESİ VE OYUN ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101004",
+      "symbol": "FUAR, PANAYIR VE FESTİVAL ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101005",
+      "symbol": "HAYVANAT BAHÇESİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101006",
+      "symbol": "HİPODROM"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101007",
+      "symbol": "KENT ORMANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101008",
+      "symbol": "KORUNACAK BAHÇE"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101009",
+      "symbol": "MESİRE YERİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101010",
+      "symbol": "MEYDAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101011",
+      "symbol": "MEZARLIK ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101012",
+      "symbol": "MİLLET BAHÇESİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101013",
+      "symbol": "PARK"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101014",
+      "symbol": "PASİF YEŞİL ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101015",
+      "symbol": "REKREASYON ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101016",
+      "symbol": "REKREAKTİF ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "101017",
+      "symbol": "BAKI VE SEYİR TERASI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "102001",
+      "symbol": "HEYELAN ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "102002",
+      "symbol": "ÖNLEMLİ ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "102003",
+      "symbol": "TAŞKINA MARUZ ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "102004",
+      "symbol": "YAPI YASAKLI ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "103001",
+      "symbol": "AKDENİZ FOKU YAŞAM ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "103002",
+      "symbol": "DENİZ KAPLUMBAĞALARI ÜREME VE KORUMA ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "103003",
+      "symbol": "DOĞAL KARAKTERİ KORUNACAK ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "103004",
+      "symbol": "KUMSAL-PLAJ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "103005",
+      "symbol": "MAKİLİK- FUNDALIK ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "103006",
+      "symbol": "MERA ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "103007",
+      "symbol": "ORGANİK TARIM ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "103008",
+      "symbol": "ORMAN ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "103009",
+      "symbol": "ÖRTÜ ALTI TARIM ARAZİSİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "103010",
+      "symbol": "TARIMSAL NİTELİKLİ ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "103011",
+      "symbol": "ZEYTİNLİK ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "104001",
+      "symbol": "ANA İSTASYON (GAR)"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "104002",
+      "symbol": "ARA İSTASYON"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "105001",
+      "symbol": "ANAOKULU ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "105002",
+      "symbol": "HALK EĞİTİM MERKEZİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "105003",
+      "symbol": "İLKOKUL ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "105004",
+      "symbol": "LİSE ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "105005",
+      "symbol": "ORTAOKUL ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "105006",
+      "symbol": "ÖZEL ANAOKULU ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "105007",
+      "symbol": "ÖZEL EĞİTİM ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "105008",
+      "symbol": "MESLEKİ VE TEKNİK ÖĞRETİM TESİSİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "105009",
+      "symbol": "YÜKSEK ÖĞRETİM ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "106001",
+      "symbol": "AKARYAKIT ÜRÜNLERİ DEPOLAMA ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "106002",
+      "symbol": "DOĞALGAZ / DAĞITIM TESİSİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "106003",
+      "symbol": "ENERJİ ÜRETİM ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "106004",
+      "symbol": "ELEKTRONİK HABERLEŞME ALTYAPI ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "106005",
+      "symbol": "NÜKLEER ENERJİ SANTRALİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "106006",
+      "symbol": "REGÜLATÖR ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "106007",
+      "symbol": "TERMİK SANTRAL ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "106008",
+      "symbol": "TRAFO ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "106009",
+      "symbol": "TÜRBİN ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "106010",
+      "symbol": "YANICI PARLAYICI VE PATLAYICI MADDELER ÜRETİM VE DEPO ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "106011",
+      "symbol": "YENİLENEBİLİR ENERJİ KAYNAKLARINA DAYALI ÜRETİM TESİSİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "106100",
+      "symbol": "ENERJİ DEPOLAMA ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "106200",
+      "symbol": "RAFİNERİ-PETROKİMYA TESİSİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "107001",
+      "symbol": "HAVAALANI/HAVALİMANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "107002",
+      "symbol": "HELİKOPTER İNİŞ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "108001",
+      "symbol": "CAMİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "108002",
+      "symbol": "KİLİSE"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "108003",
+      "symbol": "MESCİT"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "108004",
+      "symbol": "ŞAPEL"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "108005",
+      "symbol": "SİNAGOG (HAVRA)"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "109001",
+      "symbol": "BİSİKLET PARKI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "109002",
+      "symbol": "TERMİNAL (OTOGAR)"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "109003",
+      "symbol": "GENEL OTOPARK ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "109004",
+      "symbol": "TIR, KAMYON, MAKİNE PARKI VE GARAJ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "109100",
+      "symbol": "KATLI OTOPARK"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "109200",
+      "symbol": "ELEKTRİKLİ ARAÇ ŞARJ İSTASYONU"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110001",
+      "symbol": "ASKERİ ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110002",
+      "symbol": "AKARYAKIT VE SERVİS İSTASYONU ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110003",
+      "symbol": "BETON SANTRALİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110004",
+      "symbol": "BELEDİYE HİZMET ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110005",
+      "symbol": "DEPOLAMA ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110006",
+      "symbol": "ENDÜSTRİYEL GELİŞME BÖLGESİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110007",
+      "symbol": "İDARİ HİZMET ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110008",
+      "symbol": "İMALATHANE TESİS ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110009",
+      "symbol": "TİCARET - KONUT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110010",
+      "symbol": "KÜÇÜK SANAYİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110011",
+      "symbol": "LOJİSTİK TESİS ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110012",
+      "symbol": "PAZAR ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110013",
+      "symbol": "RESMİ KURUM ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110014",
+      "symbol": "SANAYİ TESİS ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110015",
+      "symbol": "SU ÜRÜNLERİ ÜRETİM VE YETİŞTİRME TESİSİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110016",
+      "symbol": "TARIM VE HAYVANCILIK TESİS ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110017",
+      "symbol": "TİCARET-TURİZM-KONUT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110018",
+      "symbol": "TİCARET ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110019",
+      "symbol": "T1 TİCARET ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110020",
+      "symbol": "T2 TİCARET ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110021",
+      "symbol": "T3 TİCARET ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110022",
+      "symbol": "TİCARET - TURİZM ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110023",
+      "symbol": "TOPLU İŞYERLERİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "110024",
+      "symbol": "TOPTAN TİCARET ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "111001",
+      "symbol": "HAVAİ HAT İSTASYONU"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "111002",
+      "symbol": "HAVARAY İSTASYONU"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "111003",
+      "symbol": "RAYLI TOPLU TAŞIMA İSTASYONU"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "111004",
+      "symbol": "TOPLU TAŞINIM TÜRLERİ ARASI DEĞİŞİM VE AKTARMA ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "112001",
+      "symbol": "GELİŞME KONUT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "112002",
+      "symbol": "YERLEŞİK KONUT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113001",
+      "symbol": "1. DERECE ARKEOLOJİK SİT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113002",
+      "symbol": "1. DERECE DOĞAL SİT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113003",
+      "symbol": "2. DERECE ARKEOLOJİK SİT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113004",
+      "symbol": "2. DERECE DOĞAL SİT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113005",
+      "symbol": "3. DERECE ARKEOLOJİK SİT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113006",
+      "symbol": "3. DERECE DOĞAL SİT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113007",
+      "symbol": "EKOLOJİK NİTELİĞİ KORUNACAK ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113008",
+      "symbol": "HASSAS ENDEMİK BİYOTOP ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113009",
+      "symbol": "KORUNMASI GEREKLİ FLORA VE FAUNA ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113010",
+      "symbol": "KENTSEL SİT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113011",
+      "symbol": "KESİN KORUNACAK HASSAS ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113012",
+      "symbol": "NİTELİKLİ DOĞAL KORUMA ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113013",
+      "symbol": "ÖÇK BÖLGESİ HASSAS ALAN (A)"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113014",
+      "symbol": "ÖÇK BÖLGESİ HASSAS ALAN (B)"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113015",
+      "symbol": "ÖÇK BÖLGESİ HASSAS ALAN (C)"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113016",
+      "symbol": "ÖZEL ÇEVRE KORUMA BÖLGESİ (ÖÇK)"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113017",
+      "symbol": "SÜRDÜRÜLEBİLİR KORUMA VE KONTROLLÜ KULLANIM ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113018",
+      "symbol": "TABİATI KORUMA ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113019",
+      "symbol": "TARİHİ SİT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113020",
+      "symbol": "ULUSLARARASI SÖZLEŞMELERLE BELİRLENEN KORUMA ALAN SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113021",
+      "symbol": "YABAN HAYATI KORUMA VE GELİŞTİRME ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113022",
+      "symbol": "YÖRESEL MİMARİ ÖZELLİKLERİ KORUNACAK ALAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113023",
+      "symbol": "MİLLİ PARK"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113024",
+      "symbol": "TABİAT PARKI ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113025",
+      "symbol": "TESCİLLİ ANIT YAPI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113026",
+      "symbol": "TESCİLLİ BİNA"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113027",
+      "symbol": "TESCİLLİ PARSEL"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113028",
+      "symbol": "TESCİLLİ TABİAT VARLIĞI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "113101",
+      "symbol": "SİT ETKİLEŞİM GEÇİŞ ALANI SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "114001",
+      "symbol": "ASKERİ YASAK VE GÜVENLİK BÖLGESİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "114002",
+      "symbol": "ENDÜSTRİ BÖLGESİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "114003",
+      "symbol": "ORGANİZE SANAYİ BÖLGESİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "114004",
+      "symbol": "SERBEST BÖLGE"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "114005",
+      "symbol": "TEKNOLOJİ GELİŞTİRME BÖLGESİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "114101",
+      "symbol": "BOĞAZİÇİ GERİ GÖRÜNÜM BÖLGESİ SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "114102",
+      "symbol": "BOĞAZİÇİ ÖN GÖRÜNÜM BÖLGESİ SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "114103",
+      "symbol": "BOĞAZİÇİ ETKİLENME BÖLGESİ SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "114104",
+      "symbol": "DİĞER ÖZEL KANUNLARLA BELİRLENEN ALAN SINIRLARI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "114105",
+      "symbol": "GECEKONDU ÖNLEME BÖLGESİ SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "114108",
+      "symbol": "TOPLU KONUT ALANI SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "114109",
+      "symbol": "TURİZM MERKEZİ/KÜLTÜR VE TURİZM KORUMA VE GELİŞİM ALT BÖLGE SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "115001",
+      "symbol": "AİLE SAĞLIĞI MERKEZİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "115002",
+      "symbol": "HASTANE"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "115003",
+      "symbol": "ÖZEL SAĞLIK TESİSİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "115004",
+      "symbol": "SAĞLIK TESİSİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116001",
+      "symbol": "AÇIK SPOR TESİSİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116002",
+      "symbol": "KAPALI SPOR TESİSİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116003",
+      "symbol": "KONGRE VE SERGİ MERKEZİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116004",
+      "symbol": "KREŞ, GÜNDÜZ BAKIMEVİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116005",
+      "symbol": "KÜLTÜREL TESİS ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116006",
+      "symbol": "ÖZEL AÇIK SPOR TESİSİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116007",
+      "symbol": "ÖZEL KAPALI SPOR TESİSİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116008",
+      "symbol": "ÖZEL KREŞ, GÜNDÜZ BAKIMEVİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116009",
+      "symbol": "ÖZEL KÜLTÜREL TESİS ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116011",
+      "symbol": "ÖZEL SOSYAL TESİS ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116012",
+      "symbol": "ÖZEL YURT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116013",
+      "symbol": "ŞEFKAT EVLERİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116014",
+      "symbol": "SOSYAL TESİS ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116015",
+      "symbol": "YAŞLI BAKIMEVİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "116016",
+      "symbol": "YURT ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "117001",
+      "symbol": "ATIKSU TESİSLERİ ALANI (ARITMA, TERFİ MERKEZİ)"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "117002",
+      "symbol": "İÇME SUYU TESİSLERİ ALANI (DEPOLAMA, ARITMA, TERFİ MERKEZİ)"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "117003",
+      "symbol": "KATI ATIK TESİSLERİ ALANI (BOŞALTMA, BERTARAF, İŞLEME, TRANSFER VE DEPOLAMA)"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "117004",
+      "symbol": "SU KAYNAKLARI TOPLAMA YERİ (KAPTAJ ALANI)"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "117005",
+      "symbol": "SU YÜZEYİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "117006",
+      "symbol": "TEHLİKELİ ATIK TESİSLERİ ALANI (BERTARAF VE DEPOLAMA)"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "117007",
+      "symbol": "TEKNİK ALTYAPI ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "117008",
+      "symbol": "YAPAY ADA "
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "117100",
+      "symbol": "ATIK GERİ KAZANIM TESİSLERİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "118001",
+      "symbol": "APART OTEL ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "118002",
+      "symbol": "GOLF ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "118003",
+      "symbol": "GÜNÜBİRLİK TESİS ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "118004",
+      "symbol": "HOSTEL ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "118005",
+      "symbol": "KAMPİNG ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "118006",
+      "symbol": "KIŞ SPORLARI VE KAYAK TESİSİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "118007",
+      "symbol": "MOTEL ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "118008",
+      "symbol": "OTEL ALANI "
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "118009",
+      "symbol": "PANSİYON ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "118010",
+      "symbol": "SAĞLIK ODAKLI TATİL KÖYÜ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "118011",
+      "symbol": "TATİL KÖYÜ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "118012",
+      "symbol": "TERMAL TURİZM ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119001",
+      "symbol": "BORU HATTI KORUMA KUŞAĞI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119002",
+      "symbol": "DEMİRYOLLARI KORUMA KUŞAĞI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119003",
+      "symbol": "ENERJİ NAKİL HATTI KORUMA KUŞAĞI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119005",
+      "symbol": "HAVAALANI/HAVALİMANI KORUMA KUŞAĞI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119006",
+      "symbol": "İÇME SUYU ANA İLETİM HATTI KORUMA KUŞAĞI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119007",
+      "symbol": "JEOTERMAL KORUMA KUŞAĞI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119008",
+      "symbol": "KARAYOLLARI YOL KENARI KORUMA KUŞAĞI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119009",
+      "symbol": "İÇME VE KULLANMA SUYU KISA MESAFELİ KORUMA ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119010",
+      "symbol": "İÇME VE KULLANMA SUYU MUTLAK KORUMA ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119011",
+      "symbol": "İÇME VE KULLANMA SUYU ORTA MESAFELİ KORUMA ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119012",
+      "symbol": "İÇME VE KULLANMA SUYU UZUN MESAFELİ KORUMA ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119013",
+      "symbol": "NÜKLEER ENERJİ ÜRETİM ALANI KORUMA KUŞAĞI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119014",
+      "symbol": "SAĞLIK KORUMA BANDI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119015",
+      "symbol": "SU KANALLARI KORUMA KUŞAĞI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119016",
+      "symbol": "SULAK ALAN BÖLGESİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119017",
+      "symbol": "SULAK ALAN EKOLOJİK ETKİLENME BÖLGESİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119018",
+      "symbol": "SULAK ALAN MUTLAK KORUMA BÖLGESİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119019",
+      "symbol": "SULAK ALAN ÖZEL HÜKÜM BÖLGESİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119020",
+      "symbol": "SULAK ALAN TAMPON BÖLGESİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119021",
+      "symbol": "YANICI PARLAYICI VE PATLAYICI MADDELER KORUMA KUŞAĞI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119022",
+      "symbol": "YER ALTI SU KAYNAKLARI KORUMA KUŞAĞI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119023",
+      "symbol": "YER ALTI SU KAYNAKLARI KORUMA ALANLARI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119102",
+      "symbol": "SULAK ALAN SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "119200",
+      "symbol": "TÜNEL ETKİ ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120001",
+      "symbol": "BALIKÇI BARINAĞI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120002",
+      "symbol": "BARINAK"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120003",
+      "symbol": "TEKNE İMAL VE ÇEKEK YERİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120004",
+      "symbol": "DOLFEN/PLATFORM"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120005",
+      "symbol": "GEMİ SÖKÜM YERİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120006",
+      "symbol": "DENİZ İNİŞ RAMPASI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120007",
+      "symbol": "İSKELE"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120008",
+      "symbol": "KIYI KORUMA YAPILARI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120009",
+      "symbol": "KONTEYNER LİMANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120010",
+      "symbol": "KRUVAZİYER LİMANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120011",
+      "symbol": "MAHMUZ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120012",
+      "symbol": "MENFEZ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120013",
+      "symbol": "RIHTIM"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120014",
+      "symbol": "RO RO LİMANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120015",
+      "symbol": "TEKNE İMAL VE BAKIM YERİ"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120016",
+      "symbol": "TERSANE ALANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120017",
+      "symbol": "YAT LİMANI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "120100",
+      "symbol": "LİMAN"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "121101",
+      "symbol": "BELEDİYE SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "121102",
+      "symbol": "İL SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "121103",
+      "symbol": "İLÇE SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "121104",
+      "symbol": "KÖY SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "121105",
+      "symbol": "MAHALLE SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "121106",
+      "symbol": "MÜCAVİR ALAN SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "121107",
+      "symbol": "ÜLKE SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "122103",
+      "symbol": "ETAPLAMA SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "122105",
+      "symbol": "İMAR HAKKI AKTARIM ALANI SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "122106",
+      "symbol": "KENTSEL TASARIM PROJESİ SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "122107",
+      "symbol": "ÖZEL PROJE ALANI SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "122108",
+      "symbol": "PLAN DEĞİŞİKLİĞİ ONAMA SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "122109",
+      "symbol": "PLAN ONAMA SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "122110",
+      "symbol": "YAPI YAKLAŞMA SINIRI"
+    },
+    {
+      "plan_level": "UIP",
+      "geometry_type": "POLYGON",
+      "code": "123100",
+      "symbol": "SOKAK HAYVANLARI BARINAĞI ALANI"
+    }
+  ]
+}

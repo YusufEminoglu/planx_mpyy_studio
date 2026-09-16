@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "plan_level": "UIP",
+  "plan_transaction_number": "UIP-31001234",
+  "approval_date": "2026-09-01",
+  "approval_number": "42",
+  "sheets": [
+    {
+      "sheet_id": "H22-A",
+      "front_face_pin": "UIP-31001234",
+      "front_face_approval_date": "2026-09-01",
+      "front_face_approval_number": "42",
+      "stamped": true,
+      "sha256": "replace_with_sheet_sha256"
+    }
+  ]
+}

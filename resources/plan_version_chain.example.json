@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "plan_id": "NIP-2026-01",
+  "versions": [
+    {
+      "version": "1",
+      "content_sha256": "replace_with_first_version_sha256",
+      "parent_sha256": "",
+      "created_at": "2026-09-01T10:00:00Z"
+    },
+    {
+      "version": "2",
+      "content_sha256": "replace_with_second_version_sha256",
+      "parent_sha256": "replace_with_first_version_sha256",
+      "created_at": "2026-09-02T10:00:00Z"
+    }
+  ]
+}

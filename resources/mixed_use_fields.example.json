@@ -1,0 +1,18 @@
+{
+  "required_fields": [
+    "use_code",
+    "ratios_in_plan_report",
+    "ratios_in_plan_notes",
+    "parking_details",
+    "green_area_details",
+    "social_technical_infrastructure_details"
+  ],
+  "residential_mixed_use_fields": [
+    "residential_ratio",
+    "residential_infrastructure_allocated"
+  ],
+  "conditional_fields": [
+    "independent_unit_count_required",
+    "independent_unit_count"
+  ]
+}

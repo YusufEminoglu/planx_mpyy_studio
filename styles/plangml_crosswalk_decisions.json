@@ -1,0 +1,257 @@
+{
+ "version": 1,
+ "note": "CAD tabaka → PlanGML 1.1.7 eşleşmesinde kademe karşılığı kararları. tools/build_plangml_tabaka_crosswalk.py uygular; her karar son kontrol listesinde gerekçesiyle görünür.",
+ "feature_equivalents": [
+  {
+   "from": "Konut",
+   "attrs": {
+    "KonutTip": "GelismeKonut"
+   },
+   "NIP": {
+    "feature": "GelismeKonut",
+    "attrs": {}
+   },
+   "CDP": {
+    "feature": "KentselGelismeKonut",
+    "attrs": {}
+   },
+   "gerekce": "NİP şeması gelişme konutu ayrı 'GelismeKonut' tipiyle, ÇDP 'KentselGelismeKonut' tipiyle tutar; KonutTip alanı yalnız UİP'te vardır."
+  },
+  {
+   "from": "Konut",
+   "attrs": {
+    "KonutTip": "YerlesikKonut"
+   },
+   "NIP": {
+    "feature": "MevcutKonut",
+    "attrs": {}
+   },
+   "CDP": {
+    "feature": "KentselYerlesik",
+    "attrs": {}
+   },
+   "gerekce": "Yerleşik konut NİP'te 'MevcutKonut', ÇDP'de 'KentselYerlesik' tipidir."
+  },
+  {
+   "from": "IletimHatti",
+   "attrs": {
+    "EnerjiHatTip": "DogalgazBoruHatti"
+   },
+   "NIP": {
+    "feature": "BoruHatti",
+    "attrs": {
+     "EnerjiHatTip": "DogalgazBoruHatti"
+    }
+   },
+   "CDP": {
+    "feature": "BoruHatti",
+    "attrs": {
+     "BoruHattiTip": "DogalgazBoruHatti"
+    }
+   },
+   "gerekce": "NİP ve ÇDP şemalarında boru hatları 'BoruHatti' tipindedir; kod aynıdır."
+  },
+  {
+   "from": "IletimHatti",
+   "attrs": {
+    "EnerjiHatTip": "AkaryakitBoruHatti"
+   },
+   "NIP": {
+    "feature": "BoruHatti",
+    "attrs": {
+     "EnerjiHatTip": "PetrolBoruHatti"
+    }
+   },
+   "CDP": {
+    "feature": "BoruHatti",
+    "attrs": {
+     "BoruHattiTip": "PetrolBoruHatti"
+    }
+   },
+   "gerekce": "NİP/ÇDP kod listesinde akaryakıt boru hattı yoktur; en yakın resmî kod 'PetrolBoruHatti'dır. Anlam daraltması olduğundan son kontrolde doğrulanmalıdır."
+  },
+  {
+   "from": "EgitimTesisAlani",
+   "attrs": {
+    "EgitimTesisTip": "IlkokulAlani"
+   },
+   "NIP": {
+    "feature": "EgitimTesisAlani",
+    "attrs": {
+     "EgitimTesisTip": "EgitimAlani"
+    }
+   },
+   "gerekce": "NİP ölçeğinde eğitim kademeleri ayrılmaz; ilkokul 'EgitimAlani' olarak tutulur."
+  },
+  {
+   "from": "EgitimTesisAlani",
+   "attrs": {
+    "EgitimTesisTip": "MeslekiTeknikOgretimTesisAlani"
+   },
+   "NIP": {
+    "feature": "EgitimTesisAlani",
+    "attrs": {
+     "EgitimTesisTip": "EgitimAlani"
+    }
+   },
+   "gerekce": "NİP ölçeğinde eğitim kademeleri ayrılmaz; mesleki teknik öğretim 'EgitimAlani' olarak tutulur."
+  }
+ ],
+ "tabaka_overrides": {
+  "*": {
+   "ETAPLAMA_SINIRI": {
+    "feature": "EtaplamaSiniri",
+    "attrs": {},
+    "gerekce": "Etaplama sınırı plan onama sınırı değildir; şemada ayrı 'EtaplamaSiniri' tipi var."
+   },
+   "SINIR_ETAPLAMA": {
+    "feature": "EtaplamaSiniri",
+    "attrs": {},
+    "gerekce": "Etaplama sınırı plan onama sınırı değildir; şemada ayrı 'EtaplamaSiniri' tipi var."
+   },
+   "FONKSIYON_SINIRI": {
+    "exclude": true,
+    "gerekce": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; PlanGML 1.1.7'da karşılığı olan bir tip yok."
+   },
+   "SINIR_FONKSIYON": {
+    "exclude": true,
+    "gerekce": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; PlanGML 1.1.7'da karşılığı olan bir tip yok."
+   },
+   "PL_ZEYTINLIK_ALAN": {
+    "feature": "Tarim",
+    "attrs": {
+     "TarimTip": "Zeytinlik"
+    },
+    "gerekce": "Zeytinlik tabakası Tarim tipinin 'Zeytinlik' koduyla tutulur."
+   }
+  },
+  "UIP": {
+   "MAHALLE_SINIRI": {
+    "feature": "MahalleSiniri",
+    "attrs": {},
+    "gerekce": "Mahalle sınırı için şemada 'MahalleSiniri' tipi var."
+   },
+   "SINIR_MAHALLE": {
+    "feature": "MahalleSiniri",
+    "attrs": {},
+    "gerekce": "Mahalle sınırı için şemada 'MahalleSiniri' tipi var."
+   },
+   "KENTSEL_TASARIM_SINIRI": {
+    "feature": "KentselTasarimProjeSiniri",
+    "attrs": {},
+    "gerekce": "Kentsel tasarım projesi sınırı için şemada ayrı tip var."
+   },
+   "SINIR_KENTSEL_TASARIM": {
+    "feature": "KentselTasarimProjeSiniri",
+    "attrs": {},
+    "gerekce": "Kentsel tasarım projesi sınırı için şemada ayrı tip var."
+   },
+   "KST_NUKLEER_EN_KORU": {
+    "feature": "KorumaKusaklari",
+    "attrs": {
+     "KusakTip": "NukleerEnerjiKorumaKusagi"
+    },
+    "gerekce": "Nükleer enerji koruma kuşağıdır, üretim alanı değil."
+   },
+   "PL_NUKLEER_SANTRAL": {
+    "feature": "EnerjiUretim",
+    "attrs": {
+     "EnerjiTip": "NukleerEnerjiSantralAlani"
+    },
+    "gerekce": "Nükleer santral için EnerjiUretim tipinde kendi kodu var."
+   },
+   "PL_YENILENEBILIR_EN": {
+    "feature": "EnerjiUretim",
+    "attrs": {
+     "EnerjiTip": "YenilenebilirEnerjiKaynaginaDayaliUretimTesisAlani"
+    },
+    "gerekce": "Yenilenebilir enerji üretim tesisi için EnerjiUretim tipinde kendi kodu var."
+   }
+  },
+  "NIP": {
+   "MAHALLE_SINIRI": {
+    "exclude": true,
+    "gerekce": "NİP 1.1.7 şemasında mahalle sınırı tipi yok; plan onama sınırı olarak yazılmamalı."
+   },
+   "SINIR_MAHALLE": {
+    "exclude": true,
+    "gerekce": "NİP 1.1.7 şemasında mahalle sınırı tipi yok; plan onama sınırı olarak yazılmamalı."
+   },
+   "KENTSEL_TASARIM_SINIRI": {
+    "exclude": true,
+    "gerekce": "NİP 1.1.7 şemasında kentsel tasarım projesi sınırı tipi yok."
+   },
+   "SINIR_KENTSEL_TASARIM": {
+    "exclude": true,
+    "gerekce": "NİP 1.1.7 şemasında kentsel tasarım projesi sınırı tipi yok."
+   },
+   "SNR_MEVCUT_KORUNACAK": {
+    "feature": "MudahaleSiniri",
+    "attrs": {
+     "MudahaleSiniriTip": "MevcutPlandakiDurumuKorunacakAlanSiniri"
+    },
+    "gerekce": "'Mevcut plandaki durumu korunacak alan sınırı' müdahale sınırı kodudur, plan onama sınırı değil."
+   },
+   "SNR_REZERV_YAPI": {
+    "feature": "KentselDonusumSinirlari",
+    "attrs": {
+     "KentselDonusumSinirlariTip": "RezervYapiAlanSiniri"
+    },
+    "gerekce": "Tip doğru, kod eksikti."
+   },
+   "SNR_YENILEME_ALANI": {
+    "feature": "KentselDonusumSinirlari",
+    "attrs": {
+     "KentselDonusumSinirlariTip": "YenilemeAlanSiniri"
+    },
+    "gerekce": "Tip doğru, kod eksikti."
+   }
+  },
+  "CDP": {
+   "MAHALLE_SINIRI": {
+    "exclude": true,
+    "gerekce": "ÇDP 1.1.7 şemasında mahalle sınırı tipi yok; plan onama sınırı olarak yazılmamalı."
+   },
+   "SINIR_MAHALLE": {
+    "exclude": true,
+    "gerekce": "ÇDP 1.1.7 şemasında mahalle sınırı tipi yok; plan onama sınırı olarak yazılmamalı."
+   },
+   "KENTSEL_TASARIM_SINIRI": {
+    "exclude": true,
+    "gerekce": "ÇDP 1.1.7 şemasında kentsel tasarım projesi sınırı tipi yok."
+   },
+   "SINIR_KENTSEL_TASARIM": {
+    "exclude": true,
+    "gerekce": "ÇDP 1.1.7 şemasında kentsel tasarım projesi sınırı tipi yok."
+   },
+   "PL_ORG_TARIM_HAY": {
+    "feature": "Tarim",
+    "attrs": {
+     "TarimTip": "OrganizeTarimVeHayvancilikAlani"
+    },
+    "gerekce": "Kaynak tabloda il idari merkezine gidiyordu. Organize tarım ve hayvancılık alanı Tarim tipinin kendi kodudur (1.1.7'de kod adı düzeltildi)."
+   },
+   "PL_YESIL_SPOR": {
+    "feature": "AcikYesilAlan",
+    "attrs": {
+     "AcikYesilTip": "KentselBolgeselYesilSporAlani"
+    },
+    "gerekce": "Kaynak tabloda il idari merkezine gidiyordu; kentsel/bölgesel yeşil spor alanı açık yeşil alan kodudur."
+   },
+   "PL_KIYI_TESISLERI": {
+    "feature": "KiyiYapilari",
+    "attrs": {
+     "KiyiYapiTip": "KiyiTesisAlani"
+    },
+    "gerekce": "Kaynak tabloda meraya gidiyordu; kıyı tesisleri KiyiYapilari tipinin 'KiyiTesisAlani' kodudur."
+   },
+   "PL_KB_SOSYAL_ALTYAPI": {
+    "feature": "SosyalKulturelAlan",
+    "attrs": {
+     "SosyalKulturelTip": "KentselBolgeselSosyalAltyapiAlani"
+    },
+    "gerekce": "Kaynak tabloda yükseköğretim alanına gidiyordu; kentsel/bölgesel sosyal altyapı kendi koduyla tutulur."
+   }
+  }
+ }
+}

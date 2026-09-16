@@ -1,0 +1,16 @@
+{
+  "profile_id": "EXAMPLE_ONLY_NOT_MINISTRY_SCHEMA",
+  "profile_version": "1.0",
+  "source_institution": "Example institution - replace with the actual issuer",
+  "source_reference": "Example dictionary - replace with the actual document and version",
+  "delimiter": ",",
+  "columns": {
+    "table": "dataset",
+    "field": "attribute",
+    "type": "sqlite_type",
+    "not_null": "required",
+    "primary_key": "primary_key",
+    "geometry_type": "geometry",
+    "srs_id": "srs"
+  }
+}

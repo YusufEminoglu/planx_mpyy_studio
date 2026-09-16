@@ -1,0 +1,2198 @@
+{
+ "uipPolygonTable": [
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101001,
+   "uip_fonksiyon": "AĞAÇLANDIRILACAK ALAN",
+   "id3": 101001,
+   "uip_tabaka": "PL_AGACLANDIRILACAK"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101002,
+   "uip_fonksiyon": "ARBORETUM - BOTANİK PARKI",
+   "id3": 101002,
+   "uip_tabaka": "PL_ARBORETUM_ALANI"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101003,
+   "uip_fonksiyon": "ÇOCUK BAHÇESİ VE OYUN ALANI",
+   "id3": 101003,
+   "uip_tabaka": "PL_COCUK_BAHCESI"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101004,
+   "uip_fonksiyon": "FUAR, PANAYIR VE FESTİVAL ALANI",
+   "id3": 101004,
+   "uip_tabaka": "PL_FUAR"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101005,
+   "uip_fonksiyon": "HAYVANAT BAHÇESİ",
+   "id3": 101005,
+   "uip_tabaka": "PL_HAYVANAT_BAHCESI"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101006,
+   "uip_fonksiyon": "HİPODROM",
+   "id3": 101006,
+   "uip_tabaka": "PL_HIPODROM"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101007,
+   "uip_fonksiyon": "KENT ORMANI",
+   "id3": 101007,
+   "uip_tabaka": "PL_KENT_ORMANI"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101008,
+   "uip_fonksiyon": "KORUNACAK BAHÇE",
+   "id3": 101008,
+   "uip_tabaka": "PL_KORUNACAK_BAHCE"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101009,
+   "uip_fonksiyon": "MESİRE YERİ",
+   "id3": 101009,
+   "uip_tabaka": "PL_MESIRE_YERI"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101010,
+   "uip_fonksiyon": "MEYDAN",
+   "id3": 101010,
+   "uip_tabaka": "PL_MEYDAN"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101011,
+   "uip_fonksiyon": "MEZARLIK ALANI",
+   "id3": 101011,
+   "uip_tabaka": "PL_MEZARLIK"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101012,
+   "uip_fonksiyon": "MİLLET BAHÇESİ",
+   "id3": 101012,
+   "uip_tabaka": "PL_MILLET_BAHCESI"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101013,
+   "uip_fonksiyon": "PARK",
+   "id3": 101013,
+   "uip_tabaka": "PL_PARK"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101014,
+   "uip_fonksiyon": "PASİF YEŞİL ALAN",
+   "id3": 101014,
+   "uip_tabaka": "PL_PASIF_YESIL"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101015,
+   "uip_fonksiyon": "REKREASYON ALANI",
+   "id3": 101015,
+   "uip_tabaka": "PL_REKREASYON"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101016,
+   "uip_fonksiyon": "REKREAKTİF ALAN",
+   "id3": 101016,
+   "uip_tabaka": "PL_REKREATIF_ALAN"
+  },
+  {
+   "id1": 101000,
+   "ust_konu_grup": "AÇIK VE YEŞİL ALANLAR",
+   "id2": 101017,
+   "uip_fonksiyon": "BAKI VE SEYİR TERASI",
+   "id3": 101017,
+   "uip_tabaka": "PL_SEYIR_TERASI"
+  },
+  {
+   "id1": 102000,
+   "ust_konu_grup": "AFET TEHLİKELİ ALANLAR",
+   "id2": 102001,
+   "uip_fonksiyon": "HEYELAN ALANI",
+   "id3": 102001,
+   "uip_tabaka": "KST_HEYELAN"
+  },
+  {
+   "id1": 102000,
+   "ust_konu_grup": "AFET TEHLİKELİ ALANLAR",
+   "id2": 102002,
+   "uip_fonksiyon": "ÖNLEMLİ ALAN",
+   "id3": 102002,
+   "uip_tabaka": "KST_ONLEMLI_ALAN"
+  },
+  {
+   "id1": 102000,
+   "ust_konu_grup": "AFET TEHLİKELİ ALANLAR",
+   "id2": 102003,
+   "uip_fonksiyon": "TAŞKINA MARUZ ALAN",
+   "id3": 102003,
+   "uip_tabaka": "KST_TASKIN"
+  },
+  {
+   "id1": 102000,
+   "ust_konu_grup": "AFET TEHLİKELİ ALANLAR",
+   "id2": 102004,
+   "uip_fonksiyon": "YAPI YASAKLI ALAN",
+   "id3": 102004,
+   "uip_tabaka": "KST_YAPI_YASAK"
+  },
+  {
+   "id1": 103000,
+   "ust_konu_grup": "BUGÜNKÜ ARAZİ KULLANIMI DEVAM ETTİRİLEREK KORUNACAK ALANLAR",
+   "id2": 103001,
+   "uip_fonksiyon": "AKDENİZ FOKU YAŞAM ALANI",
+   "id3": 103001,
+   "uip_tabaka": "PL_AKDENIZ_FOKU_YASA"
+  },
+  {
+   "id1": 103000,
+   "ust_konu_grup": "BUGÜNKÜ ARAZİ KULLANIMI DEVAM ETTİRİLEREK KORUNACAK ALANLAR",
+   "id2": 103002,
+   "uip_fonksiyon": "DENİZ KAPLUMBAĞALARI ÜREME VE KORUMA ALANI",
+   "id3": 103002,
+   "uip_tabaka": "PL_DENIZ_KAPLM_KORU"
+  },
+  {
+   "id1": 103000,
+   "ust_konu_grup": "BUGÜNKÜ ARAZİ KULLANIMI DEVAM ETTİRİLEREK KORUNACAK ALANLAR",
+   "id2": 103003,
+   "uip_fonksiyon": "DOĞAL KARAKTERİ KORUNACAK ALAN",
+   "id3": 103003,
+   "uip_tabaka": "PL_DOGAL_KARKT_KORU"
+  },
+  {
+   "id1": 103000,
+   "ust_konu_grup": "BUGÜNKÜ ARAZİ KULLANIMI DEVAM ETTİRİLEREK KORUNACAK ALANLAR",
+   "id2": 103004,
+   "uip_fonksiyon": "KUMSAL-PLAJ",
+   "id3": 103004,
+   "uip_tabaka": "PL_KUMSAL_PLAJ"
+  },
+  {
+   "id1": 103000,
+   "ust_konu_grup": "BUGÜNKÜ ARAZİ KULLANIMI DEVAM ETTİRİLEREK KORUNACAK ALANLAR",
+   "id2": 103005,
+   "uip_fonksiyon": "MAKİLİK- FUNDALIK ALAN",
+   "id3": 103005,
+   "uip_tabaka": "PL_MAKI_FUNDA"
+  },
+  {
+   "id1": 103000,
+   "ust_konu_grup": "BUGÜNKÜ ARAZİ KULLANIMI DEVAM ETTİRİLEREK KORUNACAK ALANLAR",
+   "id2": 103006,
+   "uip_fonksiyon": "MERA ALANI",
+   "id3": 103006,
+   "uip_tabaka": "PL_MERA_ALANI"
+  },
+  {
+   "id1": 103000,
+   "ust_konu_grup": "BUGÜNKÜ ARAZİ KULLANIMI DEVAM ETTİRİLEREK KORUNACAK ALANLAR",
+   "id2": 103007,
+   "uip_fonksiyon": "ORGANİK TARIM ALANI",
+   "id3": 103007,
+   "uip_tabaka": "PL_ORGANIK_TARIM"
+  },
+  {
+   "id1": 103000,
+   "ust_konu_grup": "BUGÜNKÜ ARAZİ KULLANIMI DEVAM ETTİRİLEREK KORUNACAK ALANLAR",
+   "id2": 103008,
+   "uip_fonksiyon": "ORMAN ALANI",
+   "id3": 103008,
+   "uip_tabaka": "PL_ORMAN_ALANI"
+  },
+  {
+   "id1": 103000,
+   "ust_konu_grup": "BUGÜNKÜ ARAZİ KULLANIMI DEVAM ETTİRİLEREK KORUNACAK ALANLAR",
+   "id2": 103009,
+   "uip_fonksiyon": "ÖRTÜ ALTI TARIM ARAZİSİ",
+   "id3": 103009,
+   "uip_tabaka": "PL_ORTU_ALTI_TARIM"
+  },
+  {
+   "id1": 103000,
+   "ust_konu_grup": "BUGÜNKÜ ARAZİ KULLANIMI DEVAM ETTİRİLEREK KORUNACAK ALANLAR",
+   "id2": 103010,
+   "uip_fonksiyon": "TARIMSAL NİTELİKLİ ALAN",
+   "id3": 103010,
+   "uip_tabaka": "PL_TARIMSAL_ALAN"
+  },
+  {
+   "id1": 103000,
+   "ust_konu_grup": "BUGÜNKÜ ARAZİ KULLANIMI DEVAM ETTİRİLEREK KORUNACAK ALANLAR",
+   "id2": 103011,
+   "uip_fonksiyon": "ZEYTİNLİK ALAN",
+   "id3": 103011,
+   "uip_tabaka": "PL_ZEYTINLIK_ALAN"
+  },
+  {
+   "id1": 104000,
+   "ust_konu_grup": "DEMİRYOLLARI",
+   "id2": 104001,
+   "uip_fonksiyon": "ANA İSTASYON (GAR)",
+   "id3": 104001,
+   "uip_tabaka": "PL_ANA_ISTASYON"
+  },
+  {
+   "id1": 104000,
+   "ust_konu_grup": "DEMİRYOLLARI",
+   "id2": 104002,
+   "uip_fonksiyon": "ARA İSTASYON",
+   "id3": 104002,
+   "uip_tabaka": "PL_ARA_ISTASYON"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120001,
+   "uip_fonksiyon": "BALIKÇI BARINAĞI",
+   "id3": 120001,
+   "uip_tabaka": "PL_BALIKCI_BARINAK"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120002,
+   "uip_fonksiyon": "BARINAK",
+   "id3": 120002,
+   "uip_tabaka": "PL_BARINAK"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120003,
+   "uip_fonksiyon": "TEKNE İMAL VE ÇEKEK YERİ",
+   "id3": 120003,
+   "uip_tabaka": "PL_CEKEK_YERI"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120004,
+   "uip_fonksiyon": "DOLFEN/PLATFORM",
+   "id3": 120004,
+   "uip_tabaka": "PL_DOLFEN_PLATFORM"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120005,
+   "uip_fonksiyon": "GEMİ SÖKÜM YERİ",
+   "id3": 120005,
+   "uip_tabaka": "PL_GEMI_SOKUM"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120006,
+   "uip_fonksiyon": "DENİZ İNİŞ RAMPASI",
+   "id3": 120006,
+   "uip_tabaka": "PL_INIS_RAMPA"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120007,
+   "uip_fonksiyon": "İSKELE",
+   "id3": 120007,
+   "uip_tabaka": "PL_ISKELE"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120008,
+   "uip_fonksiyon": "KIYI KORUMA YAPILARI",
+   "id3": 120008,
+   "uip_tabaka": "PL_KIYI_KORUMA"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120009,
+   "uip_fonksiyon": "KONTEYNER LİMANI",
+   "id3": 120009,
+   "uip_tabaka": "PL_KONTEYNER_LIMAN"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120010,
+   "uip_fonksiyon": "KRUVAZİYER LİMANI",
+   "id3": 120010,
+   "uip_tabaka": "PL_KRUVAZIYER_LIMAN"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120011,
+   "uip_fonksiyon": "MAHMUZ",
+   "id3": 120011,
+   "uip_tabaka": "PL_MAHMUZ"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120012,
+   "uip_fonksiyon": "MENFEZ",
+   "id3": 120012,
+   "uip_tabaka": "PL_MENFEZ"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120013,
+   "uip_fonksiyon": "RIHTIM",
+   "id3": 120013,
+   "uip_tabaka": "PL_RIHTIM"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120014,
+   "uip_fonksiyon": "RO RO LİMANI",
+   "id3": 120014,
+   "uip_tabaka": "PL_RO_RO_LIMAN"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120015,
+   "uip_fonksiyon": "TEKNE İMAL VE BAKIM YERİ",
+   "id3": 120015,
+   "uip_tabaka": "PL_TEKNE_IMAL"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120016,
+   "uip_fonksiyon": "TERSANE ALANI",
+   "id3": 120016,
+   "uip_tabaka": "PL_TERSANE_ALANI"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120017,
+   "uip_fonksiyon": "YAT LİMANI",
+   "id3": 120017,
+   "uip_tabaka": "PL_YAT_LIMANI"
+  },
+  {
+   "id1": 105000,
+   "ust_konu_grup": "EĞİTİM TESİSLERİ ALANI",
+   "id2": 105001,
+   "uip_fonksiyon": "ANAOKULU ALANI",
+   "id3": 105001,
+   "uip_tabaka": "PL_ANAOKULU"
+  },
+  {
+   "id1": 105000,
+   "ust_konu_grup": "EĞİTİM TESİSLERİ ALANI",
+   "id2": 105002,
+   "uip_fonksiyon": "HALK EĞİTİM MERKEZİ",
+   "id3": 105002,
+   "uip_tabaka": "PL_HALK_EGITIM"
+  },
+  {
+   "id1": 105000,
+   "ust_konu_grup": "EĞİTİM TESİSLERİ ALANI",
+   "id2": 105003,
+   "uip_fonksiyon": "İLKOKUL ALANI",
+   "id3": 105003,
+   "uip_tabaka": "PL_ILKOKUL_ALANI"
+  },
+  {
+   "id1": 105000,
+   "ust_konu_grup": "EĞİTİM TESİSLERİ ALANI",
+   "id2": 105004,
+   "uip_fonksiyon": "LİSE ALANI",
+   "id3": 105004,
+   "uip_tabaka": "PL_LISE_ALANI"
+  },
+  {
+   "id1": 105000,
+   "ust_konu_grup": "EĞİTİM TESİSLERİ ALANI",
+   "id2": 105005,
+   "uip_fonksiyon": "ORTAOKUL ALANI",
+   "id3": 105005,
+   "uip_tabaka": "PL_ORTAOKUL_ALANI"
+  },
+  {
+   "id1": 105000,
+   "ust_konu_grup": "EĞİTİM TESİSLERİ ALANI",
+   "id2": 105006,
+   "uip_fonksiyon": "ÖZEL ANAOKULU ALANI",
+   "id3": 105006,
+   "uip_tabaka": "PL_OZEL_ANAOKULU"
+  },
+  {
+   "id1": 105000,
+   "ust_konu_grup": "EĞİTİM TESİSLERİ ALANI",
+   "id2": 105007,
+   "uip_fonksiyon": "ÖZEL EĞİTİM ALANI",
+   "id3": 105007,
+   "uip_tabaka": "PL_OZEL_EGITIM"
+  },
+  {
+   "id1": 105000,
+   "ust_konu_grup": "EĞİTİM TESİSLERİ ALANI",
+   "id2": 105008,
+   "uip_fonksiyon": "MESLEKİ VE TEKNİK ÖĞRETİM TESİSİ ALANI",
+   "id3": 105008,
+   "uip_tabaka": "PL_TEKNIK_OGRETIM"
+  },
+  {
+   "id1": 105000,
+   "ust_konu_grup": "EĞİTİM TESİSLERİ ALANI",
+   "id2": 105009,
+   "uip_fonksiyon": "YÜKSEK ÖĞRETİM ALANI",
+   "id3": 105009,
+   "uip_tabaka": "PL_YUKSEKOGRETIM"
+  },
+  {
+   "id1": 106000,
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": 106001,
+   "uip_fonksiyon": "AKARYAKIT ÜRÜNLERİ DEPOLAMA ALANI ",
+   "id3": 106001,
+   "uip_tabaka": "PL_AKARYAKIT_DEPO"
+  },
+  {
+   "id1": 106000,
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": 106002,
+   "uip_fonksiyon": "DOĞALGAZ / DAĞITIM TESİSİ ALANI",
+   "id3": 106002,
+   "uip_tabaka": "PL_DOGALGAZ_DAGITIM"
+  },
+  {
+   "id1": 106000,
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": 106003,
+   "uip_fonksiyon": "ENERJİ ÜRETİM ALANI",
+   "id3": 106003,
+   "uip_tabaka": "PL_ENERJI_URETIM"
+  },
+  {
+   "id1": 106000,
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": 106004,
+   "uip_fonksiyon": "ELEKTRONİK HABERLEŞME ALTYAPI ALANI",
+   "id3": 106004,
+   "uip_tabaka": "PL_HABERLESME_ALTYPI"
+  },
+  {
+   "id1": 106000,
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": 106005,
+   "uip_fonksiyon": "NÜKLEER ENERJİ SANTRALİ ALANI",
+   "id3": 106005,
+   "uip_tabaka": "PL_NUKLEER_SANTRAL"
+  },
+  {
+   "id1": 106000,
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": 106006,
+   "uip_fonksiyon": "REGÜLATÖR ALANI",
+   "id3": 106006,
+   "uip_tabaka": "PL_REGULATOR_ALANI"
+  },
+  {
+   "id1": 106000,
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": 106007,
+   "uip_fonksiyon": "TERMİK SANTRAL ALANI",
+   "id3": 106007,
+   "uip_tabaka": "PL_TERMIK_SANTRAL"
+  },
+  {
+   "id1": 106000,
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": 106008,
+   "uip_fonksiyon": "TRAFO ALANI",
+   "id3": 106008,
+   "uip_tabaka": "PL_TRAFO_ALANI"
+  },
+  {
+   "id1": 106000,
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": 106009,
+   "uip_fonksiyon": "TÜRBİN ALANI",
+   "id3": 106009,
+   "uip_tabaka": "PL_TURBIN_ALANI"
+  },
+  {
+   "id1": 106000,
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": 106010,
+   "uip_fonksiyon": "YANICI PARLAYICI VE PATLAYICI MADDELER ÜRETİM VE DEPO ALANI",
+   "id3": 106010,
+   "uip_tabaka": "PL_YANICI_MADDE_DEPO"
+  },
+  {
+   "id1": 106000,
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": 106011,
+   "uip_fonksiyon": "YENİLENEBİLİR ENERJİ KAYNAKLARINA DAYALI ÜRETİM TESİSİ ALANI",
+   "id3": 106011,
+   "uip_tabaka": "PL_YENILENEBILIR_EN"
+  },
+  {
+   "id1": 107000,
+   "ust_konu_grup": "HAVAYOLLARI",
+   "id2": 107001,
+   "uip_fonksiyon": "HAVAALANI/HAVALİMANI",
+   "id3": 107001,
+   "uip_tabaka": "PL_HAVAALANI"
+  },
+  {
+   "id1": 107000,
+   "ust_konu_grup": "HAVAYOLLARI",
+   "id2": 107002,
+   "uip_fonksiyon": "HELİKOPTER İNİŞ ALANI",
+   "id3": 107002,
+   "uip_tabaka": "PL_HELIKOPTER_INIS"
+  },
+  {
+   "id1": 108000,
+   "ust_konu_grup": "İBADET ALANLARI",
+   "id2": 108001,
+   "uip_fonksiyon": "CAMİ",
+   "id3": 108001,
+   "uip_tabaka": "PL_CAMI"
+  },
+  {
+   "id1": 108000,
+   "ust_konu_grup": "İBADET ALANLARI",
+   "id2": 108002,
+   "uip_fonksiyon": "KİLİSE",
+   "id3": 108002,
+   "uip_tabaka": "PL_KILISE"
+  },
+  {
+   "id1": 108000,
+   "ust_konu_grup": "İBADET ALANLARI",
+   "id2": 108003,
+   "uip_fonksiyon": "MESCİT",
+   "id3": 108003,
+   "uip_tabaka": "PL_MESCIT"
+  },
+  {
+   "id1": 108000,
+   "ust_konu_grup": "İBADET ALANLARI",
+   "id2": 108004,
+   "uip_fonksiyon": "ŞAPEL",
+   "id3": 108004,
+   "uip_tabaka": "PL_SAPEL"
+  },
+  {
+   "id1": 108000,
+   "ust_konu_grup": "İBADET ALANLARI",
+   "id2": 108005,
+   "uip_fonksiyon": "SİNAGOG (HAVRA)",
+   "id3": 108005,
+   "uip_tabaka": "PL_SINAGOG"
+  },
+  {
+   "id1": 109000,
+   "ust_konu_grup": "KARAYOLLARI",
+   "id2": 109001,
+   "uip_fonksiyon": "BİSİKLET PARKI",
+   "id3": 109001,
+   "uip_tabaka": "PL_BISIKLET_PARKI"
+  },
+  {
+   "id1": 109000,
+   "ust_konu_grup": "KARAYOLLARI",
+   "id2": 109002,
+   "uip_fonksiyon": "TERMİNAL (OTOGAR)",
+   "id3": 109002,
+   "uip_tabaka": "PL_OTOGAR"
+  },
+  {
+   "id1": 109000,
+   "ust_konu_grup": "KARAYOLLARI",
+   "id2": 109003,
+   "uip_fonksiyon": "GENEL OTOPARK ALANI",
+   "id3": 109003,
+   "uip_tabaka": "PL_OTOPARK"
+  },
+  {
+   "id1": 109000,
+   "ust_konu_grup": "KARAYOLLARI",
+   "id2": 109004,
+   "uip_fonksiyon": "TIR, KAMYON, MAKİNE PARKI VE GARAJ ALANI",
+   "id3": 109004,
+   "uip_tabaka": "PL_TIR_PARKI"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110001,
+   "uip_fonksiyon": "ASKERİ ALAN",
+   "id3": 110001,
+   "uip_tabaka": "PL_ASKERI_ALAN"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110002,
+   "uip_fonksiyon": "AKARYAKIT VE SERVİS İSTASYONU ALANI",
+   "id3": 110002,
+   "uip_tabaka": "PL_BAKIM_AKARYAKIT"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110003,
+   "uip_fonksiyon": "BETON SANTRALİ",
+   "id3": 110003,
+   "uip_tabaka": "PL_BETON_SANTRALI"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110004,
+   "uip_fonksiyon": "BELEDİYE HİZMET ALANI",
+   "id3": 110004,
+   "uip_tabaka": "PL_BHA"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110005,
+   "uip_fonksiyon": "DEPOLAMA ALANI",
+   "id3": 110005,
+   "uip_tabaka": "PL_DEPOLAMA"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110006,
+   "uip_fonksiyon": "ENDÜSTRİYEL GELİŞME BÖLGESİ",
+   "id3": 110006,
+   "uip_tabaka": "PL_ENDUSTRIYEL_GEL"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110007,
+   "uip_fonksiyon": "İDARİ HİZMET ALANI",
+   "id3": 110007,
+   "uip_tabaka": "PL_IHA"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110008,
+   "uip_fonksiyon": "İMALATHANE TESİS ALANI",
+   "id3": 110008,
+   "uip_tabaka": "PL_IMALATHANE"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110009,
+   "uip_fonksiyon": "TİCARET - KONUT ALANI",
+   "id3": 110009,
+   "uip_tabaka": "PL_KONUT_TICARET"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110010,
+   "uip_fonksiyon": "KÜÇÜK SANAYİ ALANI",
+   "id3": 110010,
+   "uip_tabaka": "PL_KUCUK_SANAYI"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110011,
+   "uip_fonksiyon": "LOJİSTİK TESİS ALANI",
+   "id3": 110011,
+   "uip_tabaka": "PL_LOJISTIK_TESIS"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110012,
+   "uip_fonksiyon": "PAZAR ALANI",
+   "id3": 110012,
+   "uip_tabaka": "PL_PAZAR_ALANI"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110013,
+   "uip_fonksiyon": "RESMİ KURUM ALANI",
+   "id3": 110013,
+   "uip_tabaka": "PL_RESMI_KURUM"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110014,
+   "uip_fonksiyon": "SANAYİ TESİS ALANI",
+   "id3": 110014,
+   "uip_tabaka": "PL_SANAYI_TESIS"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110015,
+   "uip_fonksiyon": "SU ÜRÜNLERİ ÜRETİM VE YETİŞTİRME TESİSİ",
+   "id3": 110015,
+   "uip_tabaka": "PL_SU_URUNLERI"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110016,
+   "uip_fonksiyon": "TARIM VE HAYVANCILIK TESİS ALANI",
+   "id3": 110016,
+   "uip_tabaka": "PL_TARIM_HAYVANCILIK"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110017,
+   "uip_fonksiyon": "TİCARET-TURİZM-KONUT ALANI",
+   "id3": 110017,
+   "uip_tabaka": "PL_TIC_TURZM_KNT"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110018,
+   "uip_fonksiyon": "TİCARET ALANI",
+   "id3": 110018,
+   "uip_tabaka": "PL_TICARET"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110019,
+   "uip_fonksiyon": "T1 TİCARET ALANI",
+   "id3": 110019,
+   "uip_tabaka": "PL_TICARET_T1"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110020,
+   "uip_fonksiyon": "T2 TİCARET ALANI",
+   "id3": 110020,
+   "uip_tabaka": "PL_TICARET_T2"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110021,
+   "uip_fonksiyon": "T3 TİCARET ALANI",
+   "id3": 110021,
+   "uip_tabaka": "PL_TICARET_T3"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110022,
+   "uip_fonksiyon": "TİCARET - TURİZM ALANI",
+   "id3": 110022,
+   "uip_tabaka": "PL_TICARET_TURIZM"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110023,
+   "uip_fonksiyon": "TOPLU İŞYERLERİ",
+   "id3": 110023,
+   "uip_tabaka": "PL_TOPLU_ISYERLERI"
+  },
+  {
+   "id1": 110000,
+   "ust_konu_grup": "KENTSEL ÇALIŞMA ALANLARI",
+   "id2": 110024,
+   "uip_fonksiyon": "TOPTAN TİCARET ALANI",
+   "id3": 110024,
+   "uip_tabaka": "PL_TOPTAN_TICARET"
+  },
+  {
+   "id1": 111000,
+   "ust_konu_grup": "KENTSEL TOPLU TAŞIMA GÜZERGAHLARI",
+   "id2": 111001,
+   "uip_fonksiyon": "HAVAİ HAT İSTASYONU",
+   "id3": 111001,
+   "uip_tabaka": "PL_HAVAI"
+  },
+  {
+   "id1": 111000,
+   "ust_konu_grup": "KENTSEL TOPLU TAŞIMA GÜZERGAHLARI",
+   "id2": 111002,
+   "uip_fonksiyon": "HAVARAY İSTASYONU",
+   "id3": 111002,
+   "uip_tabaka": "PL_HAVARAY_ISTASYONU"
+  },
+  {
+   "id1": 111000,
+   "ust_konu_grup": "KENTSEL TOPLU TAŞIMA GÜZERGAHLARI",
+   "id2": 111003,
+   "uip_fonksiyon": "RAYLI TOPLU TAŞIMA İSTASYONU",
+   "id3": 111003,
+   "uip_tabaka": "PL_RAY_ISTASYON"
+  },
+  {
+   "id1": 111000,
+   "ust_konu_grup": "KENTSEL TOPLU TAŞIMA GÜZERGAHLARI",
+   "id2": 111004,
+   "uip_fonksiyon": "TOPLU TAŞINIM TÜRLERİ ARASI DEĞİŞİM VE AKTARMA ALANI",
+   "id3": 111004,
+   "uip_tabaka": "PL_TT_AKTARMA"
+  },
+  {
+   "id1": 112000,
+   "ust_konu_grup": "KONUT ALANLARI / YERLEŞİM ALANLARI",
+   "id2": 112001,
+   "uip_fonksiyon": "GELİŞME KONUT ALANI",
+   "id3": 112001,
+   "uip_tabaka": "PL_GELISME_KONUT"
+  },
+  {
+   "id1": 112000,
+   "ust_konu_grup": "KONUT ALANLARI / YERLEŞİM ALANLARI",
+   "id2": 112002,
+   "uip_fonksiyon": "YERLEŞİK KONUT ALANI",
+   "id3": 112002,
+   "uip_tabaka": "PL_KONUT"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113001,
+   "uip_fonksiyon": "1. DERECE ARKEOLOJİK SİT ALANI",
+   "id3": 113001,
+   "uip_tabaka": "KA_1DER_ARK_SIT"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113002,
+   "uip_fonksiyon": "1. DERECE DOĞAL SİT ALANI",
+   "id3": 113002,
+   "uip_tabaka": "KA_1DER_DGL_SIT"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113003,
+   "uip_fonksiyon": "2. DERECE ARKEOLOJİK SİT ALANI",
+   "id3": 113003,
+   "uip_tabaka": "KA_2DER_ARK_SIT"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113004,
+   "uip_fonksiyon": "2. DERECE DOĞAL SİT ALANI",
+   "id3": 113004,
+   "uip_tabaka": "KA_2DER_DGL_SIT"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113005,
+   "uip_fonksiyon": "3. DERECE ARKEOLOJİK SİT ALANI",
+   "id3": 113005,
+   "uip_tabaka": "KA_3DER_ARK_SIT"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113006,
+   "uip_fonksiyon": "3. DERECE DOĞAL SİT ALANI",
+   "id3": 113006,
+   "uip_tabaka": "KA_3DER_DGL_SIT"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113007,
+   "uip_fonksiyon": "EKOLOJİK NİTELİĞİ KORUNACAK ALAN",
+   "id3": 113007,
+   "uip_tabaka": "KA_EKOLOJIK_KORU"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113008,
+   "uip_fonksiyon": "HASSAS ENDEMİK BİYOTOP ALANI",
+   "id3": 113008,
+   "uip_tabaka": "KA_ENDEMIK_BIYOTOP"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113009,
+   "uip_fonksiyon": "KORUNMASI GEREKLİ FLORA VE FAUNA ALANI",
+   "id3": 113009,
+   "uip_tabaka": "KA_FLORA_FAUNA"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113010,
+   "uip_fonksiyon": "KENTSEL SİT ALANI",
+   "id3": 113010,
+   "uip_tabaka": "KA_KENTSEL_SIT"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113011,
+   "uip_fonksiyon": "KESİN KORUNACAK HASSAS ALAN",
+   "id3": 113011,
+   "uip_tabaka": "KA_KESIN_KOR_HAS"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113012,
+   "uip_fonksiyon": "NİTELİKLİ DOĞAL KORUMA ALANI",
+   "id3": 113012,
+   "uip_tabaka": "KA_NITELIKLI_DOG_KOR"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113013,
+   "uip_fonksiyon": "ÖÇK BÖLGESİ HASSAS ALAN (A)",
+   "id3": 113013,
+   "uip_tabaka": "KA_OCK_A"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113014,
+   "uip_fonksiyon": "ÖÇK BÖLGESİ HASSAS ALAN (B)",
+   "id3": 113014,
+   "uip_tabaka": "KA_OCK_B"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113015,
+   "uip_fonksiyon": "ÖÇK BÖLGESİ HASSAS ALAN (C)",
+   "id3": 113015,
+   "uip_tabaka": "KA_OCK_C"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113016,
+   "uip_fonksiyon": "ÖZEL ÇEVRE KORUMA BÖLGESİ (ÖÇK)",
+   "id3": 113016,
+   "uip_tabaka": "KA_OZEL_CEVRE_KORUMA"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113017,
+   "uip_fonksiyon": "SÜRDÜRÜLEBİLİR KORUMA VE KONTROLLÜ KULLANIM ALANI",
+   "id3": 113017,
+   "uip_tabaka": "KA_SURDURULEBILIR_KO"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113018,
+   "uip_fonksiyon": "TABİATI KORUMA ALANI",
+   "id3": 113018,
+   "uip_tabaka": "KA_TABIATI_KORUMA"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113019,
+   "uip_fonksiyon": "TARİHİ SİT ALANI",
+   "id3": 113019,
+   "uip_tabaka": "KA_TARIHI_SIT"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113020,
+   "uip_fonksiyon": "ULUSLARARASI SÖZLEŞMELERLE BELİRLENEN KORUMA ALAN SINIRI",
+   "id3": 113020,
+   "uip_tabaka": "KA_ULUSLARARASI_KOR"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113021,
+   "uip_fonksiyon": "YABAN HAYATI KORUMA VE GELİŞTİRME ALANI",
+   "id3": 113021,
+   "uip_tabaka": "KA_YABAN_HAYATI_KORU"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113022,
+   "uip_fonksiyon": "YÖRESEL MİMARİ ÖZELLİKLERİ KORUNACAK ALAN",
+   "id3": 113022,
+   "uip_tabaka": "KA_YOR_MIMARI_KORU"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113023,
+   "uip_fonksiyon": "MİLLİ PARK",
+   "id3": 113023,
+   "uip_tabaka": "PL_MILLI_PARK"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113024,
+   "uip_fonksiyon": "TABİAT PARKI ALANI",
+   "id3": 113024,
+   "uip_tabaka": "PL_TABIAT_PARKI"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113025,
+   "uip_fonksiyon": "TESCİLLİ ANIT YAPI",
+   "id3": 113025,
+   "uip_tabaka": "TESCILLI_ANIT_YAPI"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113026,
+   "uip_fonksiyon": "TESCİLLİ BİNA",
+   "id3": 113026,
+   "uip_tabaka": "TESCILLI_BINA"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113027,
+   "uip_fonksiyon": "TESCİLLİ PARSEL",
+   "id3": 113027,
+   "uip_tabaka": "TESCILLI_PARSEL"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113028,
+   "uip_fonksiyon": "TESCİLLİ TABİAT VARLIĞI",
+   "id3": 113028,
+   "uip_tabaka": "TESCILLI_TAB_VARLIGI"
+  },
+  {
+   "id1": 114000,
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": 114001,
+   "uip_fonksiyon": "ASKERİ YASAK VE GÜVENLİK BÖLGESİ",
+   "id3": 114001,
+   "uip_tabaka": "KST_ASKERI_YASAK"
+  },
+  {
+   "id1": 114000,
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": 114002,
+   "uip_fonksiyon": "ENDÜSTRİ BÖLGESİ",
+   "id3": 114002,
+   "uip_tabaka": "PL_ENDUSTRI_BOL"
+  },
+  {
+   "id1": 114000,
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": 114003,
+   "uip_fonksiyon": "ORGANİZE SANAYİ BÖLGESİ",
+   "id3": 114003,
+   "uip_tabaka": "PL_OSB"
+  },
+  {
+   "id1": 114000,
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": 114004,
+   "uip_fonksiyon": "SERBEST BÖLGE",
+   "id3": 114004,
+   "uip_tabaka": "PL_SERBEST_BOLGE"
+  },
+  {
+   "id1": 114000,
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": 114005,
+   "uip_fonksiyon": "TEKNOLOJİ GELİŞTİRME BÖLGESİ",
+   "id3": 114005,
+   "uip_tabaka": "PL_TGB"
+  },
+  {
+   "id1": 115000,
+   "ust_konu_grup": "SAĞLIK TESİSLERİ ALANI",
+   "id2": 115001,
+   "uip_fonksiyon": "AİLE SAĞLIĞI MERKEZİ",
+   "id3": 115001,
+   "uip_tabaka": "PL_AILE_SAGL_MER"
+  },
+  {
+   "id1": 115000,
+   "ust_konu_grup": "SAĞLIK TESİSLERİ ALANI",
+   "id2": 115002,
+   "uip_fonksiyon": "HASTANE",
+   "id3": 115002,
+   "uip_tabaka": "PL_HASTANE"
+  },
+  {
+   "id1": 115000,
+   "ust_konu_grup": "SAĞLIK TESİSLERİ ALANI",
+   "id2": 115003,
+   "uip_fonksiyon": "ÖZEL SAĞLIK TESİSİ ALANI",
+   "id3": 115003,
+   "uip_tabaka": "PL_OZEL_SAGLIK_TES"
+  },
+  {
+   "id1": 115000,
+   "ust_konu_grup": "SAĞLIK TESİSLERİ ALANI",
+   "id2": 115004,
+   "uip_fonksiyon": "SAĞLIK TESİSİ ALANI",
+   "id3": 115004,
+   "uip_tabaka": "PL_SAGLIK_TESISI"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116001,
+   "uip_fonksiyon": "AÇIK SPOR TESİSİ ALANI",
+   "id3": 116001,
+   "uip_tabaka": "PL_ACIK_SPOR_TES"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116002,
+   "uip_fonksiyon": "KAPALI SPOR TESİSİ ALANI",
+   "id3": 116002,
+   "uip_tabaka": "PL_KAPALI_SPOR_TES"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116003,
+   "uip_fonksiyon": "KONGRE VE SERGİ MERKEZİ ALANI",
+   "id3": 116003,
+   "uip_tabaka": "PL_KONGRE_SERGI"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116004,
+   "uip_fonksiyon": "KREŞ, GÜNDÜZ BAKIMEVİ",
+   "id3": 116004,
+   "uip_tabaka": "PL_KRES_BAKIMEVI"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116005,
+   "uip_fonksiyon": "KÜLTÜREL TESİS ALANI",
+   "id3": 116005,
+   "uip_tabaka": "PL_KULTUREL_TESIS"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116006,
+   "uip_fonksiyon": "ÖZEL AÇIK SPOR TESİSİ ALANI",
+   "id3": 116006,
+   "uip_tabaka": "PL_O_ACIK_SPOR_TES"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116007,
+   "uip_fonksiyon": "ÖZEL KAPALI SPOR TESİSİ ALANI",
+   "id3": 116007,
+   "uip_tabaka": "PL_O_KAPALI_SPOR_TES"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116008,
+   "uip_fonksiyon": "ÖZEL KREŞ, GÜNDÜZ BAKIMEVİ",
+   "id3": 116008,
+   "uip_tabaka": "PL_O_KRES_BAKIMEVI"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116009,
+   "uip_fonksiyon": "ÖZEL KÜLTÜREL TESİS ALANI",
+   "id3": 116009,
+   "uip_tabaka": "PL_O_KULTUREL_TESIS"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116011,
+   "uip_fonksiyon": "ÖZEL SOSYAL TESİS ALANI",
+   "id3": 116011,
+   "uip_tabaka": "PL_OZEL_SOSYAL_TESIS"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116012,
+   "uip_fonksiyon": "ÖZEL YURT ALANI",
+   "id3": 116012,
+   "uip_tabaka": "PL_OZEL_YURT_ALANI"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116013,
+   "uip_fonksiyon": "ŞEFKAT EVLERİ ALANI",
+   "id3": 116013,
+   "uip_tabaka": "PL_SEFKAT_EVI"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116014,
+   "uip_fonksiyon": "SOSYAL TESİS ALANI",
+   "id3": 116014,
+   "uip_tabaka": "PL_SOSYAL_TESIS"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116015,
+   "uip_fonksiyon": "YAŞLI BAKIMEVİ ALANI",
+   "id3": 116015,
+   "uip_tabaka": "PL_YASLI_BAKIMEVI"
+  },
+  {
+   "id1": 116000,
+   "ust_konu_grup": "SOSYAL VE KÜLTÜREL TESİS ALANI",
+   "id2": 116016,
+   "uip_fonksiyon": "YURT ALANI",
+   "id3": 116016,
+   "uip_tabaka": "PL_YURT_ALANI"
+  },
+  {
+   "id1": 117000,
+   "ust_konu_grup": "SU - ATIKSU VE ATIK SİSTEMLERİ",
+   "id2": 117001,
+   "uip_fonksiyon": "ATIKSU TESİSLERİ ALANI (ARITMA, TERFİ MERKEZİ)",
+   "id3": 117001,
+   "uip_tabaka": "PL_ATIKSU_TESISI"
+  },
+  {
+   "id1": 117000,
+   "ust_konu_grup": "SU - ATIKSU VE ATIK SİSTEMLERİ",
+   "id2": 117002,
+   "uip_fonksiyon": "İÇME SUYU TESİSLERİ ALANI (DEPOLAMA, ARITMA, TERFİ MERKEZİ)",
+   "id3": 117002,
+   "uip_tabaka": "PL_ICME_SUYU_TESIS"
+  },
+  {
+   "id1": 117000,
+   "ust_konu_grup": "SU - ATIKSU VE ATIK SİSTEMLERİ",
+   "id2": 117003,
+   "uip_fonksiyon": "KATI ATIK TESİSLERİ ALANI (BOŞALTMA, BERTARAF, İŞLEME, TRANSFER VE DEPOLAMA)",
+   "id3": 117003,
+   "uip_tabaka": "PL_KATI_ATIK_TESISI"
+  },
+  {
+   "id1": 117000,
+   "ust_konu_grup": "SU - ATIKSU VE ATIK SİSTEMLERİ",
+   "id2": 117004,
+   "uip_fonksiyon": "SU KAYNAKLARI TOPLAMA YERİ (KAPTAJ ALANI)",
+   "id3": 117004,
+   "uip_tabaka": "PL_SU_KAY_TOPLAMA"
+  },
+  {
+   "id1": 117000,
+   "ust_konu_grup": "SU - ATIKSU VE ATIK SİSTEMLERİ",
+   "id2": 117005,
+   "uip_fonksiyon": "SU YÜZEYİ",
+   "id3": 117005,
+   "uip_tabaka": "PL_SU_YUZEYI"
+  },
+  {
+   "id1": 117000,
+   "ust_konu_grup": "SU - ATIKSU VE ATIK SİSTEMLERİ",
+   "id2": 117006,
+   "uip_fonksiyon": "TEHLİKELİ ATIK TESİSLERİ ALANI (BERTARAF VE DEPOLAMA) ",
+   "id3": 117006,
+   "uip_tabaka": "PL_TEHLIKELI_ATIK_TE"
+  },
+  {
+   "id1": 117000,
+   "ust_konu_grup": "SU - ATIKSU VE ATIK SİSTEMLERİ",
+   "id2": 117007,
+   "uip_fonksiyon": "TEKNİK ALTYAPI ALANI",
+   "id3": 117007,
+   "uip_tabaka": "PL_TEKNIK_ALTYAPI"
+  },
+  {
+   "id1": 117000,
+   "ust_konu_grup": "SU - ATIKSU VE ATIK SİSTEMLERİ",
+   "id2": 117008,
+   "uip_fonksiyon": "YAPAY ADA ",
+   "id3": 117008,
+   "uip_tabaka": "PL_YAPAY_ADA"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118001,
+   "uip_fonksiyon": "APART OTEL ALANI",
+   "id3": 118001,
+   "uip_tabaka": "PL_APART_OTEL"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118002,
+   "uip_fonksiyon": "GOLF ALANI",
+   "id3": 118002,
+   "uip_tabaka": "PL_GOLF_ALANI"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118003,
+   "uip_fonksiyon": "GÜNÜBİRLİK TESİS ALANI",
+   "id3": 118003,
+   "uip_tabaka": "PL_GUNUBIRLIK_TESIS"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118004,
+   "uip_fonksiyon": "HOSTEL ALANI",
+   "id3": 118004,
+   "uip_tabaka": "PL_HOSTEL_ALANI"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118005,
+   "uip_fonksiyon": "KAMPİNG ALANI",
+   "id3": 118005,
+   "uip_tabaka": "PL_KAMPING_ALANI"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118006,
+   "uip_fonksiyon": "KIŞ SPORLARI VE KAYAK TESİSİ ALANI",
+   "id3": 118006,
+   "uip_tabaka": "PL_KIS_SPORLARI"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118007,
+   "uip_fonksiyon": "MOTEL ALANI",
+   "id3": 118007,
+   "uip_tabaka": "PL_MOTEL_ALANI"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118008,
+   "uip_fonksiyon": "OTEL ALANI ",
+   "id3": 118008,
+   "uip_tabaka": "PL_OTEL_ALANI"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118009,
+   "uip_fonksiyon": "PANSİYON ALANI",
+   "id3": 118009,
+   "uip_tabaka": "PL_PANSIYON_ALANI"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118010,
+   "uip_fonksiyon": "SAĞLIK ODAKLI TATİL KÖYÜ",
+   "id3": 118010,
+   "uip_tabaka": "PL_SAGLIK_TATIL_KOYU"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118011,
+   "uip_fonksiyon": "TATİL KÖYÜ ALANI",
+   "id3": 118011,
+   "uip_tabaka": "PL_TATIL_KOYU"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118012,
+   "uip_fonksiyon": "TERMAL TURİZM ALANI",
+   "id3": 118012,
+   "uip_tabaka": "PL_TERMAL_TURIZM"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119001,
+   "uip_fonksiyon": "BORU HATTI KORUMA KUŞAĞI",
+   "id3": 119001,
+   "uip_tabaka": "KST_BORU_HATTI_KORU"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119002,
+   "uip_fonksiyon": "DEMİRYOLLARI KORUMA KUŞAĞI",
+   "id3": 119002,
+   "uip_tabaka": "KST_DEMIRYOLU_KORU"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119003,
+   "uip_fonksiyon": "ENERJİ NAKİL HATTI KORUMA KUŞAĞI",
+   "id3": 119003,
+   "uip_tabaka": "KST_ENERJI_NAKIL_HAT"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119004,
+   "uip_fonksiyon": "HAVA ALANI HAVA KORİDORU",
+   "id3": 119004,
+   "uip_tabaka": "KST_HAVA_KORIDORU"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119005,
+   "uip_fonksiyon": "HAVAALANI/HAVALİMANI KORUMA KUŞAĞI",
+   "id3": 119005,
+   "uip_tabaka": "KST_HAVAALANI_KORUMA"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119006,
+   "uip_fonksiyon": "İÇME SUYU ANA İLETİM HATTI KORUMA KUŞAĞI",
+   "id3": 119006,
+   "uip_tabaka": "KST_ICME_SUYU_KORU"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119007,
+   "uip_fonksiyon": "JEOTERMAL KORUMA KUŞAĞI",
+   "id3": 119007,
+   "uip_tabaka": "KST_JEOTERMAL_KORU"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119008,
+   "uip_fonksiyon": "KARAYOLLARI YOL KENARI KORUMA KUŞAĞI ",
+   "id3": 119008,
+   "uip_tabaka": "KST_KARAYOLU_KORUMA"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119009,
+   "uip_fonksiyon": "İÇME VE KULLANMA SUYU KISA MESAFELİ KORUMA ALANI",
+   "id3": 119009,
+   "uip_tabaka": "KST_KORUMA_KISA"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119010,
+   "uip_fonksiyon": "İÇME VE KULLANMA SUYU MUTLAK KORUMA ALANI",
+   "id3": 119010,
+   "uip_tabaka": "KST_KORUMA_MUTLAK"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119011,
+   "uip_fonksiyon": "İÇME VE KULLANMA SUYU ORTA MESAFELİ KORUMA ALANI",
+   "id3": 119011,
+   "uip_tabaka": "KST_KORUMA_ORTA"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119012,
+   "uip_fonksiyon": "İÇME VE KULLANMA SUYU UZUN MESAFELİ KORUMA ALANI",
+   "id3": 119012,
+   "uip_tabaka": "KST_KORUMA_UZUN"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119013,
+   "uip_fonksiyon": "NÜKLEER ENERJİ ÜRETİM ALANI KORUMA KUŞAĞI",
+   "id3": 119013,
+   "uip_tabaka": "KST_NUKLEER_EN_KORU"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119014,
+   "uip_fonksiyon": "SAĞLIK KORUMA BANDI",
+   "id3": 119014,
+   "uip_tabaka": "KST_SAGLIK_KORUMA"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119015,
+   "uip_fonksiyon": "SU KANALLARI KORUMA KUŞAĞI",
+   "id3": 119015,
+   "uip_tabaka": "KST_SU_KANAL_KORUMA"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119016,
+   "uip_fonksiyon": "SULAK ALAN BÖLGESİ",
+   "id3": 119016,
+   "uip_tabaka": "KST_SULAK_ALAN_BOLGE"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119017,
+   "uip_fonksiyon": "SULAK ALAN EKOLOJİK ETKİLENME BÖLGESİ",
+   "id3": 119017,
+   "uip_tabaka": "KST_SULAK_EKO_ETKI"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119018,
+   "uip_fonksiyon": "SULAK ALAN MUTLAK KORUMA BÖLGESİ",
+   "id3": 119018,
+   "uip_tabaka": "KST_SULAK_MUTLAK"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119019,
+   "uip_fonksiyon": "SULAK ALAN ÖZEL HÜKÜM BÖLGESİ",
+   "id3": 119019,
+   "uip_tabaka": "KST_SULAK_OZEL_HUKUM"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119020,
+   "uip_fonksiyon": "SULAK ALAN TAMPON BÖLGESİ",
+   "id3": 119020,
+   "uip_tabaka": "KST_SULAK_TAMPON"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119021,
+   "uip_fonksiyon": "YANICI PARLAYICI VE PATLAYICI MADDELER KORUMA KUŞAĞI",
+   "id3": 119021,
+   "uip_tabaka": "KST_YANICI_PATLAYICI"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119022,
+   "uip_fonksiyon": "YER ALTI SU KAYNAKLARI KORUMA KUŞAĞI",
+   "id3": 119022,
+   "uip_tabaka": "KST_YERALTI_SUYU_KOR"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119023,
+   "uip_fonksiyon": "YER ALTI SU KAYNAKLARI KORUMA ALANLARI",
+   "id3": 119023,
+   "uip_tabaka": "KST_YSK_KORUMA_ALANI"
+  },
+  {
+   "id1": 121000,
+   "ust_konu_grup": "İDARİ SINIRLAR",
+   "id2": 121101,
+   "uip_fonksiyon": "BELEDİYE SINIRI",
+   "id3": 121101,
+   "uip_tabaka": "SNR_BELEDIYE"
+  },
+  {
+   "id1": 121000,
+   "ust_konu_grup": "İDARİ SINIRLAR",
+   "id2": 121102,
+   "uip_fonksiyon": "İL SINIRI",
+   "id3": 121102,
+   "uip_tabaka": "SNR_IL"
+  },
+  {
+   "id1": 121000,
+   "ust_konu_grup": "İDARİ SINIRLAR",
+   "id2": 121103,
+   "uip_fonksiyon": "İLÇE SINIRI",
+   "id3": 121103,
+   "uip_tabaka": "SNR_ILCE"
+  },
+  {
+   "id1": 121000,
+   "ust_konu_grup": "İDARİ SINIRLAR",
+   "id2": 121104,
+   "uip_fonksiyon": "KÖY SINIRI",
+   "id3": 121104,
+   "uip_tabaka": "SNR_KOY"
+  },
+  {
+   "id1": 121000,
+   "ust_konu_grup": "İDARİ SINIRLAR",
+   "id2": 121105,
+   "uip_fonksiyon": "MAHALLE SINIRI",
+   "id3": 121105,
+   "uip_tabaka": "SNR_MAHALLE"
+  },
+  {
+   "id1": 121000,
+   "ust_konu_grup": "İDARİ SINIRLAR",
+   "id2": 121106,
+   "uip_fonksiyon": "MÜCAVİR ALAN SINIRI",
+   "id3": 121106,
+   "uip_tabaka": "SNR_MUCAVIR"
+  },
+  {
+   "id1": 121000,
+   "ust_konu_grup": "İDARİ SINIRLAR",
+   "id2": 121107,
+   "uip_fonksiyon": "ÜLKE SINIRI",
+   "id3": 121107,
+   "uip_tabaka": "SNR_ULKE"
+  },
+  {
+   "id1": 113000,
+   "ust_konu_grup": "KORUNACAK ALANLAR",
+   "id2": 113101,
+   "uip_fonksiyon": "SİT ETKİLEŞİM GEÇİŞ ALANI SINIRI",
+   "id3": 113101,
+   "uip_tabaka": "SNR_SEG"
+  },
+  {
+   "id1": 114000,
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": 114101,
+   "uip_fonksiyon": "BOĞAZİÇİ GERİ GÖRÜNÜM BÖLGESİ SINIRI",
+   "id3": 114101,
+   "uip_tabaka": "SNR_BOGAZ_GERI_GOR"
+  },
+  {
+   "id1": 114000,
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": 114102,
+   "uip_fonksiyon": "BOĞAZİÇİ ÖN GÖRÜNÜM BÖLGESİ SINIRI",
+   "id3": 114102,
+   "uip_tabaka": "SNR_BOGAZ_ON_GOR"
+  },
+  {
+   "id1": 114000,
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": 114103,
+   "uip_fonksiyon": "BOĞAZİÇİ ETKİLENME BÖLGESİ SINIRI",
+   "id3": 114103,
+   "uip_tabaka": "SNR_BOGAZICI_ETKILNM"
+  },
+  {
+   "id1": 114000,
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": 114104,
+   "uip_fonksiyon": "DİĞER ÖZEL KANUNLARLA BELİRLENEN ALAN SINIRLARI",
+   "id3": 114104,
+   "uip_tabaka": "SNR_DIGER_OZL"
+  },
+  {
+   "id1": 114000,
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": 114105,
+   "uip_fonksiyon": "GECEKONDU ÖNLEME BÖLGESİ SINIRI",
+   "id3": 114105,
+   "uip_tabaka": "SNR_GOB"
+  },
+  {
+   "id1": 114000,
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": 114108,
+   "uip_fonksiyon": "TOPLU KONUT ALANI SINIRI",
+   "id3": 114108,
+   "uip_tabaka": "SNR_TKA"
+  },
+  {
+   "id1": 114000,
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": 114109,
+   "uip_fonksiyon": "TURİZM MERKEZİ/KÜLTÜR VE TURİZM KORUMA VE GELİŞİM ALT BÖLGE SINIRI",
+   "id3": 114109,
+   "uip_tabaka": "SNR_TURIZM_KORUMA"
+  },
+  {
+   "id1": 122000,
+   "ust_konu_grup": "PLANLAMA SINIRLARI",
+   "id2": 122103,
+   "uip_fonksiyon": "ETAPLAMA SINIRI",
+   "id3": 122103,
+   "uip_tabaka": "SNR_ETAPLAMA"
+  },
+  {
+   "id1": 122000,
+   "ust_konu_grup": "PLANLAMA SINIRLARI",
+   "id2": 122105,
+   "uip_fonksiyon": "İMAR HAKKI AKTARIM ALANI SINIRI",
+   "id3": 122105,
+   "uip_tabaka": "SNR_IMAR_HAKKI_AKT"
+  },
+  {
+   "id1": 122000,
+   "ust_konu_grup": "PLANLAMA SINIRLARI",
+   "id2": 122106,
+   "uip_fonksiyon": "KENTSEL TASARIM PROJESİ SINIRI",
+   "id3": 122106,
+   "uip_tabaka": "SNR_KENTSEL_TASARIM"
+  },
+  {
+   "id1": 122000,
+   "ust_konu_grup": "PLANLAMA SINIRLARI",
+   "id2": 122107,
+   "uip_fonksiyon": "ÖZEL PROJE ALANI SINIRI ",
+   "id3": 122107,
+   "uip_tabaka": "SNR_OZEL_PROJE_ALANI"
+  },
+  {
+   "id1": 122000,
+   "ust_konu_grup": "PLANLAMA SINIRLARI",
+   "id2": 122108,
+   "uip_fonksiyon": "PLAN DEĞİŞİKLİĞİ ONAMA SINIRI",
+   "id3": 122108,
+   "uip_tabaka": "SNR_PLAN_DEGISIKLIGI"
+  },
+  {
+   "id1": 122000,
+   "ust_konu_grup": "PLANLAMA SINIRLARI",
+   "id2": 122109,
+   "uip_fonksiyon": "PLAN ONAMA SINIRI",
+   "id3": 122109,
+   "uip_tabaka": "SNR_PLANONAMA"
+  },
+  {
+   "id1": 122000,
+   "ust_konu_grup": "PLANLAMA SINIRLARI",
+   "id2": 122110,
+   "uip_fonksiyon": "YAPI YAKLAŞMA SINIRI",
+   "id3": 122110,
+   "uip_tabaka": "SNR_YAPIYAK"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119102,
+   "uip_fonksiyon": "SULAK ALAN SINIRI",
+   "id3": 119102,
+   "uip_tabaka": "SNR_SULAK_ALAN"
+  },
+  {
+   "id1": 114000,
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": 114200,
+   "uip_fonksiyon": "SAHİL ŞERİDİ",
+   "id3": 114200,
+   "uip_tabaka": "SNR_SAHIL_SERIDI"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118200,
+   "uip_fonksiyon": "GOLF TURİZMİ",
+   "id3": 118200,
+   "uip_tabaka": "YOK"
+  },
+  {
+   "id1": 109000,
+   "ust_konu_grup": "KARAYOLLARI",
+   "id2": 109100,
+   "uip_fonksiyon": "KATLI OTOPARK",
+   "id3": 109100,
+   "uip_tabaka": "YOK"
+  },
+  {
+   "id1": 120000,
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": 120100,
+   "uip_fonksiyon": "LİMAN",
+   "id3": 120100,
+   "uip_tabaka": "YOK"
+  },
+  {
+   "id1": 119000,
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": 119200,
+   "uip_fonksiyon": "TÜNEL ETKİ ALANI",
+   "id3": 119200,
+   "uip_tabaka": "YOK"
+  },
+  {
+   "id1": 106000,
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": 106100,
+   "uip_fonksiyon": "ENERJİ DEPOLAMA ALANI",
+   "id3": 106100,
+   "uip_tabaka": "PL_ENERJI_DEPOLAMA"
+  },
+  {
+   "id1": 106000,
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": 106200,
+   "uip_fonksiyon": "RAFİNERİ-PETROKİMYA TESİSİ ALANI",
+   "id3": 106200,
+   "uip_tabaka": "PL_ENERJI_DEPOLAMA"
+  },
+  {
+   "id1": 117000,
+   "ust_konu_grup": "SU - ATIKSU VE ATIK SİSTEMLERİ",
+   "id2": 117100,
+   "uip_fonksiyon": "ATIK GERİ KAZANIM TESİSLERİ ALANI",
+   "id3": 117100,
+   "uip_tabaka": "YOK"
+  },
+  {
+   "id1": 118000,
+   "ust_konu_grup": "TURİZM ALANLARI",
+   "id2": 118200,
+   "uip_fonksiyon": "EKOTURİZM/KIRSAL TURİZM",
+   "id3": 118200,
+   "uip_tabaka": "YOK"
+  },
+  {
+   "id1": 109000,
+   "ust_konu_grup": "KARAYOLLARI",
+   "id2": 109200,
+   "uip_fonksiyon": "ELEKTRİKLİ ARAÇ ŞARJ İSTASYONU",
+   "id3": 109200,
+   "uip_tabaka": "YOK"
+  },
+  {
+   "id1": 123000,
+   "ust_konu_grup": "SOSYAL ALT YAPI ALANLARI",
+   "id2": 123100,
+   "uip_fonksiyon": "SOKAK HAYVANLARI BARINAĞI ALANI",
+   "id3": 123100,
+   "uip_tabaka": "YOK"
+  }
+ ],
+ "uipLineTable": [
+  {
+   "id1": "104000",
+   "ust_konu_grup": "DEMİRYOLLARI",
+   "id2": "104100",
+   "uip_fonksiyon": "DEMİRYOLU",
+   "id3": "104100",
+   "uip_tabaka": "HAT_DEMIRYOLU"
+  },
+  {
+   "id1": "104000",
+   "ust_konu_grup": "DEMİRYOLLARI",
+   "id2": "104101",
+   "uip_fonksiyon": "HIZLI TREN HATTI",
+   "id3": "104101",
+   "uip_tabaka": "HAT_HIZLI_TREN"
+  },
+  {
+   "id1": "104000",
+   "ust_konu_grup": "DEMİRYOLLARI",
+   "id2": "104102",
+   "uip_fonksiyon": "KATAR DÜZENLEME (TRİYAJ) ALANI",
+   "id3": "104102",
+   "uip_tabaka": "HAT_TRIYAJ"
+  },
+  {
+   "id1": "120000",
+   "ust_konu_grup": "DENİZYOLLARI",
+   "id2": "120101",
+   "uip_fonksiyon": "DENİZ ULAŞIM BAĞLANTISI",
+   "id3": "120101",
+   "uip_tabaka": "SNR_DENIZ_ULASIM"
+  },
+  {
+   "id1": "106000",
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": "106101",
+   "uip_fonksiyon": "AKARYAKIT BORU HATTI",
+   "id3": "106101",
+   "uip_tabaka": "HAT_AKARYAKIT_BORU"
+  },
+  {
+   "id1": "106000",
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": "106102",
+   "uip_fonksiyon": "BORU HATTI",
+   "id3": "106102",
+   "uip_tabaka": "HAT_BORU_HATTI"
+  },
+  {
+   "id1": "106000",
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": "106103",
+   "uip_fonksiyon": "CEBRİ BORU HATTI",
+   "id3": "106103",
+   "uip_tabaka": "HAT_CEBRI_BORU"
+  },
+  {
+   "id1": "106000",
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": "106104",
+   "uip_fonksiyon": "DOĞALGAZ BORU HATTI",
+   "id3": "106104",
+   "uip_tabaka": "HAT_DOGALGAZ"
+  },
+  {
+   "id1": "106000",
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": "106105",
+   "uip_fonksiyon": "ENERJİ NAKİL HATTI",
+   "id3": "106105",
+   "uip_tabaka": "HAT_ENERJI_NAKIL_HAT"
+  },
+  {
+   "id1": "106000",
+   "ust_konu_grup": "ENERJI ÜRETİM DAĞITIM VE DEPOLAMA",
+   "id2": "106106",
+   "uip_fonksiyon": "İLETİM TÜNELİ",
+   "id3": "106106",
+   "uip_tabaka": "HAT_ILETIM_TUNELI"
+  },
+  {
+   "id1": "111000",
+   "ust_konu_grup": "KENTSEL TOPLU TAŞIMA GÜZERGAHLARI",
+   "id2": "111101",
+   "uip_fonksiyon": "HAVAİ HAT",
+   "id3": "111101",
+   "uip_tabaka": "HAT_HAVAI"
+  },
+  {
+   "id1": "111000",
+   "ust_konu_grup": "KENTSEL TOPLU TAŞIMA GÜZERGAHLARI",
+   "id2": "111102",
+   "uip_fonksiyon": "HAVARAY",
+   "id3": "111102",
+   "uip_tabaka": "HAT_HAVARAY"
+  },
+  {
+   "id1": "111000",
+   "ust_konu_grup": "KENTSEL TOPLU TAŞIMA GÜZERGAHLARI",
+   "id2": "111103",
+   "uip_fonksiyon": "RAYLI TOPLU TAŞIMA HATTI",
+   "id3": "111103",
+   "uip_tabaka": "HAT_RAYLI_TOPLU_TAS"
+  },
+  {
+   "id1": "114000",
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": "114106",
+   "uip_fonksiyon": "KIYI KENAR ÇİZGİSİ",
+   "id3": "114106",
+   "uip_tabaka": "SNR_KIYI_KENAR"
+  },
+  {
+   "id1": "114000",
+   "ust_konu_grup": "ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR",
+   "id2": "114107",
+   "uip_fonksiyon": "SAHİL ŞERİDİ",
+   "id3": "114107",
+   "uip_tabaka": "SNR_SAHIL_SERIDI"
+  },
+  {
+   "id1": "132000",
+   "ust_konu_grup": "YAPI DÜZENİ VE YOĞUNLUKLARI",
+   "id2": "132102",
+   "uip_fonksiyon": "İFRAZ HATTI",
+   "id3": "132102",
+   "uip_tabaka": "HAT_IFRAZ"
+  },
+  {
+   "id1": "132000",
+   "ust_konu_grup": "YAPI DÜZENİ VE YOĞUNLUKLARI",
+   "id2": "132101",
+   "uip_fonksiyon": "KADEME HATTI",
+   "id3": "132101",
+   "uip_tabaka": "HAT_KADEME"
+  },
+  {
+   "id1": "117000",
+   "ust_konu_grup": "SU - ATIKSU VE ATIK SİSTEMLERİ",
+   "id2": "117101",
+   "uip_fonksiyon": "İÇME SUYU ANA HATTI",
+   "id3": "117101",
+   "uip_tabaka": "HAT_ANA_ICME_SUYU"
+  },
+  {
+   "id1": "117000",
+   "ust_konu_grup": "SU - ATIKSU VE ATIK SİSTEMLERİ",
+   "id2": "117102",
+   "uip_fonksiyon": "ATIK SU DERİN DENİZ DEŞARJ HATTI",
+   "id3": "117102",
+   "uip_tabaka": "HAT_ATIKSU_DESARJ"
+  },
+  {
+   "id1": "117000",
+   "ust_konu_grup": "SU - ATIKSU VE ATIK SİSTEMLERİ",
+   "id2": "117103",
+   "uip_fonksiyon": "ATIK SU ANA KOLLEKTÖRÜ",
+   "id3": "117103",
+   "uip_tabaka": "HAT_ATIKSU_KOLLEKTOR"
+  },
+  {
+   "id1": "117000",
+   "ust_konu_grup": "SU - ATIKSU VE ATIK SİSTEMLERİ",
+   "id2": "117104",
+   "uip_fonksiyon": "SOĞUTMA SUYU ALMA HATTI",
+   "id3": "117104",
+   "uip_tabaka": "HAT_SOGUTMA_SUYU"
+  },
+  {
+   "id1": "119000",
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": "119101",
+   "uip_fonksiyon": "MANİA PLANI",
+   "id3": "119101",
+   "uip_tabaka": "SNR_MANIA_PLAN"
+  },
+  {
+   "id1": "130000",
+   "ust_konu_grup": "ÖZEL ÇİZGİLER",
+   "id2": "130100",
+   "uip_fonksiyon": "ADAKENARI",
+   "id3": "130100",
+   "uip_tabaka": "ADAKENARI"
+  },
+  {
+   "id1": "130000",
+   "ust_konu_grup": "ÖZEL ÇİZGİLER",
+   "id2": "130103",
+   "uip_fonksiyon": "KALDIRIM",
+   "id3": "130103",
+   "uip_tabaka": "KALDIRIM"
+  },
+  {
+   "id1": "132000",
+   "ust_konu_grup": "YAPI DÜZENİ VE YOĞUNLUKLARI",
+   "id2": "132103",
+   "uip_fonksiyon": "KORUNAN CEPHE ÇİZGİSİ",
+   "id3": "132103",
+   "uip_tabaka": "YOK"
+  },
+  {
+   "id1": "132000",
+   "ust_konu_grup": "YAPI DÜZENİ VE YOĞUNLUKLARI",
+   "id2": "132104",
+   "uip_fonksiyon": "DÜZELTİLEN CEPHE ÇİZGİSİ",
+   "id3": "132104",
+   "uip_tabaka": "YOK"
+  },
+  {
+   "id1": "132000",
+   "ust_konu_grup": "YAPI DÜZENİ VE YOĞUNLUKLARI",
+   "id2": "132105",
+   "uip_fonksiyon": "ÖNERİLEN CEPHE ÇİZGİSİ",
+   "id3": "132105",
+   "uip_tabaka": "YOK"
+  },
+  {
+   "id1": "119000",
+   "ust_konu_grup": "YAPI SINIRLAMASI GETİRİLEREK KORUNACAK ALANLAR",
+   "id2": "119103",
+   "uip_fonksiyon": "HAVAALANI HAVA KORİDORU",
+   "id3": "119103",
+   "uip_tabaka": "KST_HAVA_KORIDORU"
+  },
+  {
+   "id1": "133000",
+   "ust_konu_grup": "KARAYOLLARI",
+   "id2": "133001",
+   "uip_fonksiyon": "ERİŞME KONTROLLÜ KARAYOLU (OTOYOL)",
+   "id3": "133001",
+   "uip_tabaka": "HAT_OTOYOL"
+  },
+  {
+   "id1": "133000",
+   "ust_konu_grup": "KARAYOLLARI",
+   "id2": "133002",
+   "uip_fonksiyon": "BÖLÜNMÜŞ TAŞIT YOLU",
+   "id3": "133002",
+   "uip_tabaka": "YOK"
+  },
+  {
+   "id1": "133000",
+   "ust_konu_grup": "KARAYOLLARI",
+   "id2": "133003",
+   "uip_fonksiyon": "TAŞIT YOLU",
+   "id3": "133003",
+   "uip_tabaka": "YOK"
+  },
+  {
+   "id1": "133000",
+   "ust_konu_grup": "KARAYOLLARI",
+   "id2": "133004",
+   "uip_fonksiyon": "BİSİKLET YOLU",
+   "id3": "133004",
+   "uip_tabaka": "YOK"
+  },
+  {
+   "id1": "133000",
+   "ust_konu_grup": "KARAYOLLARI",
+   "id2": "133005",
+   "uip_fonksiyon": "YAYA YOLU VE BÖLGESİ",
+   "id3": "133005",
+   "uip_tabaka": "YOK"
+  }
+ ]
+}

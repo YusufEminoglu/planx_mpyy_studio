@@ -1,0 +1,81 @@
+{
+  "plan_level": "UIP",
+  "context_flags": {
+    "coastal": false,
+    "water_basin": false,
+    "protected_area": false,
+    "hazard_exposure": true
+  },
+  "evidence_items": [
+    {
+      "evidence_id": "EV-TOPO-001",
+      "category": "TOPOGRAPHY",
+      "source_institution": "Authorized Survey Unit",
+      "acquisition_date": "2026-06-01",
+      "version": "2026.1",
+      "crs_authid": "EPSG:5254",
+      "scale_denominator": 1000,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "evidence_id": "EV-GEO-001",
+      "category": "GEOLOGY",
+      "source_institution": "Authorized Geological Survey Unit",
+      "acquisition_date": "2026-05-15",
+      "version": "2026.1",
+      "crs_authid": "EPSG:5254",
+      "scale_denominator": 1000,
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    {
+      "evidence_id": "EV-HYDRO-001",
+      "category": "HYDROGEOLOGY",
+      "source_institution": "Authorized Water Authority",
+      "acquisition_date": "2026-05-20",
+      "version": "2026.1",
+      "crs_authid": "EPSG:5254",
+      "scale_denominator": 5000,
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    {
+      "evidence_id": "EV-LANDUSE-001",
+      "category": "CURRENT_LAND_USE",
+      "source_institution": "Planning Authority",
+      "acquisition_date": "2026-06-10",
+      "version": "2026.1",
+      "crs_authid": "EPSG:5254",
+      "resolution_m": 0.2,
+      "sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    {
+      "evidence_id": "EV-AGRI-001",
+      "category": "AGRICULTURE_FOREST",
+      "source_institution": "Agriculture and Forestry Authority",
+      "acquisition_date": "2026-04-01",
+      "version": "2026.1",
+      "crs_authid": "EPSG:5254",
+      "scale_denominator": 5000,
+      "sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    {
+      "evidence_id": "EV-INFRA-001",
+      "category": "INFRASTRUCTURE",
+      "source_institution": "Infrastructure Coordination Unit",
+      "acquisition_date": "2026-06-05",
+      "version": "2026.1",
+      "crs_authid": "EPSG:5254",
+      "scale_denominator": 1000,
+      "sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    {
+      "evidence_id": "EV-HAZARD-001",
+      "category": "HAZARD",
+      "source_institution": "Disaster and Emergency Authority",
+      "acquisition_date": "2026-05-25",
+      "version": "2026.1",
+      "crs_authid": "EPSG:5254",
+      "scale_denominator": 5000,
+      "sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    }
+  ]
+}

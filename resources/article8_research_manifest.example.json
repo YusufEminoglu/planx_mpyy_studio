@@ -1,0 +1,17 @@
+{
+  "institution_data_opinions": true,
+  "printed_and_digital_sources": true,
+  "national_geoportal_review": true,
+  "numeric_dataset_submission": true,
+  "current_plan_evaluation": true,
+  "threshold_and_field_studies": true,
+  "social_economic_historic_research": true,
+  "problem_and_potential_analysis": true,
+  "research_report": true,
+  "high_urban_or_disaster_risk": true,
+  "risk_or_avoidance_study": true,
+  "large_scale_land_use": false,
+  "conservation_plan": false,
+  "nip_preparation": true,
+  "institution_service_area_needs": true
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "profiles": [
+    {
+      "code": "PAIY_DEFAULT",
+      "display_name": "PAIY Baseline",
+      "profile_version": "1.0",
+      "min_ceiling_height_m": 2.6,
+      "min_unit_net_area_m2": 0.0,
+      "permitted_roof_slopes_percent": [33.0, 45.0],
+      "min_subbasement_height_m": 0.5,
+      "max_overhang_m": null,
+      "parking_on_parcel_required": false,
+      "source_note": "Configuration baseline; verify every result against the current approved plan and official by-law text.",
+      "source_reference": "PAIY configuration baseline"
+    },
+    {
+      "code": "ISTANBUL_IBB",
+      "display_name": "Istanbul Metropolitan Municipality",
+      "profile_version": "1.0",
+      "min_ceiling_height_m": 2.8,
+      "min_unit_net_area_m2": 28.5,
+      "permitted_roof_slopes_percent": [33.0, 45.0],
+      "min_subbasement_height_m": 0.5,
+      "max_overhang_m": null,
+      "parking_on_parcel_required": true,
+      "source_note": "Configurable municipal interpretation; verify against the current official text before permitting.",
+      "source_reference": "Istanbul municipal configuration"
+    },
+    {
+      "code": "ANKARA_ABB",
+      "display_name": "Ankara Metropolitan Municipality",
+      "profile_version": "1.0",
+      "min_ceiling_height_m": 2.6,
+      "min_unit_net_area_m2": 0.0,
+      "permitted_roof_slopes_percent": [33.0, 45.0],
+      "min_subbasement_height_m": 1.2,
+      "max_overhang_m": null,
+      "parking_on_parcel_required": false,
+      "source_note": "Configurable municipal interpretation; verify against the current official text before permitting.",
+      "source_reference": "Ankara municipal configuration"
+    },
+    {
+      "code": "IZMIR_IBB",
+      "display_name": "Izmir Metropolitan Municipality",
+      "profile_version": "1.0",
+      "min_ceiling_height_m": 2.6,
+      "min_unit_net_area_m2": 0.0,
+      "permitted_roof_slopes_percent": [33.0, 45.0],
+      "min_subbasement_height_m": 0.5,
+      "max_overhang_m": 1.5,
+      "parking_on_parcel_required": false,
+      "source_note": "Configurable municipal interpretation; verify against the current official text before permitting.",
+      "source_reference": "Izmir municipal configuration"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "evaluation_date": "2026-09-14",
+  "institutions": [
+    {
+      "institution": "Infrastructure Coordination Unit",
+      "request_date": "2026-07-01",
+      "response_date": "2026-07-20",
+      "extension_granted": false
+    },
+    {
+      "institution": "Water Authority",
+      "request_date": "2026-08-15",
+      "response_date": "",
+      "extension_granted": true
+    }
+  ]
+}

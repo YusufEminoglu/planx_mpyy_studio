@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "plan_level": "NIP",
+  "events": [
+    {
+      "event_id": "meeting-01",
+      "method": "MEETING",
+      "date": "2026-08-20",
+      "stakeholder_groups": [
+        "PUBLIC_INSTITUTION",
+        "CIVIL_SOCIETY"
+      ],
+      "announcement_evidence": "notice-01",
+      "attendance_evidence": "minutes-01",
+      "outcome_summary": "Planning concerns were recorded.",
+      "input_disposition": "Responses are indexed in the plan report."
+    }
+  ]
+}

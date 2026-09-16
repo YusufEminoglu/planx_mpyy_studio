@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "plan_id": "UIP-2026-01",
+  "plan_version": "3",
+  "plan_level": "UIP",
+  "purpose": "REVISION",
+  "components": [
+    {
+      "role": "PLAN_SHEET",
+      "plan_id": "UIP-2026-01",
+      "plan_version": "3",
+      "plan_level": "UIP",
+      "purpose": "REVISION",
+      "sha256": "replace_with_component_sha256"
+    },
+    {
+      "role": "OFFICIAL_DISPLAY",
+      "plan_id": "UIP-2026-01",
+      "plan_version": "3",
+      "plan_level": "UIP",
+      "purpose": "REVISION",
+      "sha256": "replace_with_component_sha256"
+    },
+    {
+      "role": "PLAN_NOTES",
+      "plan_id": "UIP-2026-01",
+      "plan_version": "3",
+      "plan_level": "UIP",
+      "purpose": "REVISION",
+      "sha256": "replace_with_component_sha256"
+    },
+    {
+      "role": "PLAN_REPORT",
+      "plan_id": "UIP-2026-01",
+      "plan_version": "3",
+      "plan_level": "UIP",
+      "purpose": "REVISION",
+      "sha256": "replace_with_component_sha256"
+    }
+  ]
+}

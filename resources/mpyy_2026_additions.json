@@ -1,0 +1,29 @@
+{
+  "catalog_version": "2026-01-22",
+  "official_gazette_number": "33145",
+  "schema_version": 1,
+  "symbols": [
+    {"code": "KENTSEL_ARKEOLOJIK_SIT_ALANI", "name": "Kentsel Arkeolojik Sit Alani", "levels": ["MSP", "CDP", "NIP", "UIP"]},
+    {"code": "TUZLA_ALANI", "name": "Tuzla Alani", "levels": ["MSP", "CDP", "NIP", "UIP"]},
+    {"code": "MANIA_PLANI", "name": "Mania Plani", "levels": ["MSP", "CDP", "NIP", "UIP"]},
+    {"code": "SINIR_KAPISI", "name": "Sinir Kapisi", "levels": ["MSP", "CDP", "NIP", "UIP"]},
+    {"code": "DOGAL_VE_EKOLOJIK_YAPISI_KORUNACAK_ALAN", "name": "Dogal ve Ekolojik Yapisi Korunacak Alan", "levels": ["MSP", "CDP", "NIP", "UIP"]},
+    {"code": "EKOLOJIK_ONEME_SAHIP_ALAN", "name": "Ekolojik Oneme Sahip Alan", "levels": ["MSP", "CDP", "NIP", "UIP"]},
+    {"code": "SU_ULASIM_BAGLANTISI", "name": "Su Ulasim Baglantisi", "levels": ["MSP", "CDP", "NIP", "UIP"]},
+    {"code": "AFET_LOJISTIK_ALANI", "name": "Afet Lojistik Alani", "levels": ["MSP", "CDP", "NIP", "UIP"]},
+    {"code": "SOKAK_HAYVANLARI_BARINAGI", "name": "Sokak Hayvanlari Barinagi", "levels": ["MSP", "CDP", "NIP", "UIP"]},
+    {"code": "PLANLAMA_ALT_BOLGESI", "name": "Planlama Alt Bolgesi", "levels": ["CDP"]},
+    {"code": "STRATEJIK_ALT_BOLGE", "name": "Stratejik Alt Bolge", "levels": ["CDP"]},
+    {"code": "STRATEJIK_KARAR", "name": "Stratejik Karar", "levels": ["CDP"]},
+    {"code": "AGACLANDIRILACAK_ALAN", "name": "Agaclandirilacak Alan", "levels": ["CDP"]},
+    {"code": "BAGLIK_BAHCELIK_ALAN", "name": "Baglik-Bahcelik Alan", "levels": ["CDP"]},
+    {"code": "DEPOLAMA_ALANI", "name": "Depolama Alani", "levels": ["CDP"]},
+    {"code": "KAMU_HIZMET_ALANI", "name": "Kamu Hizmet Alani", "levels": ["CDP"]},
+    {"code": "RAYLI_TOPLU_TASIMA_HATTI", "name": "Rayli Toplu Tasima Hatti", "levels": ["CDP"]},
+    {"code": "YENILENEBILIR_ENERJI_URETIM_TESISI_ALANI", "name": "Yenilenebilir Enerji Kaynaklarina Dayali Uretim Tesisi Alani", "levels": ["CDP", "NIP", "UIP"]},
+    {"code": "FUAR_PANAYIR_FESTIVAL_GOSTERI_ALANI", "name": "Fuar, Panayir ve Festival/Gosteri Alani", "levels": ["CDP", "NIP", "UIP"]},
+    {"code": "ELEKTRONIK_HABERLESME_ALTYAPI_ALANI", "name": "Elektronik Haberlesme Altyapi Alani", "levels": ["NIP"]},
+    {"code": "CEMEVI_ALANI", "name": "Cemevi Alani", "levels": ["UIP"]},
+    {"code": "MOTOKURYE_PARK_ALANI", "name": "Motokurye Park Alani", "levels": ["NIP", "UIP"]}
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "profile_id": "replace_with_administration_profile_id",
+  "profile_version": "1",
+  "tables": [
+    {
+      "name": "mpyy_metadata",
+      "fields": [
+        {
+          "name": "dataset_id",
+          "type": "TEXT",
+          "not_null": true
+        },
+        {
+          "name": "schema_version",
+          "type": "INTEGER",
+          "not_null": true
+        }
+      ]
+    },
+    {
+      "name": "plangml_uip_alan",
+      "geometry_type": "MULTIPOLYGON",
+      "srs_id": 5254,
+      "fields": [
+        {
+          "name": "fid",
+          "type": "INTEGER"
+        }
+      ]
+    }
+  ]
+}

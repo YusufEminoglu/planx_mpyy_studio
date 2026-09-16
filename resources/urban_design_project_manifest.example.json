@@ -1,0 +1,16 @@
+{
+  "project_boundary_in_plan": true,
+  "project_preceded_plan": false,
+  "details_transferred_to_plan": false,
+  "implementation_requested": true,
+  "implementation_plan_approved": true,
+  "development_and_building_targets": true,
+  "solid_void_analysis": true,
+  "building_relationships": true,
+  "vehicle_pedestrian_movements": true,
+  "natural_data": true,
+  "cultural_data": true,
+  "social_economic_data": true,
+  "transport_data": true,
+  "technical_infrastructure_data": true
+}

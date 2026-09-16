@@ -1,0 +1,441 @@
+{
+ "version": 1,
+ "source": {
+  "file": "MpyyUipDb_2026_02_27.gpkg",
+  "sha256": "63c796d081d0f099edd8ac87e7e1362412ad8f46db86506b90ed1ae307b94c28",
+  "project": "BERGAMA UYGULAMA İMAR PLANI ÇİZİM ŞABLONU-2026 27 ŞUBAT"
+ },
+ "layer_order": [
+  "yapi_yaklasma",
+  "uip-notasyonlar",
+  "uip_cizgiler",
+  "uip-alanlar",
+  "uipPolygonTable",
+  "uipLineTable"
+ ],
+ "tables": [
+  {
+   "table": "uip-alanlar",
+   "geometry": "MULTIPOLYGON",
+   "fields": [
+    {
+     "name": "id1",
+     "type": "TEXT(10)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "ustkonugrup",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "id2",
+     "type": "TEXT(50)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "uipfonksiyon",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "nizam",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yanbahce",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "taks",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "kaks",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "onbahce",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "katadedi",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yencok",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "emsal",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "id3",
+     "type": "TEXT(10)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "uip_tabaka",
+     "type": "TEXT(50)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yapiYaklasmaMesafesi",
+     "type": "INTEGER",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yapiYaklasmaDurumu",
+     "type": "TEXT(10)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "Tarihilk",
+     "type": "DATETIME",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "Tarihson",
+     "type": "DATETIME",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "Kullanici",
+     "type": "TEXT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "AlanM2",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    }
+   ]
+  },
+  {
+   "table": "uip_cizgiler",
+   "geometry": "MULTILINESTRING",
+   "fields": [
+    {
+     "name": "uipfonksiyon",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yolTipi",
+     "type": "TEXT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yolGenislik",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "cepheKalinlik",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "kaldirimGenislik",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "refujGenislik",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "SolSeritSayisi",
+     "type": "INTEGER",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "SagSeritSayisi",
+     "type": "INTEGER",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yolGenislik2",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "Kullanici",
+     "type": "TEXT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "Uzunluk(m)",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "Tarihilk",
+     "type": "DATETIME",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "Tarihson",
+     "type": "DATETIME",
+     "notnull": false,
+     "pk": false
+    }
+   ]
+  },
+  {
+   "table": "uip-notasyonlar",
+   "geometry": "POINT",
+   "fields": [
+    {
+     "name": "ustkonugrup",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "uipfonksiyon",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "sembolTipi",
+     "type": "TEXT(30)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yolGenislik",
+     "type": "TEXT(10)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "nizam",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "katadedi",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "onbahce",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yanbahce",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "taks",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "kaks",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "emsal",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yencok",
+     "type": "TEXT(5)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yolTipi",
+     "type": "TEXT",
+     "notnull": false,
+     "pk": false
+    }
+   ]
+  },
+  {
+   "table": "yapi_yaklasma",
+   "geometry": "LINESTRING",
+   "fields": []
+  },
+  {
+   "table": "uipPolygonTable",
+   "geometry": null,
+   "fields": [
+    {
+     "name": "id1",
+     "type": "INTEGER",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "ust_konu_grup",
+     "type": "TEXT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "id2",
+     "type": "INTEGER",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "uip_fonksiyon",
+     "type": "TEXT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "id3",
+     "type": "INTEGER",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "uip_tabaka",
+     "type": "TEXT",
+     "notnull": false,
+     "pk": false
+    }
+   ]
+  },
+  {
+   "table": "uipLineTable",
+   "geometry": null,
+   "fields": [
+    {
+     "name": "id1",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "ust_konu_grup",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "id2",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "uip_fonksiyon",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "id3",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "uip_tabaka",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    }
+   ]
+  }
+ ],
+ "relations": [
+  {
+   "id": "uip_alanla_uipfonksiyon_uipPolygon_uip_fonksiyon",
+   "referencing": "uip-alanlar",
+   "referenced": "uipPolygonTable",
+   "pairs": {
+    "uipfonksiyon": "uip_fonksiyon"
+   }
+  }
+ ],
+ "styles": {
+  "uip-alanlar": {
+   "qml": "uip-alanlar.qml",
+   "sha256": "2b8a3c03d23843164faa881130c5566a2201bd242514af4e0b32e6629c1dfe83"
+  },
+  "uip_cizgiler": {
+   "qml": "uip_cizgiler.qml",
+   "sha256": "7c431c30d27fbb01b035bb28167a7642bdfc0be2f9724763b6751a3c22ad4edc"
+  },
+  "uip-notasyonlar": {
+   "qml": "uip-notasyonlar.qml",
+   "sha256": "3a9501242717a4f8b061988db8e94caf2f4ceb3e057e124d138921f9bebcd44c"
+  },
+  "yapi_yaklasma": {
+   "qml": "yapi_yaklasma.qml",
+   "sha256": "201345dcf323d2d5849d9da14754ba273f6d452b05e312c72209e121ce28200f"
+  },
+  "uipPolygonTable": {
+   "qml": "uipPolygonTable.qml",
+   "sha256": "3e89d9d0ccf5b2dfccd5df9a8b4a5b01f25792896bb51c6743f733a7703c210e"
+  },
+  "uipLineTable": {
+   "qml": "uipLineTable.qml",
+   "sha256": "f47c77ce1a6572fded42cbf3cc577f5b4fe74c92f326c48d664eddcdb3acd070"
+  }
+ },
+ "deviations": [
+  "uip-notasyonlar.ustkonugrup default: stale layer id replaced by overlay_intersects('uip-alanlar', \"ustkonugrup\")",
+  "relation widget data source is rebound to the opened workspace at load time"
+ ]
+}

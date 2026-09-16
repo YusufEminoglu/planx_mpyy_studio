@@ -1,0 +1,3 @@
+dataset,attribute,sqlite_type,required,primary_key,geometry,srs
+plangml_uip_alan,fid,INTEGER,true,true,MULTIPOLYGON,5254
+plangml_uip_alan,fonksiyon,TEXT,false,false,MULTIPOLYGON,5254

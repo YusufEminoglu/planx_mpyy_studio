@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "plan_level": "CDP",
+  "prior_plan_cancelled": true,
+  "cancelled_plan_reference": "CDP-OLD-01",
+  "cancellation_decision_reference": "decision-2026-14",
+  "reevaluations": [
+    {
+      "evidence_id": "old-opinions",
+      "kind": "INSTITUTION_OPINIONS",
+      "decision": "SUPERSEDED",
+      "reevaluation_date": "2026-09-01",
+      "rationale": "Current institution opinions replace the earlier set.",
+      "responsible_party": "planning_unit"
+    },
+    {
+      "evidence_id": "old-analysis",
+      "kind": "ANALYSIS",
+      "decision": "REUSED",
+      "reevaluation_date": "2026-09-01",
+      "rationale": "The dataset remains applicable after documented review.",
+      "responsible_party": "planning_unit",
+      "current_version_reference": "analysis-v3"
+    },
+    {
+      "evidence_id": "old-synthesis",
+      "kind": "SYNTHESIS",
+      "decision": "REJECTED",
+      "reevaluation_date": "2026-09-01",
+      "rationale": "A new synthesis is required for the revised boundary.",
+      "responsible_party": "planning_unit"
+    }
+  ]
+}

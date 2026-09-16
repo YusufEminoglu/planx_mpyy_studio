@@ -1,0 +1,25 @@
+{
+  "plan_level": "UIP",
+  "report_purpose": "PLAN_CHANGE",
+  "contains_mixed_use": true,
+  "sections": {
+    "plan_type_scale_scope": true,
+    "vision_objectives_targets_strategies": true,
+    "protection_use_principles": true,
+    "land_use_decisions": true,
+    "density_and_building_principles": true,
+    "implementation_principles": true,
+    "open_green_system": true,
+    "transport": true,
+    "accessibility": true,
+    "efficient_use_of_space": true,
+    "area_distribution_table": true,
+    "detailed_change_rationale": true,
+    "necessity_analyses": true,
+    "mixed_use_ratios": true,
+    "parking_details": true,
+    "green_area_details": true,
+    "social_technical_infrastructure_details": true,
+    "independent_unit_count": 120
+  }
+}

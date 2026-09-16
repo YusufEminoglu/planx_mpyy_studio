@@ -1,0 +1,23 @@
+{
+  "planning_area_interaction_basis": true,
+  "integrated_coastal_strategy": true,
+  "land_and_sea_public_access": true,
+  "institution_sector_coordination_model": true,
+  "current_coastal_profile": true,
+  "potential_problem_constraint_analysis": true,
+  "subregion_spatial_strategies": true,
+  "participatory_management_model": true,
+  "coastal_ecosystem": true,
+  "disaster_hazards": true,
+  "wave_wind_water_cycle": true,
+  "coastline_and_shore_practice": true,
+  "transport_connections": true,
+  "ports_and_coastal_facilities": true,
+  "marine_trade_and_transport": true,
+  "energy_storage_transmission": true,
+  "tourism_and_accommodation": true,
+  "fisheries_and_aquaculture": true,
+  "water_waste_and_air_quality": true,
+  "coast_guard_and_restricted_areas": true,
+  "coastal_settlement_expansion": true
+}
