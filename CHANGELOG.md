@@ -1,11 +1,6 @@
 # Changelog
 
-## [2.5.3] - 2026-09-17
-
-- Upgraded official plugin icon to high-end tactile 3D brand identity (isometric 45°, slim teal pedestal, full bleed transparent canvas).
-- Synchronized documentation, repository and issue tracker endpoints to GeoPhilo and GitLab.
-
-## [Yayımlanmadı]
+## [2.6.0] - 2026-09-17
 
 ### Düzeltilen
 - **Öznitelik formu açılır listeleri çalışmıyordu.** Stil uygulandıktan ve çalışma alanı yüklendikten sonra genel form tasarımcısı QML formunu siliyor, koşullu sekmelerin yerine genel sekmeler koyuyordu. Nizam listesine `BITISIK`, `IKIZ` gibi GeoPackage CHECK kısıtının reddettiği kodlar yazdığı için kayıt hiç kaydedilemiyordu. Yazılmış formu olan katmanlara artık dokunulmuyor.
@@ -41,6 +36,11 @@
 - **PlanGML çalışma alanı (UİP / NİP / ÇDP).** Tablolar, alan adları, sırası, türleri, zorunluluk bilgisi ve kod listeleri Bakanlığın resmî XSD şemasından (`https://eplan.csb.gov.tr/e-plan/planGML/planGMLShema_1_6.zip`) `tools/compile_plangml_schema.py` ile türetiliyor: UİP 90, NİP 81, ÇDP 60 nesne tipi. Kod listeleri şemanın kendi değerini saklayan açılır listelerdir; zorunlu alanlar taslağı engellemeyen uyarı olarak işaretlenir, eksikler `audit_required_fields` ile raporlanır. Formlar GeoPackage'a varsayılan stil olarak yazıldığından eklenti olmadan açılan QGIS'te de açılır listeler gelir. ÇDP şemasında listelenip tanımlanmamış `EnerjiDagitimDepolama` için tablo oluşturulmaz ve kayıt altındadır. Semboloji Bakanlığın e-Plan GeoServer SLD'lerinden gelir: stil adı tip adından, filtre kod listesindeki sıradan çözülür (`tools/compile_plangml_eplan_styles.py`); taramalar kayıpsız PNG olarak stile gömülür, QGIS'in düz daireye çevirdiği `ttf://` işaretleri font sembolü olarak geri kurulur. Sıra ile başlığın çeliştiği, çözülemeyen ya da kısaltılmış adla eşleşen kurallar `mapping.json`'da kayıtlıdır ve onaya sunulmuştur. SLD'si olmayan 4 tip ve QGIS'in aktaramadığı `Yolorta` (yalnız yazı sembolü) nötr kalır.
 - **Yerel UİP çalışma alanı (MpyyUipDb çizim şablonu):** `uip-alanlar`, `uip_cizgiler`, `uip-notasyonlar`, `yapi_yaklasma`, `uipPolygonTable` ve `uipLineTable` kaynak şablonla aynı tablo, alan ve tür yapısında oluşturuluyor. Sembolojiyi, sekmeleri, açılır listeleri ve varsayılan değerleri taşıyan katman tanımları `tools/extract_local_uip_template.py` ile şablondan QGIS üzerinden alınıyor (`forms/yerel_uip`, SHA-256 manifestli).
 - Açılır listeleri gerçek widget'larla dolduran, her liste değerini veritabanına yazan ve stilin girilen değerle eşleştiğini doğrulayan `test_forms_dropdowns_qgis` (9 test, QGIS 3.44 ve 4.2).
+
+## [2.5.3] - 2026-09-17
+
+- Upgraded official plugin icon to high-end tactile 3D brand identity (isometric 45°, slim teal pedestal, full bleed transparent canvas).
+- Synchronized documentation, repository and issue tracker endpoints to GeoPhilo and GitLab.
 
 ## [2.5.2] - 2026-09-15
 
