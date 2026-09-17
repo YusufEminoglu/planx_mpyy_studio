@@ -1,0 +1,6 @@
+# QGIS Hub prefers LF; keep it in the working tree too so the zip ships LF.
+* text=auto eol=lf
+*.png binary
+*.ttf binary
+*.gpkg binary
+*.zip binary

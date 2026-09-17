@@ -317,13 +317,20 @@ def schema_level(schema):
     return next(level for level, compiled in all_levels().items() if compiled["xsd"] == schema["xsd"])
 
 
-def _sld_marks(sld_text, line_layer=False):
-    """Per rule, one entry per SLD graphic QGIS turns into a marker symbol layer, in document order:
-    (family, character) for ttf marks, None for any other graphic.
+METRE_UOM = "http://www.opengeospatial.org/se/units/metre"
 
-    Counting Graphic elements rather than Marks keeps font marks aligned with QGIS marker slots when a
-    rule also has an ExternalGraphic marker (the flood and landslide borders). Fill graphics QGIS draws
-    as a raster or SVG tile have no marker slot, and neither does a PointSymbolizer on a line layer."""
+
+def _sld_graphics(sld_text, line_layer=False):
+    """Per rule, one entry per SLD graphic QGIS turns into a marker symbol layer, in document order.
+
+    Each entry is a dict: ``font`` (family, character) for a ttf mark, ``size`` and ``metre`` from the
+    graphic and its symbolizer, and for a GraphicStroke ``interval``/``offset`` from the stroke dash
+    pattern (GeoServer repeats the graphic once per dash; with no dasharray it repeats contiguously,
+    so the interval is the graphic's own size). ``None`` where QGIS makes no marker: a fill tile, or a
+    PointSymbolizer on a line layer.
+
+    QGIS reads none of this when it imports the SLD (every marker line comes in with interval 0 and
+    graphics inside a stroke or fill lose the symbolizer's metre unit), so it is applied afterwards."""
     from qgis.PyQt.QtXml import QDomDocument
 
     doc = QDomDocument()
@@ -338,27 +345,70 @@ def _sld_marks(sld_text, line_layer=False):
             graphic = graphic_nodes.at(j).toElement()
             mark = graphic.firstChildElement("Mark")
             external = graphic.firstChildElement("ExternalGraphic")
-            parent = graphic.parentNode().toElement().localName()
-            if (parent == "GraphicFill" and not external.isNull()) or (line_layer and parent == "PointSymbolizer"):
+            parent = graphic.parentNode().toElement()
+            holder = parent.localName()
+            if (holder == "GraphicFill" and not external.isNull()) or (line_layer and holder == "PointSymbolizer"):
                 continue
             name = mark.firstChildElement("WellKnownName").text() if not mark.isNull() else ""
             found = re.match(r"ttf://(?P<family>[^#]+)#0x(?P<code>[0-9A-Fa-f]+)", name)
-            marks.append((found.group("family"), chr(int(found.group("code"), 16))) if found else None)
+            entry = {"font": (found.group("family"), chr(int(found.group("code"), 16))) if found else None}
+            entry["size"] = _number(graphic.firstChildElement("Size").text())
+            node, entry["metre"] = graphic, False
+            while not node.isNull():
+                element = node.toElement()
+                if element.localName().endswith("Symbolizer"):
+                    entry["metre"] = element.attribute("uom") == METRE_UOM
+                    break
+                node = node.parentNode()
+            if holder == "GraphicStroke":
+                stroke = parent.parentNode().toElement()
+                dashes = [_number(v) for v in _css(stroke, "stroke-dasharray").split()]
+                dashes = [d for d in dashes if d is not None]
+                entry["interval"] = sum(dashes) if dashes else entry["size"]
+                entry["offset"] = _number(_css(stroke, "stroke-dashoffset"))
+            marks.append(entry)
         rules.append(marks)
     return rules
 
 
-def _marker_slots(symbol):
-    """(owner symbol, index) of every marker symbol layer, depth first, in drawing order."""
-    slots = []
+def _css(element, name):
+    """Value of the ``<CssParameter name=...>`` directly under ``element``."""
+    child = element.firstChildElement("CssParameter")
+    while not child.isNull():
+        if child.attribute("name") == name:
+            return child.text().strip()
+        child = child.nextSiblingElement("CssParameter")
+    return ""
+
+
+def _number(text):
+    try:
+        return float(str(text).strip())
+    except (TypeError, ValueError):
+        return None
+
+
+def _marker_paths(symbol, prefix=()):
+    """Index path of every marker symbol layer, depth first, in drawing order.
+
+    A path such as ``(1, 0)`` means ``symbol.symbolLayer(1).subSymbol().symbolLayer(0)``. Paths are
+    used instead of symbol layer references because a layer fetched from a sub-symbol does not stay
+    valid while the tree is walked and edited."""
+    paths = []
     for index in range(symbol.symbolLayerCount()):
-        layer = symbol.symbolLayer(index)
-        if layer.type() == Qgis.SymbolType.Marker:
-            slots.append((symbol, index))
-        sub = layer.subSymbol()
-        if sub is not None:
-            slots.extend(_marker_slots(sub))
-    return slots
+        if symbol.symbolLayer(index).type() == Qgis.SymbolType.Marker:
+            paths.append(prefix + (index,))
+        if symbol.symbolLayer(index).subSymbol() is not None:
+            paths.extend(_marker_paths(symbol.symbolLayer(index).subSymbol(), prefix + (index,)))
+    return paths
+
+
+def _owner_of(symbol, path):
+    """The symbol holding the layer at ``path`` (resolved from the root every time)."""
+    current = symbol
+    for index in path[:-1]:
+        current = current.symbolLayer(index).subSymbol()
+    return current
 
 
 def apply_eplan_symbology(layer, level, type_name):
@@ -382,35 +432,39 @@ def apply_eplan_symbology(layer, level, type_name):
         layer.setCustomProperty("mpyy/symbology", "e-Plan SLD QGIS'e aktarılamadı: " + level + "/" + type_name)
         return False
 
-    marks = _sld_marks(text, layer.geometryType() == Qgis.GeometryType.Line)
+    marks = _sld_graphics(text, layer.geometryType() == Qgis.GeometryType.Line)
     renderer = layer.renderer()
     if isinstance(renderer, QgsRuleBasedRenderer):
         root = renderer.rootRule()
         symbols = [rule.symbol() for rule in root.children()]
         labels = [rule.label() for rule in root.children()]
+        setters = [rule.setSymbol for rule in root.children()]
     else:
         # A single rule without a filter (ManiaSiniri, CDP StratejikKarar ...) comes in as a single symbol.
         root, symbols = None, [renderer.symbol()] if hasattr(renderer, "symbol") else []
         labels = ["*"] * len(symbols)
+        setters = [renderer.setSymbol] * len(symbols)
     from .plangml_catalog import apply_catalog_overrides, raster_marker, symbol_for_glyph
 
     families = installed_font_families()
     missing = {}  # rule label -> gaps left in that rule
-    for symbol, rule_marks, label in zip(symbols, marks, labels):
+    for symbol, rule_marks, label, setter in zip(symbols, marks, labels, setters):
         if symbol is None:
             continue
         if _mark_missing_svg_symbols(symbol):
             missing.setdefault(label, set()).add("TaramaSembol SVG")
-        slots = _marker_slots(symbol)
-        if len(slots) == len(rule_marks):
-            for (owner, index), mark in zip(slots, rule_marks):
-                if mark is None:
+        paths = _marker_paths(symbol)
+        if len(paths) == len(rule_marks):
+            for path, mark in zip(paths, rule_marks):
+                if mark["font"] is None:
                     continue
-                old = owner.symbolLayer(index)
-                family, character, color = mark[0], mark[1], old.color()
+                index = path[-1]
+                old = _owner_of(symbol, path).symbolLayer(index)
+                family, character, color = mark["font"][0], mark["font"][1], old.color()
                 if family not in families and symbol_for_glyph(family, character):
                     # Ek-1e catalog symbol of the same item instead of the unshipped glyph
-                    owner.changeSymbolLayer(index, raster_marker(symbol_for_glyph(family, character), old.size(), old.sizeUnit(), old.angle()))
+                    replacement = raster_marker(symbol_for_glyph(family, character), old.size(), old.sizeUnit(), old.angle())
+                    _owner_of(symbol, path).changeSymbolLayer(index, replacement)
                     continue
                 if family not in families:
                     if family in UNICODE_TEXT_FONTS:
@@ -424,7 +478,11 @@ def apply_eplan_symbology(layer, level, type_name):
                 font.setSizeUnit(old.sizeUnit())
                 font.setStrokeWidth(0)
                 font.setStrokeColor(QColor(0, 0, 0, 0))
-                owner.changeSymbolLayer(index, font)
+                _owner_of(symbol, path).changeSymbolLayer(index, font)
+        sized = _sized_symbol(symbol, rule_marks)
+        if sized is not None:
+            setter(sized)
+            symbol = sized
         _embed_images(symbol)
 
     applied, redrawn = apply_catalog_overrides(layer, level, type_name)
@@ -545,6 +603,76 @@ def installed_font_families():
     return set(database.families())
 
 
+def _sized_symbol(symbol, rule_marks):
+    """Copy of ``symbol`` with the size, unit and repeat interval every SLD graphic asks for.
+
+    QGIS drops both when it reads a graphic inside a stroke or a fill: the marker keeps a pixel size
+    and the marker line is left with interval 0, so the symbols pile up on the line's first vertex.
+    The work is done on the symbol's XML rather than on the live symbol layers, because a symbol layer
+    fetched from a sub-symbol does not stay valid while the tree is being walked."""
+    from qgis.core import QgsReadWriteContext, QgsSymbolLayerUtils
+    from qgis.PyQt.QtXml import QDomDocument
+
+    document = QDomDocument()
+    element = QgsSymbolLayerUtils.saveSymbol("s", symbol, document, QgsReadWriteContext())
+    marks = list(rule_marks)
+    if not _walk_symbol_element(element, marks) or marks:
+        return None
+    return QgsSymbolLayerUtils.loadSymbol(element, QgsReadWriteContext())
+
+
+def _walk_symbol_element(symbol_element, marks):
+    """Apply and consume ``marks`` over the <layer> elements of one <symbol>; False when they run out."""
+    is_marker = symbol_element.attribute("type") == "marker"
+    layer = symbol_element.firstChildElement("layer")
+    while not layer.isNull():
+        if is_marker:
+            if not marks:
+                return False
+            mark = marks.pop(0)
+            if mark["size"]:
+                _set_option(layer, "size", mark["size"])
+                _set_option(layer, "size_unit", _unit_name(mark))
+        inner = layer.firstChildElement("symbol")
+        if not inner.isNull():
+            if layer.attribute("class") == "MarkerLine" and marks and marks[0].get("interval"):
+                spacing = marks[0]
+                _set_option(layer, "interval", spacing["interval"])
+                _set_option(layer, "interval_unit", _unit_name(spacing))
+                _set_option(layer, "placements", "Interval")
+                if spacing.get("offset"):
+                    _set_option(layer, "offset_along_line", spacing["offset"])
+                    _set_option(layer, "offset_along_line_unit", _unit_name(spacing))
+            if not _walk_symbol_element(inner, marks):
+                return False
+        layer = layer.nextSiblingElement("layer")
+    return True
+
+
+def _unit_name(mark):
+    return "RenderMetersInMapUnits" if mark["metre"] else "Pixel"
+
+
+def _set_option(layer_element, name, value):
+    """Set one <Option name=...> of a symbol layer's property map, adding it when absent."""
+    options = layer_element.firstChildElement("Option")
+    if options.isNull():
+        return
+    option = options.firstChildElement("Option")
+    while not option.isNull():
+        if option.attribute("name") == name:
+            option.setAttribute("value", str(value))
+            return
+        option = option.nextSiblingElement("Option")
+    added = layer_element.ownerDocument().createElement("Option")
+    added.setAttribute("type", "QString")
+    added.setAttribute("name", name)
+    added.setAttribute("value", str(value))
+    options.appendChild(added)
+
+
+def _unit_of(mark):
+    return Qgis.RenderUnit.MetersInMapUnits if mark["metre"] else Qgis.RenderUnit.Pixels
 def _mark_missing_svg_symbols(symbol):
     """Markers pointing at the Ministry's unpublished TaramaSembol SVGs: the Ek-1e catalog symbol of
     the same item when there is one, otherwise a grey "?". True when a "?" was left."""

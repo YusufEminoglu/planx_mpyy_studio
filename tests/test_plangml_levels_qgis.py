@@ -12,6 +12,7 @@ from pathlib import Path
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 from qgis.core import (  # noqa: E402
+    Qgis,
     QgsApplication,
     QgsExpression,
     QgsExpressionContext,
@@ -106,11 +107,11 @@ def typed_layer(level, type_name, rows):
     return layer
 
 
-def walk_layers(symbol):
-    """Symbol layers depth first, sub-symbols included."""
+def walk_layers(symbol, into_sub=True):
+    """Symbol layers depth first; ``into_sub`` False keeps the containers (marker lines, fills)."""
     for index in range(symbol.symbolLayerCount()):
         layer = symbol.symbolLayer(index)
-        if layer.subSymbol() is None or layer.layerType() in ("SimpleFill", "SimpleLine", "SimpleMarker"):
+        if not into_sub or layer.subSymbol() is None or layer.layerType() in ("SimpleFill", "SimpleLine", "SimpleMarker"):
             yield layer
         else:
             yield from walk_layers(layer.subSymbol())
@@ -194,6 +195,28 @@ class SymbologyGapTests(unittest.TestCase):
         single = typed_layer("CDP", "StratejikKarar", [])
         apply_eplan_symbology(single, "CDP", "StratejikKarar")
         self.assertIsNone(single.customProperty("mpyy/missing_symbols"))
+
+    def test_marker_lines_keep_the_sld_interval_and_size(self):
+        # QGIS imports every SLD graphic inside a stroke or fill without its size and with interval 0,
+        # so the symbols pile up on the line's first vertex.
+        power = typed_layer("CDP", "EnerjiNakilHatti", [])
+        self.assertTrue(apply_eplan_symbology(power, "CDP", "EnerjiNakilHatti"))
+        symbol = power.renderer().rootRule().children()[0].symbol()
+        line = next(l for l in walk_layers(symbol, into_sub=False) if l.layerType() == "MarkerLine")
+        self.assertEqual((line.interval(), int(line.intervalUnit())), (15, int(Qgis.RenderUnit.MetersInMapUnits)))
+        marker = line.subSymbol().symbolLayer(0)
+        self.assertEqual((marker.size(), int(marker.sizeUnit())), (15, int(Qgis.RenderUnit.MetersInMapUnits)))
+        for level in ("UIP", "NIP", "CDP", "MUIP", "MNIP"):
+            for type_name in [t["name"] for t in all_levels()[level]["feature_types"] if t["geometry"]]:
+                layer = typed_layer(level, type_name, [])
+                if not apply_eplan_symbology(layer, level, type_name):
+                    continue
+                renderer = layer.renderer()
+                rules = renderer.rootRule().children() if renderer.type() == "RuleRenderer" else []
+                for rule in rules:
+                    for item in walk_layers(rule.symbol()) if rule.symbol() else []:
+                        if item.layerType() == "MarkerLine":
+                            self.assertGreater(item.interval(), 0, f"{level}/{type_name}/{rule.label()}")
 
     def test_pedestrian_path_width_is_written_like_a_road(self):
         line = "LINESTRING(500000 4250000, 500200 4250000)"
