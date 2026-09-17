@@ -317,8 +317,13 @@ def schema_level(schema):
     return next(level for level, compiled in all_levels().items() if compiled["xsd"] == schema["xsd"])
 
 
-def _sld_marks(sld_text):
-    """Per rule, the marks in document order: (family, character) for ttf marks, None otherwise."""
+def _sld_marks(sld_text, line_layer=False):
+    """Per rule, one entry per SLD graphic QGIS turns into a marker symbol layer, in document order:
+    (family, character) for ttf marks, None for any other graphic.
+
+    Counting Graphic elements rather than Marks keeps font marks aligned with QGIS marker slots when a
+    rule also has an ExternalGraphic marker (the flood and landslide borders). Fill graphics QGIS draws
+    as a raster or SVG tile have no marker slot, and neither does a PointSymbolizer on a line layer."""
     from qgis.PyQt.QtXml import QDomDocument
 
     doc = QDomDocument()
@@ -328,9 +333,15 @@ def _sld_marks(sld_text):
     rule_nodes = doc.elementsByTagNameNS(sld, "Rule")
     for i in range(rule_nodes.count()):
         marks = []
-        mark_nodes = rule_nodes.at(i).toElement().elementsByTagNameNS(sld, "Mark")
-        for j in range(mark_nodes.count()):
-            name = mark_nodes.at(j).toElement().firstChildElement("WellKnownName").text()
+        graphic_nodes = rule_nodes.at(i).toElement().elementsByTagNameNS(sld, "Graphic")
+        for j in range(graphic_nodes.count()):
+            graphic = graphic_nodes.at(j).toElement()
+            mark = graphic.firstChildElement("Mark")
+            external = graphic.firstChildElement("ExternalGraphic")
+            parent = graphic.parentNode().toElement().localName()
+            if (parent == "GraphicFill" and not external.isNull()) or (line_layer and parent == "PointSymbolizer"):
+                continue
+            name = mark.firstChildElement("WellKnownName").text() if not mark.isNull() else ""
             found = re.match(r"ttf://(?P<family>[^#]+)#0x(?P<code>[0-9A-Fa-f]+)", name)
             marks.append((found.group("family"), chr(int(found.group("code"), 16))) if found else None)
         rules.append(marks)
@@ -371,7 +382,7 @@ def apply_eplan_symbology(layer, level, type_name):
         layer.setCustomProperty("mpyy/symbology", "e-Plan SLD QGIS'e aktarılamadı: " + level + "/" + type_name)
         return False
 
-    marks = _sld_marks(text)
+    marks = _sld_marks(text, layer.geometryType() == Qgis.GeometryType.Line)
     renderer = layer.renderer()
     if isinstance(renderer, QgsRuleBasedRenderer):
         root = renderer.rootRule()
