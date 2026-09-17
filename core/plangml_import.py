@@ -26,7 +26,7 @@ from qgis.core import (
     QgsWkbTypes,
 )
 
-from .plangml_workspace import catalog, level_schema
+from .plangml_workspace import all_levels, level_schema
 
 CROSSWALK_PATH = Path(__file__).resolve().parents[1] / "styles" / "plangml_tabaka_crosswalk.json"
 FAMILY = {
@@ -35,6 +35,7 @@ FAMILY = {
     "LineString": Qgis.GeometryType.Line,
     "MultiLineString": Qgis.GeometryType.Line,
     "Point": Qgis.GeometryType.Point,
+    "MultiPoint": Qgis.GeometryType.Point,
 }
 FAMILY_NAME = {Qgis.GeometryType.Polygon: "alan", Qgis.GeometryType.Line: "çizgi", Qgis.GeometryType.Point: "nokta"}
 SYSTEM_TABLES = {"plangml_sema", "layer_styles", "mpyy_metadata"}
@@ -163,7 +164,7 @@ def import_cad_layer(source, tabaka_field, workspace, feedback=None, project=Non
 def audit_plangml_workspace(path, level=None):
     """Schema conformance findings for a PlanGML 1.1.7 GeoPackage (read only)."""
     level = level or workspace_level(path)
-    if level not in catalog()["levels"]:
+    if level not in all_levels():
         raise ValueError('Plan kademesi belirlenemedi; kademeyi seçin.')
     schema = level_schema(level)
     types = {t["name"]: t for t in schema["feature_types"]}

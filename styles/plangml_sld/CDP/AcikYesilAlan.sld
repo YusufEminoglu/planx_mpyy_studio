@@ -86,7 +86,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/TaramaSembol/FuarPanayirFestival.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:FuarPanayirFestival.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>38</Size>
@@ -130,7 +130,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/TaramaSembol/AgaclandirilacakAlan.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:AgaclandirilacakAlan.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>38</Size>

@@ -209,7 +209,8 @@ class PlanGMLWorkspaceTests(unittest.TestCase):
         marker = ticaret.symbolLayer(1).subSymbol().symbolLayer(0)
         self.assertEqual((marker.layerType(), marker.fontFamily(), marker.character()), ("FontMarker", "OG_V_1_2", "D"))
 
-        self.assertEqual(layers["Yolorta"].customProperty("mpyy/symbology"), "e-Plan SLD QGIS'e aktarılamadı: UIP/Yolorta")
+        # UIP_YOLORTA only has text symbolizers: the road width is written in a circle instead.
+        self.assertEqual(layers["Yolorta"].customProperty("mpyy/symbology"), "e-Plan SLD (yol genişliği yazısı): UIP/Yolorta")
 
         # Reopened without the plugin, the GeoPackage alone carries the official symbology.
         plain = QgsVectorLayer(f"{path}|layername=KentselCalisma", "plain", "ogr")
@@ -223,7 +224,7 @@ class PlanGMLWorkspaceTests(unittest.TestCase):
                 text = (SLD_DIR / level / f"{type_name}.sld").read_text(encoding="utf-8")
                 for rule in entry["rules"]:
                     for condition in rule["conditions"]:
-                        if condition.get("code"):
+                        if condition.get("code") and not rule["dropped"]:
                             self.assertIn(condition["code"], codes)
                             self.assertIn(f"<ogc:Literal>{condition['code']}</ogc:Literal>", text)
         # Only this type lacks an SLD; it is drawn from the detail catalog definition in decisions.json.

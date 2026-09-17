@@ -28,7 +28,12 @@ GEOMETRY = {
     "gml:LineStringPropertyType": "LineString",
     "gml:MultiLineStringPropertyType": "MultiLineString",
     "gml:PointPropertyType": "Point",
+    "gml:MultiPointPropertyType": "MultiPoint",
 }
+# M series: schemas that also carry the pre-2014 (mülga regulation) legend vocabulary and a YeniKod field.
+# Compiled separately; used to read such GML files, not to author new plans.
+M_LEVELS = {"MUIP": "muip.V.1.1.6.xsd", "MNIP": "mnip.V.1.1.6.xsd", "MCDP25": "mcdp25.V.1.1.6.xsd", "MCDP100": "mcdp100.V.1.1.6.xsd"}
+M_OUT = Path(__file__).resolve().parents[1] / "styles" / "plangml_m_schema.json"
 SCALAR = {"xs:string": "string", "xs:double": "double", "xs:int": "int", "xs:long": "long", "xs:dateTime": "dateTime"}
 OUT = Path(__file__).resolve().parents[1] / "styles" / "plangml_schema.json"
 
@@ -86,7 +91,7 @@ def compile_level(data):
     }
 
 
-def main(archive_path):
+def build(archive_path, levels, out):
     raw = Path(archive_path).read_bytes()
     archive = zipfile.ZipFile(io.BytesIO(raw))
     catalog = {
@@ -98,16 +103,21 @@ def main(archive_path):
         },
         "levels": {},
     }
-    for level, member in LEVELS.items():
+    for level, member in levels.items():
         data = archive.read(member)
         compiled = compile_level(data)
         compiled["xsd"] = {"file": member, "sha256": hashlib.sha256(data).hexdigest()}
         catalog["levels"][level] = compiled
-    OUT.write_text(json.dumps(catalog, ensure_ascii=False, indent=1), encoding="utf-8")
+    out.write_text(json.dumps(catalog, ensure_ascii=False, indent=1), encoding="utf-8")
     for level, compiled in catalog["levels"].items():
         types = compiled["feature_types"]
         print(level, len(types), "types", sum(1 for t in types if t["geometry"] is None), "without geometry",
               len(compiled["codelists"]), "codelists", "undefined:", compiled["undefined_members"])
+
+
+def main(archive_path):
+    build(archive_path, LEVELS, OUT)
+    build(archive_path, M_LEVELS, M_OUT)
 
 
 if __name__ == "__main__":

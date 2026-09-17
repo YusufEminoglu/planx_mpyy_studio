@@ -21,6 +21,14 @@
    "literal": "-222",
    "action": "is_null",
    "gerekce": "-222 bir kod değil, yoğunluk kademesi girilmemiş gelişme konut alanı için yer tutucudur; alan boş olduğunda uygulanır."
+  },
+  {
+   "level": "MUIP",
+   "type": "AdaKenari",
+   "sld_property": "ada_kenari_cizgi_tip",
+   "literal": "1",
+   "action": "index",
+   "gerekce": "İki kural da 'ONERILEN' başlıklı (Bakanlık dosyasında kopya); 0/1/2 sırası Önerilen/Korunan/Düzeltilen listesini izliyor, başlık kullanılırsa Korunan cephe hattı hiç çizilmez."
   }
  ],
  "style_aliases": {
@@ -32,6 +40,13 @@
    "AraziKullanimiDevamEttirilerekKorunacakAlanlar": {
     "style": "NIP_ARAZI_KULLANIMI_KORUNACAK_ALAN",
     "gerekce": "Bakanlık setinde stil adı 'ARAZI_KULLANIMI_KORUNACAK_ALAN'dır; filtre alanı arazi_koruma_kullanim_tip bu tipin AraziKorumaKullanimTip alanıdır (PlanGML 1.1.7'de eklenen tip)."
+   },
+   "KentselDonusumSinirlari": {
+    "style": "NIP_KENTSEL_DONUSUM_SINIR",
+    "property_aliases": {
+     "kent_don_sinir_tip": "KentselDonusumSinirlariTip"
+    },
+    "gerekce": "SLD filtresi 'kent_don_sinir_tip' özelliğine bakıyor; şemada bu tipin alanı 'KentselDonusumSinirlariTip'. Eşlenmeden kurallar hiçbir nesneyle eşleşmiyordu (Ek-1e detay kataloğu karşılaştırmasında bulundu)."
    }
   },
   "UIP": {
@@ -55,6 +70,38 @@
    "AraziKullanimiDevamEttirilerekKorunacakAlanlar": {
     "style": "CDP_ARAZI_KULLANIMI_KORUNACAK_ALAN",
     "gerekce": "Bakanlık setinde stil adı 'ARAZI_KULLANIMI_KORUNACAK_ALAN'dır; filtre alanı arazi_koruma_kullanim_tip bu tipin AraziKorumaKullanimTip alanıdır (PlanGML 1.1.7'de eklenen tip)."
+   }
+  },
+  "MUIP": {
+   "AdaKenari": {
+    "style": "MUIP_ADA_KENARI",
+    "property_aliases": {
+     "ada_kenari_cizgi_tip": "YolCepheCizgiTip"
+    },
+    "gerekce": "SLD filtresi 'ada_kenari_cizgi_tip' özelliğine bakıyor; şemada bu tipin alanı 'YolCepheCizgiTip'. Eşlenmeden kurallar hiçbir nesneyle eşleşmiyordu (Ek-1e detay kataloğu karşılaştırmasında bulundu)."
+   },
+   "IcmesuTesis": {
+    "style": "MUIP_ICMESU_TESIS",
+    "property_aliases": {
+     "icmesu_tur": "IcmeSuTur"
+    },
+    "gerekce": "SLD filtresi 'icmesu_tur' özelliğine bakıyor; şemada bu tipin alanı 'IcmeSuTur'. Eşlenmeden kurallar hiçbir nesneyle eşleşmiyordu (Ek-1e detay kataloğu karşılaştırmasında bulundu)."
+   }
+  },
+  "MNIP": {
+   "DonusumKonutAlanlari": {
+    "style": "MNIP_DONUSUM_KONUT_ALANLARI",
+    "property_aliases": {
+     "donusum_tip": "Donusum"
+    },
+    "gerekce": "SLD filtresi 'donusum_tip' özelliğine bakıyor; şemada bu tipin alanı 'Donusum'. Eşlenmeden kurallar hiçbir nesneyle eşleşmiyordu (Ek-1e detay kataloğu karşılaştırmasında bulundu)."
+   },
+   "OckHassasAlan": {
+    "style": "MNIP_OCK_HASSAS_ALAN",
+    "property_aliases": {
+     "hassaslik_derecesi": "HassaslıkDerecesi"
+    },
+    "gerekce": "SLD filtresi 'hassaslik_derecesi' özelliğine bakıyor; şemada bu tipin alanı 'HassaslıkDerecesi'. Eşlenmeden kurallar hiçbir nesneyle eşleşmiyordu (Ek-1e detay kataloğu karşılaştırmasında bulundu)."
    }
   }
  },
@@ -87,6 +134,94 @@
     ],
     "gerekce": "Bakanlık SLD setinde bu tip için stil yok; sembol detay kataloğundaki çizgi tanımından kuruldu."
    }
+  }
+ },
+ "m_borrow": {
+  "note": "M series types without a Ministry style, written differently from the current-level type of the same meaning. Style of 'from' at the current level is used; property_aliases map the M field to the current field. Only rules whose codes exist in the M code list are kept.",
+  "MUIP": {
+   "KentselDogalmge": {
+    "from": "KentselImge"
+   },
+   "KiyiKorumaYapilariBi": {
+    "from": "KiyiKorumaYapilari"
+   }
+  },
+  "MNIP": {
+   "BuyuksehirSinir": {
+    "from": "BuyuksehirSiniri",
+    "property_aliases": {
+     "IlKod": "Ilkod"
+    }
+   }
+  },
+  "MCDP25": {
+   "IcmeSuTesis": {
+    "from": "IcmesuTesis",
+    "property_aliases": {
+     "IcmeSuTur": "IcmesuTur"
+    }
+   },
+   "IcmeSuAnaHat": {
+    "from": "IcmesuAnaHat"
+   },
+   "MucavirSahaSiniri": {
+    "from": "MucavirAlanSiniri"
+   },
+   "DevletSinir": {
+    "from": "UlkeSiniri"
+   },
+   "EnerjiDagitimDepo": {
+    "from": "EnerjiDagitimDepolama"
+   }
+  },
+  "MCDP100": {
+   "IcmeSuTesis": {
+    "from": "IcmesuTesis",
+    "property_aliases": {
+     "IcmeSuTur": "IcmesuTur"
+    }
+   },
+   "MeraCayir": {
+    "from": "Mera"
+   },
+   "PlanlamaAltBolgeSiniri": {
+    "from": "Planlama_AltBolge"
+   },
+   "EnerjiDagitimDepo": {
+    "from": "EnerjiDagitimDepolama"
+   },
+   "IdariMerkez": {
+    "from": "IdariMerkez",
+    "property_aliases": {
+     "MerkezTip": "IdariMerkezTip"
+    }
+   },
+   "PlanSiniri": {
+    "from": "PlanSiniri",
+    "property_aliases": {
+     "Nitelik": "NitelikTip"
+    }
+   },
+   "AcikYesilAlan": {
+    "from": "AcikYesilAlan",
+    "property_aliases": {
+     "YesilTip": "AcikYesilTip"
+    }
+   },
+   "SosyalKulturelAlan": {
+    "from": "SosyalKulturelAlan",
+    "property_aliases": {
+     "SosyalTip": "SosyalKulturelTip"
+    }
+   }
+  }
+ },
+ "building_notation": {
+  "note": "Yapılaşma notasyonu, Ek-1e Mekânsal Planlar Detay Katalogları (22.01.2026) sayfa 39-43: 18 mm yapı düzeni dairesi (solda nizam harfi, sağda kat adedi, üstte ön bahçe, altta yan bahçe), 18 mm TAKS/KAKS dairesi (TAKS çizgi üstünde, KAKS altında), 'E =' ve 'Yençok = ... m' yazıları; yazı 5 mm. Katalog yalnızca Ayrık (A-), Bitişik (B-) ve Blok (BL-) harflerini tanımlar; İkiz ve Serbest nizam için harf yazılmaz.",
+  "nizam_letters": {
+   "Ayrik": "A",
+   "Bitisik": "B",
+   "Blok": "BL"
   }
  }
 }

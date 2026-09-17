@@ -46,7 +46,7 @@ PARAMETERS = {
     'PROTECTED_AREA': 'Koruma alanı',
     'CRS': 'Çalışma alanı koordinat sistemi', 'LEVELS': 'Plan kademeleri',
     'TABAKA_FIELD': 'Tabaka adı alanı', 'WORKSPACE': 'PlanGML çalışma alanı', 'OUTPUT_REPORT': 'Rapor dosyası (CSV)',
-    'PLAN_LEVEL': 'Plan kademesi', 'TARGET_LEVEL': 'Hedef kademe', 'WRITTEN': 'Yazılan nesne sayısı', 'FINDINGS': 'Bulgu sayısı',
+    'PLAN_LEVEL': 'Plan kademesi', 'TARGET_LEVEL': 'Hedef kademe', 'GML_FILE': 'PlanGML GML dosyası', 'GML_SCHEMA': 'Şema', 'WRITTEN': 'Yazılan nesne sayısı', 'FINDINGS': 'Bulgu sayısı',
     'INPUT': 'Girdi katmanı', 'OUTPUT': 'Çıktı katmanı', 'DISTANCE': 'Çekme Mesafesi (m)',
     'FIELD': 'İşlev kodu alanı', 'PARCELS': 'Parsel poligonları', 'BUILDINGS': 'Yapı poligonları',
     'PLANS': 'Plan işlevi poligonları', 'SETBACK': 'Çekme Mesafesi (m)',
@@ -117,6 +117,7 @@ PARAMETERS = {
 
 ENUM_OPTIONS = {
     'TARGET_LEVEL': ['Nazım imar planı (NİP)', 'Çevre düzeni planı (ÇDP)'],
+    'GML_SCHEMA': ['Otomatik', 'M serisi UİP (MUİP)', 'M serisi NİP (MNİP)', 'M serisi ÇDP 1/25.000', 'M serisi ÇDP 1/100.000', 'Uygulama imar planı (UİP)', 'Nazım imar planı (NİP)', 'Çevre düzeni planı (ÇDP)'],
     'PLAN_LEVEL': ['Dosyadan oku', 'Uygulama imar planı (UİP)', 'Nazım imar planı (NİP)', 'Çevre düzeni planı (ÇDP)'],
     'LEVELS': ['Tüm kademeler (MSP, ÇDP, NİP, UİP)', 'Yalnızca uygulama imar planı (UİP 1:1.000)',
                'Yalnızca nazım imar planı (NİP 1:5.000)', 'Yalnızca çevre düzeni planı (ÇDP 1:50.000 - 1:100.000)',

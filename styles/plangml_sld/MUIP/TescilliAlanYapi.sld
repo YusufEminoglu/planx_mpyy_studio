@@ -1,0 +1,300 @@
+<?xml version='1.0' encoding='utf-8'?>
+<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
+	<NamedLayer>
+		<Name>MUIP_TESCILLI_ALAN_YAPI</Name>
+		<UserStyle>
+			<Title>MUIP_TESCILLI_ALAN_YAPI</Title>
+			<FeatureTypeStyle>
+				<Rule>
+					<Name>0</Name>
+					<Title>TESCILLI_ANIT_YAPI</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TescilTip</ogc:PropertyName>
+							<ogc:Literal>TescilliAnitYapi</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:51c32c37-5507-4320-bf6c-d316a8f6a259.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+					<PointSymbolizer uom="http://www.opengeospatial.org/se/units/metre">
+						<Graphic>
+							<Mark>
+								<WellKnownName>ttf://uygulama_imar_07_3#0x006f</WellKnownName>
+								<Fill>
+									<CssParameter name="fill">#000000</CssParameter>
+								</Fill>
+								<Stroke>
+									<CssParameter name="stroke-opacity">0</CssParameter>
+									<CssParameter name="stroke">#000000</CssParameter>
+									<CssParameter name="stroke-width">1</CssParameter>
+								</Stroke>
+							</Mark>
+							<Size>15</Size>
+						</Graphic>
+					</PointSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>TESCILLI_BINA</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TescilTip</ogc:PropertyName>
+							<ogc:Literal>TescilliBina</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:bf3acfe6-79ea-4367-bcfa-95fd7ea8672f.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+					<PointSymbolizer uom="http://www.opengeospatial.org/se/units/metre">
+						<Graphic>
+							<Mark>
+								<WellKnownName>ttf://uygulama_imar_07_3#0x0070</WellKnownName>
+								<Fill>
+									<CssParameter name="fill">#000000</CssParameter>
+								</Fill>
+								<Stroke>
+									<CssParameter name="stroke-opacity">0</CssParameter>
+									<CssParameter name="stroke">#000000</CssParameter>
+									<CssParameter name="stroke-width">1</CssParameter>
+								</Stroke>
+							</Mark>
+							<Size>15</Size>
+						</Graphic>
+					</PointSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>TESCILLI_PARSEL</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TescilTip</ogc:PropertyName>
+							<ogc:Literal>TescilliParsel</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:db2336f2-14ba-40ed-b0ff-9ee53730e664.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>TESCILLI_TABIAT_VARLIGI</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TescilTip</ogc:PropertyName>
+							<ogc:Literal>TescilliTabiatVarligi</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:1801065c-2df5-4778-99dd-97bc9e8aef44.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+					<PointSymbolizer uom="http://www.opengeospatial.org/se/units/metre">
+						<Graphic>
+							<Mark>
+								<WellKnownName>ttf://uygulama_imar_07_3#0x0064</WellKnownName>
+								<Fill>
+									<CssParameter name="fill">#000000</CssParameter>
+								</Fill>
+								<Stroke>
+									<CssParameter name="stroke-opacity">0</CssParameter>
+									<CssParameter name="stroke">#000000</CssParameter>
+									<CssParameter name="stroke-width">1</CssParameter>
+								</Stroke>
+							</Mark>
+							<Size>15</Size>
+						</Graphic>
+					</PointSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>TESCILLI_ALAN</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TescilTip</ogc:PropertyName>
+							<ogc:Literal>TescilliAlan</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<CssParameter name="fill">#B2B2B2</CssParameter>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>KORUNMASI_GEREKLI_KULTUR_TABIAT_VARLIKLARINI_KORUMA_ALANI</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TescilTip</ogc:PropertyName>
+							<ogc:Literal>KorunmasiGerekliKulturTabiatVarliklariniKorumaAlani</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<CssParameter name="fill">#CCCCCC</CssParameter>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>RESTORE_EDILEREK_KORUNACAK_ALANLAR</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TescilTip</ogc:PropertyName>
+							<ogc:Literal>RestoreEdilerekKorunacakAlanlar</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:964c3948-ac5d-4ecb-b40d-6fc3c167e9a2.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>DIS_CEPHELERI_RES_EDIL_KOR_ONERI_KUL_DEG_YAP_ALAN</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TescilTip</ogc:PropertyName>
+							<ogc:Literal>DisCepheleriResEdilKorOneriKulDegYapAlan</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:f474566f-c859-402f-af3c-35e4cd746e3a.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>YAPI_YAS_KONMUS_PARSEL</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TescilTip</ogc:PropertyName>
+							<ogc:Literal>YapiYasKonmusParsel</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<CssParameter name="fill">#F3C500</CssParameter>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>ICI_DISI_OLDUGU_GIBI_KORUNMASI_GEREKEN_YAPILAR</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TescilTip</ogc:PropertyName>
+							<ogc:Literal>IciDisiOlduguGibiKorunmasiGerekenYapilar</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<CssParameter name="fill">#C6D7EF</CssParameter>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>GOR_GAB_KOR_YEN_YAPI</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TescilTip</ogc:PropertyName>
+							<ogc:Literal>GorGabKorYenYapi</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<CssParameter name="fill">#B2B2B2</CssParameter>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>KORUNMASI_GEREKLI_ANIT_OLARAK_TESCILLI_YAPI_ALAN</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TescilTip</ogc:PropertyName>
+							<ogc:Literal>KorunmasiGerekliAnitOlarakTescilliYapiAlan</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:69b5d6e5-4efa-488c-94f9-53edd41e7a78.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+			</FeatureTypeStyle>
+		</UserStyle>
+	</NamedLayer>
+</StyledLayerDescriptor>

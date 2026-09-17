@@ -6744,6 +6744,60 @@ class ConvertPlanGMLLevelAlgorithm(LocalizedProcessingAlgorithm):
         return result
 
 
+class ImportPlanGMLFileAlgorithm(LocalizedProcessingAlgorithm):
+    LEVELS = [None, "MUIP", "MNIP", "MCDP25", "MCDP100", "UIP", "NIP", "CDP"]
+
+    def name(self) -> str:
+        return "import_plangml_gml"
+
+    def displayName(self) -> str:
+        return tool_text(self, 'title')
+
+    def group(self) -> str:
+        return tool_text(self, 'category')
+
+    def groupId(self) -> str:
+        return "workspace"
+
+    def shortHelpString(self) -> str:
+        return tool_text(self, 'help')
+
+    def createInstance(self):
+        return ImportPlanGMLFileAlgorithm()
+
+    def initAlgorithm(self, config=None):
+        self.addParameter(QgsProcessingParameterFile("GML_FILE", "PlanGML GML dosyası", fileFilter="GML (*.gml *.xml)"))
+        self.addParameter(QgsProcessingParameterEnum("GML_SCHEMA", "Şema", options=["Otomatik", "MUIP", "MNIP", "MCDP25", "MCDP100", "UIP", "NIP", "CDP"], defaultValue=0))
+        self.addParameter(QgsProcessingParameterCrs("KRS", "Koordinat sistemi", optional=True))
+        self.addParameter(QgsProcessingParameterFileDestination("OUTPUT", "Çıktı katmanı", "GeoPackage (*.gpkg)"))
+        self.addParameter(QgsProcessingParameterFileDestination("OUTPUT_REPORT", "İçe aktarma raporu", "CSV (*.csv)", optional=True))
+
+    def processAlgorithm(self, parameters, context, feedback):
+        from .core.plangml_gml import import_plangml_gml
+        from .core.plangml_import import write_csv
+
+        path = self.parameterAsFile(parameters, "GML_FILE", context)
+        level = self.LEVELS[self.parameterAsEnum(parameters, "GML_SCHEMA", context)]
+        crs = self.parameterAsCrs(parameters, "KRS", context)
+        output = self.parameterAsFileOutput(parameters, "OUTPUT", context)
+        try:
+            result, summary, report = import_plangml_gml(path, output, level, crs if crs.isValid() else None, feedback, context.project())
+        except (ValueError, RuntimeError, OSError, sqlite3.Error) as error:
+            raise QgsProcessingException(str(error)) from error
+        feedback.pushInfo(f'Şema: {summary["sema"]} ({summary["belirleme"]}).')
+        for row in report:
+            if row["aktarilan"] < row["adet"] or row["kod_listesi_disi"] or row["bilinmeyen_oznitelik"]:
+                feedback.pushWarning(f'{row["tip"]} ({row["adet"]}): aktarılan {row["aktarilan"]}; {row["ornek_sorun"] or row["bilinmeyen_oznitelik"]}')
+        if summary["bilinmeyen_ogeler"]:
+            feedback.pushWarning('Şemada olmayan öğeler: ' + ", ".join(f"{k} ({v})" for k, v in summary["bilinmeyen_ogeler"].items()))
+        feedback.pushInfo(f'{sum(r["aktarilan"] for r in report)} nesne aktarıldı.')
+        out = {"OUTPUT": result}
+        report_path = self.parameterAsFileOutput(parameters, "OUTPUT_REPORT", context)
+        if report_path and report:
+            out["OUTPUT_REPORT"] = write_csv(report, report_path, list(report[0].keys()))
+        return out
+
+
 class MPYYProvider(QgsProcessingProvider):
     def id(self) -> str:
         return "planx_mpyy_studio"
@@ -6765,6 +6819,7 @@ class MPYYProvider(QgsProcessingProvider):
         self.addAlgorithm(ImportCadToPlanGMLAlgorithm())
         self.addAlgorithm(AuditPlanGMLWorkspaceAlgorithm())
         self.addAlgorithm(ConvertPlanGMLLevelAlgorithm())
+        self.addAlgorithm(ImportPlanGMLFileAlgorithm())
         self.addAlgorithm(CalculateBuildingEnvelopeAlgorithm())
         self.addAlgorithm(ExecuteCrosswalkAlgorithm())
         self.addAlgorithm(SynthesizeParcelDensityAlgorithm())

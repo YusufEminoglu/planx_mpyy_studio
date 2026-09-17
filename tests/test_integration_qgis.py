@@ -383,7 +383,7 @@ class IntegrationTests(unittest.TestCase):
         provider = MPYYProvider()
         provider.loadAlgorithms()
         alg_names = [a.name() for a in provider.algorithms()]
-        self.assertEqual(len(alg_names), 86)
+        self.assertEqual(len(alg_names), 87)
         self.assertIn("create_workspace", alg_names)
         self.assertIn("create_land_use_workspace", alg_names)
         self.assertIn("preview_workspace_reconciliation", alg_names)

@@ -11,8 +11,8 @@
 					<MaxScaleDenominator>80000</MaxScaleDenominator>
 					<ogc:Filter>
 						<ogc:PropertyIsEqualTo>
-							<ogc:PropertyName>kent_don_sinir_tip</ogc:PropertyName>
-							<ogc:Literal>0</ogc:Literal>
+							<ogc:PropertyName>KentselDonusumSinirlariTip</ogc:PropertyName>
+							<ogc:Literal>RiskliAlanSiniri</ogc:Literal>
 						</ogc:PropertyIsEqualTo>
 					</ogc:Filter>
 					<LineSymbolizer uom="http://www.opengeospatial.org/se/units/metre">
@@ -49,8 +49,8 @@
 					<MaxScaleDenominator>80000</MaxScaleDenominator>
 					<ogc:Filter>
 						<ogc:PropertyIsEqualTo>
-							<ogc:PropertyName>kent_don_sinir_tip</ogc:PropertyName>
-							<ogc:Literal>1</ogc:Literal>
+							<ogc:PropertyName>KentselDonusumSinirlariTip</ogc:PropertyName>
+							<ogc:Literal>RezervYapiAlanSiniri</ogc:Literal>
 						</ogc:PropertyIsEqualTo>
 					</ogc:Filter>
 					<LineSymbolizer uom="http://www.opengeospatial.org/se/units/metre">
@@ -87,8 +87,8 @@
 					<MaxScaleDenominator>80000</MaxScaleDenominator>
 					<ogc:Filter>
 						<ogc:PropertyIsEqualTo>
-							<ogc:PropertyName>kent_don_sinir_tip</ogc:PropertyName>
-							<ogc:Literal>2</ogc:Literal>
+							<ogc:PropertyName>KentselDonusumSinirlariTip</ogc:PropertyName>
+							<ogc:Literal>YenilemeAlanSiniri</ogc:Literal>
 						</ogc:PropertyIsEqualTo>
 					</ogc:Filter>
 					<LineSymbolizer uom="http://www.opengeospatial.org/se/units/metre">
@@ -99,7 +99,7 @@
 						</Stroke>
 					</LineSymbolizer>
 					<TextSymbolizer uom="http://www.opengeospatial.org/se/units/metre">
-						<Label>YENÝLEME</Label>
+						<Label>YENİLEME</Label>
 						<Font>
 							<CssParameter name="font-family">Calibri</CssParameter>
 							<CssParameter name="font-size">5</CssParameter>

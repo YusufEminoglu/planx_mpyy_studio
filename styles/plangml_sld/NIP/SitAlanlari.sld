@@ -937,7 +937,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/TaramaSembol/KentselArkeolojikSitAlani.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:KentselArkeolojikSitAlani.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>38</Size>

@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
+	<NamedLayer>
+		<Name>MCDP100_TARIM</Name>
+		<UserStyle>
+			<Title>CDP_TARIM</Title>
+			<FeatureTypeStyle>
+				<Rule>
+					<Name>0</Name>
+					<Title>ZEYTINLIK</Title>
+					<MaxScaleDenominator>500000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TarimTip</ogc:PropertyName>
+							<ogc:Literal>Zeytinlik</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:19c10aae-1037-4c7f-abc8-2a8aba70964e.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>SULAMA_ALANI</Title>
+					<MaxScaleDenominator>500000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>TarimTip</ogc:PropertyName>
+							<ogc:Literal>SulamaAlani</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:a280d285-27ac-4b22-bc83-5fa7959efd57.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				</FeatureTypeStyle>
+		</UserStyle>
+	</NamedLayer>
+</StyledLayerDescriptor>

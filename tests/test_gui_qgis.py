@@ -60,7 +60,7 @@ class GuiTests(unittest.TestCase):
         described = {row[0] for rows in _GROUPS.values() for row in rows}
         actual = {tool.id for tool in self.dock.tools if tool.processing}
         self.assertEqual(actual, described)
-        self.assertEqual(len(actual), 86)
+        self.assertEqual(len(actual), 87)
         self.assertEqual(self.dock.tabs.count(), 3)
         self.assertEqual([self.dock.tabs.tabText(i).replace('&', '') for i in range(3)],
                          ['Başlangıç', 'Araçlar', 'Kayıt'])
@@ -78,7 +78,7 @@ class GuiTests(unittest.TestCase):
         self.assertFalse(self.dock.open_tool_button.isEnabled())
         self.assertFalse(self.dock.empty_tools.isHidden())
         self.dock._reset_filters()
-        self.assertEqual(self.dock.tool_list.count(), 88)
+        self.assertEqual(self.dock.tool_list.count(), 89)
         self.assertEqual(self.iface.opened, [])
 
     def test_turkish_names_and_accent_insensitive_search(self):
@@ -209,7 +209,7 @@ class GuiTests(unittest.TestCase):
         from ..provider import MPYYProvider
         provider = MPYYProvider()
         provider.load()
-        self.assertEqual(len(provider.algorithms()), 86)
+        self.assertEqual(len(provider.algorithms()), 87)
         for algorithm in provider.algorithms():
             with self.subTest(algorithm=algorithm.name()):
                 for text in (algorithm.displayName(), algorithm.group(), algorithm.shortHelpString()):

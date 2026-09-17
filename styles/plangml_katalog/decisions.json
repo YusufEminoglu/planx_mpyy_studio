@@ -1,0 +1,442 @@
+{
+ "note": "Ek-1e Mekânsal Planlar Detay Katalogları (22.01.2026) esas alınır. Bakanlık SLD'sinin yayımlanmamış TaramaSembol SVG'si ya da arşivde olmayan Intelli Eplan karakteri yerine aynı kalemin katalog sembolü kullanılır: 'svg' ve 'glyphs' o kaynağı kullanan her kademedeki her kurala uygulanır. 'rules' kataloğun sembol istediği ama SLD'nin sembol vermediği kurallara sembolü ekler.",
+ "symbols": {
+  "askeri_yasak_guvenlik": {
+   "page": 24,
+   "title": "ASKERİ YASAK VE GÜVENLİK BÖLGESİ",
+   "svg": [
+    "AskeriAlan.svg"
+   ]
+  },
+  "sinir_kapisi": {
+   "page": 36,
+   "title": "SINIR KAPISI",
+   "svg": [
+    "SinirKapisi.svg"
+   ]
+  },
+  "stratejik_karar": {
+   "page": 38,
+   "title": "STRATEJİK KARAR",
+   "svg": [
+    "StratejikKarar.svg"
+   ]
+  },
+  "golf_turizmi": {
+   "page": 57,
+   "title": "GOLF TURİZMİ",
+   "svg": [
+    "GolfTurizmi.svg"
+   ],
+   "part": [
+    0,
+    0
+   ],
+   "note": "Katalog hücresinde GTB, GTA, GTT yan yana; ÇDP kuralı bölge ölçeğindedir (GTB)."
+  },
+  "turizm_bolgesi": {
+   "page": 57,
+   "title": "TURİZM BÖLGESİ",
+   "svg": [
+    "TurizmAlani.svg"
+   ]
+  },
+  "kamu_hizmet_alani": {
+   "page": 62,
+   "title": "KAMU HİZMET ALANI",
+   "svg": [
+    "KamuHizmetAlani.svg"
+   ]
+  },
+  "depolama_alani": {
+   "page": 67,
+   "title": "DEPOLAMA ALANI",
+   "svg": [
+    "DepolamaAlani.svg"
+   ]
+  },
+  "kentsel_arkeolojik_sit": {
+   "page": 83,
+   "title": "KENTSEL ARKEOLOJİK SİT ALANI",
+   "svg": [
+    "KentselArkeolojikSitAlani.svg"
+   ]
+  },
+  "afet_lojistik": {
+   "page": 136,
+   "title": "AFET ARAMA KURTARMA HİZMET LOJİSTİK MERKEZLERİ ALANI",
+   "svg": [
+    "AfetLojistikAlani.svg"
+   ]
+  },
+  "fuar_panayir": {
+   "page": 138,
+   "title": "FUAR, PANAYIR VE FESTİVAL/GÖSTERİ ALANI",
+   "svg": [
+    "FuarPanayirFestival.svg"
+   ]
+  },
+  "agaclandirilacak": {
+   "page": 142,
+   "title": "AĞAÇLANDIRILACAK ALAN",
+   "svg": [
+    "AgaclandirilacakAlan.svg"
+   ]
+  },
+  "yenilenebilir_enerji": {
+   "page": 174,
+   "title": "YENİLENEBİLİR ENERJİ KAYNAKLARINA DAYALI ÜRETİM TESİSİ ALANI",
+   "svg": [
+    "YenilenebilirEnerjiKaynaklarinaDayaliEnerjiUretimTesisAlani.svg"
+   ]
+  },
+  "kentsel_risk": {
+   "page": 189,
+   "title": "KENTSEL RİSK ALANI",
+   "svg": [
+    "KentselRiskAlani.svg"
+   ],
+   "part": [
+    0,
+    0
+   ],
+   "note": "Katalog hücresinde kutunun altında açıklama metni var; yalnız kutu alınır. Parantez içi (KRA (….)) risk türü nesnenin açıklamasıyla doldurulur.",
+   "rows_first": true
+  },
+  "tsunami_riskli": {
+   "page": 189,
+   "title": "TSUNAMİ RİSKLİ ALAN",
+   "svg": [
+    "TsunamiRiskliAlan.svg"
+   ]
+  },
+  "kutle_hareketi_riskli": {
+   "page": 190,
+   "title": "KÜTLE HAREKETİ RİSKLİ ALAN",
+   "svg": [
+    "KutleHareketiRiskAlan.svg"
+   ],
+   "part": [
+    0,
+    0
+   ],
+   "note": "Katalog hücresinde kutunun altında açıklama metni var; yalnız kutu alınır. Parantez içi (KRA (….)) risk türü nesnenin açıklamasıyla doldurulur.",
+   "rows_first": true
+  },
+  "vahsi_cop": {
+   "page": 191,
+   "title": "VAHŞİ ÇÖP DEPOLAMA REHABİLİTASYON VE KAPATMA ALANI",
+   "svg": [
+    "VahsiCopVeRehabilitasyonMerkezi.svg"
+   ]
+  },
+  "sokak_hayvanlari": {
+   "page": 192,
+   "title": "SOKAK HAYVANLARI BARINAĞI ALANI",
+   "svg": [
+    "SokakHayvanlariBarinagiAlani.svg"
+   ]
+  },
+  "ekoturizm_kirsal": {
+   "page": 77,
+   "title": "EKOTURİZM/KIRSAL TURİZM",
+   "glyphs": [
+    "Intelli Eplan#G"
+   ]
+  },
+  "yapay_ada": {
+   "page": 100,
+   "title": "YAPAY ADA",
+   "glyphs": [
+    "Intelli Eplan#H"
+   ]
+  },
+  "millet_bahcesi": {
+   "page": 137,
+   "title": "MİLLET BAHÇESİ",
+   "glyphs": [
+    "Intelli Eplan#A"
+   ]
+  },
+  "sagliklastirma": {
+   "page": 18,
+   "title": "SAĞLIKLAŞTIRMA ALANI SINIRI",
+   "glyphs": [
+    "Intelli Eplan#L"
+   ]
+  },
+  "makilik_fundalik": {
+   "page": 96,
+   "title": "MAKİLİK- FUNDALIK ALAN",
+   "rules": [
+    {
+     "levels": [
+      "UIP",
+      "NIP"
+     ],
+     "type": "DogalKarakter",
+     "rule": "MAKILIK_FUNDALIK"
+    }
+   ]
+  },
+  "tarimsal_nitelikli": {
+   "page": 100,
+   "title": "TARIMSAL NİTELİKLİ ALAN",
+   "rules": [
+    {
+     "levels": [
+      "UIP"
+     ],
+     "type": "Tarim",
+     "rule": "TARIMSAL_NITELIKLI_ALAN"
+    }
+   ]
+  },
+  "bisiklet_yolu": {
+   "page": 153,
+   "title": "BİSİKLET YOLU",
+   "note": "vectors -> UIP/BisikletYolu/* çizgisinin ortasına konur."
+  },
+  "ekolojik_oneme_sahip": {
+   "page": 90,
+   "title": "EKOLOJİK ÖNEME SAHİP ALAN",
+   "cell": "TARAMA",
+   "part": [
+    1,
+    1
+   ],
+   "use": "hatch",
+   "note": "SLD bu SVG'yi GraphicFill (tarama) olarak kullanır; katalog tarama hücresindeki tek motif kesilir, katalogdaki karolaj aralığıyla dizilir.",
+   "hatch": [
+    "EkolojikOnemeSahipAlan.svg"
+   ],
+   "spacing_mm": 10
+  },
+  "dogal_karakteri_korunacak": {
+   "page": 95,
+   "title": "DOĞAL KARAKTERİ KORUNACAK ALAN",
+   "cell": "TARAMA",
+   "part": [
+    1,
+    1
+   ],
+   "use": "hatch",
+   "note": "SLD bu SVG'yi GraphicFill (tarama) olarak kullanır; katalog tarama hücresindeki tek motif kesilir, katalogdaki karolaj aralığıyla dizilir.",
+   "hatch": [
+    "DogalKarakteriKorunacakAlan.svg"
+   ],
+   "spacing_mm": 10
+  }
+ },
+ "levels_scale": {
+  "note": "Katalog ölçüleri paftadaki milimetredir. Harita metresi gereken sembollerde 1 mm = ölçek/1000 m alınır.",
+  "UIP": 1000,
+  "NIP": 5000,
+  "CDP": 25000
+ },
+ "vectors": {
+  "note": "Katalogda ölçüyle tarif edilen, SLD'de ise arşivde olmayan Intelli Eplan karakteriyle çizilen semboller. Anahtar KADEME/Tip/Kural başlığı; '*' tipin tüm kuralları. M serisinde güncel kademeden ödünç alınmış aynı kurala da uygulanır.",
+  "CDP/IdariMerkez/IL": {
+   "page": 35,
+   "kind": "merkez",
+   "outer_m": 80,
+   "inner_m": 50,
+   "ring": "255/255/0",
+   "color": "0/0/0",
+   "stroke_mm": 0.3
+  },
+  "CDP/IdariMerkez/ILCE": {
+   "page": 35,
+   "kind": "merkez",
+   "outer_m": 60,
+   "inner_m": 30,
+   "ring": "255/255/0",
+   "color": "0/0/0",
+   "stroke_mm": 0.3
+  },
+  "CDP/IdariMerkez/BELDE": {
+   "page": 36,
+   "kind": "merkez",
+   "outer_m": 30,
+   "inner_m": 10,
+   "ring": "255/255/0",
+   "color": "0/0/0",
+   "stroke_mm": 0.3
+  },
+  "CDP/IdariMerkez/KOY": {
+   "page": 38,
+   "kind": "merkez",
+   "outer_m": 30,
+   "inner_m": 10,
+   "ring": "255/255/0",
+   "color": "0/0/0",
+   "stroke_mm": 0.3
+  },
+  "CDP/Yolorta/ERISME_KONTROLLU_KARAYOLU_OTOYOL": {
+   "page": 147,
+   "kind": "road",
+   "total_mm": 3.0,
+   "platform_mm": 1.0,
+   "cephe_mm": 0.3,
+   "kaldirim": "255/255/0",
+   "color": "0/0/0"
+  },
+  "CDP/Yolorta/1_DERECE_YOL": {
+   "page": 148,
+   "kind": "road",
+   "total_mm": 1.8,
+   "platform_mm": 1.2,
+   "cephe_mm": 0.3,
+   "kaldirim": "255/255/0",
+   "color": "0/0/0"
+  },
+  "CDP/Yolorta/2_DERECE_YOL": {
+   "page": 149,
+   "kind": "road",
+   "total_mm": 1.2,
+   "platform_mm": 0.8,
+   "cephe_mm": 0.3,
+   "kaldirim": "255/255/0",
+   "color": "0/0/0"
+  },
+  "UIP/BisikletYolu/*": {
+   "page": 153,
+   "kind": "ladder",
+   "interval_mm": 3.0,
+   "rung_mm": 1.5,
+   "width_mm": 0.3,
+   "color": "0/0/0",
+   "symbol": "bisiklet_yolu",
+   "symbol_mm": 5.0
+  }
+ },
+ "fills": {
+  "note": "Katalogdaki renk kutusunun dolgu rengi (PDF çiziminden okunmuştur). s.95 'Doğal ve ekolojik yapısı korunacak alan' kutusu 209/255/155'tir; yanındaki '102/153/205' yazısı kutuyla çelişir, eklentideki renk kutuyla aynı olduğu için değiştirilmez.",
+  "UIP/YapayAda/*": {
+   "page": 100,
+   "rgb": "225/225/225"
+  },
+  "NIP/YapayAda/*": {
+   "page": 100,
+   "rgb": "225/225/225"
+  },
+  "CDP/YapayAda/*": {
+   "page": 100,
+   "rgb": "225/225/225"
+  },
+  "CDP/KiyiYapilari/KIYI_TESIS_ALANI": {
+   "page": 107,
+   "rgb": "225/225/225"
+  },
+  "UIP/TopluTasimTurleriArasiDegisimAktarmaAlani/*": {
+   "page": 172,
+   "rgb": "178/178/178"
+  },
+  "NIP/TopluTasimaAktarimAlani/*": {
+   "page": 172,
+   "rgb": "178/178/178"
+  },
+  "UIP/AtikGeriKazTesAlani/*": {
+   "page": 187,
+   "rgb": "178/178/178"
+  }
+ },
+ "hatches": {
+  "note": "SLD'de olmayan ya da QGIS'e aktarılamayan katalog taramaları; ölçüler pafta milimetresi. keep_fills: SLD'de SVG taraması olan PolygonSymbolizer QGIS'e gri düz dolgu olarak gelir; ilk keep_fills kadar düz dolgu tutulur, gerisi silinir (s.90 saydam, s.95 209/255/155 zemin).",
+  "UIP/AraziKullanimiDevamEttirilerekKorunacakAlanlar/Dogal Ekolojik Korunacak Alan": {
+   "page": 95,
+   "kind": "motif",
+   "motif": "dogal_karakteri_korunacak",
+   "spacing_mm": 10,
+   "size_mm": 3,
+   "keep_fills": 1
+  },
+  "NIP/AraziKullanimiDevamEttirilerekKorunacakAlanlar/Dogal Ekolojik Korunacak Alan": {
+   "page": 95,
+   "kind": "motif",
+   "motif": "dogal_karakteri_korunacak",
+   "spacing_mm": 10,
+   "size_mm": 3,
+   "keep_fills": 1
+  },
+  "CDP/AraziKullanimiDevamEttirilerekKorunacakAlanlar/Dogal Ekolojik Korunacak Alan": {
+   "page": 95,
+   "kind": "motif",
+   "motif": "dogal_karakteri_korunacak",
+   "spacing_mm": 10,
+   "size_mm": 3,
+   "keep_fills": 1
+  },
+  "UIP/AraziKullanimiDevamEttirilerekKorunacakAlanlar/EkolojikOnemeSahipAlan": {
+   "page": 90,
+   "kind": "motif",
+   "motif": "ekolojik_oneme_sahip",
+   "spacing_mm": 10,
+   "size_mm": 3,
+   "keep_fills": 0
+  },
+  "NIP/AraziKullanimiDevamEttirilerekKorunacakAlanlar/EkolojikOnemeSahipAlan": {
+   "page": 90,
+   "kind": "motif",
+   "motif": "ekolojik_oneme_sahip",
+   "spacing_mm": 10,
+   "size_mm": 3,
+   "keep_fills": 0
+  },
+  "CDP/AraziKullanimiDevamEttirilerekKorunacakAlanlar/EkolojikOnemeSahipAlan": {
+   "page": 90,
+   "kind": "motif",
+   "motif": "ekolojik_oneme_sahip",
+   "spacing_mm": 10,
+   "size_mm": 3,
+   "keep_fills": 0
+  },
+  "UIP/AtikGeriKazTesAlani/*": {
+   "page": 187,
+   "kind": "dots",
+   "spacing_mm": 7,
+   "dot_mm": 0.4,
+   "color": "0/0/0"
+  },
+  "CDP/AcikYesilAlan/FuarPanayirFestival": {
+   "page": 138,
+   "kind": "random_dots",
+   "fill": "36/156/34",
+   "area_per_dot_mm2": 5,
+   "dot_mm": 0.3,
+   "color": "0/0/0"
+  },
+  "NIP/AfetTehlikeliAlanlar/TASKINA_MARUZ_ALAN": {
+   "page": 145,
+   "kind": "copy",
+   "from": "UIP/AfetTehlikeliAlanlar/TASKINA_MARUZ_ALAN",
+   "note": "Katalog UİP ve NİP için aynı taramayı tanımlar; NİP SLD'si yalnız saydam dolgu verir."
+  },
+  "UIP/Durak/HAVAI_HAT_ISTASYONU": {
+   "page": 171,
+   "kind": "tile",
+   "tile": "havai_hat_istasyonu_tarama"
+  }
+ },
+ "tiles": {
+  "note": "Katalogun ölçüyle tarif ettiği ve QGIS desen dolgusuyla kırpılamayan taramalar için üretilen kesintisiz karolar. Eğik çizgi yönü katalog çizimindeki görünüşe göre alınmıştır ('330 derece' yazısının hangi eksene göre ölçüldüğü katalogda belirtilmez).",
+  "havai_hat_istasyonu_tarama": {
+   "page": 171,
+   "title": "HAVAİ HAT İSTASYONU",
+   "period_mm": 5,
+   "band_mm": 2,
+   "line_spacing_mm": 1,
+   "slant_deg": 30,
+   "width_mm": 0.2
+  }
+ },
+ "labels": {
+  "note": "Katalogun yazıyla gösterdiği ölçüler.",
+  "UIP/YayaYolu/*": {
+   "page": 155,
+   "kind": "road_width",
+   "field": "Genislik",
+   "note": "Yaya yolu genişliği, taşıt yolundaki gibi aks ortasında daire içinde yazılır."
+  }
+ }
+}

@@ -59,7 +59,7 @@
 							<GraphicFill>
 								<Graphic>
 									<ExternalGraphic>
-										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:a4b40m8ce-3538-4dba-9d63-bdc20e31e25e.png" />
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:a4b408ce-3538-4dba-9d63-bdc20e31e25e.png" />
 										<Format>image/png</Format>
 									</ExternalGraphic>
 								</Graphic>
@@ -98,7 +98,7 @@
 							<GraphicFill>
 								<Graphic>
 									<ExternalGraphic>
-										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:ffda70e7-9040m-4b2e-bdda-e7413b0b7f89.png" />
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:ffda70e7-9040-4b2e-bdda-e7413b0b7f89.png" />
 										<Format>image/png</Format>
 									</ExternalGraphic>
 								</Graphic>
@@ -241,7 +241,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/TaramaSembol/VahsiCopVeRehabilitasyonMerkezi.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:VahsiCopVeRehabilitasyonMerkezi.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>40m</Size>

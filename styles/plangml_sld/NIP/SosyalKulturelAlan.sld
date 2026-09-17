@@ -20,7 +20,7 @@
 							<GraphicFill>
 								<Graphic>
 									<ExternalGraphic>
-										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:eeb9686d-0c24-421e-9da8-c3b4375dab40m.png" />
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:eeb9686d-0c24-421e-9da8-c3b4375dab40.png" />
 										<Format>image/png</Format>
 									</ExternalGraphic>
 								</Graphic>
@@ -98,7 +98,7 @@
 							<GraphicFill>
 								<Graphic>
 									<ExternalGraphic>
-										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:2956db42-fa48-48d2-9a72-60640m06a5710.png" />
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:2956db42-fa48-48d2-9a72-6064006a5710.png" />
 										<Format>image/png</Format>
 									</ExternalGraphic>
 								</Graphic>
@@ -358,7 +358,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/SokakHayvanlariBarinagiAlani.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:SokakHayvanlariBarinagiAlani.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>40m</Size>

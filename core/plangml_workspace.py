@@ -37,9 +37,10 @@ from qgis.core import (
     QgsProject,
     QgsRuleBasedRenderer,
     QgsSymbol,
+    QgsSymbolLayer,
     QgsVectorLayer,
 )
-from qgis.PyQt.QtGui import QColor
+from qgis.PyQt.QtGui import QColor, QFont
 
 from .schema import SCHEMA_VERSION
 
@@ -50,11 +51,17 @@ PLUGIN_ROOT = Path(__file__).resolve().parents[1]
 CATALOG_PATH = PLUGIN_ROOT / "styles" / "plangml_schema.json"
 SLD_DIR = PLUGIN_ROOT / "styles" / "plangml_sld"
 TARAMA_PLACEHOLDER = "mpyy-tarama:"
+MISSING_SYMBOL_PLACEHOLDER = "mpyy-eksik-sembol:"
 LEVEL_TITLES = {
     "UIP": "Uygulama imar planı (UİP)",
     "NIP": "Nazım imar planı (NİP)",
     "CDP": "Çevre düzeni planı (ÇDP)",
+    "MUIP": "M serisi uygulama imar planı (MUİP)",
+    "MNIP": "M serisi nazım imar planı (MNİP)",
+    "MCDP25": "M serisi çevre düzeni planı 1/25.000 (MÇDP25)",
+    "MCDP100": "M serisi çevre düzeni planı 1/100.000 (MÇDP100)",
 }
+M_CATALOG_PATH = PLUGIN_ROOT / "styles" / "plangml_m_schema.json"
 QGIS_NULL = "{2839923C-8B7D-419E-B84B-CA2FE9B80EC7}"
 
 _OGR_GEOMETRY = {
@@ -63,6 +70,7 @@ _OGR_GEOMETRY = {
     "LineString": ogr.wkbLineString,
     "MultiLineString": ogr.wkbMultiLineString,
     "Point": ogr.wkbPoint,
+    "MultiPoint": ogr.wkbMultiPoint,
     None: ogr.wkbNone,
 }
 _OGR_FIELD = {
@@ -76,7 +84,7 @@ _OGR_FIELD = {
 _GROUPS = (
     ("Alanlar", ("MultiPolygon", "Polygon")),
     ("Çizgiler", ("LineString", "MultiLineString")),
-    ("Noktalar", ("Point",)),
+    ("Noktalar", ("Point", "MultiPoint")),
     ("Tablolar", (None,)),
 )
 
@@ -85,8 +93,15 @@ def catalog():
     return json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
 
 
+def all_levels():
+    """Current PlanGML levels plus the M series (read-only import of legacy-legend plans)."""
+    levels = dict(catalog()["levels"])
+    levels.update(json.loads(M_CATALOG_PATH.read_text(encoding="utf-8"))["levels"])
+    return levels
+
+
 def level_schema(level):
-    levels = catalog()["levels"]
+    levels = all_levels()
     if level not in levels:
         raise ValueError('PlanGML şemasında olmayan plan kademesi: ' + str(level))
     return levels[level]
@@ -230,7 +245,8 @@ def _store_default_forms(path, schema):
             raise RuntimeError('Katman açılamadı: ' + feature_type["name"])
         configure_plangml_layer(layer, feature_type, schema["codelists"])
         apply_eplan_symbology(layer, schema_level(schema), feature_type["name"])
-        apply_line_labels(layer, schema_level(schema), feature_type["name"])
+        if not apply_line_labels(layer, schema_level(schema), feature_type["name"]) and not layer.labelsEnabled():
+            apply_building_notation(layer)
         # layer_styles.styleName is TEXT(30); the table name already identifies the row.
         message = layer.saveStyleToDatabase("PlanGML " + schema["xsd"]["file"].split(".V.")[1][:-4], "PlanGML şeması formu", True, "")
         if message:
@@ -262,10 +278,10 @@ def load_plangml_layers(path, project=None, dataset_id=None, level=None):
             if not layer.isValid():
                 raise RuntimeError('Katman açılamadı: ' + feature_type["name"])
             configure_plangml_layer(layer, feature_type, schema["codelists"])
-            if not isinstance(layer.renderer(), QgsRuleBasedRenderer):
+            if not str(layer.customProperty("mpyy/symbology") or "").startswith(("e-Plan SLD", "Detay kataloğu")):
                 apply_eplan_symbology(layer, level, feature_type["name"])  # default style missing or replaced
-            if not layer.labelsEnabled():
-                apply_line_labels(layer, level, feature_type["name"])
+            if not layer.labelsEnabled() and not apply_line_labels(layer, level, feature_type["name"]):
+                apply_building_notation(layer)
             if dataset_id:
                 layer.setCustomProperty("mpyy/dataset_id", dataset_id)
             project.addMapLayer(layer, False)
@@ -298,7 +314,7 @@ def audit_required_fields(layers):
 
 
 def schema_level(schema):
-    return next(level for level, compiled in catalog()["levels"].items() if compiled["xsd"] == schema["xsd"])
+    return next(level for level, compiled in all_levels().items() if compiled["xsd"] == schema["xsd"])
 
 
 def _sld_marks(sld_text):
@@ -347,37 +363,200 @@ def apply_eplan_symbology(layer, level, type_name):
         path = Path(folder) / f"{type_name}.sld"
         path.write_text(text, encoding="utf-8")
         message, ok = layer.loadSldStyle(str(path))
-    if not ok or not isinstance(layer.renderer(), QgsRuleBasedRenderer):
-        # e.g. UIP_YOLORTA only carries text symbolizers, which QGIS cannot turn into a renderer.
+    if not ok:
+        # UIP/NIP YOLORTA only carries text symbolizers (the road width in a circle).
+        if _apply_road_width_labels(layer, text):
+            layer.setCustomProperty("mpyy/symbology", "e-Plan SLD (yol genişliği yazısı): " + level + "/" + type_name)
+            return True
         layer.setCustomProperty("mpyy/symbology", "e-Plan SLD QGIS'e aktarılamadı: " + level + "/" + type_name)
         return False
 
-    root = layer.renderer().rootRule()
     marks = _sld_marks(text)
-    for rule, rule_marks in zip(root.children(), marks):
-        symbol = rule.symbol()
+    renderer = layer.renderer()
+    if isinstance(renderer, QgsRuleBasedRenderer):
+        root = renderer.rootRule()
+        symbols = [rule.symbol() for rule in root.children()]
+        labels = [rule.label() for rule in root.children()]
+    else:
+        # A single rule without a filter (ManiaSiniri, CDP StratejikKarar ...) comes in as a single symbol.
+        root, symbols = None, [renderer.symbol()] if hasattr(renderer, "symbol") else []
+        labels = ["*"] * len(symbols)
+    from .plangml_catalog import apply_catalog_overrides, raster_marker, symbol_for_glyph
+
+    families = installed_font_families()
+    missing = {}  # rule label -> gaps left in that rule
+    for symbol, rule_marks, label in zip(symbols, marks, labels):
         if symbol is None:
             continue
+        if _mark_missing_svg_symbols(symbol):
+            missing.setdefault(label, set()).add("TaramaSembol SVG")
         slots = _marker_slots(symbol)
         if len(slots) == len(rule_marks):
             for (owner, index), mark in zip(slots, rule_marks):
                 if mark is None:
                     continue
                 old = owner.symbolLayer(index)
-                font = QgsFontMarkerSymbolLayer(mark[0], mark[1], old.size(), old.color(), old.angle())
+                family, character, color = mark[0], mark[1], old.color()
+                if family not in families and symbol_for_glyph(family, character):
+                    # Ek-1e catalog symbol of the same item instead of the unshipped glyph
+                    owner.changeSymbolLayer(index, raster_marker(symbol_for_glyph(family, character), old.size(), old.sizeUnit(), old.angle()))
+                    continue
+                if family not in families:
+                    if family in UNICODE_TEXT_FONTS:
+                        family = "DejaVu Sans"  # same Unicode character, e.g. Tahoma U+02C4
+                    else:
+                        # A private symbol font the Ministry set does not ship (Intelli Eplan):
+                        # another font would draw a wrong symbol, so mark the gap instead.
+                        missing.setdefault(label, set()).add(family)
+                        family, character, color = "DejaVu Sans", "?", QColor("#8a8f96")
+                font = QgsFontMarkerSymbolLayer(family, character, old.size(), color, old.angle())
                 font.setSizeUnit(old.sizeUnit())
                 font.setStrokeWidth(0)
                 font.setStrokeColor(QColor(0, 0, 0, 0))
                 owner.changeSymbolLayer(index, font)
         _embed_images(symbol)
 
-    fallback = QgsSymbol.defaultSymbol(layer.geometryType())
-    fallback.setColor(QColor("#9aa3ab"))
-    else_rule = QgsRuleBasedRenderer.Rule(fallback, 0, 0, "ELSE", "Kodu girilmemiş / resmî gösterimi yok")
-    root.appendChild(else_rule)
+    applied, redrawn = apply_catalog_overrides(layer, level, type_name)
+    from .plangml_catalog import catalog_labels
+
+    for spec in catalog_labels(level, type_name):
+        if spec["kind"] == "road_width" and _apply_road_width_labels(layer, None, spec["field"], keep_renderer=True):
+            applied.append(f"genişlik yazısı: s.{spec['page']}")
+    missing = set().union(*[gaps for label, gaps in missing.items() if label not in redrawn])
+    if applied:
+        layer.setCustomProperty("mpyy/katalog", "; ".join(applied))
+    else:
+        layer.removeCustomProperty("mpyy/katalog")
+    renderer = layer.renderer()
+    root = renderer.rootRule() if isinstance(renderer, QgsRuleBasedRenderer) else None
+    if root is not None:
+        fallback = QgsSymbol.defaultSymbol(layer.geometryType())
+        fallback.setColor(QColor("#9aa3ab"))
+        else_rule = QgsRuleBasedRenderer.Rule(fallback, 0, 0, "ELSE", "Kodu girilmemiş / resmî gösterimi yok")
+        root.appendChild(else_rule)
     layer.setCustomProperty("mpyy/symbology", "e-Plan SLD: " + level + "/" + type_name)
+    if missing:
+        layer.setCustomProperty("mpyy/missing_symbols", ", ".join(sorted(missing)))
+    else:
+        layer.removeCustomProperty("mpyy/missing_symbols")
     layer.triggerRepaint()
     return True
+
+
+M_BASE = {"MUIP": "UIP", "MNIP": "NIP", "MCDP25": "CDP", "MCDP100": "CDP"}
+UNICODE_TEXT_FONTS = {"Tahoma", "Arial", "Calibri", "Microsoft Sans Serif"}
+ROAD_WIDTH_GLYPH_RATIO = 0.70  # "(" in ESRI Default Marker: circle diameter / font size (measured)
+
+
+def _apply_road_width_labels(layer, sld_text, field="YolGenisligi", keep_renderer=False):
+    """UIP/NIP YOLORTA: road width written in a circle at the middle of the axis, up to 1:2000.
+
+    ``sld_text`` None skips the SLD check; ``keep_renderer`` adds the circle as an extra rule of the
+    existing rule-based renderer (Ek-1e s.155 yaya yolu: same width notation on its own line style).
+
+    The Ministry style draws no axis line. It places the ESRI Default Marker "(" glyph (a circle)
+    at font size YolGenisligi * 2.5 map units and writes the width inside it: the whole metres,
+    then the decimals underlined. The circle is the same glyph here; the text size is chosen to
+    fit inside it because the SLD sizes the text from a server-side view column."""
+    if (sld_text is not None and "yol_genisligi1" not in sld_text) or layer.fields().indexOf(field) < 0:
+        return False
+    from qgis.core import (
+        QgsMarkerLineSymbolLayer,
+        QgsMarkerSymbol,
+        QgsPalLayerSettings,
+        QgsProperty,
+        QgsPropertyCollection,
+        QgsLineSymbol,
+        QgsTextFormat,
+        QgsVectorLayerSimpleLabeling,
+    )
+    from .fonts import register_mpyy_fonts
+
+    register_mpyy_fonts()
+    map_units = Qgis.RenderUnit.MapUnits
+    middle = 'line_interpolate_point($geometry, length($geometry) / 2)'
+    circle = QgsFontMarkerSymbolLayer("ESRI Default Marker", "(", 10, QColor("black"))
+    circle.setSizeUnit(map_units)
+    circle.setDataDefinedProperty(QgsSymbolLayer.Property.Size, QgsProperty.fromExpression(f'"{field}" * 2.5'))
+    carrier = QgsMarkerLineSymbolLayer()
+    carrier.setPlacements(Qgis.MarkerLinePlacement.CentralPoint)
+    carrier.setSubSymbol(QgsMarkerSymbol([circle]))
+    width_rule = QgsRuleBasedRenderer.Rule(QgsLineSymbol([carrier]), 0, 2000, f'"{field}" > 0', "Yol genişliği")
+    if keep_renderer and isinstance(layer.renderer(), QgsRuleBasedRenderer):
+        layer.renderer().rootRule().appendChild(width_rule)
+    else:
+        root = QgsRuleBasedRenderer.Rule(None)
+        root.appendChild(width_rule)
+        layer.setRenderer(QgsRuleBasedRenderer(root))
+
+    settings = QgsPalLayerSettings()
+    settings.isExpression = True
+    settings.fieldName = (
+        f'CASE WHEN "{field}" IS NULL THEN NULL '
+        f'WHEN round("{field}" * 100) % 100 = 0 THEN to_string(floor("{field}")) '
+        f"""ELSE to_string(floor("{field}")) || '<u>' || """
+        f"""lpad(to_string(round("{field}" * 100) % 100), 2, '0') || '</u>' END"""
+    )
+    settings.geometryGenerator = middle
+    settings.geometryGeneratorEnabled = True
+    settings.geometryGeneratorType = Qgis.GeometryType.Point
+    settings.placement = Qgis.LabelPlacement.OverPoint
+    settings.scaleVisibility = True
+    settings.minimumScale = 2000  # most zoomed-out scale shown, as the SLD MaxScaleDenominator
+    settings.maximumScale = 0
+    text_format = QgsTextFormat()
+    text_format.setFont(QFont("DejaVu Sans"))
+    text_format.setSizeUnit(map_units)
+    text_format.setSize(4)
+    text_format.setColor(QColor("black"))
+    text_format.setAllowHtmlFormatting(True)
+    settings.setFormat(text_format)
+    properties = QgsPropertyCollection()
+    properties.setProperty(
+        QgsPalLayerSettings.Property.Size,
+        QgsProperty.fromExpression(f'"{field}" * 2.5 * {ROAD_WIDTH_GLYPH_RATIO} * 0.26'),
+    )
+    settings.setDataDefinedProperties(properties)
+    placement = settings.placementSettings()
+    placement.setOverlapHandling(Qgis.LabelOverlapHandling.AllowOverlapIfRequired)
+    settings.setPlacementSettings(placement)
+    layer.setLabeling(QgsVectorLayerSimpleLabeling(settings))
+    layer.setLabelsEnabled(True)
+    return True
+
+
+def installed_font_families():
+    from qgis.PyQt.QtCore import QT_VERSION_STR
+    from qgis.PyQt.QtGui import QFontDatabase
+
+    # Qt 6 made QFontDatabase static; Qt 5 needs an instance.
+    database = QFontDatabase if int(QT_VERSION_STR.split(".")[0]) >= 6 else QFontDatabase()
+    return set(database.families())
+
+
+def _mark_missing_svg_symbols(symbol):
+    """Markers pointing at the Ministry's unpublished TaramaSembol SVGs: the Ek-1e catalog symbol of
+    the same item when there is one, otherwise a grey "?". True when a "?" was left."""
+    from .plangml_catalog import raster_marker, symbol_for_svg
+
+    found = False
+    for index in range(symbol.symbolLayerCount()):
+        layer = symbol.symbolLayer(index)
+        path = str(layer.path() if hasattr(layer, "path") else "")
+        name = path.split(MISSING_SYMBOL_PLACEHOLDER, 1)[-1].rsplit("/", 1)[-1]
+        if (MISSING_SYMBOL_PLACEHOLDER in path or "TaramaSembol" in path) and symbol_for_svg(name):
+            symbol.changeSymbolLayer(index, raster_marker(symbol_for_svg(name), layer.size(), layer.sizeUnit(), layer.angle()))
+            continue
+        if MISSING_SYMBOL_PLACEHOLDER in path or "TaramaSembol" in path:
+            gap = QgsFontMarkerSymbolLayer("DejaVu Sans", "?", layer.size(), QColor("#8a8f96"), layer.angle())
+            gap.setSizeUnit(layer.sizeUnit())
+            symbol.changeSymbolLayer(index, gap)  # deletes ``layer``; do not touch it afterwards
+            found = True
+            continue
+        sub = layer.subSymbol()
+        if sub is not None and _mark_missing_svg_symbols(sub):
+            found = True
+    return found
 
 
 def _embed_images(symbol):
@@ -416,7 +595,8 @@ def _png_bytes(path):
 def _apply_catalog_symbol(layer, level, type_name):
     """Types absent from the Ministry SLD set, drawn from the detail catalog's line definition."""
     decisions = json.loads((SLD_DIR / "decisions.json").read_text(encoding="utf-8"))
-    spec = decisions.get("catalog_symbols", {}).get(level, {}).get(type_name)
+    symbols = decisions.get("catalog_symbols", {})
+    spec = symbols.get(level, {}).get(type_name) or symbols.get(M_BASE.get(level), {}).get(type_name)
     if not spec:
         return False
     from qgis.core import (
@@ -468,6 +648,104 @@ def _apply_catalog_symbol(layer, level, type_name):
     layer.setCustomProperty("mpyy/symbology", "Detay kataloğu: " + level + "/" + type_name)
     layer.triggerRepaint()
     return True
+
+
+BUILDING_FIELDS = (
+    "Taks", "TaksTip", "EmsalKaks", "EmsalKaksTip", "KatAdedi", "YapiDuzeni",
+    "YapiYuksekligi", "YapiYuksekligiTip", "OnBahceMesafesi", "YanBahceMesafesi",
+)
+NOTATION_CIRCLE_M = 18.0  # Ek-1e: 18 mm circle, 5 mm text, drawn at 1/1000 so 1 mm = 1 m
+NOTATION_TEXT_M = 5.0
+
+
+def apply_building_notation(layer):
+    """Yapılaşma notasyonu as drawn in Ek-1e Mekânsal Planlar Detay Katalogları (pages 39-43).
+
+    * Yapı düzeni circle (18 mm): nizam letter on the left (A-, B-, BL-), kat adedi on the right,
+      ön bahçe mesafesi on top and yan bahçe mesafesi at the bottom.
+    * TAKS / KAKS circle (18 mm): TAKS above the dividing line, KAKS below it; the same layout as
+      the Ministry's YAPILASMA_SEMBOL style.
+    * "E = ..." when only the emsal is given, and "Yençok = ... m".
+    Text is 5 mm; sizes are in map units for a 1/1000 plan and the notation shows up to 1:2000.
+    The symbols sit around SembolPoz when it holds two coordinates, otherwise inside the polygon.
+    Returns the number of label rules; 0 when the layer has no building fields."""
+    names = set(layer.fields().names())
+    if not set(BUILDING_FIELDS) <= names:
+        return 0
+    from qgis.core import QgsPalLayerSettings, QgsRuleBasedLabeling, QgsTextFormat
+    from .fonts import register_mpyy_fonts
+
+    register_mpyy_fonts()
+    notation = json.loads((SLD_DIR / "decisions.json").read_text(encoding="utf-8"))["building_notation"]
+    anchor = (
+        """CASE WHEN regexp_match("SembolPoz", '^ *-?[0-9.]+ *[ ,;] *-?[0-9.]+ *$') """
+        """THEN make_point(to_real(regexp_substr("SembolPoz", '^ *(-?[0-9.]+)')), """
+        """to_real(regexp_substr("SembolPoz", '(-?[0-9.]+) *$'))) """
+        """ELSE pole_of_inaccessibility($geometry, 0.5) END"""
+    )
+    radius = NOTATION_CIRCLE_M / 2
+    gap = radius + 1.0  # the two circles sit side by side around the anchor
+    taks = """"TaksTip" = 'Deger' AND "Taks" IS NOT NULL"""
+    kaks = """"EmsalKaksTip" = 'Deger' AND "EmsalKaks" IS NOT NULL"""
+    order = """("YapiDuzeni" IS NOT NULL OR "KatAdedi" > 0 OR "OnBahceMesafesi" > 0 OR "YanBahceMesafesi" > 0)"""
+    letters = "map(" + ", ".join(f"'{code}', '{letter}'" for code, letter in notation["nizam_letters"].items()) + ")"
+
+    def number(field):
+        return f"""CASE WHEN "{field}" IS NULL THEN NULL WHEN "{field}" = floor("{field}") THEN to_string(floor("{field}")) ELSE format_number("{field}", 2, 'en') END"""
+
+    texts = (
+        "array_to_string(array_filter(array("
+        f"""CASE WHEN {kaks} AND NOT ({taks}) THEN 'E = ' || format_number("EmsalKaks", 2, 'en') END, """
+        """CASE WHEN "YapiYuksekligiTip" = 'Deger' AND "YapiYuksekligi" > 0 THEN 'Y<sub>ençok</sub> = ' || format_number("YapiYuksekligi", 2, 'en') || ' m' END"""
+        "), @element IS NOT NULL), '<br>')"
+    )
+    glyph_drop = 0.13 * NOTATION_CIRCLE_M / ROAD_WIDTH_GLYPH_RATIO  # circle sits 0.13 em above the text box centre
+
+    def rule(expression, filter_expression, description, size=NOTATION_TEXT_M, font="DejaVu Sans",
+             dx=0.0, dy=0.0, underline=False, below=False, html=False):
+        settings = QgsPalLayerSettings()
+        settings.isExpression = True
+        settings.fieldName = expression
+        settings.geometryGenerator = anchor
+        settings.geometryGeneratorEnabled = True
+        settings.geometryGeneratorType = Qgis.GeometryType.Point
+        settings.placement = Qgis.LabelPlacement.OverPoint
+        settings.xOffset, settings.yOffset = dx, dy  # map units, y grows downwards
+        if below:
+            settings.quadOffset = Qgis.LabelQuadrantPosition.Below
+        settings.offsetUnits = Qgis.RenderUnit.MapUnits
+        settings.multilineAlign = Qgis.LabelMultiLineAlignment.Center
+        placement = settings.placementSettings()
+        placement.setOverlapHandling(Qgis.LabelOverlapHandling.AllowOverlapIfRequired)
+        settings.setPlacementSettings(placement)
+        text_format = QgsTextFormat()
+        qfont = QFont(font)
+        qfont.setUnderline(underline)
+        text_format.setFont(qfont)
+        text_format.setSize(size)
+        text_format.setSizeUnit(Qgis.RenderUnit.MapUnits)
+        text_format.setColor(QColor("black"))
+        text_format.setAllowHtmlFormatting(html)
+        settings.setFormat(text_format)
+        return QgsRuleBasedLabeling.Rule(settings, 0, 2000, filter_expression, description)
+
+    circle_size = NOTATION_CIRCLE_M / ROAD_WIDTH_GLYPH_RATIO
+    inner = radius * 0.52
+    root = QgsRuleBasedLabeling.Rule(None)
+    root.appendChild(rule("'('", order, "Yapı düzeni dairesi", circle_size, "ESRI Default Marker", -gap, glyph_drop))
+    root.appendChild(rule(f"""map_get({letters}, "YapiDuzeni") || '-'""", """"YapiDuzeni" IS NOT NULL""", "Yapı düzeni (A-, B-, BL-)", dx=-gap - inner))
+    root.appendChild(rule(number("KatAdedi"), """"KatAdedi" > 0""", "Kat adedi", dx=-gap + inner))
+    root.appendChild(rule(number("OnBahceMesafesi"), """"OnBahceMesafesi" > 0""", "Ön bahçe mesafesi", dx=-gap, dy=-inner))
+    root.appendChild(rule(number("YanBahceMesafesi"), """"YanBahceMesafesi" > 0""", "Yan bahçe mesafesi", dx=-gap, dy=inner))
+    root.appendChild(rule("'('", taks, "TAKS/KAKS dairesi", circle_size, "ESRI Default Marker", gap, glyph_drop))
+    root.appendChild(rule("""format_number("Taks", 2, 'en')""", taks, "TAKS", dx=gap, dy=-2.6, underline=True))
+    root.appendChild(rule("""format_number("EmsalKaks", 2, 'en')""", f"({taks}) AND ({kaks})", "KAKS", dx=gap, dy=3.4))
+    root.appendChild(rule(texts, "", "Emsal ve yençok", dy=radius + 1.5, below=True, html=True))
+    layer.setLabeling(QgsRuleBasedLabeling(root))
+    layer.setLabelsEnabled(True)
+    layer.setCustomProperty("mpyy/building_notation", "Ek-1e detay kataloğu yapılaşma notasyonu")
+    layer.triggerRepaint()
+    return len(root.children())
 
 
 def apply_line_labels(layer, level, type_name):

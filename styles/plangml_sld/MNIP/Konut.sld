@@ -1,0 +1,241 @@
+<?xml version='1.0' encoding='utf-8'?>
+<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
+	<NamedLayer>
+		<Name>MNIP_KONUT</Name>
+		<UserStyle>
+			<Title>MNIP_KONUT</Title>
+			<FeatureTypeStyle>
+				<Rule>
+					<Name>0</Name>
+					<Title>0, 0</Title>
+					<MaxScaleDenominator>80000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>KonutTip</ogc:PropertyName>
+							<ogc:Literal>YerlesikKonut</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:da899489-7872-4a82-a299-b671727a8adf.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>0, 1</Title>
+					<MaxScaleDenominator>80000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>KonutTip</ogc:PropertyName>
+							<ogc:Literal>YerlesikKonut</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:30c8a20f-af95-4f71-ba6b-4de85309cc1c.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>0, 2</Title>
+					<MaxScaleDenominator>80000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>KonutTip</ogc:PropertyName>
+							<ogc:Literal>YerlesikKonut</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:6f42bf7e-8fe3-4bd7-9362-b0e665af90a2.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>0, 3</Title>
+					<MaxScaleDenominator>80000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>KonutTip</ogc:PropertyName>
+							<ogc:Literal>YerlesikKonut</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:ece34800-7353-43a0-a1d7-8a334ebd81fc.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>0, 4</Title>
+					<MaxScaleDenominator>80000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>KonutTip</ogc:PropertyName>
+							<ogc:Literal>YerlesikKonut</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:9f932026-adfc-4f95-ae6d-412a66310d93.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>1, 0</Title>
+					<MaxScaleDenominator>80000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>KonutTip</ogc:PropertyName>
+							<ogc:Literal>GelismeKonut</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:9a2d90c0-0e54-48a4-947c-6c6b2c69b651.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>1, 1</Title>
+					<MaxScaleDenominator>80000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>KonutTip</ogc:PropertyName>
+							<ogc:Literal>GelismeKonut</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:8cf19e0c-17ff-4644-8835-b623b98d8bef.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>1, 2</Title>
+					<MaxScaleDenominator>80000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>KonutTip</ogc:PropertyName>
+							<ogc:Literal>GelismeKonut</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:1c73d156-8c44-4b10-9f02-75ac68502139.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>1, 3</Title>
+					<MaxScaleDenominator>80000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>KonutTip</ogc:PropertyName>
+							<ogc:Literal>GelismeKonut</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:95ee5f65-94d6-4969-9a33-8bc9d773c8b8.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>1, 4</Title>
+					<MaxScaleDenominator>80000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>KonutTip</ogc:PropertyName>
+							<ogc:Literal>GelismeKonut</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<GraphicFill>
+								<Graphic>
+									<ExternalGraphic>
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:b498f5bb-a40b-4c8d-88b8-0a8c5d228886.png" />
+										<Format>image/png</Format>
+									</ExternalGraphic>
+								</Graphic>
+							</GraphicFill>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+			</FeatureTypeStyle>
+		</UserStyle>
+	</NamedLayer>
+</StyledLayerDescriptor>

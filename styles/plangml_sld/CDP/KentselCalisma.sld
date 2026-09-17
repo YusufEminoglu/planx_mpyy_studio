@@ -505,7 +505,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/TaramaSembol/DepolamaAlani.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:DepolamaAlani.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>38</Size>
@@ -551,7 +551,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/TaramaSembol/KamuHizmetAlani.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:KamuHizmetAlani.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>38</Size>

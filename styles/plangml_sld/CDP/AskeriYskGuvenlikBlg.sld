@@ -20,7 +20,7 @@
             </ExternalGraphic></Graphic></GraphicFill></Fill>
           </PolygonSymbolizer>
           <PointSymbolizer><Graphic><ExternalGraphic>
-            <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/TaramaSembol/AskeriAlan.svg" />
+            <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:AskeriAlan.svg" />
             <Format>image/svg</Format>
           </ExternalGraphic><Size>38</Size></Graphic></PointSymbolizer>
         </Rule>
@@ -39,7 +39,7 @@
             </ExternalGraphic></Graphic></GraphicFill></Fill>
           </PolygonSymbolizer>
           <PointSymbolizer><Graphic><ExternalGraphic>
-            <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/TaramaSembol/AskeriAlan.svg" />
+            <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:AskeriAlan.svg" />
             <Format>image/svg</Format>
           </ExternalGraphic><Size>38</Size></Graphic></PointSymbolizer>
           <LineSymbolizer>
@@ -78,7 +78,7 @@
             </ExternalGraphic></Graphic></GraphicFill></Fill>
           </PolygonSymbolizer>
           <PointSymbolizer><Graphic><ExternalGraphic>
-            <OnlineResource xlink:type="simple" xlink:href="http://localhost:8080/TaramaSembol/AskeriAlan.svg" />
+            <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:AskeriAlan.svg" />
             <Format>image/svg</Format>
           </ExternalGraphic><Size>38</Size></Graphic></PointSymbolizer>
           <LineSymbolizer>

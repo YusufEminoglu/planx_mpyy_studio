@@ -66,7 +66,7 @@
 							<GraphicFill>
 								<Graphic>
 									<ExternalGraphic>
-										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:32c0328d-8050-440m2-bb5e-1d80b2621969.png" />
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:32c0328d-8050-4402-bb5e-1d80b2621969.png" />
 										<Format>image/png</Format>
 									</ExternalGraphic>
 								</Graphic>
@@ -260,7 +260,7 @@
 					<PointSymbolizer>
 						<Graphic>
 							<ExternalGraphic>
-								<OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/TaramaSembol/KentselRiskAlani.svg" />
+								<OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:KentselRiskAlani.svg" />
 								<Format>image/svg</Format>
 							</ExternalGraphic>
 							<Size>40m</Size>
@@ -372,7 +372,7 @@
 					<PointSymbolizer>
 						<Graphic>
 							<ExternalGraphic>
-								<OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/TaramaSembol/TsunamiRiskliAlan.svg" />
+								<OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:TsunamiRiskliAlan.svg" />
 								<Format>image/svg</Format>
 							</ExternalGraphic>
 							<Size>40m</Size>
@@ -491,7 +491,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/KutleHareketiRiskAlan.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:KutleHareketiRiskAlan.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>40m</Size>
@@ -785,7 +785,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/TsunamiRiskliAlan.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:TsunamiRiskliAlan.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>40m</Size>
@@ -948,7 +948,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/KutleHareketiRiskAlan.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:KutleHareketiRiskAlan.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>40m</Size>

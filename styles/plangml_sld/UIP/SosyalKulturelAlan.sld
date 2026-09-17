@@ -176,7 +176,7 @@
 							<GraphicFill>
 								<Graphic>
 									<ExternalGraphic>
-										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:fb5f392f-7a84-40m34-87e3-67e53eab8dc6.png" />
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:fb5f392f-7a84-4034-87e3-67e53eab8dc6.png" />
 										<Format>image/png</Format>
 									</ExternalGraphic>
 								</Graphic>
@@ -332,7 +332,7 @@
 							<GraphicFill>
 								<Graphic>
 									<ExternalGraphic>
-										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:4b4e3383-fa39-46ab-bc40m-ec95954ca9cb.png" />
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:4b4e3383-fa39-46ab-bc40-ec95954ca9cb.png" />
 										<Format>image/png</Format>
 									</ExternalGraphic>
 								</Graphic>
@@ -410,7 +410,7 @@
 							<GraphicFill>
 								<Graphic>
 									<ExternalGraphic>
-										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:0e991025-b1bb-40m01-af8c-7a15ef5665d4.png" />
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:0e991025-b1bb-4001-af8c-7a15ef5665d4.png" />
 										<Format>image/png</Format>
 									</ExternalGraphic>
 								</Graphic>
@@ -449,7 +449,7 @@
 							<GraphicFill>
 								<Graphic>
 									<ExternalGraphic>
-										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:fa3a40mad-a590-480d-88b1-11abcafd1f41.png" />
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:fa3a40ad-a590-480d-88b1-11abcafd1f41.png" />
 										<Format>image/png</Format>
 									</ExternalGraphic>
 								</Graphic>
@@ -488,7 +488,7 @@
 							<GraphicFill>
 								<Graphic>
 									<ExternalGraphic>
-										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:83fe8e76-4a80-4d03-813c-37b5d6d61e40m.png" />
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:83fe8e76-4a80-4d03-813c-37b5d6d61e40.png" />
 										<Format>image/png</Format>
 									</ExternalGraphic>
 								</Graphic>
@@ -592,7 +592,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/SokakHayvanlariBarinagiAlani.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:SokakHayvanlariBarinagiAlani.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>40m</Size>

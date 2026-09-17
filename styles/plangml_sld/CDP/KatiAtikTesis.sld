@@ -241,7 +241,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/VahsiCopVeRehabilitasyonMerkezi.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:VahsiCopVeRehabilitasyonMerkezi.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>40m</Size>

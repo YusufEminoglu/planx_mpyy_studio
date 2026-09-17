@@ -204,7 +204,7 @@
 					<PointSymbolizer>
 						<Graphic>
 							<ExternalGraphic>
-								<OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/KentselRiskAlani.svg" />
+								<OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:KentselRiskAlani.svg" />
 								<Format>image/svg</Format>
 							</ExternalGraphic>
 							<Size>40m</Size>
@@ -316,7 +316,7 @@
 					<PointSymbolizer>
 						<Graphic>
 							<ExternalGraphic>
-								<OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/TsunamiRiskliAlan.svg" />
+								<OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:TsunamiRiskliAlan.svg" />
 								<Format>image/svg</Format>
 							</ExternalGraphic>
 							<Size>40m</Size>
@@ -435,7 +435,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/KutleHareketiRiskAlan.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:KutleHareketiRiskAlan.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>40m</Size>
@@ -729,7 +729,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/TsunamiRiskliAlan.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:TsunamiRiskliAlan.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>40m</Size>
@@ -892,7 +892,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/KutleHareketiRiskAlan.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:KutleHareketiRiskAlan.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>40m</Size>

@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='utf-8'?>
+<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
+	<NamedLayer>
+		<Name>MUIP_SU_YUZEYI</Name>
+		<UserStyle>
+			<Title>MUIP_SU_YUZEYI</Title>
+			<FeatureTypeStyle>
+				<Rule>
+					<Name>0</Name>
+					<Title>GOL</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>SuYuzeyiTip</ogc:PropertyName>
+							<ogc:Literal>Gol</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<CssParameter name="fill">#73DFEB</CssParameter>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>BARAJ_GOLET</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>SuYuzeyiTip</ogc:PropertyName>
+							<ogc:Literal>BarajGolet</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<CssParameter name="fill">#73DFEB</CssParameter>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>AKARSU</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>SuYuzeyiTip</ogc:PropertyName>
+							<ogc:Literal>Akarsu</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<CssParameter name="fill">#7AB6F5</CssParameter>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>KANAL_KANALET</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>SuYuzeyiTip</ogc:PropertyName>
+							<ogc:Literal>KanalKanalet</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<CssParameter name="fill">#0070FF</CssParameter>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>SULAMA_KANALI</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>SuYuzeyiTip</ogc:PropertyName>
+							<ogc:Literal>SulamaKanali</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<CssParameter name="fill">#73DFEB</CssParameter>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+				<Rule>
+					<Name>0</Name>
+					<Title>DENIZ</Title>
+					<MaxScaleDenominator>50000</MaxScaleDenominator>
+					<ogc:Filter>
+						<ogc:PropertyIsEqualTo>
+							<ogc:PropertyName>SuYuzeyiTip</ogc:PropertyName>
+							<ogc:Literal>Deniz</ogc:Literal>
+						</ogc:PropertyIsEqualTo>
+					</ogc:Filter>
+					<PolygonSymbolizer>
+						<Fill>
+							<CssParameter name="fill">#73DFEB</CssParameter>
+						</Fill>
+					</PolygonSymbolizer>
+				</Rule>
+			</FeatureTypeStyle>
+		</UserStyle>
+	</NamedLayer>
+</StyledLayerDescriptor>

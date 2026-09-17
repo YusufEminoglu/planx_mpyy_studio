@@ -4,7 +4,7 @@
 
 Önceki 2.135 satırlık panel dosyası gezinme, 18 form ve 57 gelişmiş araç düğmesini aynı yapıda tutuyordu. Dört uzun sekme 440 pikselde kesiliyor, sabit 9 punto yazı kullanıcı tercihlerini izlemiyordu. Girdi ve çıktıların ne olduğu yapılandırma açılmadan açıklanmıyordu.
 
-Yeni panel **Başlangıç**, **Araçlar**, **Kayıt** sekmelerini kullanır. 86 işlem algoritması ve iki panel aracı korunmuştur. Kategoriler, Türkçe arama, kaydedilen kısayollar ve son açılanlar araç keşfini destekler. Kullanıcının son dil tercihi bu eklenti için Türkçedir.
+Yeni panel **Başlangıç**, **Araçlar**, **Kayıt** sekmelerini kullanır. 87 işlem algoritması ve iki panel aracı korunmuştur. Kategoriler, Türkçe arama, kaydedilen kısayollar ve son açılanlar araç keşfini destekler. Kullanıcının son dil tercihi bu eklenti için Türkçedir.
 
 ## Sorumluluklar
 
@@ -25,7 +25,7 @@ Araç seçimi veya arama hesaplama başlatmaz. Yapılandırma açılması tamaml
 
 ## Dil ve erişilebilirlik doğrulaması
 
-Dil testleri 86 aracın adını, yardımını, parametrelerini ve seçeneklerini; plan/saha formlarını, alan etiketlerini, kısıtları, açılır listeleri, lejantları ve QML gösterimlerini tarar. Yerel QGIS ifadeleri ve harita bilgi kartları değerlendirilir; raporların isteğe bağlı bölümleri de kontrol edilir. Kaynak kodlar, şema kimlikleri, filtreler ve kullanıcı adları değişmez.
+Dil testleri 87 aracın adını, yardımını, parametrelerini ve seçeneklerini; plan/saha formlarını, alan etiketlerini, kısıtları, açılır listeleri, lejantları ve QML gösterimlerini tarar. Yerel QGIS ifadeleri ve harita bilgi kartları değerlendirilir; raporların isteğe bağlı bölümleri de kontrol edilir. Kaynak kodlar, şema kimlikleri, filtreler ve kullanıcı adları değişmez.
 
 Değer ilişkilerinde sanal gösterim alanı, referans ilişkilerinde yerel gösterim ifadesi kullanılır. Kaydedilen projeler özel Python ifade kaydı gerektirmez.
 

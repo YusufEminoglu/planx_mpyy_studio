@@ -9,7 +9,7 @@ Eklentiye ait arayüz **Türkçedir**: araç adları, yardım, parametreler, se�
 Panelin üç sekmesi vardır:
 
 - **Başlangıç:** çalışma alanı oluşturma, veri aktarma, biçimlendirme, karar inceleme ve teslim adımları.
-- **Araçlar:** 86 işlem algoritması ve iki panel aracı; kategori, arama, kaydedilen kısayollar ve son açılanlar.
+- **Araçlar:** 87 işlem algoritması ve iki panel aracı; kategori, arama, kaydedilen kısayollar ve son açılanlar.
 - **İşlem Kaydı:** yapılandırma açılışları ve sonuçlar; tam ayrıntıları kopyalayabilirsiniz.
 
 Araç seçildiğinde amacı, gerekli girdileri ve beklenen sonucu görürsünüz. **Aracı aç** yapılandırmayı açar; hesaplamayı İşlem Araç Kutusunda başlatırsınız. Hafif işler için **Kısa formu kullan** sonuçları mevcut projeye uygular. Geri dönüldüğünde girdiler korunur. Hedef katman seçimi başlangıçta boştur.
@@ -25,6 +25,8 @@ Plan GeoPackage dosyası MSP → ÇDP → NİP → UİP kademelerini içerir. He
 **Yerel UİP (MpyyUipDb çizim şablonu)** ayrı bir çalışma alanı türüdür: `uip-alanlar`, `uip_cizgiler`, `uip-notasyonlar`, `yapi_yaklasma`, `uipPolygonTable` ve `uipLineTable` tabloları kaynak şablonla aynı alan ve türlerle oluşturulur. Semboloji, koşullu sekmeler, açılır listeler ve varsayılan değerler şablonun QGIS projesinden `tools/extract_local_uip_template.py` ile alınır ve `forms/yerel_uip` altında saklanır. UİP fonksiyonu zincirli listedir: önce üst konu grubu, sonra o gruptaki fonksiyon seçilir. Nizam `A`, `B`, `BL` olarak saklanır. Aynı form PlanGML çalışma alanındaki `plangml_uip_*` katmanlarında da kullanılır; genel form düzenleyici yazılmış formu olan katmanlara dokunmaz.
 
 **PlanGML 1.1.7 çalışma alanı (UİP / NİP / ÇDP)** Bakanlığın XSD şemasından birebir üretilir: tablo ve alan adları GML öğe adlarıdır, kod listeleri açılır listedir. Gösterim Bakanlığın e-Plan SLD setinden gelir; sit ve koruma sınırlarına detay kataloğundaki kısaltmalar (A1, KS, YKK…) yazılır. CAD tabakaları bu çalışma alanına aktarılabilir, kademe dönüştürülebilir (UİP → NİP → ÇDP) ve şema uygunluğu denetlenebilir. 1.1.6'dan farklar: `docs/PLANGML_1.1.6_1.1.7_FARKLAR.md`.
+
+**PlanGML GML içe aktarma** (`import_plangml_gml`) e-Plan GML dosyasını şemasına göre okur. Güncel şemaların yanında Bakanlık paketindeki M serisi (MUİP, MNİP, MÇDP 1/25.000 ve 1/100.000, sürüm 1.1.6) da desteklenir; bu şemalar eski yönetmelik gösterimlerini ve `YeniKod` alanını taşır. Şema `xsi:schemaLocation` alanından, yoksa öğe adlarından belirlenir. Şemada olmayan öğe ve öznitelikler, kod listesi dışı değerler ve okunamayan geometriler tahmin edilmez, raporlanır. MUİP ve MNİP katmanları Bakanlık SLD gösterimiyle açılır; MÇDP için SLD setinde stil yoktur.
 
 Arazi kullanımı ayrı bir çalışma alanıdır. TUCBS arazi katmanları ile parsel, yapı ve yol araştırma tabloları plan kararlarından ayrı tutulur. Her iki çalışma alanını aynı QGIS projesine yükleyebilirsiniz.
 

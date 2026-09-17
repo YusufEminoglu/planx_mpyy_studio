@@ -176,7 +176,7 @@
 							<GraphicFill>
 								<Graphic>
 									<ExternalGraphic>
-										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:b01b0c76-7204-40mm40mm-aa56-b3cba23b1f44.png" />
+										<OnlineResource xlink:type="simple" xlink:href="mpyy-tarama:b01b0c76-7204-4040-aa56-b3cba23b1f44.png" />
 										<Format>image/png</Format>
 									</ExternalGraphic>
 								</Graphic>
@@ -241,7 +241,7 @@
           <PointSymbolizer>
             <Graphic>
               <ExternalGraphic>
-                <OnlineResource xlink:type="simple" xlink:href="http://localhost/TaramaSembol/VahsiCopVeRehabilitasyonMerkezi.svg" />
+                <OnlineResource xlink:type="simple" xlink:href="mpyy-eksik-sembol:VahsiCopVeRehabilitasyonMerkezi.svg" />
                 <Format>image/svg</Format>
               </ExternalGraphic>
               <Size>40mm</Size>
