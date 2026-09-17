@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.1] - 2026-09-18
+
+### Düzeltilen
+- **Çizgi desenlerinde aralık yoktu, semboller ilk kırılma noktasında üst üste biniyordu.** QGIS, SLD'de bir çizgi ya da dolgu içindeki grafiği boyutu olmadan okuyor ve işaret çizgisini 0 aralıkla bırakıyor. PlanGML stillerindeki 629 işaret çizgisinin tamamı bundan etkileniyordu (ÇDP enerji nakil hattı, askeri yasak bölge sınırı, taşkın ve tsunami sınırları). Aralık artık GeoServer'ın çizdiği gibi çizgi deseninin toplamından, desen yoksa sembolün kendi boyundan alınıyor; sembol boyutları da SLD'deki ölçü ve birimle uygulanıyor.
+- **Sembol katmanları indeks yoluyla çözülüyor.** Alt sembolden alınan bir katman, ağaç dolaşılırken geçerli kalmıyordu; bu QGIS'i çökertiyordu.
+- Paket `.claude` çalışma ağaçlarını içermiyor (QGIS bu kopyayı ayrı bir eklenti sanıp yükleme hatası veriyordu) ve satır sonları LF.
+
 ## [2.6.0] - 2026-09-17
 
 ### Düzeltilen
