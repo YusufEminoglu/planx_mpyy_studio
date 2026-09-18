@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.8.0] - 2026-09-19
+
+### Düzeltilen
+- **Sınır/çizgi desenlerinde ölçü birimi hataları.** Ek-1e Mekânsal Planlar Detay Katalogları'nın kendi "GEOMETRİ TİPİ" sütunu bazı kalemlerde yanlış: `ManiaPlani`, `HavaalaniHavaKoridoru` ve `SulamaHatti` katalogda "ÇİZGİ" diye geçer ama şemada `MultiPolygon`'dur; bu üçü `vectors` (yalnız LINE) yerine `borders` (POLYGON) altına taşındı — önceki hâlde geometri denetimi hiç eşleşmediği için sınır deseni sessizce hiç uygulanmıyordu. Aynı sınıf hatayı yakalayan `test_catalog_overrides_target_the_schemas_real_geometry_type` denetimi kalıcı hâle getirildi.
+- **`create_workspace` menü/form referansı eklentiyi çökertiyordu.** v2.7.0'da Processing algoritması kaldırılmıştı ama satır içi form kaydı ve başlangıç sayfası düğme referansı kalmıştı; `gui/catalog.py`'a araç açıklaması eklendi.
+- **Demiryolu ailesinde "boş dikdörtgen" görsel olarak "dolu" ile aynıydı.** Şeffaf dolgu + kalın kontur tekniği, çizgi şekilli işaretçide tüm alanı konturla dolduruyordu (dolgu hiç görünmüyordu); artık gerçekten iki ince kenardan oluşan bir dikdörtgen çiziliyor (Hızlı Tren Hattı).
+
+### Eklenen
+- **Ulaşım ve Altyapı Güzergâhları ailesi tamamlandı** (Ek-1e s.147-182): Üçüncü Derece Yol, Demiryolu/Hızlı Tren Hattı/Katar Düzenleme Alanı, Raylı Toplu Taşıma Hattı/Havai Hat/Havaray, Deniz/Su Ulaşım Bağlantısı, Tünel Etki Alanı, İletim Tüneli/Cebri Boru Hattı/Boru Hattı/Doğalgaz Boru Hattı/Akaryakıt Boru Hattı, Sulama Hattı, Bisiklet Yolu. Gerçek ölçüsü olmayanlar (Tünel, Köprü, Yaya Geçitleri, Taşıt Yolu, Enerji Nakil Hattı'nın zikzak genliği) `decisions.json`'a not düşülerek bilinçli atlandı.
+- **Su, Atıksu ve Atık Sistemleri ailesi tamamlandı** (s.183-186): Soğutma Suyu Alma Hattı (üçgen + tekrarlayan "S" harfi, çizgi üzerinde), İçme Suyu Ana İletim Hattı (teğet boş daire zinciri), Atık Su Ana Kollektörü/Derin Deniz Deşarj Hattı (dolu ok / boş üçgen).
+- **Afet Tehlikeli Alanlar ailesi tamamlandı** (s.144-146, 189-191): Kentsel Risk Alanı/Yapı Yasaklı Alan (kesikli çizgi), Tsunami Riskli Alan/Kütle Hareketi Riskli Alan/Fay Sakınım Zonu/Taşkına Maruz Alan/Heyelan Alanı (tabanı eksik üçgen dizisi), Afete Maruz Bölge (3'lü üçgen öbeği).
+- **Sınır üzerinde tekrarlayan yazı artık çizgi (LINE) geometrisinde de çalışıyor**, önceden yalnız poligon çevresinde (`PerimeterCurved`) vardı; Soğutma Suyu Alma Hattı'nın "S" harfi `Qgis.LabelPlacement.Line` ile çizginin kendisi boyunca tekrarlanıyor.
+- Yeni çizim türleri: iki katmanlı ray+bağ (`line_ties`, dolu/boş sıra ve çift yan ray desteğiyle), çizgi üstü ikinci çizgi (`line_overlay`), tekrarlayan işaretli çizgi (`line_marked`, üçgen/ok, dolu/boş), dik çentik+dikdörtgen (`line_tick_tie`), çizgiye teğet daire zinciri (`line_circles`), dik çentik tarağı (`line_ticks`).
+
 ## [2.7.0] - 2026-09-18
 
 ### Kaldırılan

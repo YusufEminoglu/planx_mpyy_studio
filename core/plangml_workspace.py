@@ -485,12 +485,18 @@ def apply_eplan_symbology(layer, level, type_name):
             symbol = sized
         _embed_images(symbol)
 
-    applied, redrawn = apply_catalog_overrides(layer, level, type_name)
+    applied, redrawn, border_text, line_text = apply_catalog_overrides(layer, level, type_name)
     from .plangml_catalog import catalog_labels
 
     for spec in catalog_labels(level, type_name):
         if spec["kind"] == "road_width" and _apply_road_width_labels(layer, None, spec["field"], keep_renderer=True):
             applied.append(f"genişlik yazısı: s.{spec['page']}")
+    if border_text and layer.geometryType() == Qgis.GeometryType.Polygon:
+        _apply_border_text_labels(layer, border_text)
+        applied.append("sınır yazısı: " + ", ".join(sorted({text for text, _ in border_text.values()})))
+    if line_text and layer.geometryType() == Qgis.GeometryType.Line:
+        _apply_line_text_labels(layer, line_text)
+        applied.append("çizgi yazısı: " + ", ".join(sorted({text for text, _ in line_text.values()})))
     missing = set().union(*[gaps for label, gaps in missing.items() if label not in redrawn])
     if applied:
         layer.setCustomProperty("mpyy/katalog", "; ".join(applied))
@@ -592,6 +598,60 @@ def _apply_road_width_labels(layer, sld_text, field="YolGenisligi", keep_rendere
     layer.setLabeling(QgsVectorLayerSimpleLabeling(settings))
     layer.setLabelsEnabled(True)
     return True
+
+
+BORDER_TEXT_REPEAT_MM = 40  # katalog "uygun aralıklarla ... yazılacak" der, aralığı ölçmez
+LINE_TEXT_REPEAT_MM = 15  # s.183: üçgenlerle aynı 15mm aralık
+
+
+def _apply_repeating_text_labels(layer, texts, placement, repeat_mm):
+    """Repeat each rule's catalog text around/along its geometry, one label rule per SLD rule so
+    unrelated rules of the same type stay unlabelled."""
+    from qgis.core import QgsPalLayerSettings, QgsRuleBasedLabeling, QgsTextFormat
+
+    from .fonts import register_mpyy_fonts
+
+    renderer = layer.renderer()
+    if not isinstance(renderer, QgsRuleBasedRenderer):
+        return
+    register_mpyy_fonts()
+    root = QgsRuleBasedLabeling.Rule(None)
+    for rule in renderer.rootRule().children():
+        entry = texts.get(rule.label())
+        if entry is None:
+            continue
+        text, color = entry
+        settings = QgsPalLayerSettings()
+        settings.isExpression = True
+        settings.fieldName = "'" + text.replace("'", "''") + "'"
+        settings.placement = placement
+        settings.repeatDistance = repeat_mm
+        settings.repeatDistanceUnit = Qgis.RenderUnit.Millimeters
+        text_format = QgsTextFormat()
+        text_format.setFont(QFont("DejaVu Sans"))
+        text_format.setSizeUnit(Qgis.RenderUnit.Millimeters)
+        text_format.setSize(3)
+        text_format.setColor(QColor(*[int(v) for v in color.split("/")]))
+        settings.setFormat(text_format)
+        label_rule = QgsRuleBasedLabeling.Rule(settings)
+        label_rule.setFilterExpression(rule.filterExpression())
+        label_rule.setDescription(rule.label())
+        root.appendChild(label_rule)
+    if root.children():
+        layer.setLabeling(QgsRuleBasedLabeling(root))
+        layer.setLabelsEnabled(True)
+
+
+def _apply_border_text_labels(layer, border_text):
+    """Repeat each border's catalog text (AYB, RA, RYA, YENİLEME, TEA...) around its polygon's
+    perimeter (s.24 etc.: 'uygun aralıklarla sınır üzerine ... yazılacak')."""
+    _apply_repeating_text_labels(layer, border_text, Qgis.LabelPlacement.PerimeterCurved, BORDER_TEXT_REPEAT_MM)
+
+
+def _apply_line_text_labels(layer, line_text):
+    """Repeat each line's catalog text (Soğutma Suyu Alma Hattı's 'S') along the line itself,
+    between the chevron markers (s.183: 'ardışık iki üçgen arasında orta noktada ... S harfi')."""
+    _apply_repeating_text_labels(layer, line_text, Qgis.LabelPlacement.Line, LINE_TEXT_REPEAT_MM)
 
 
 def installed_font_families():

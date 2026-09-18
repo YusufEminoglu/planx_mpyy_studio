@@ -66,6 +66,15 @@ class GuiTests(unittest.TestCase):
                          ['Başlangıç', 'Araçlar', 'Kayıt'])
         self.assertEqual(self.iface.opened, [])
 
+    def test_every_inline_form_and_start_target_has_a_tool_description(self):
+        # A start-page workflow card or a registered inline form pointing at an id missing from
+        # self.dock.tools crashes on click with a bare KeyError (v2.7.0 dropped create_workspace's
+        # Processing algorithm but left its inline form and start-page button behind).
+        tool_ids = {tool.id for tool in self.dock.tools}
+        self.assertTrue(self.dock._inline_forms)
+        for tool_id in self.dock._inline_forms:
+            self.assertIn(tool_id, tool_ids, tool_id)
+
     def test_search_category_and_empty_state_do_not_run_tools(self):
         self.dock.browse_category('Ulaşım ve erişim')
         self.assertEqual(self.dock.tool_list.count(), 6)
@@ -78,7 +87,7 @@ class GuiTests(unittest.TestCase):
         self.assertFalse(self.dock.open_tool_button.isEnabled())
         self.assertFalse(self.dock.empty_tools.isHidden())
         self.dock._reset_filters()
-        self.assertEqual(self.dock.tool_list.count(), 88)
+        self.assertEqual(self.dock.tool_list.count(), 89)
         self.assertEqual(self.iface.opened, [])
 
     def test_turkish_names_and_accent_insensitive_search(self):

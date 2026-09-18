@@ -143,6 +143,7 @@ def build_catalog(algorithm_ids: Iterable[str], search_aliases: Mapping[str, str
             'Çıktılar işlem iletişim kutusunda belirtilir.',
         )
         tools.append(replace(tool, keywords=(search_aliases or {}).get(algorithm_id, "")))
+    tools.append(descriptions["create_workspace"])
     tools.append(ToolDescription(
         "style_and_forms", 'Katmanı biçimlendir ve formları düzenle', 'Çalışma alanı ve veri',
         'Vektör katmanına plan stili ve öznitelik formu uygular.',
