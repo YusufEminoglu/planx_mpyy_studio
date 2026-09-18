@@ -438,5 +438,35 @@
    "field": "Genislik",
    "note": "Yaya yolu genişliği, taşıt yolundaki gibi aks ortasında daire içinde yazılır."
   }
+ },
+ "borders": {
+  "note": "Katalogun ölçüyle tanımladığı sınır çizgileri. SLD'den gelen işaret çizgileri kaldırılıp yerine katalog çizgisi konur.",
+  "UIP/AskeriYasakBolge/*": {
+   "page": 24,
+   "kind": "cross",
+   "color": "255/0/0",
+   "width_mm": 0.3,
+   "interval_mm": 7,
+   "size_mm": 3,
+   "label": "AYB"
+  },
+  "NIP/AskeriYasakBolge/*": {
+   "page": 24,
+   "kind": "cross",
+   "color": "255/0/0",
+   "width_mm": 0.3,
+   "interval_mm": 7,
+   "size_mm": 3,
+   "label": "AYB"
+  },
+  "CDP/AskeriYskGuvenlikBlg/*": {
+   "page": 24,
+   "kind": "cross",
+   "color": "255/0/0",
+   "width_mm": 0.3,
+   "interval_mm": 7,
+   "size_mm": 3,
+   "label": "AYB"
+  }
  }
 }

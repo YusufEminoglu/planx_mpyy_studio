@@ -8,6 +8,7 @@ field no form ever fills. These tests drive the real widgets and the real
 database instead.
 """
 
+import hashlib
 import os
 import sqlite3
 import tempfile
@@ -36,7 +37,6 @@ QgsGui.editorWidgetRegistry().initEditors()
 
 from planx_mpyy_studio.core.db_factory import (  # noqa: E402
     create_land_use_workspace,
-    create_planning_workspace,
     read_dataset_info,
 )
 from planx_mpyy_studio.core.form_designer import MPYYFormDesigner  # noqa: E402
@@ -156,32 +156,53 @@ class FormDropdownTests(unittest.TestCase):
         self.assertEqual(renderer.classAttribute(), "uipfonksiyon")
         self.assertIn("YERLEŞİK KONUT ALANI", {c.value() for c in renderer.categories()})
 
-    # --- PlanGML planning workspace: same template form on plangml_uip_* ------------
+    # --- Yerel NİP: the author's MpyyNipDB 1/5000 structure -------------------------
 
-    def test_planning_uip_form_is_template_and_survives_form_designer(self):
-        _, layers = self._load(create_planning_workspace, ("UIP",))
-        alan = layers["plangml_uip_alan"]
-        self.assertEqual([t.name() for t in alan.editFormConfig().tabs()], TEMPLATE_TABS)
-        MPYYFormDesigner.apply_complete_form_experience(alan)
-        self.assertEqual([t.name() for t in alan.editFormConfig().tabs()], TEMPLATE_TABS)
-        self.assertEqual(value_map_values(alan, "nizam"), ["A", "B", "BL"])
-        self.assert_function_dropdown_works(alan)
-        self.assert_every_dropdown_value_saves(alan, ["nizam", "katadedi", "yapiYaklasmaDurumu", "ustkonugrup"])
-        notasyon = layers["plangml_uip_notasyon"]
-        expressions = [notasyon.defaultValueDefinition(i).expression() for i in range(notasyon.fields().count())]
-        self.assertTrue(any("'plangml_uip_alan'" in e for e in expressions))
-        self.assertFalse(any("'uip-alanlar'" in e for e in expressions))
+    def test_local_nip_workspace_reproduces_template_structure(self):
+        from planx_mpyy_studio.core.local_nip_workspace import (
+            KIND as NIP_KIND,
+            TEMPLATE_DIR as NIP_TEMPLATE_DIR,
+            create_local_nip_workspace,
+            template as nip_template,
+        )
 
-    def test_plangml_style_classifies_the_value_the_form_writes(self):
-        _, layers = self._load(create_planning_workspace, ("UIP",))
-        alan = layers["plangml_uip_alan"]
-        result = PlanGMLStylerEngine().apply(alan, field="uipfonksiyon", plan_type="UIP")
-        values = {c.value() for c in alan.renderer().categories()}
-        self.assertIn("YERLEŞİK KONUT ALANI", values)
-        self.assertGreater(result.official_styles, 0)
-        self.assertFalse(any(str(v).startswith("POLYGON:") for v in values))
+        path = Path(self.tmp.name) / "yerel_nip.gpkg"
+        create_local_nip_workspace(path, "EPSG:5254")
+        self.assertEqual(read_dataset_info(path)["workspace_kind"], NIP_KIND)
+        spec = nip_template()
+        with sqlite3.connect(path) as con:
+            for table in spec["tables"]:
+                columns = {row[1]: row[2] for row in con.execute(f'PRAGMA table_info("{table["table"]}")')}
+                for field in table["fields"]:
+                    self.assertEqual(columns.get(field["name"]), field["type"], (table["table"], field["name"]))
+            self.assertEqual(con.execute('SELECT count(*) FROM "fonksiyonlar-5000_tablo"').fetchone()[0], 169)
+            styled = {row[0] for row in con.execute("SELECT f_table_name FROM layer_styles WHERE useAsDefault")}
+        self.assertEqual(styled, {t["table"] for t in spec["tables"]})
+        # only the drawing layers were frozen; the base map and the in-force plan stayed out
+        self.assertNotIn("halihazir", styled)
+        self.assertTrue({"halihazir", "meri_5000_alan"} <= set(spec["skipped"]))
+        for name, style in spec["styles"].items():
+            data = (NIP_TEMPLATE_DIR / style["qml"]).read_bytes()
+            self.assertEqual(hashlib.sha256(data).hexdigest(), style["sha256"], name)
 
-    # --- Arazi / saha survey forms ----------------------------------------------------
+    def test_local_nip_layers_keep_their_styles_forms_and_relation(self):
+        from planx_mpyy_studio.core.local_nip_workspace import create_local_nip_workspace
+
+        _, layers = self._load(lambda p, crs: create_local_nip_workspace(p, crs))
+        alan = layers["alanlar-5000"]
+        self.assertIsInstance(alan.renderer(), QgsCategorizedSymbolRenderer)
+        self.assertGreaterEqual(len(alan.renderer().categories()), 10)
+        self.assertEqual(alan.customProperty("mpyy/form"), 'MpyyNipDB çizim şablonu: alanlar-5000')
+        self.assertEqual(len(alan.editFormConfig().tabs()), 4)
+        feature = QgsVectorLayerUtils.createFeature(alan, QgsGeometry.fromWkt(POLYGON), {}, alan.createExpressionContext())
+        form = QgsAttributeForm(alan, feature, QgsAttributeEditorContext())
+        form.show()
+        widgets = form.findChildren(QgsRelationReferenceWidget)
+        self.assertTrue(widgets, "nipfonksiyon bir ilişki açılır listesi olmalı")
+        combos = widgets[0].findChildren(QComboBox)
+        self.assertTrue(wait_until(lambda: any(c.count() > 20 for c in combos)), [c.count() for c in combos])
+        relation_ids = list(QgsProject.instance().relationManager().relations())
+        self.assertTrue(any("nipfonksiyon" in identifier for identifier in relation_ids), relation_ids)
 
     def test_survey_forms_keep_their_tabs_and_accept_their_dropdown_codes(self):
         _, layers = self._load(lambda p, crs: create_land_use_workspace(p, crs))

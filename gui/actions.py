@@ -21,7 +21,8 @@ from ..core.capacity_engine import PlanCapacityEngine
 from ..core.chamfer_engine import ChamferEngine
 from ..core.compliance_engine import ComplianceEngine
 from ..core.crosswalk import execute_layer_crosswalk
-from ..core.db_factory import create_land_use_workspace, create_planning_workspace
+from ..core.db_factory import create_land_use_workspace
+from ..core.local_nip_workspace import create_local_nip_workspace
 from ..core.local_uip_workspace import create_local_uip_workspace
 from ..core.plangml_workspace import create_plangml_workspace
 from ..core.dop_engine import DOPEngine
@@ -52,10 +53,10 @@ class DockActionsMixin:
             scope = self.scope.currentData()
             if scope == "YEREL_UIP":
                 create_local_uip_workspace(path, self.crs.crs())
-            elif isinstance(scope, str) and scope.startswith("PLANGML_XSD:"):
-                create_plangml_workspace(path, self.crs.crs(), scope.split(":", 1)[1])
+            elif scope == "YEREL_NIP":
+                create_local_nip_workspace(path, self.crs.crs())
             else:
-                create_planning_workspace(path, self.crs.crs(), self.scope.currentData())
+                create_plangml_workspace(path, self.crs.crs(), str(scope).split(":", 1)[1])
             self.load_workspace(path)
         except (ValueError, OSError, RuntimeError, TypeError, sqlite3.Error) as error:
             self.status.setText('Çalışma alanı oluşturulamadı: ' + str(error))
@@ -86,7 +87,7 @@ class DockActionsMixin:
     def load_workspace(self, path):
         layers = load_project_layers(path)
         if layers:
-            target = next((lyr for lyr in layers if lyr.name() in ("plangml_uip_alan", "uip-alanlar")), layers[0])
+            target = next((lyr for lyr in layers if lyr.name() == "uip-alanlar"), layers[0])
             self.layer.setLayer(target)
             self.crs.setCrs(target.crs())
             self.status.setText(f'Çalışma alanı başarıyla yüklendi: {len(layers)} katman projeye eklendi.')
@@ -221,8 +222,7 @@ class DockActionsMixin:
                     f'{res.official_styles} resmî, {res.fallback_styles} yedek gösterim.'
                 )
             elif level in ("YEREL_UIP", "UIP"):
-                if layer.name() in ("plangml_uip_alan", "plangml_uip_cizgi", "plangml_uip_notasyon",
-                                    "uip-alanlar", "uip_cizgiler", "uip-notasyonlar"):
+                if layer.name() in ("uip-alanlar", "uip_cizgiler", "uip-notasyonlar"):
                     apply_layer_style_and_form(layer)
                     self._last_engine = None
                     self.status.setText('MpyyUipDb çizim şablonunun sembolojisi ve koşullu formu uygulandı.')

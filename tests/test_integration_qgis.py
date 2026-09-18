@@ -3,7 +3,7 @@
 Tests cover:
 - Workspace layer tree structure and Turkish group hierarchy.
 - Authentic PlanGML form binding, tab layout, and default value expressions.
-- QgsRelation registration between plangml_uip_alan and uipPolygonTable.
+- QgsRelation registration between uip-alanlar and uipPolygonTable.
 - Actions (Street View, TKGM, clipboard copy) and MapTip cards.
 - Land use survey tables with external photo resources.
 - Deterministic vs. ambiguous Crosswalk resolution (ONAY_BEKLIYOR guarantee).
@@ -38,9 +38,9 @@ from planx_mpyy_studio.core.crosswalk import (
     evaluate_crosswalk,
     execute_layer_crosswalk,
 )
+from planx_mpyy_studio.core.local_uip_workspace import create_local_uip_workspace
 from planx_mpyy_studio.core.db_factory import (
     create_land_use_workspace,
-    create_planning_workspace,
     read_dataset_info,
 )
 from planx_mpyy_studio.core.form_designer import MPYYFormDesigner
@@ -63,77 +63,6 @@ class IntegrationTests(unittest.TestCase):
     def tearDown(self):
         QgsProject.instance().clear()
         self.tmp.cleanup()
-
-    def test_uip_full_workspace_binding_and_relations(self):
-        """Kriter 6, 9 & 10: UİP katmanı yüklenir, 8 sekmeli form, relation ve eylemler bağlanır."""
-        p = Path(self.tmp.name) / "uip_workspace.gpkg"
-        create_planning_workspace(p, "EPSG:5254", ("UIP",))
-
-        project = QgsProject.instance()
-        loaded = load_project_layers(p, project)
-        self.assertGreaterEqual(len(loaded), 3)
-
-        # 1. Layer tree Turkish groups
-        root = project.layerTreeRoot()
-        plan_group = root.findGroup('PlanGML Çalışma Alanı')
-        self.assertIsNotNone(plan_group, "PlanGML Çalışma Alanı grubu bulunmalı")
-        uip_group = plan_group.findGroup('Uygulama imar planı (UİP)')
-        self.assertIsNotNone(uip_group, "UİP alt grubu bulunmalı")
-
-        # 2. UIP Alan layer properties and form
-        alan_layers = [lyr for lyr in loaded if lyr.name() == "plangml_uip_alan"]
-        self.assertEqual(len(alan_layers), 1)
-        alan_layer = alan_layers[0]
-
-        self.assertEqual(alan_layer.customProperty("mpyy/form"), 'MpyyUipDb çizim şablonu: uip-alanlar')
-        efc = alan_layer.editFormConfig()
-        self.assertEqual(efc.layout(), 1)  # TabLayout
-        self.assertGreaterEqual(len(efc.invisibleRootContainer().children()), 3)
-
-        # 3. Default value expressions
-        gid_idx = alan_layer.fields().indexFromName("global_id")
-        self.assertGreaterEqual(gid_idx, 0)
-        gid_def = alan_layer.defaultValueDefinition(gid_idx)
-        self.assertTrue(gid_def.isValid())
-        self.assertIn("uuid", gid_def.expression().lower())
-
-        time_idx = alan_layer.fields().indexFromName("olusturma_tarihi")
-        self.assertGreaterEqual(time_idx, 0)
-        time_def = alan_layer.defaultValueDefinition(time_idx)
-        self.assertTrue(time_def.isValid())
-        self.assertIn("now", time_def.expression().lower())
-
-        pk_idx = alan_layer.fields().indexFromName("plan_kademesi")
-        self.assertGreaterEqual(pk_idx, 0)
-        pk_def = alan_layer.defaultValueDefinition(pk_idx)
-        self.assertTrue(pk_def.isValid())
-        self.assertEqual(pk_def.expression(), "'UIP'")
-
-        # 4. Actions & MapTip HTML
-        actions = alan_layer.actions().actions()
-        self.assertGreaterEqual(len(actions), 3)
-        action_names = [a.name() for a in actions]
-        self.assertIn('Google Street View Aç', action_names)
-        self.assertIn('TKGM Parsel Sorgu Aç', action_names)
-        self.assertIn('Öznitelik Özetini Panoya Kopyala', action_names)
-
-        maptip = alan_layer.mapTipTemplate()
-        self.assertIn("uipfonksiyon", maptip)
-        self.assertIn("AlanM2", maptip)
-
-        # 5. QgsRelation between plangml_uip_alan and uipPolygonTable, plangml_uip_cizgi and uipLineTable
-        rel_mgr = project.relationManager()
-        rel_id = "uip_alanla_uipfonksiyon_uipPolygon_uip_fonksiyon"  # the MpyyUipDb template's own id
-        rel = rel_mgr.relation(rel_id)
-        self.assertTrue(rel.isValid(), f"Relation '{rel_id}' must be registered and valid")
-        self.assertEqual(rel.referencingLayer().name(), "plangml_uip_alan")
-        self.assertEqual(rel.referencedLayer().name(), "uipPolygonTable")
-
-        line_rel_id = "uipLine_uipfonksiyon_uipLine_uip_fonksiyon"
-        rel_c = rel_mgr.relation(line_rel_id)
-        self.assertTrue(rel_c.isValid(), f"Relation '{line_rel_id}' must be registered and valid")
-        self.assertEqual(rel_c.referencingLayer().name(), "plangml_uip_cizgi")
-        self.assertEqual(rel_c.referencedLayer().name(), "uipLineTable")
 
     def test_land_use_workspace_and_external_resource_widgets(self):
         """Kriter 7: Arazi Kullanımı GeoPackage katmanları eksiksiz yüklenir."""
@@ -312,38 +241,6 @@ class IntegrationTests(unittest.TestCase):
         same_geom = calculate_setback_envelope(parcel_geom, 0.0)
         self.assertAlmostEqual(same_geom.area(), parcel_geom.area(), delta=0.1)
 
-    def test_all_four_plan_hierarchy_levels_together(self):
-        """Kriter 1: Dört plan kademesi (MSP, ÇDP, NİP, UİP) tek bir projede hiyerarşik yüklenir."""
-        p = Path(self.tmp.name) / "multi_level.gpkg"
-        create_planning_workspace(p, "EPSG:5254", ("MSP", "CDP", "NIP", "UIP"))
-
-        project = QgsProject.instance()
-        loaded = load_project_layers(p, project)
-        loaded_names = [lyr.name() for lyr in loaded]
-
-        for expected in (
-            "plangml_msp_alan",
-            "plangml_msp_cizgi",
-            "plangml_msp_notasyon",
-            "plangml_cdp_alan",
-            "plangml_cdp_cizgi",
-            "plangml_nip_alan",
-            "plangml_nip_cizgi",
-            "plangml_nip_notasyon",
-            "plangml_uip_alan",
-            "plangml_uip_cizgi",
-            "plangml_uip_notasyon",
-        ):
-            self.assertIn(expected, loaded_names)
-
-        # Verify group hierarchy
-        root = project.layerTreeRoot()
-        plan_group = root.findGroup('PlanGML Çalışma Alanı')
-        self.assertIsNotNone(plan_group.findGroup('Mekânsal Strateji Planı (MSP)'))
-        self.assertIsNotNone(plan_group.findGroup('Çevre düzeni planı (ÇDP)'))
-        self.assertIsNotNone(plan_group.findGroup('Nazım imar planı (NİP)'))
-        self.assertIsNotNone(plan_group.findGroup('Uygulama imar planı (UİP)'))
-
     def test_quality_control_engine(self):
         """Kriter QC: Parsel çakışmaları, bina tecavüzleri ve çekme ihlalleri tespit edilir."""
         # 1. Overlapping parcels
@@ -383,8 +280,7 @@ class IntegrationTests(unittest.TestCase):
         provider = MPYYProvider()
         provider.loadAlgorithms()
         alg_names = [a.name() for a in provider.algorithms()]
-        self.assertEqual(len(alg_names), 87)
-        self.assertIn("create_workspace", alg_names)
+        self.assertEqual(len(alg_names), 86)
         self.assertIn("create_land_use_workspace", alg_names)
         self.assertIn("preview_workspace_reconciliation", alg_names)
         self.assertIn("audit_msp_plan_requirements", alg_names)
@@ -1835,87 +1731,6 @@ class IntegrationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             ProceduralMassingEngine.generate(parcel, max_height_m=float("nan"))
 
-    def test_mpyy_plan_level_audits_and_2026_catalog(self):
-        import sqlite3
-
-        from planx_mpyy_studio.core.plan_diff import classify_amenity_category
-        from planx_mpyy_studio.core.plan_stage_audit import PlanStageAuditEngine
-        from planx_mpyy_studio.provider import (
-            AuditCDPPlanRequirementsAlgorithm,
-            AuditMSPPlanRequirementsAlgorithm,
-            AuditNIPPlanRequirementsAlgorithm,
-            AuditUIPPlanRequirementsAlgorithm,
-        )
-
-        uri = (
-            "Polygon?crs=EPSG:5254&field=global_id:string&field=plan_id:string"
-            "&field=plan_kademesi:string&field=fonksiyon_kodu:string"
-            "&field=strateji_bolgesi:string&field=oncelik_durumu:string"
-            "&field=bolge_turu:string&field=alt_bolge_kodu:string"
-            "&field=brut_yogunluk_kisi_ha:double&field=yogunluk_kademesi:string"
-            "&field=nizam:string&field=taks:string&field=kaks:string&field=emsal:string"
-            "&field=katadedi:string&field=yencok:string&field=onbahce:string"
-        )
-        configurations = (
-            ("MSP", "AFET_LOJISTIK_ALANI", {"strateji_bolgesi": "BOLGE-1"}, 250000,
-             AuditMSPPlanRequirementsAlgorithm),
-            ("CDP", "PLANLAMA_ALT_BOLGESI", {"bolge_turu": "ALT_BOLGE"}, 100000,
-             AuditCDPPlanRequirementsAlgorithm),
-            ("NIP", "KONUT_ALANI", {"brut_yogunluk_kisi_ha": 180.0}, 5000,
-             AuditNIPPlanRequirementsAlgorithm),
-            ("UIP", "KONUT_ALANI", {
-                "nizam": "AYRIK", "kaks": "1.50", "katadedi": "5", "onbahce": "5"
-            }, 1000, AuditUIPPlanRequirementsAlgorithm),
-        )
-        for index, (level, function_code, extras, scale, algorithm_type) in enumerate(configurations):
-            layer = QgsVectorLayer(uri, level + "_audit", "memory")
-            feature = QgsFeature(layer.fields())
-            feature["global_id"] = level + "-1"
-            feature["plan_id"] = "PLAN-2026"
-            feature["plan_kademesi"] = level
-            feature["fonksiyon_kodu"] = function_code
-            for name, value in extras.items():
-                feature[name] = value
-            feature.setGeometry(QgsGeometry.fromRect(QgsRectangle(index * 20, 0, index * 20 + 10, 10)))
-            layer.dataProvider().addFeature(feature)
-            audit = PlanStageAuditEngine.audit_features(layer.getFeatures(), level, scale)
-            self.assertEqual(audit.records[0].status, "COMPLIANT", level)
-            self.assertEqual(audit.catalog_version, "2026-01-22")
-
-            algorithm = algorithm_type()
-            algorithm.initAlgorithm()
-            response = algorithm.processAlgorithm(
-                {"INPUT": layer, "MAP_SCALE": scale, "OUTPUT": "memory:" + level.lower() + "_audit"},
-                QgsProcessingContext(), QgsProcessingFeedback(),
-            )
-            self.assertEqual(response["ERROR_COUNT"], 0, level)
-            self.assertEqual(response["FEATURE_COUNT"], 1, level)
-
-        wrong_level = QgsVectorLayer(uri, "wrong_symbol_level", "memory")
-        feature = QgsFeature(wrong_level.fields())
-        feature["global_id"] = "NIP-BAD"
-        feature["plan_id"] = "PLAN-2026"
-        feature["plan_kademesi"] = "NIP"
-        feature["fonksiyon_kodu"] = "CEMEVI_ALANI"
-        feature.setGeometry(QgsGeometry.fromRect(QgsRectangle(0, 0, 10, 10)))
-        wrong_level.dataProvider().addFeature(feature)
-        audit = PlanStageAuditEngine.audit_features(wrong_level.getFeatures(), "NIP", 5000)
-        self.assertIn("SYMBOL_LEVEL_MISMATCH", {item.code for item in audit.records[0].findings})
-        self.assertEqual(classify_amenity_category("Cemevi Alanı"), "IBADET")
-
-        workspace = Path(self.tmp.name) / "mpyy_2026_catalog.gpkg"
-        create_planning_workspace(workspace, "EPSG:5254", ("MSP", "CDP", "NIP", "UIP"))
-        with sqlite3.connect(workspace) as connection:
-            catalog_count = connection.execute(
-                "SELECT COUNT(*) FROM mpyy_2026_gosterim_katalogu"
-            ).fetchone()[0]
-            cemevi_levels = connection.execute(
-                "SELECT applicable_levels FROM mpyy_2026_gosterim_katalogu "
-                "WHERE symbol_code='CEMEVI_ALANI'"
-            ).fetchone()[0]
-        self.assertEqual(catalog_count, 22)
-        self.assertEqual(cemevi_levels, "UIP")
-
     def test_mpyy_plan_hierarchy_audit_and_algorithm(self):
         from planx_mpyy_studio.core.hierarchy_audit import PlanHierarchyAuditEngine
         from planx_mpyy_studio.provider import AuditPlanHierarchyConsistencyAlgorithm
@@ -2123,7 +1938,7 @@ class IntegrationTests(unittest.TestCase):
         output = Path(self.tmp.name) / "reconciled.gpkg"
         output_algorithm = Path(self.tmp.name) / "reconciled_algorithm.gpkg"
         output_preferred = Path(self.tmp.name) / "reconciled_preferred.gpkg"
-        create_planning_workspace(base, "EPSG:5254", ("UIP",))
+        create_local_uip_workspace(base, "EPSG:5254")
         with sqlite3.connect(base) as connection:
             connection.execute("CREATE TABLE team_edits (edit_id TEXT PRIMARY KEY, note TEXT)")
             connection.execute(
@@ -3462,12 +3277,12 @@ class IntegrationTests(unittest.TestCase):
     def test_mpyy_profile_driven_geopackage_schema_audit(self):
         import json
 
-        from planx_mpyy_studio.core.db_factory import create_planning_workspace
+        from planx_mpyy_studio.core.local_uip_workspace import create_local_uip_workspace
         from planx_mpyy_studio.core.digital_governance import MPYYGeoPackageProfileEngine
         from planx_mpyy_studio.provider import AuditMPYYGeoPackageSchemaProfileAlgorithm
 
         gpkg = Path(self.tmp.name) / "profile_workspace.gpkg"
-        create_planning_workspace(gpkg, "EPSG:5254", ("UIP",))
+        create_local_uip_workspace(gpkg, "EPSG:5254")
         profile = {
             "profile_id": "test-administration-profile", "profile_version": "1",
             "tables": [{

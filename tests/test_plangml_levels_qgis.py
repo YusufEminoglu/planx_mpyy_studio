@@ -217,6 +217,7 @@ class SymbologyGapTests(unittest.TestCase):
                     for item in walk_layers(rule.symbol()) if rule.symbol() else []:
                         if item.layerType() == "MarkerLine":
                             self.assertGreater(item.interval(), 0, f"{level}/{type_name}/{rule.label()}")
+                del layer  # 500+ styled layers in one process otherwise pile up
 
     def test_pedestrian_path_width_is_written_like_a_road(self):
         line = "LINESTRING(500000 4250000, 500200 4250000)"

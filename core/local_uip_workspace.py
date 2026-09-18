@@ -60,6 +60,7 @@ def _field_defn(name, declared):
     kind = {
         "TEXT": ogr.OFTString,
         "INTEGER": ogr.OFTInteger64,
+        "MEDIUMINT": ogr.OFTInteger,  # SQLite affinity used by the MpyyNipDB template
         "REAL": ogr.OFTReal,
         "DATETIME": ogr.OFTDateTime,
     }[declared]

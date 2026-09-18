@@ -1,0 +1,302 @@
+{
+ "version": 1,
+ "source": {
+  "file": "MpyyNipDB.gpkg",
+  "sha256": "2c23ca3c3b33f35e6e79fee583a8813f25acb8e79184772039345d5f3d1a9b13",
+  "project": "5000_RevizyonPlanCizimProjesi"
+ },
+ "layer_order": [
+  "yolgenisliksembol",
+  "yollar_ve_Adalar_icin_cizgiler",
+  "alanlar-5000",
+  "cizgiler_5000_v2",
+  "5000_revizyon_planonama_snr",
+  "fonksiyonlar-5000_tablo"
+ ],
+ "tables": [
+  {
+   "table": "alanlar-5000",
+   "geometry": "MULTIPOLYGON",
+   "fields": [
+    {
+     "name": "nipfonksiyon",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "TipSINIR",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "NotasyonuVarMI",
+     "type": "TEXT(10)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "TarihIlk",
+     "type": "DATETIME",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "TarihSon",
+     "type": "DATETIME",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "Kullanici",
+     "type": "TEXT(50)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "AlanHa",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "ALT_SNR",
+     "type": "MEDIUMINT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "UST_SNR",
+     "type": "MEDIUMINT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "ALT_NUFUS",
+     "type": "MEDIUMINT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "UST_NUFUS",
+     "type": "MEDIUMINT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "k/m2_UST_NUFUS",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "k/m2_ALT_NUFUS",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    }
+   ]
+  },
+  {
+   "table": "cizgiler_5000_v2",
+   "geometry": "MULTILINESTRING",
+   "fields": [
+    {
+     "name": "nipfonksiyon",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yolTipi",
+     "type": "TEXT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yolGenislik",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "solKaldirimGenislik",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "refujGenislik",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "SolSeritSayisi",
+     "type": "INTEGER",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "SagSeritSayisi",
+     "type": "INTEGER",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "yolGenislik2",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "sagKaldirimGenislik",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "Kullanıcı",
+     "type": "TEXT(50)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "TarihIlk",
+     "type": "DATETIME",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "TarihSon",
+     "type": "TEXT(50)",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "Uzunluk(m)",
+     "type": "REAL",
+     "notnull": false,
+     "pk": false
+    }
+   ]
+  },
+  {
+   "table": "yollar_ve_Adalar_icin_cizgiler",
+   "geometry": "LINESTRING",
+   "fields": []
+  },
+  {
+   "table": "yolgenisliksembol",
+   "geometry": "POINT",
+   "fields": [
+    {
+     "name": "YolGenislik",
+     "type": "TEXT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "YolTamsayi",
+     "type": "MEDIUMINT",
+     "notnull": false,
+     "pk": false
+    }
+   ]
+  },
+  {
+   "table": "5000_revizyon_planonama_snr",
+   "geometry": "MULTIPOLYGON",
+   "fields": []
+  },
+  {
+   "table": "fonksiyonlar-5000_tablo",
+   "geometry": null,
+   "fields": [
+    {
+     "name": "ust_konu_grup_2",
+     "type": "TEXT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "nip_fonksiyon",
+     "type": "TEXT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "nip_tabaka",
+     "type": "TEXT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "id1",
+     "type": "INTEGER",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "ust_konu_grup",
+     "type": "TEXT",
+     "notnull": false,
+     "pk": false
+    },
+    {
+     "name": "nipFonksiyonSymbol",
+     "type": "TEXT(100)",
+     "notnull": false,
+     "pk": false
+    }
+   ]
+  }
+ ],
+ "relations": [
+  {
+   "id": "alanlar_50_nipfonksiyon_fonksiyonl_nip_fonksiyon",
+   "referencing": "alanlar-5000",
+   "referenced": "fonksiyonlar-5000_tablo",
+   "pairs": {
+    "nipfonksiyon": "nip_fonksiyon"
+   }
+  }
+ ],
+ "styles": {
+  "alanlar-5000": {
+   "qml": "alanlar-5000.qml",
+   "sha256": "02320985af85d1b30b1adeec5436b2d264375df929a2d6d2ad084f2968221e07"
+  },
+  "cizgiler_5000_v2": {
+   "qml": "cizgiler_5000_v2.qml",
+   "sha256": "1f3e6ad1ce5a418727bf36a68bd5ccae0508522777bb2b649046506e04086cbe"
+  },
+  "yollar_ve_Adalar_icin_cizgiler": {
+   "qml": "yollar_ve_Adalar_icin_cizgiler.qml",
+   "sha256": "6f7eed641ea744de6ca288fcb70373cc6d454d46f4cc563f05610a579e81b725"
+  },
+  "yolgenisliksembol": {
+   "qml": "yolgenisliksembol.qml",
+   "sha256": "afc9c03820f792958eab26537198149597554f5edd045b2c9744993ba5972cad"
+  },
+  "5000_revizyon_planonama_snr": {
+   "qml": "5000_revizyon_planonama_snr.qml",
+   "sha256": "93d0b52a1254323532942acb48ef22a0261a2d0071d88c528d9941880325947b"
+  },
+  "fonksiyonlar-5000_tablo": {
+   "qml": "fonksiyonlar-5000_tablo.qml",
+   "sha256": "2b316f6b51597ad381c7f1a402a3fd7f3d25d993527c093fded76d91f741bbac"
+  }
+ },
+ "skipped": [
+  "halihazir",
+  "meri_5000_nokta",
+  "meri_5000_cizgi",
+  "meri_5000_alan",
+  "meri_1000_alan",
+  "ak_ada_duzeyi_tahmini_calisan_sayisi",
+  "Google Satellite",
+  "cizgiler-5000"
+ ]
+}

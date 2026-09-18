@@ -57,10 +57,10 @@ class GuiTests(unittest.TestCase):
         self.fail("Tool not found: " + tool_id)
 
     def test_catalog_covers_every_processing_algorithm(self):
-        described = {row[0] for rows in _GROUPS.values() for row in rows}
+        described = {row[0] for rows in _GROUPS.values() for row in rows if len(row) < 6 or row[5]}
         actual = {tool.id for tool in self.dock.tools if tool.processing}
         self.assertEqual(actual, described)
-        self.assertEqual(len(actual), 87)
+        self.assertEqual(len(actual), 86)
         self.assertEqual(self.dock.tabs.count(), 3)
         self.assertEqual([self.dock.tabs.tabText(i).replace('&', '') for i in range(3)],
                          ['Başlangıç', 'Araçlar', 'Kayıt'])
@@ -78,7 +78,7 @@ class GuiTests(unittest.TestCase):
         self.assertFalse(self.dock.open_tool_button.isEnabled())
         self.assertFalse(self.dock.empty_tools.isHidden())
         self.dock._reset_filters()
-        self.assertEqual(self.dock.tool_list.count(), 89)
+        self.assertEqual(self.dock.tool_list.count(), 88)
         self.assertEqual(self.iface.opened, [])
 
     def test_turkish_names_and_accent_insensitive_search(self):
@@ -209,7 +209,7 @@ class GuiTests(unittest.TestCase):
         from ..provider import MPYYProvider
         provider = MPYYProvider()
         provider.load()
-        self.assertEqual(len(provider.algorithms()), 87)
+        self.assertEqual(len(provider.algorithms()), 86)
         for algorithm in provider.algorithms():
             with self.subTest(algorithm=algorithm.name()):
                 for text in (algorithm.displayName(), algorithm.group(), algorithm.shortHelpString()):
@@ -226,10 +226,11 @@ class GuiTests(unittest.TestCase):
         provider.unload()
 
     def test_workspaces_forms_dropdowns_and_legends_are_turkish(self):
-        from ..core.db_factory import create_planning_workspace, create_land_use_workspace
+        from ..core.db_factory import create_land_use_workspace
+        from ..core.local_uip_workspace import create_local_uip_workspace
         from ..core.project_binding import load_project_layers
         with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as folder:
-            for filename, create in [('planning.gpkg', create_planning_workspace), ('survey.gpkg', create_land_use_workspace)]:
+            for filename, create in [('uip.gpkg', create_local_uip_workspace), ('survey.gpkg', create_land_use_workspace)]:
                 path = Path(folder) / filename
                 create(path, 'EPSG:5254')
                 layers = load_project_layers(path)
@@ -298,13 +299,13 @@ class GuiTests(unittest.TestCase):
 
     def test_relation_reference_and_maptip_use_turkish_representations(self):
         from qgis.core import QgsFeature, QgsExpression, QgsExpressionContext, QgsExpressionContextUtils
-        from ..core.db_factory import create_planning_workspace
+        from ..core.local_uip_workspace import create_local_uip_workspace
         from ..core.project_binding import load_project_layers
         with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as folder:
             path = Path(folder) / 'plan.gpkg'
-            create_planning_workspace(path, 'EPSG:5254', ['UIP'])
+            create_local_uip_workspace(path, 'EPSG:5254')
             layers = load_project_layers(path)
-            layer = next(item for item in layers if item.name() == 'plangml_uip_alan')
+            layer = next(item for item in layers if item.name() == 'uip-alanlar')
             lookup = next(item for item in layers if item.name() == 'uipPolygonTable')
             raw = next(lookup.getFeatures())['uip_fonksiyon']
             feature = QgsFeature(layer.fields())
@@ -316,10 +317,11 @@ class GuiTests(unittest.TestCase):
             expression = QgsExpression('represent_value("nizam")')
             self.assertFalse(expression.hasParserError())
             self.assertEqual(expression.evaluate(context), 'AYRIK')
+            # The MpyyUipDb template keeps its own map tip; the plugin does not overwrite it.
             rendered = QgsExpression.replaceExpressionText(layer.mapTipTemplate(), context)
-            self.assertIn('Ayrık', rendered)
-            self.assertNotIn('[%', rendered)
-            self.assertTurkish(re.sub(r'<[^>]+>', ' ', rendered))
+            if rendered:
+                self.assertNotIn('[%', rendered)
+                self.assertTurkish(re.sub(r'<[^>]+>', ' ', rendered))
             lookup_context = QgsExpressionContext()
             lookup_context.appendScopes(QgsExpressionContextUtils.globalProjectLayerScopes(lookup))
             lookup_context.setFeature(next(lookup.getFeatures()))

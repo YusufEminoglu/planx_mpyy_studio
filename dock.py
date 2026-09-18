@@ -2,9 +2,6 @@
 
 from qgis.PyQt.QtWidgets import QDockWidget
 
-from .core.cdp_styler import CDPStylerEngine
-from .core.msp_styler import MSPStylerEngine
-from .core.nip_styler import NIPStylerEngine
 from .core.plangml_styler import PlanGMLStylerEngine
 from .core.styler import MPYYStylerEngine
 
@@ -21,9 +18,6 @@ class MPYYDock(WorkbenchMixin, WorkflowFormsMixin, DockActionsMixin, QDockWidget
         self.setMinimumWidth(320)
         self.iface = iface
 
-        self.msp_engine = MSPStylerEngine()
-        self.cdp_engine = CDPStylerEngine()
-        self.nip_engine = NIPStylerEngine()
         self.plangml_engine = PlanGMLStylerEngine()
         self.mpyy_engine = MPYYStylerEngine()
         self._last_engine = None

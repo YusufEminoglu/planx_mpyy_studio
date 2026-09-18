@@ -15,8 +15,6 @@ gdal.UseExceptions()
 from .schema import (
     LAND_TABLES,
     LAND_USE_CLASSES,
-    PLAN_LEVEL_CODES,
-    PLAN_LEVELS,
     SAHA_CATI_KODLARI,
     SAHA_HASAR_KODLARI,
     SAHA_ISITMA_KODLARI,
@@ -24,8 +22,6 @@ from .schema import (
     SAHA_PARSEL_DURUM_KODLARI,
     SAHA_YAPI_CINS_KODLARI,
     SCHEMA_VERSION,
-    planning_tables,
-    selected_tables,
 )
 
 
@@ -44,39 +40,9 @@ def _quote(name: str) -> str:
     return f'"{cleaned}"'
 
 
-def _msp_rows():
-    path = Path(__file__).resolve().parents[1] / "styles" / "msp_catalog.json"
-    if path.exists():
-        return json.loads(path.read_text(encoding="utf-8")).get("rows", [])
-    return []
 
 
-def _uip_lookups():
-    path = Path(__file__).resolve().parents[1] / "styles" / "uip_lookup_tables.json"
-    if path.exists():
-        return json.loads(path.read_text(encoding="utf-8"))
-    return {"polygon_functions": [], "line_functions": []}
 
-
-def _nip_entries():
-    path = Path(__file__).resolve().parents[1] / "styles" / "nip_catalog.json"
-    if path.exists():
-        return json.loads(path.read_text(encoding="utf-8")).get("entries", [])
-    return []
-
-
-def _cdp_entries():
-    path = Path(__file__).resolve().parents[1] / "styles" / "cdp_catalog.json"
-    if path.exists():
-        return json.loads(path.read_text(encoding="utf-8")).get("entries", [])
-    return []
-
-
-def _mpyy_2026_symbols():
-    path = Path(__file__).resolve().parents[1] / "resources" / "mpyy_2026_additions.json"
-    if path.exists():
-        return json.loads(path.read_text(encoding="utf-8")).get("symbols", [])
-    return []
 
 
 def _read_qml(rel_path: str) -> str:
@@ -224,186 +190,7 @@ def _create(output_path, crs, tables, kind, levels=()):
             )
 
             # 3. If Planning workspace, add catalogs & lookups
-            if kind == "PLANLAMA":
-                con.execute(
-                    """CREATE TABLE mpyy_2026_gosterim_katalogu (
-                        symbol_code TEXT PRIMARY KEY,
-                        symbol_name TEXT NOT NULL,
-                        applicable_levels TEXT NOT NULL,
-                        effective_date TEXT NOT NULL,
-                        official_gazette_number TEXT NOT NULL
-                    )"""
-                )
-                con.execute(
-                    "INSERT INTO gpkg_contents(table_name,data_type,identifier) "
-                    "VALUES ('mpyy_2026_gosterim_katalogu','attributes','MPYY 2026 supplemental display catalog')"
-                )
-                symbol_rows = [
-                    (
-                        row.get("code", ""),
-                        row.get("name", ""),
-                        ",".join(row.get("levels", [])),
-                        "2026-01-22",
-                        "33145",
-                    )
-                    for row in _mpyy_2026_symbols()
-                    if row.get("code") and set(row.get("levels", [])) & set(levels)
-                ]
-                con.executemany(
-                    "INSERT INTO mpyy_2026_gosterim_katalogu VALUES (?,?,?,?,?)", symbol_rows
-                )
-
-                # MSP Catalog
-                if "MSP" in levels:
-                    con.execute(
-                        """CREATE TABLE mpyy_msp_katalogu (
-                            msp_catalog_id TEXT PRIMARY KEY,
-                            detay_sinifi TEXT NOT NULL,
-                            detay_alt_sinifi TEXT,
-                            gosterim TEXT,
-                            geometri TEXT NOT NULL,
-                            tarama_rgb TEXT,
-                            tarama_alpha INTEGER,
-                            sinir_rgb TEXT,
-                            stroke_width_mm REAL,
-                            stroke_desc TEXT,
-                            hatch_desc TEXT,
-                            source_pdf_page INTEGER NOT NULL
-                        )"""
-                    )
-                    con.execute(
-                        "INSERT INTO gpkg_contents(table_name,data_type,identifier) VALUES ('mpyy_msp_katalogu','attributes','MSP Annex 1e detail catalog')"
-                    )
-                    msp_data = [
-                        (
-                            r["id"],
-                            r["detay_adi"],
-                            r.get("detay_alt_sinifi", ""),
-                            r.get("gosterim", ""),
-                            r.get("geometri", "POLYGON"),
-                            r.get("tarama_rgb"),
-                            r.get("tarama_alpha", 255),
-                            r.get("sinir_rgb"),
-                            float(r.get("stroke_width_mm") or 0.3),
-                            r.get("stroke_desc", ""),
-                            r.get("hatch_desc", ""),
-                            int(r.get("page", 1)),
-                        )
-                        for r in _msp_rows()
-                    ]
-                    con.executemany("INSERT INTO mpyy_msp_katalogu VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", msp_data)
-
-                # CDP Catalog
-                if "CDP" in levels:
-                    con.execute(
-                        """CREATE TABLE mpyy_cdp_katalogu (
-                            layer_code TEXT PRIMARY KEY,
-                            tanim TEXT NOT NULL,
-                            kural_sayisi INTEGER NOT NULL
-                        )"""
-                    )
-                    con.execute(
-                        "INSERT INTO gpkg_contents(table_name,data_type,identifier) VALUES ('mpyy_cdp_katalogu','attributes','CDP E-Plan detail catalog')"
-                    )
-                    cdp_rows = [
-                        (e.get("layer_code", ""), e.get("layer_code", "").replace("_", " ").title(), len(e.get("rules", [])))
-                        for e in _cdp_entries() if e.get("layer_code")
-                    ]
-                    con.executemany("INSERT OR IGNORE INTO mpyy_cdp_katalogu VALUES (?,?,?)", cdp_rows)
-
-                # NIP Catalog
-                if "NIP" in levels:
-                    con.execute(
-                        """CREATE TABLE mpyy_nip_katalogu (
-                            layer_code TEXT PRIMARY KEY,
-                            tanim TEXT NOT NULL,
-                            is_notation BOOLEAN NOT NULL,
-                            kural_sayisi INTEGER NOT NULL
-                        )"""
-                    )
-                    con.execute(
-                        "INSERT INTO gpkg_contents(table_name,data_type,identifier) VALUES ('mpyy_nip_katalogu','attributes','NIP E-Plan and MNIP detail catalog')"
-                    )
-                    nip_rows = [
-                        (e.get("layer_code", ""), e.get("layer_code", "").replace("_", " ").title(), bool(e.get("is_notation")), len(e.get("rules", [])))
-                        for e in _nip_entries() if e.get("layer_code")
-                    ]
-                    con.executemany("INSERT OR IGNORE INTO mpyy_nip_katalogu VALUES (?,?,?,?)", nip_rows)
-
-                # If UIP is selected, create uipPolygonTable and uipLineTable
-                if "UIP" in levels:
-                    con.execute(
-                        """CREATE TABLE uipPolygonTable (
-                            fid INTEGER PRIMARY KEY AUTOINCREMENT,
-                            id1 INTEGER,
-                            ust_konu_grup TEXT,
-                            id2 INTEGER,
-                            uip_fonksiyon TEXT,
-                            id3 INTEGER,
-                            uip_tabaka TEXT
-                        )"""
-                    )
-                    con.execute(
-                        "INSERT INTO gpkg_contents(table_name,data_type,identifier) VALUES ('uipPolygonTable','attributes','UIP polygon function catalog')"
-                    )
-
-                    con.execute(
-                        """CREATE TABLE uipLineTable (
-                            fid INTEGER PRIMARY KEY AUTOINCREMENT,
-                            id1 TEXT,
-                            ust_konu_grup TEXT,
-                            id2 TEXT,
-                            uip_fonksiyon TEXT,
-                            id3 TEXT,
-                            uip_tabaka TEXT
-                        )"""
-                    )
-                    con.execute(
-                        "INSERT INTO gpkg_contents(table_name,data_type,identifier) VALUES ('uipLineTable','attributes','UIP line function catalog')"
-                    )
-
-                    lookups = _uip_lookups()
-                    poly_data = [
-                        (p.get("id1"), p.get("ust_konu_grup"), p.get("id2"), p.get("uip_fonksiyon"), p.get("id3"), p.get("uip_tabaka"))
-                        for p in lookups.get("polygon_functions", [])
-                    ]
-                    con.executemany("INSERT INTO uipPolygonTable(id1, ust_konu_grup, id2, uip_fonksiyon, id3, uip_tabaka) VALUES (?,?,?,?,?,?)", poly_data)
-
-                    line_data = [
-                        (
-                            line_item.get("id1"),
-                            line_item.get("ust_konu_grup"),
-                            line_item.get("id2"),
-                            line_item.get("uip_fonksiyon"),
-                            line_item.get("id3"),
-                            line_item.get("uip_tabaka"),
-                        )
-                        for line_item in lookups.get("line_functions", [])
-                    ]
-                    con.executemany("INSERT INTO uipLineTable(id1, ust_konu_grup, id2, uip_fonksiyon, id3, uip_tabaka) VALUES (?,?,?,?,?,?)", line_data)
-
-                    # Embed the MpyyUipDb drawing template definitions for the UIP layers.
-                    from .local_uip_workspace import TEMPLATE_DIR, template
-
-                    styles = template()["styles"]
-                    uip_styles = [
-                        ("plangml_uip_alan", "uip-alanlar"),
-                        ("plangml_uip_cizgi", "uip_cizgiler"),
-                        ("plangml_uip_notasyon", "uip-notasyonlar"),
-                        ("uipPolygonTable", "uipPolygonTable"),
-                        ("uipLineTable", "uipLineTable"),
-                    ]
-                    for target_layer, template_layer in uip_styles:
-                        qml_text = (TEMPLATE_DIR / styles[template_layer]["qml"]).read_text(encoding="utf-8")
-                        for old, new in (("uip-alanlar", "plangml_uip_alan"), ("uip_cizgiler", "plangml_uip_cizgi")):
-                            qml_text = qml_text.replace(f"'{old}'", f"'{new}'")
-                        con.execute(
-                            """INSERT INTO layer_styles(f_table_name, styleName, styleQML, useAsDefault, description)
-                               VALUES (?, ?, ?, 1, ?)""",
-                            (target_layer, target_layer, qml_text, 'MpyyUipDb çizim şablonu'),
-                        )
-
-            elif kind == "ARAZI_KULLANIMI":
+            if kind == "ARAZI_KULLANIMI":
                 # 1. Non-TUCBS Urban Land Use Code Dictionary (Mevcut Arazi Kullanımı Sözlüğü)
                 con.execute(
                     """CREATE TABLE IF NOT EXISTS saha_kullanim_kodlari (
@@ -771,62 +558,6 @@ def _create(output_path, crs, tables, kind, levels=()):
                         (view_name, view_ident),
                     )
 
-            elif kind == "PLANLAMA":
-                if "UIP" in levels:
-                    views_uip = [
-                        (
-                            "v_uip_fonksiyon_bilancosu",
-                            """CREATE VIEW IF NOT EXISTS v_uip_fonksiyon_bilancosu AS
-                            SELECT 
-                                COALESCE(uipfonksiyon, 'BELİRTİLMEMİŞ') AS plan_fonksiyonu,
-                                COALESCE(ustkonugrup, 'BELİRTİLMEMİŞ') AS ust_konu_grubu,
-                                COUNT(*) AS poligon_sayisi,
-                                ROUND(SUM(COALESCE(AlanM2, 0)), 2) AS toplam_alan_m2,
-                                ROUND(SUM(COALESCE(AlanM2, 0)) / 10000.0, 4) AS toplam_alan_ha
-                            FROM plangml_uip_alan
-                            GROUP BY uipfonksiyon, ustkonugrup
-                            ORDER BY toplam_alan_m2 DESC""",
-                            'UİP 1/1000 Fonksiyon Dağılımı ve Alan Bilançosu',
-                        ),
-                        (
-                            "v_uip_yol_kademelenmesi",
-                            """CREATE VIEW IF NOT EXISTS v_uip_yol_kademelenmesi AS
-                            SELECT 
-                                COALESCE(yolTipi, 'BELİRSİZ') AS yol_tipi,
-                                COALESCE(yolGenislik, 0) AS plan_genisligi_m,
-                                COUNT(*) AS cizgi_sayisi,
-                                ROUND(SUM(COALESCE("Uzunluk(m)", 0)), 2) AS toplam_uzunluk_m,
-                                ROUND(SUM(COALESCE("Uzunluk(m)", 0)) / 1000.0, 3) AS toplam_uzunluk_km
-                            FROM plangml_uip_cizgi
-                            GROUP BY yolTipi, yolGenislik
-                            ORDER BY plan_genisligi_m DESC""",
-                            'UİP 1/1000 Yol Kademelenmesi ve Metraj Bilançosu',
-                        ),
-                    ]
-                    for view_name, view_sql, view_ident in views_uip:
-                        con.execute(view_sql)
-                        con.execute(
-                            "INSERT INTO gpkg_contents(table_name,data_type,identifier) VALUES (?, 'attributes', ?)",
-                            (view_name, view_ident),
-                        )
-
-                if "NIP" in levels:
-                    v_nip_sql = """CREATE VIEW IF NOT EXISTS v_nip_yogunluk_ve_alan_dagilimi AS
-                    SELECT 
-                        COALESCE(fonksiyon_adi, 'BELİRTİLMEMİŞ') AS nazim_fonksiyon,
-                        COALESCE(yogunluk_kademesi, 'BELİRSİZ') AS yogunluk,
-                        COUNT(*) AS bolge_sayisi,
-                        ROUND(SUM(COALESCE(alan_m2, 0)), 2) AS toplam_alan_m2,
-                        ROUND(SUM(COALESCE(alan_m2, 0)) / 10000.0, 4) AS toplam_alan_ha
-                    FROM plangml_nip_alan
-                    GROUP BY fonksiyon_adi, yogunluk_kademesi
-                    ORDER BY toplam_alan_m2 DESC"""
-                    con.execute(v_nip_sql)
-                    con.execute(
-                        "INSERT INTO gpkg_contents(table_name,data_type,identifier) VALUES (?, 'attributes', ?)",
-                        ("v_nip_yogunluk_ve_alan_dagilimi", 'NİP 1/5000 Yoğunluk ve Alan Dağılım Bilançosu'),
-                    )
-
             integrity = con.execute("PRAGMA integrity_check").fetchone()[0]
             if integrity != "ok":
                 raise RuntimeError('Veritabanı bütünlüğü doğrulanamadı: ' + str(integrity))
@@ -847,23 +578,9 @@ def _create(output_path, crs, tables, kind, levels=()):
     return str(output)
 
 
-def create_planning_workspace(output_path, crs, plan_levels=None):
-    """Create a GeoPackage containing strictly isolated tables for the selected planning levels."""
-    levels = tuple(plan_levels or PLAN_LEVEL_CODES)
-    ordered = tuple(code for code, _, _ in PLAN_LEVELS if code in levels)
-    if not ordered:
-        raise ValueError('En az bir plan kademesi seçilmelidir')
-    return _create(output_path, crs, selected_tables(ordered), "PLANLAMA", ordered)
-
-
 def create_land_use_workspace(output_path, crs):
     """Create an independent Arazi Kullanımı GeoPackage containing TUCBS and field survey tables."""
     return _create(output_path, crs, LAND_TABLES, "ARAZI_KULLANIMI", ())
-
-
-def create_geopackage(output_path, crs, catalog_rows=None):
-    """Backward-compatible alias: creates all four PlanGML levels."""
-    return create_planning_workspace(output_path, crs, ("MSP", "CDP", "NIP", "UIP"))
 
 
 def read_dataset_info(path):

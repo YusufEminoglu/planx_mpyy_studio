@@ -1,6 +1,6 @@
 # PlanX MPYY Studio
 
-## Türkçe çalışma alanı — 2.6.1
+## Türkçe çalışma alanı — 2.7.0
 
 MPYY planlama iş akışları için QGIS eklentisi. Taşınabilir GeoPackage çalışma alanları, PlanGML/e-Plan ve yerel MPYY stilleri, plan denetimleri, saha araştırması ve rapor üretimini bir araya getirir.
 
@@ -9,7 +9,7 @@ Eklentiye ait arayüz **Türkçedir**: araç adları, yardım, parametreler, se�
 Panelin üç sekmesi vardır:
 
 - **Başlangıç:** çalışma alanı oluşturma, veri aktarma, biçimlendirme, karar inceleme ve teslim adımları.
-- **Araçlar:** 87 işlem algoritması ve iki panel aracı; kategori, arama, kaydedilen kısayollar ve son açılanlar.
+- **Araçlar:** 86 işlem algoritması ve iki panel aracı; kategori, arama, kaydedilen kısayollar ve son açılanlar.
 - **İşlem Kaydı:** yapılandırma açılışları ve sonuçlar; tam ayrıntıları kopyalayabilirsiniz.
 
 Araç seçildiğinde amacı, gerekli girdileri ve beklenen sonucu görürsünüz. **Aracı aç** yapılandırmayı açar; hesaplamayı İşlem Araç Kutusunda başlatırsınız. Hafif işler için **Kısa formu kullan** sonuçları mevcut projeye uygular. Geri dönüldüğünde girdiler korunur. Hedef katman seçimi başlangıçta boştur.

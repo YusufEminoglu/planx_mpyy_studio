@@ -19,15 +19,8 @@ class WorkflowFormsMixin:
         form_plan.addRow('Çalışma alanı koordinat sistemi', self.crs)
 
         self.scope = QComboBox()
-        self.scope.addItem('Tüm plan kademeleri', ("MSP", "CDP", "NIP", "UIP"))
-        for label, code in (
-            ('Mekânsal Strateji Planı (MSP)', "MSP"),
-            ('Çevre düzeni planı (ÇDP)', "CDP"),
-            ('Nazım imar planı (NİP)', "NIP"),
-            ('Uygulama imar planı (UİP)', "UIP"),
-        ):
-            self.scope.addItem(label, (code,))
         self.scope.addItem('Yerel UİP — MpyyUipDb çizim şablonu', "YEREL_UIP")
+        self.scope.addItem('Yerel NİP — MpyyNipDB çizim şablonu', "YEREL_NIP")
         for code, label in (("UIP", 'UİP'), ("NIP", 'NİP'), ("CDP", 'ÇDP')):
             self.scope.addItem(f'PlanGML 1.1.7 şeması — {label} (e-Plan XSD)', "PLANGML_XSD:" + code)
         form_plan.addRow('Plan kademesi', self.scope)

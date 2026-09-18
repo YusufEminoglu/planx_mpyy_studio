@@ -23,6 +23,7 @@ from qgis.core import (
     Qgis,
     QgsCentroidFillSymbolLayer,
     QgsFillSymbol,
+    QgsGeometryGeneratorSymbolLayer,
     QgsHashedLineSymbolLayer,
     QgsLineSymbol,
     QgsMarkerLineSymbolLayer,
@@ -255,6 +256,28 @@ def _added_symbol(symbol, key, level, geometry_type):
         symbol.appendSymbolLayer(middle)
 
 
+def _border(symbol, spec):
+    """Redraw a polygon boundary the way the catalog measures it: a line with a cross every interval."""
+    for index in reversed(range(symbol.symbolLayerCount())):
+        if symbol.symbolLayer(index).layerType() in ("MarkerLine", "SimpleLine"):
+            symbol.deleteSymbolLayer(index)  # the SLD's own attempt at this boundary
+    outline = _line(spec["color"], spec["width_mm"])
+    cross = QgsSimpleMarkerSymbolLayer(Qgis.MarkerShape.Cross2, spec["size_mm"])
+    cross.setSizeUnit(MM)
+    cross.setColor(_color(spec["color"]))
+    cross.setStrokeColor(_color(spec["color"]))
+    cross.setStrokeWidth(spec["width_mm"])
+    cross.setStrokeWidthUnit(MM)
+    marks = QgsMarkerLineSymbolLayer()
+    marks.setInterval(spec["interval_mm"])
+    marks.setIntervalUnit(MM)
+    marks.setSubSymbol(QgsMarkerSymbol([cross]))
+    for layer in (outline, marks):
+        generator = QgsGeometryGeneratorSymbolLayer.create({"geometryModifier": "boundary($geometry)", "SymbolType": "Line"})
+        generator.setSubSymbol(QgsLineSymbol([layer]))
+        symbol.appendSymbolLayer(generator)
+
+
 def apply_catalog_overrides(layer, level, type_name):
     """Correct the SLD-derived renderer of ``layer`` to the catalog.
 
@@ -276,6 +299,10 @@ def apply_catalog_overrides(layer, level, type_name):
             applied.append(f"{label}: s.{spec['page']} ölçüleri")
             redrawn.add(label)
         if current:
+            for key, spec in _specs("borders", level, type_name, label, include_borrowed=False):
+                if spec["kind"] == "cross" and geometry_type == Qgis.GeometryType.Polygon:
+                    _border(symbol, spec)
+                    applied.append(f"{label}: s.{spec['page']} sınır çizgisi")
             for key, spec in _specs("fills", level, type_name, label, include_borrowed=False):
                 for index in range(symbol.symbolLayerCount()):
                     if symbol.symbolLayer(index).layerType() == "SimpleFill":

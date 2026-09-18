@@ -14,13 +14,11 @@ from qgis.core import (
 from qgis.PyQt.QtXml import QDomDocument
 
 from .actions import attach_layer_actions
-from .cdp_styler import CDPStylerEngine
 from .db_factory import read_dataset_info
 from .fonts import register_mpyy_fonts
-from .msp_styler import MSPStylerEngine
-from .nip_styler import NIPStylerEngine
 from .localization import configure_localized_layer
 from .plangml_workspace import KIND as PLANGML_XSD_KIND, load_plangml_layers
+from .local_nip_workspace import KIND as LOCAL_NIP_KIND, load_local_nip_layers
 from .local_uip_workspace import (
     KIND as LOCAL_UIP_KIND,
     bind_function_relation,
@@ -29,16 +27,8 @@ from .local_uip_workspace import (
     template as uip_template,
 )
 
-# PlanGML workspace layer -> MpyyUipDb template layer whose definition it uses.
-UIP_TEMPLATE_TABLES = {
-    "plangml_uip_alan": "uip-alanlar",
-    "plangml_uip_cizgi": "uip_cizgiler",
-    "plangml_uip_notasyon": "uip-notasyonlar",
-    "uipPolygonTable": "uipPolygonTable",
-    "uipLineTable": "uipLineTable",
-}
-# Layer names referenced inside template expressions (overlay_intersects etc.).
-UIP_TEMPLATE_LAYER_NAMES = {"uip-alanlar": "plangml_uip_alan", "uip_cizgiler": "plangml_uip_cizgi"}
+# Tables of the MpyyUipDb drawing template, by their own names.
+UIP_TEMPLATE_TABLES = {"uipPolygonTable": "uipPolygonTable", "uipLineTable": "uipLineTable"}
 
 
 def _forms_dir() -> Path:
@@ -86,28 +76,10 @@ def apply_layer_style_and_form(layer: QgsVectorLayer) -> None:
     # 1. UIP layers use the frozen MpyyUipDb drawing template (form, dropdowns, symbology)
     template_table = UIP_TEMPLATE_TABLES.get(name) or (name if name in uip_template()["styles"] else None)
     if template_table:
-        import_template_style(layer, template_table, rename_layers=UIP_TEMPLATE_LAYER_NAMES)
+        import_template_style(layer, template_table)
         return
 
-    # 2. MSP Layers
-    if name.startswith("plangml_msp_"):
-        engine = MSPStylerEngine()
-        engine.apply(layer)
-        return
-
-    # 3. CDP Layers
-    elif name.startswith("plangml_cdp_"):
-        engine = CDPStylerEngine()
-        engine.apply(layer)
-        return
-
-    # 4. NIP Layers
-    elif name.startswith("plangml_nip_"):
-        engine = NIPStylerEngine()
-        engine.apply(layer)
-        return
-
-    # 5. Arazi Kullanımı Layers
+    # 2. Arazi Kullanımı Layers
     arazi_qmls = {
         "parsel_saha": fdir / "arazi" / "01_parsel_saha.qml",
         "Tucbs_1000_alan": fdir / "arazi" / "02_Tucbs_1000_alan.qml",
@@ -122,12 +94,12 @@ def apply_layer_style_and_form(layer: QgsVectorLayer) -> None:
 
 
 def setup_project_relations(project: QgsProject) -> None:
-    """Connect RelationReference for uipfonksiyon in plangml_uip_alan to uipPolygonTable."""
+    """Connect the MpyyUipDb template relations: uip-alanlar -> uipPolygonTable, uip_cizgiler -> uipLineTable."""
     alan_layer = None
     table_layer = None
 
     for layer in project.mapLayers().values():
-        if layer.name() == "plangml_uip_alan":
+        if layer.name() == "uip-alanlar":
             alan_layer = layer
         elif layer.name() == "uipPolygonTable":
             table_layer = layer
@@ -136,11 +108,11 @@ def setup_project_relations(project: QgsProject) -> None:
         template_relation = uip_template()["relations"][0]
         bind_function_relation(project, alan_layer, table_layer, template_relation["pairs"], template_relation["id"])
 
-    # Connect plangml_uip_cizgi and uipLineTable if both exist
+    # Connect uip_cizgiler and uipLineTable if both exist
     cizgi_layer = None
     line_table_layer = None
     for layer in project.mapLayers().values():
-        if layer.name() == "plangml_uip_cizgi":
+        if layer.name() == "uip_cizgiler":
             cizgi_layer = layer
         elif layer.name() == "uipLineTable":
             line_table_layer = layer
@@ -191,41 +163,24 @@ def load_project_layers(path: str | Path, project: QgsProject | None = None) -> 
     kind = info["workspace_kind"]
     if kind == LOCAL_UIP_KIND:
         return load_local_uip_layers(path, project, dataset_id)
+    if kind == LOCAL_NIP_KIND:
+        return load_local_nip_layers(path, project, dataset_id)
     if kind == PLANGML_XSD_KIND:
         return load_plangml_layers(path, project, dataset_id, info["plan_levels"][0])
 
     root = project.layerTreeRoot()
-    base_group_name = 'PlanGML Çalışma Alanı' if kind == "PLANLAMA" else 'Arazi Kullanımı ve Saha Anketi'
-    base_group = root.findGroup(base_group_name) or root.addGroup(base_group_name)
+    if kind != "ARAZI_KULLANIMI":
+        raise RuntimeError('Bu çalışma alanı türü artık desteklenmiyor: ' + str(kind))
+    base_group = root.findGroup('Arazi Kullanımı ve Saha Anketi') or root.addGroup('Arazi Kullanımı ve Saha Anketi')
 
-    from .schema import selected_tables, LAND_TABLES
-    tables = selected_tables(info["plan_levels"]) if kind == "PLANLAMA" else LAND_TABLES
+    from .schema import LAND_TABLES
+    tables = LAND_TABLES
 
     loaded_layers = []
     gpkg_str = str(Path(path).resolve())
 
     # Auto-load official catalog and domain lookup tables
-    if kind == "PLANLAMA":
-        cat_map = {
-            "MSP": [("mpyy_msp_katalogu", 'Mekânsal Strateji Planı (MSP)')],
-            "CDP": [("mpyy_cdp_katalogu", 'Çevre düzeni planı (ÇDP)')],
-            "NIP": [("mpyy_nip_katalogu", 'Nazım imar planı (NİP)')],
-            "UIP": [("uipPolygonTable", 'Uygulama imar planı (UİP)'), ("uipLineTable", 'Uygulama imar planı (UİP)')],
-        }
-        for lvl in info.get("plan_levels", []):
-            for lookup_tbl, grp_title in cat_map.get(lvl, []):
-                uri = f"{gpkg_str}|layername={lookup_tbl}"
-                tbl_layer = QgsVectorLayer(uri, lookup_tbl, "ogr")
-                if tbl_layer.isValid():
-                    tbl_layer.setCustomProperty("mpyy/dataset_id", dataset_id)
-                    if lookup_tbl in UIP_TEMPLATE_TABLES:
-                        # Its display expression is what the uipfonksiyon dropdown lists.
-                        apply_layer_style_and_form(tbl_layer)
-                    project.addMapLayer(tbl_layer, False)
-                    sub_group = base_group.findGroup(grp_title) or base_group.addGroup(grp_title)
-                    sub_group.addLayer(tbl_layer)
-                    loaded_layers.append(tbl_layer)
-    elif kind == "ARAZI_KULLANIMI":
+    if kind == "ARAZI_KULLANIMI":
         for lookup_tbl in ("saha_kullanim_kodlari",):
             uri = f"{gpkg_str}|layername={lookup_tbl}"
             tbl_layer = QgsVectorLayer(uri, lookup_tbl, "ogr")
@@ -248,17 +203,8 @@ def load_project_layers(path: str | Path, project: QgsProject | None = None) -> 
         apply_layer_style_and_form(layer)
         configure_layer_defaults(layer)
 
-        # Place into level sub-group
-        if kind == "PLANLAMA" and "_" in table_name:
-            lvl_code = table_name.split("_")[1].upper()
-            lvl_names = {"MSP": 'Mekânsal Strateji Planı (MSP)', "CDP": 'Çevre düzeni planı (ÇDP)', "NIP": 'Nazım imar planı (NİP)', "UIP": 'Uygulama imar planı (UİP)'}
-            lvl_group_name = lvl_names.get(lvl_code, lvl_code)
-            sub_group = base_group.findGroup(lvl_group_name) or base_group.addGroup(lvl_group_name)
-            project.addMapLayer(layer, False)
-            sub_group.addLayer(layer)
-        else:
-            project.addMapLayer(layer, False)
-            base_group.addLayer(layer)
+        project.addMapLayer(layer, False)
+        base_group.addLayer(layer)
 
         loaded_layers.append(layer)
 

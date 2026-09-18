@@ -40,73 +40,6 @@ from qgis.PyQt import QtGui
 from qgis.PyQt.QtCore import QMetaType
 
 
-class CreateWorkspace(LocalizedProcessingAlgorithm):
-    def name(self) -> str:
-        return "create_workspace"
-
-    def displayName(self) -> str:
-        return tool_text(self, 'title')
-
-    def group(self) -> str:
-        return tool_text(self, 'category')
-
-    def groupId(self) -> str:
-        return "workspace"
-
-    def shortHelpString(self) -> str:
-        return tool_text(self, 'help')
-
-    def createInstance(self):
-        return CreateWorkspace()
-
-    def initAlgorithm(self, config=None) -> None:
-        self.addParameter(QgsProcessingParameterCrs('KRS', 'Çalışma alanı koordinat sistemi'))
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                "LEVELS",
-                'Plan kademeleri',
-                options=[
-                    "Tüm Kademeler (MSP, ÇDP, NİP, UİP)",
-                    'Yalnız Implementation plan (UİP 1/1.000)',
-                    'Yalnız Master plan (NİP 1/5.000)',
-                    'Yalnız Environmental plan (ÇDP 1/50.000 - 1/100.000)',
-                    'Yalnız Spatial strategy plan (MSP 1/250.000 - 1/500.000)',
-                    "İmar Planları (NİP + UİP)",
-                ],
-                defaultValue=0,
-            )
-        )
-        self.addParameter(
-            QgsProcessingParameterFileDestination(
-                "OUTPUT", 'Çıktı katmanı', 'GeoPackage (*.gpkg)'
-            )
-        )
-
-    def processAlgorithm(self, parameters, context, feedback):
-        from .core.db_factory import create_planning_workspace
-
-        if feedback.isCanceled():
-            raise QgsProcessingException('İşlem iptal edildi.')
-        crs = self.parameterAsCrs(parameters, 'KRS', context)
-        path = self.parameterAsFileOutput(parameters, "OUTPUT", context)
-        level_opt = self.parameterAsEnum(parameters, "LEVELS", context)
-        level_map = {
-            0: ("MSP", "CDP", "NIP", "UIP"),
-            1: ("UIP",),
-            2: ("NIP",),
-            3: ("CDP",),
-            4: ("MSP",),
-            5: ("NIP", "UIP"),
-        }
-        selected_levels = level_map.get(level_opt, ("MSP", "CDP", "NIP", "UIP"))
-        try:
-            result = create_planning_workspace(path, crs, selected_levels)
-        except (ValueError, OSError, RuntimeError, sqlite3.Error) as error:
-            raise QgsProcessingException(str(error)) from error
-        feedback.pushInfo('PlanGML çalışma ortamı oluşturuldu: ' + result)
-        return {"OUTPUT": result}
-
-
 class CreateLandUseWorkspace(LocalizedProcessingAlgorithm):
     def name(self) -> str:
         return "create_land_use_workspace"
@@ -6813,7 +6746,6 @@ class MPYYProvider(QgsProcessingProvider):
         return QtGui.QIcon(str(icon_path)) if icon_path.exists() else QtGui.QIcon()
 
     def loadAlgorithms(self) -> None:
-        self.addAlgorithm(CreateWorkspace())
         self.addAlgorithm(CreateLandUseWorkspace())
         self.addAlgorithm(IngestVectorDatasetAlgorithm())
         self.addAlgorithm(ImportCadToPlanGMLAlgorithm())

@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.7.0] - 2026-09-18
+
+### Kaldırılan
+- **Eski MSP/ÇDP/NİP/UİP çalışma alanı şeması kaldırıldı.** `plangml_<kademe>_alan/cizgi/notasyon` tabloları gerçek PlanGML değildi: geometri türleri katalogla uyuşmuyordu, tekrar eden alanlar vardı ve öznitelik formlarında açılır liste yoktu. Bununla birlikte kaldırılanlar: `create_workspace` işlem algoritması (86 algoritma kaldı), MSP/ÇDP/NİP stil motorları, panelin plan kademesi seçenekleri ve bu şemaya bağlı testler. Kalan çalışma alanları: **PlanGML 1.1.7 şemaları**, **Yerel UİP (MpyyUipDb)**, **Yerel NİP (MpyyNipDB)** ve **Arazi kullanımı / saha anketi**.
+
+### Eklenen
+- **Yerel NİP çalışma alanı (MpyyNipDB 1/5.000 çizim şablonu).** Kullanıcının kendi GeoPackage'ındaki QGIS projesinden dondurulan katmanlar, stiller, formlar, 169 satırlık fonksiyon tablosu ve fonksiyon ilişkisi; `tools/extract_local_nip_template.py` ile üretilir. Yalnız çizim katmanları alınır: halihazır, meri plan katmanları, saha katmanı ve uydu servisi şablona girmez.
+- **Askeri yasak ve güvenlik bölgesi sınırı** Ek-1e s.24'e göre çizilir: 0,3 mm kırmızı çizgi, 7 mm'de bir 3 mm'lik çarpı ve sınır üzerinde AYB yazısı. SLD'den gelen kırmızı daireler kaldırıldı.
+
 ## [2.6.1] - 2026-09-18
 
 ### Düzeltilen

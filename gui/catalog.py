@@ -22,7 +22,7 @@ class ToolDescription:
 # Each row describes the user's task, its prerequisites and its result.
 _GROUPS = {
     'Çalışma alanı ve veri': (
-        ("create_workspace", 'Plan çalışma alanı oluştur', 'Bir veya birden fazla plan kademesi için taşınabilir veri seti oluşturur.', 'Koordinat sistemi, plan kademeleri ve yeni bir GeoPackage dosyası seçin.', 'Plan katmanlarını içeren GeoPackage dosyası.'),
+        ("create_workspace", 'Plan çalışma alanı oluştur', 'Yerel UİP çizim şablonundan ya da PlanGML 1.1.7 şemasından taşınabilir bir çalışma alanı üretir.', 'Koordinat sistemi ile çalışma alanı türünü (Yerel UİP veya PlanGML kademesi) ve yeni bir GeoPackage dosyası seçin.', 'Katmanları, formları ve gösterimi hazır GeoPackage dosyası.', False),
         ("create_land_use_workspace", 'Saha çalışma alanı oluştur', 'Arazi kullanım araştırmalarını plan kararlarından ayrı saklar.', 'Koordinat sistemi ve yeni bir GeoPackage dosyası seçin.', 'Arazi kullanımı ve saha katmanlarını içeren GeoPackage dosyası.'),
         ("ingest_vector_dataset", 'Vektör veri içe aktar', 'Mevcut CBS veya CAD vektörlerini çalışma alanına aktarır.', 'Kaynak vektör katmanı ve hedef GeoPackage katmanı.', 'Aktarılan nesneler ve içe aktarma özeti.'),
         ("import_cad_to_plangml", 'CAD tabakalarını PlanGML çalışma alanına aktar', 'CAD/NCZ tabaka adlarını PlanGML 1.1.7 nesne tiplerine ve kodlarına çevirerek çalışma alanına yazar; eşleşmeyen tabakaları raporlar.', 'Tabaka adı alanı olan CAD veya CBS vektör katmanı ve PlanGML 1.1.7 çalışma alanı.', 'PlanGML tablolarına yazılan nesneler ve tabaka bazında aktarım raporu.'),
