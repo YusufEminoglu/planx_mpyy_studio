@@ -59,6 +59,27 @@
     "Times New Roman",
     "Calibri"
   ],
+  "bundled_font_payload": {
+    "note": "The font_families list above is what the source XML references, not what the package ships. The package carries its own TTF payload under resources/fonts/; the measured inventory is below.",
+    "path": "resources/fonts",
+    "file_count": 131,
+    "family_count": 58,
+    "measurement": "QFontDatabase.addApplicationFont on every .ttf, then applicationFontFamilies; 0 files unreadable, so all 131 register.",
+    "free_licensed": {
+      "families": ["DejaVu Sans", "DejaVu Sans Mono", "DejaVu Serif", "DejaVu Math TeX Gyre"],
+      "file_count": 22,
+      "basis": "The DejaVu fonts carry the DejaVu / Bitstream Vera license, which permits redistribution."
+    },
+    "unverified": {
+      "family_count": 54,
+      "file_count": 109,
+      "plan_notation_families": 51,
+      "plan_notation_examples": ["CDP_10_1", "MCDP_25_10_1", "MNIP_10_1", "MUIP_10_1", "NIP_10_1", "UIP_10_1", "OG_V_1_1", "uygulama_imar_00", "nazim_imar_00", "yerlesim", "cevre_duzeni_plani_00", "mekansal_strateji_planlari_00", "mulga_uip_00_1"],
+      "marker_families": ["ESRI Default Marker", "Intelli Eplan Extra", "ISKI"],
+      "basis": "No license file, license header or attribution record accompanies any of the 131 files. The three marker families above are named after unrelated third parties; the rest are named after Turkish plan levels and authorities."
+    },
+    "distribution_status": "unverified; the package ships these files under the overall distribution_status above. This record states what the package contains, it does not assert a right to redistribute it."
+  },
   "source_ownership_evidence": "zero2cadgis/THIRD_PARTY_NOTICES.md attributes source database compilation to Yusuf Eminoğlu; XML contains no explicit license declaration.",
   "limitations": [
     "No legal conformity certification.",
