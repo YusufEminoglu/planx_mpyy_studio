@@ -18,8 +18,8 @@ Use **Ctrl+K** to search, arrow keys to select and **Enter** or **Alt+O** to ope
 
 The UI follows the QGIS application font and palette. Labels and buttons wrap in narrow docks; forms scroll vertically. See [GUI architecture](docs/GUI_ARCHITECTURE.md) for the review and reproducible visual checks.
 
-MPYY-compatible MPYY spatial planning studio. MPYY/e-Plan is the default
-symbology engine; local MPYY XML styles are selectable alternatives.
+MPYY spatial planning studio. MPYY/e-Plan is the default symbology engine;
+local MPYY XML styles are selectable alternatives.
 
 ## Workspaces
 
