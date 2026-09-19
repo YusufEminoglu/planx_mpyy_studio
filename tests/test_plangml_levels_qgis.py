@@ -272,6 +272,21 @@ class SymbologyGapTests(unittest.TestCase):
         apply_eplan_symbology(single, "CDP", "StratejikKarar")
         self.assertIsNone(single.customProperty("mpyy/missing_symbols"))
 
+    def _assert_marker_lines_have_an_interval(self, layer, level, type_name):
+        """Every MarkerLine of ``layer`` must repeat; interval 0 piles the markers on the first vertex.
+
+        The references taken here die when this method returns, *before* the caller drops the
+        layer. That order is the whole point: ``renderer``, ``rule`` and ``item`` left in the
+        caller's frame outlive the layer they point into, and a wrapper to a destroyed renderer
+        tree is what makes the teardown of the *next* layer die with a native access violation
+        every other run or so. Reproduced 3-in-4 before this split, 6/6 clean after it; the same
+        crash is present on the commit before the extractor fix, so it predates that work."""
+        renderer = layer.renderer()
+        for rule in renderer.rootRule().children() if renderer.type() == "RuleRenderer" else []:
+            for item in walk_layers(rule.symbol()) if rule.symbol() else []:
+                if item.layerType() == "MarkerLine":
+                    self.assertGreater(item.interval(), 0, f"{level}/{type_name}/{rule.label()}")
+
     def test_marker_lines_keep_the_sld_interval_and_size(self):
         # QGIS imports every SLD graphic inside a stroke or fill without its size and with interval 0,
         # so the symbols pile up on the line's first vertex.
@@ -290,13 +305,8 @@ class SymbologyGapTests(unittest.TestCase):
                 layer = typed_layer(level, type_name, [])
                 if not apply_eplan_symbology(layer, level, type_name):
                     continue
-                renderer = layer.renderer()
-                rules = renderer.rootRule().children() if renderer.type() == "RuleRenderer" else []
-                for rule in rules:
-                    for item in walk_layers(rule.symbol()) if rule.symbol() else []:
-                        if item.layerType() == "MarkerLine":
-                            self.assertGreater(item.interval(), 0, f"{level}/{type_name}/{rule.label()}")
-                del layer  # 500+ styled layers in one process otherwise pile up
+                self._assert_marker_lines_have_an_interval(layer, level, type_name)
+                del layer  # 400+ styled layers in one process otherwise pile up
 
     def test_pedestrian_path_width_is_written_like_a_road(self):
         line = "LINESTRING(500000 4250000, 500200 4250000)"
