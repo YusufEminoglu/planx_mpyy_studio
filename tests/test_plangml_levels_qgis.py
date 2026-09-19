@@ -40,7 +40,6 @@ from planx_mpyy_studio.core.plangml_workspace import (  # noqa: E402
     apply_building_notation,
     apply_eplan_symbology,
     apply_line_labels,
-    installed_font_families,
     create_plangml_workspace,
     level_schema,
 )
@@ -149,22 +148,30 @@ class SymbologyGapTests(unittest.TestCase):
                 self.assertEqual(layer.customProperty("mpyy/symbology"), f"e-Plan SLD: {level}/{type_name}")
 
     def test_unpublished_svg_without_a_catalog_symbol_is_marked(self):
-        # YaylaTurizmi.svg (ÇDP) has no counterpart in the Ek-1e catalog (unlike its siblings --
-        # Günübirlik/Kış/Eko/Sağlık Turizmi all resolved to a real page): the gap stays visible.
+        # Every Turizm Alanı sub-type now resolves to a real Ek-1e page or a documented synthesis
+        # (Yayla Turizmi has no page at all, s.57 GTB/GTA/GTT short-code convention -> "YT"):
+        # confirm all six land on a RasterMarker, none fall back to the "?" placeholder.
         layer = typed_layer("CDP", "TurizmAlani", [])
         self.assertTrue(apply_eplan_symbology(layer, "CDP", "TurizmAlani"))
-        self.assertEqual(layer.customProperty("mpyy/missing_symbols"), "TaramaSembol SVG")
-        rule = next(r for r in layer.renderer().rootRule().children() if r.label() == "YAYLA_TURIZMI")
-        kinds = [layer_.layerType() for layer_ in walk_layers(rule.symbol())]
-        self.assertNotIn("SvgMarker", kinds)
-        self.assertIn("FontMarker", kinds)
-
-        # Ekoturizm/Günübirlik/Kış/Sağlık Turizmi *do* have a catalog page now -- confirm they
-        # resolved to the Ek-1e symbol, not the "?" placeholder.
-        for label in ("EKOTURIZM", "GUNUBIRLIK_TURIZM", "KIS_TURIZMI", "SAGLIK_TURIZMI"):
+        self.assertIsNone(layer.customProperty("mpyy/missing_symbols"))
+        for label in ("EKOTURIZM", "GUNUBIRLIK_TURIZM", "KIS_TURIZMI", "SAGLIK_TURIZMI", "YAYLA_TURIZMI"):
             rule = next(r for r in layer.renderer().rootRule().children() if r.label() == label)
             kinds = [layer_.layerType() for layer_ in walk_layers(rule.symbol())]
             self.assertIn("RasterMarker", kinds, label)
+
+        # The "unpublished SVG, no catalog symbol registered yet -> stays a visible gap, never a
+        # silent SvgMarker" mechanism itself: simulate a not-yet-catalogued placeholder by making
+        # the lookup miss for just this call, independent of which items are already fixed today.
+        from unittest.mock import patch
+
+        with patch("planx_mpyy_studio.core.plangml_catalog.symbol_for_svg", return_value=None):
+            layer2 = typed_layer("CDP", "TurizmAlani", [])
+            self.assertTrue(apply_eplan_symbology(layer2, "CDP", "TurizmAlani"))
+            self.assertEqual(layer2.customProperty("mpyy/missing_symbols"), "TaramaSembol SVG")
+            rule = next(r for r in layer2.renderer().rootRule().children() if r.label() == "YAYLA_TURIZMI")
+            kinds = [layer_.layerType() for layer_ in walk_layers(rule.symbol())]
+            self.assertNotIn("SvgMarker", kinds)
+            self.assertIn("FontMarker", kinds)
 
     def test_ministry_placeholder_glyph_is_treated_as_a_gap_not_a_real_character(self):
         # The Ministry's own SLD sometimes points a *installed* private font at codepoint 0x003f
@@ -182,10 +189,20 @@ class SymbologyGapTests(unittest.TestCase):
         apply_eplan_symbology(sosyal, "UIP", "SosyalKulturelAlan")
         rule = next(r for r in sosyal.renderer().rootRule().children() if r.label() == "KONGRE_SERGI_MERKEZI_ALANI")
         self.assertIn("RasterMarker", [l.layerType() for l in walk_layers(rule.symbol())])
+        # OZEL_SOSYAL_TESIS_ALANI, once a genuine gap, is now a documented synthesis too (s.124's
+        # own SOSYAL_TESIS_ALANI pictogram + "Ö", matching the catalog's own s.122/125 convention).
+        rule = next(r for r in sosyal.renderer().rootRule().children() if r.label() == "OZEL_SOSYAL_TESIS_ALANI")
+        self.assertIn("RasterMarker", [l.layerType() for l in walk_layers(rule.symbol())])
+        self.assertIsNone(sosyal.customProperty("mpyy/missing_symbols"))
 
-        # OZEL_SOSYAL_TESIS_ALANI genuinely has no Ek-1e page (unlike its base ALTYAPI cousin) --
-        # confirm the gap is still flagged, not silently rendered as a plain "?".
-        self.assertIn("Intelli Eplan", sosyal.customProperty("mpyy/missing_symbols") or "")
+        # The "installed font, literal '?' codepoint, no catalog symbol yet -> stays a visible gap"
+        # mechanism itself, independent of which specific glyphs are already fixed today.
+        from unittest.mock import patch
+
+        with patch("planx_mpyy_studio.core.plangml_catalog.symbol_for_glyph", return_value=None):
+            sosyal2 = typed_layer("UIP", "SosyalKulturelAlan", [])
+            apply_eplan_symbology(sosyal2, "UIP", "SosyalKulturelAlan")
+            self.assertIn("Intelli Eplan", sosyal2.customProperty("mpyy/missing_symbols") or "")
 
     def test_road_width_is_written_in_a_circle(self):
         line = "LINESTRING(500000 4250000, 500200 4250000)"
@@ -197,12 +214,16 @@ class SymbologyGapTests(unittest.TestCase):
         self.assertEqual((rule.minimumScale(), rule.filterExpression()), (2000, '"YolGenisligi" > 0'))
 
     def test_missing_private_symbol_font_is_marked_not_substituted(self):
-        # OZEL_*_TESIS_ALANI glyphs of Intelli Eplan have no catalog item; SOKAK_HAYVANLARI now uses the catalog symbol.
+        # Every "Intelli Eplan" glyph this SLD needs is now covered by a catalog substitute (the
+        # Özel Sosyal/Kültürel/Açık-Kapalı Spor Tesis Alanı synthesis badges) -- exercise the
+        # underlying "family not shipped, no catalog symbol -> flagged, DejaVu fallback, not a
+        # silently wrong glyph" mechanism directly, independent of which glyphs are fixed today.
+        from unittest.mock import patch
+
         layer = typed_layer("UIP", "SosyalKulturelAlan", [])
-        apply_eplan_symbology(layer, "UIP", "SosyalKulturelAlan")
-        if "Intelli Eplan" in installed_font_families():
-            self.skipTest("Intelli Eplan is installed on this machine")
-        self.assertEqual(layer.customProperty("mpyy/missing_symbols"), "Intelli Eplan")
+        with patch("planx_mpyy_studio.core.plangml_catalog.symbol_for_glyph", return_value=None):
+            apply_eplan_symbology(layer, "UIP", "SosyalKulturelAlan")
+        self.assertIn("Intelli Eplan", layer.customProperty("mpyy/missing_symbols") or "")
 
     def test_catalog_symbols_replace_unpublished_assets(self):
         symbols = json.loads((PLUGIN_ROOT / "styles" / "plangml_katalog" / "symbols.json").read_text(encoding="utf-8"))["symbols"]

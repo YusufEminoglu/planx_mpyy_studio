@@ -387,6 +387,66 @@
    "width_mm": 14.18,
    "height_mm": 16.51,
    "sha256": "57af55aafe888fd765c9fcd5d500a716167e84c7ee3d52d9e4824f220180bc4b"
+  },
+  "ozel_kulturel_tesis": {
+   "page": "sentez",
+   "title": "ÖZEL KÜLTÜREL TESİS ALANI (sentez: s.124 sembolü + s.125 'Ö' kuralı)",
+   "file": "resources/katalog_sembol/ozel_kulturel_tesis.png",
+   "pixels": [
+    360,
+    360
+   ],
+   "width_mm": 15.24,
+   "height_mm": 15.24,
+   "sha256": "278e6e367a890c71f1bcb711793c7c8b6127a278be8feb1a332ab77d713d16ef"
+  },
+  "ozel_sosyal_tesis": {
+   "page": "sentez",
+   "title": "ÖZEL SOSYAL TESİS ALANI (sentez: s.124 sembolü + s.125 'Ö' kuralı)",
+   "file": "resources/katalog_sembol/ozel_sosyal_tesis.png",
+   "pixels": [
+    360,
+    360
+   ],
+   "width_mm": 15.24,
+   "height_mm": 15.24,
+   "sha256": "dc8e023ca7d2a7ada85453bc92ef735c2e62420709285b59afd229c049a144dc"
+  },
+  "ozel_acik_spor_tesis": {
+   "page": "sentez",
+   "title": "ÖZEL AÇIK SPOR TESİSİ ALANI (sentez: s.126 sembolü + s.125 'Ö' kuralı)",
+   "file": "resources/katalog_sembol/ozel_acik_spor_tesis.png",
+   "pixels": [
+    360,
+    360
+   ],
+   "width_mm": 15.24,
+   "height_mm": 15.24,
+   "sha256": "2ec744eb8cdba4c957b4e236c4ddd7b70bef692c2edb74ef801edd1ff5872ccf"
+  },
+  "ozel_kapali_spor_tesis": {
+   "page": "sentez",
+   "title": "ÖZEL KAPALI SPOR TESİSİ ALAN (sentez: s.127 sembolü + s.125 'Ö' kuralı)",
+   "file": "resources/katalog_sembol/ozel_kapali_spor_tesis.png",
+   "pixels": [
+    360,
+    360
+   ],
+   "width_mm": 15.24,
+   "height_mm": 15.24,
+   "sha256": "84f1b44116fe5f88725367d8820bcad2932d6db1a44468950373b48de31449b8"
+  },
+  "yayla_turizmi": {
+   "page": "sentez",
+   "title": "YAYLA TURİZMİ (sentez: s.57 GTB/GTA/GTT kısa-kod kuralı, 'YT')",
+   "file": "resources/katalog_sembol/yayla_turizmi.png",
+   "pixels": [
+    360,
+    360
+   ],
+   "width_mm": 15.24,
+   "height_mm": 15.24,
+   "sha256": "4e939f69a9db560cae3a37b24c6848af58a0ccc1798460c43bbcf650c9481eeb"
   }
  }
 }

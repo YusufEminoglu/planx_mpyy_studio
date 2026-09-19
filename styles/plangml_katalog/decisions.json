@@ -264,6 +264,41 @@
    "glyphs": [
     "UIP_10_2#?"
    ]
+  },
+  "ozel_kulturel_tesis": {
+   "page": "sentez",
+   "title": "ÖZEL KÜLTÜREL TESİS ALANI (sentez: s.124 sembolü + s.125 'Ö' kuralı)",
+   "glyphs": [
+    "Intelli Eplan#D"
+   ]
+  },
+  "ozel_sosyal_tesis": {
+   "page": "sentez",
+   "title": "ÖZEL SOSYAL TESİS ALANI (sentez: s.124 sembolü + s.125 'Ö' kuralı)",
+   "glyphs": [
+    "Intelli Eplan#E"
+   ]
+  },
+  "ozel_acik_spor_tesis": {
+   "page": "sentez",
+   "title": "ÖZEL AÇIK SPOR TESİSİ ALANI (sentez: s.126 sembolü + s.125 'Ö' kuralı)",
+   "glyphs": [
+    "Intelli Eplan#C"
+   ]
+  },
+  "ozel_kapali_spor_tesis": {
+   "page": "sentez",
+   "title": "ÖZEL KAPALI SPOR TESİSİ ALAN (sentez: s.127 sembolü + s.125 'Ö' kuralı)",
+   "glyphs": [
+    "Intelli Eplan#B"
+   ]
+  },
+  "yayla_turizmi": {
+   "page": "sentez",
+   "title": "YAYLA TURİZMİ",
+   "svg": [
+    "YaylaTurizmi.svg"
+   ]
   }
  },
  "levels_scale": {
