@@ -16,8 +16,8 @@ Two things worth knowing before touching them:
   how the Ministry ships them. Qt detects the format from content, so they are
   left exactly as published rather than being re-encoded.
 - The file names are the Ministry's own UUIDs and are referenced by
-  `core/eplan_catalog.py`. Renaming one breaks the catalog; regenerate with
-  `tools/compile_eplan_catalog.py` instead.
+  `core/eplan_catalog.py`. Renaming one breaks the catalog, so leave them
+  exactly as published.
 
 Copyright and the basis for redistribution are recorded in
 [`THIRD_PARTY_NOTICES.md`](../../THIRD_PARTY_NOTICES.md).

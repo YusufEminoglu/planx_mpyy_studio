@@ -10,7 +10,7 @@ QGIS start-up reaches before any project is read.
 What this module does NOT claim: that a glyph renders correctly on a real
 desktop.  Headless font metrics are not the desktop's, so the end-to-end proof
 stays a manual run with the fonts uninstalled from the system (see
-``docs/TRAPS.md``).
+``docs/TRAPS.md`` in the monorepo root, one level above this plugin).
 """
 
 import os

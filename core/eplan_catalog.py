@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 """Official Turkish e-Plan symbology catalog (generated file).
 
-Compiled by ``tools/compile_eplan_catalog.py`` from the plan gösterimleri
-SLD style set published on the e-Plan portal of the T.C. Çevre, Şehircilik ve
-İklim Değişikliği Bakanlığı — Coğrafi Bilgi Sistemleri Genel Müdürlüğü
-(<https://eplan.csb.gov.tr/>). Do not edit by hand; re-run the compiler.
+Compiled from the plan gösterimleri SLD style set published on the e-Plan portal
+of the T.C. Çevre, Şehircilik ve İklim Değişikliği Bakanlığı — Coğrafi Bilgi
+Sistemleri Genel Müdürlüğü (<https://eplan.csb.gov.tr/>). Do not edit by hand.
+
+The generator that produced this module is not part of this plugin, so a
+regeneration has to start from the published SLD set itself.
 
 Maps normalized CAD tabaka tokens to resolved official style data per plan
 type: UIP (uygulama imar planı 1/1000), NIP (nazım imar planı 1/5000),

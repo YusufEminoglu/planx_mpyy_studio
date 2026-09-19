@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 """Official MPYY UİP tabaka catalog (generated file).
 
-Compiled by ``tools/compile_mpyy_catalog.py`` from the Mekânsal Planlar
-Yapım Yönetmeliği UİP database compiled and maintained by Yusuf Eminoğlu.
-Do not edit by hand; re-run the compiler.
+Compiled from the Mekânsal Planlar Yapım Yönetmeliği UİP database compiled and
+maintained by Yusuf Eminoğlu. Do not edit by hand.
+
+The generator that produced this module is not part of this plugin, so a
+regeneration has to start from that database itself.
 
 Gives each UİP tabaka its official identity — upper group and code, function
 and code — so the MPYY schema columns of an imported plan carry the
