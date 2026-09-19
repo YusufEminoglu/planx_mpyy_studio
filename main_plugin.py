@@ -49,6 +49,15 @@ class PlanXMPYYStudioPlugin:
                 )
 
     def initGui(self) -> None:
+        # Register the bundled fonts before anything else.  A font marker symbol
+        # layer resolves its QFont at the moment setFontFamily() is called, so a
+        # project restored without these fonts registered falls back to a
+        # substitute family and re-registering later does not repaint it.  A
+        # plugin loaded at QGIS start-up reaches this point before any project
+        # is read; registering from the readProject handler is already too late.
+        from .core.fonts import register_mpyy_fonts
+
+        register_mpyy_fonts()
         self.initProcessing()
         if self.action is not None:
             return
