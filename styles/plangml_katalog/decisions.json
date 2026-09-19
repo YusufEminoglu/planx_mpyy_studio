@@ -140,6 +140,9 @@
   "ekoturizm_kirsal": {
    "page": 77,
    "title": "EKOTURİZM/KIRSAL TURİZM",
+   "svg": [
+    "Ekoturizm.svg"
+   ],
    "glyphs": [
     "Intelli Eplan#G"
    ]
@@ -226,6 +229,41 @@
     "DogalKarakteriKorunacakAlan.svg"
    ],
    "spacing_mm": 10
+  },
+  "saglik_odakli_tatil_koyu": {
+   "page": 74,
+   "title": "SAĞLIK ODAKLI TATİL KÖYÜ",
+   "svg": [
+    "SaglikTurizmi.svg"
+   ]
+  },
+  "gunubirlik_tesis": {
+   "page": 76,
+   "title": "GÜNÜBİRLİK TESİS ALANI",
+   "svg": [
+    "GunubirlikTurizm.svg"
+   ]
+  },
+  "kis_sporlari_kayak": {
+   "page": 76,
+   "title": "KIŞ SPORLARI VE KAYAK TESİSİ ALANI",
+   "svg": [
+    "KisTurizmi.svg"
+   ]
+  },
+  "kongre_sergi_merkezi": {
+   "page": 128,
+   "title": "KONGRE VE SERGİ MERKEZİ ALANI",
+   "glyphs": [
+    "uygulama_imar_07_2#?"
+   ]
+  },
+  "kumsal_plaj": {
+   "page": 97,
+   "title": "KUMSAL-PLAJ",
+   "glyphs": [
+    "UIP_10_2#?"
+   ]
   }
  },
  "levels_scale": {

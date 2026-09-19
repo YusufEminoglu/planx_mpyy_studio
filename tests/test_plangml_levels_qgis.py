@@ -149,14 +149,43 @@ class SymbologyGapTests(unittest.TestCase):
                 self.assertEqual(layer.customProperty("mpyy/symbology"), f"e-Plan SLD: {level}/{type_name}")
 
     def test_unpublished_svg_without_a_catalog_symbol_is_marked(self):
-        # Ekoturizm.svg (ÇDP) has no counterpart in the Ek-1e catalog: the gap stays visible.
+        # YaylaTurizmi.svg (ÇDP) has no counterpart in the Ek-1e catalog (unlike its siblings --
+        # Günübirlik/Kış/Eko/Sağlık Turizmi all resolved to a real page): the gap stays visible.
         layer = typed_layer("CDP", "TurizmAlani", [])
         self.assertTrue(apply_eplan_symbology(layer, "CDP", "TurizmAlani"))
         self.assertEqual(layer.customProperty("mpyy/missing_symbols"), "TaramaSembol SVG")
-        rule = next(r for r in layer.renderer().rootRule().children() if r.label() == "EKOTURIZM")
+        rule = next(r for r in layer.renderer().rootRule().children() if r.label() == "YAYLA_TURIZMI")
         kinds = [layer_.layerType() for layer_ in walk_layers(rule.symbol())]
         self.assertNotIn("SvgMarker", kinds)
         self.assertIn("FontMarker", kinds)
+
+        # Ekoturizm/Günübirlik/Kış/Sağlık Turizmi *do* have a catalog page now -- confirm they
+        # resolved to the Ek-1e symbol, not the "?" placeholder.
+        for label in ("EKOTURIZM", "GUNUBIRLIK_TURIZM", "KIS_TURIZMI", "SAGLIK_TURIZMI"):
+            rule = next(r for r in layer.renderer().rootRule().children() if r.label() == label)
+            kinds = [layer_.layerType() for layer_ in walk_layers(rule.symbol())]
+            self.assertIn("RasterMarker", kinds, label)
+
+    def test_ministry_placeholder_glyph_is_treated_as_a_gap_not_a_real_character(self):
+        # The Ministry's own SLD sometimes points a *installed* private font at codepoint 0x003f
+        # ('?') -- their own marker for "we never mapped this glyph". Rendering that literally
+        # would look identical to a real character; it must be treated as a gap like a missing
+        # font, and substituted from the catalog where one is registered (Kumsal-Plaj, s.97;
+        # Kongre ve Sergi Merkezi Alanı, s.128).
+        kumsal = typed_layer("UIP", "KumsalPlaj", [])
+        apply_eplan_symbology(kumsal, "UIP", "KumsalPlaj")
+        self.assertIsNone(kumsal.customProperty("mpyy/missing_symbols"))
+        kinds = [l.layerType() for l in walk_layers(kumsal.renderer().rootRule().children()[0].symbol())]
+        self.assertIn("RasterMarker", kinds)
+
+        sosyal = typed_layer("UIP", "SosyalKulturelAlan", [])
+        apply_eplan_symbology(sosyal, "UIP", "SosyalKulturelAlan")
+        rule = next(r for r in sosyal.renderer().rootRule().children() if r.label() == "KONGRE_SERGI_MERKEZI_ALANI")
+        self.assertIn("RasterMarker", [l.layerType() for l in walk_layers(rule.symbol())])
+
+        # OZEL_SOSYAL_TESIS_ALANI genuinely has no Ek-1e page (unlike its base ALTYAPI cousin) --
+        # confirm the gap is still flagged, not silently rendered as a plain "?".
+        self.assertIn("Intelli Eplan", sosyal.customProperty("mpyy/missing_symbols") or "")
 
     def test_road_width_is_written_in_a_circle(self):
         line = "LINESTRING(500000 4250000, 500200 4250000)"
@@ -204,9 +233,12 @@ class SymbologyGapTests(unittest.TestCase):
         self.assertTrue(apply_eplan_symbology(power, "CDP", "EnerjiNakilHatti"))
         symbol = power.renderer().rootRule().children()[0].symbol()
         line = next(l for l in walk_layers(symbol, into_sub=False) if l.layerType() == "MarkerLine")
-        self.assertEqual((line.interval(), int(line.intervalUnit())), (15, int(Qgis.RenderUnit.MetersInMapUnits)))
+        # s.182: the SLD declares uom="...units/metre" here, but that is the Ministry's own
+        # mislabelling -- these are millimetre design values (a real 15m mark spacing on a power
+        # line symbol would be absurd), corrected by _fix_metre_uom_units/_unit_name.
+        self.assertEqual((line.interval(), int(line.intervalUnit())), (15, int(Qgis.RenderUnit.Millimeters)))
         marker = line.subSymbol().symbolLayer(0)
-        self.assertEqual((marker.size(), int(marker.sizeUnit())), (15, int(Qgis.RenderUnit.MetersInMapUnits)))
+        self.assertEqual((marker.size(), int(marker.sizeUnit())), (15, int(Qgis.RenderUnit.Millimeters)))
         for level in ("UIP", "NIP", "CDP", "MUIP", "MNIP"):
             for type_name in [t["name"] for t in all_levels()[level]["feature_types"] if t["geometry"]]:
                 layer = typed_layer(level, type_name, [])

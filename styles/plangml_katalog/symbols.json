@@ -327,6 +327,66 @@
    "height_mm": 1.15,
    "sha256": "0185ec7533f984df357bf275dc69f50f8bcdf7c52c3c89c9fd6cc1b4ed952370",
    "generated": true
+  },
+  "saglik_odakli_tatil_koyu": {
+   "page": 74,
+   "title": "SAĞLIK ODAKLI TATİL KÖYÜ",
+   "file": "resources/katalog_sembol/saglik_odakli_tatil_koyu.png",
+   "pixels": [
+    275,
+    285
+   ],
+   "width_mm": 11.64,
+   "height_mm": 12.06,
+   "sha256": "5fb63e2a7a5859fd946d53dfc38223cb93ff7128fbbc0525f4ccbcd53b072613"
+  },
+  "gunubirlik_tesis": {
+   "page": 76,
+   "title": "GÜNÜBİRLİK TESİS ALANI",
+   "file": "resources/katalog_sembol/gunubirlik_tesis.png",
+   "pixels": [
+    305,
+    305
+   ],
+   "width_mm": 12.91,
+   "height_mm": 12.91,
+   "sha256": "90aab09d9d6beaf6228e6c38d2b54b685894d2e6446389b3dcb3efc3e47ef7ac"
+  },
+  "kis_sporlari_kayak": {
+   "page": 76,
+   "title": "KIŞ SPORLARI VE KAYAK TESİSİ ALANI",
+   "file": "resources/katalog_sembol/kis_sporlari_kayak.png",
+   "pixels": [
+    330,
+    260
+   ],
+   "width_mm": 13.97,
+   "height_mm": 11.01,
+   "sha256": "cb54ba6350c21a282447f597cfdd2b3ed54a389fc4826d1359a20d5195488536"
+  },
+  "kongre_sergi_merkezi": {
+   "page": 128,
+   "title": "KONGRE VE SERGİ MERKEZİ ALANI",
+   "file": "resources/katalog_sembol/kongre_sergi_merkezi.png",
+   "pixels": [
+    295,
+    270
+   ],
+   "width_mm": 12.49,
+   "height_mm": 11.43,
+   "sha256": "d458908d4cc4e67873d2b0174a80e89172d71e0ec071b13b0052048c03612ab9"
+  },
+  "kumsal_plaj": {
+   "page": 97,
+   "title": "KUMSAL-PLAJ",
+   "file": "resources/katalog_sembol/kumsal_plaj.png",
+   "pixels": [
+    335,
+    390
+   ],
+   "width_mm": 14.18,
+   "height_mm": 16.51,
+   "sha256": "57af55aafe888fd765c9fcd5d500a716167e84c7ee3d52d9e4824f220180bc4b"
   }
  }
 }

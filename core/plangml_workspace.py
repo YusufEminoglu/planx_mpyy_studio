@@ -444,6 +444,9 @@ def apply_eplan_symbology(layer, level, type_name):
         root, symbols = None, [renderer.symbol()] if hasattr(renderer, "symbol") else []
         labels = ["*"] * len(symbols)
         setters = [renderer.setSymbol] * len(symbols)
+    for symbol in symbols:
+        if symbol is not None:
+            _fix_metre_uom_units(symbol)
     from .plangml_catalog import apply_catalog_overrides, raster_marker, symbol_for_glyph
 
     families = installed_font_families()
@@ -461,7 +464,11 @@ def apply_eplan_symbology(layer, level, type_name):
                 index = path[-1]
                 old = _owner_of(symbol, path).symbolLayer(index)
                 family, character, color = mark["font"][0], mark["font"][1], old.color()
-                if family not in families and symbol_for_glyph(family, character):
+                # 0x003f ('?') is the Ministry's own placeholder for a glyph they never mapped --
+                # it renders fine (the font family itself may well be installed), but a literal
+                # question mark is never the real design; only a catalog substitute fixes it.
+                unresolved = family not in families or character == "?"
+                if unresolved and symbol_for_glyph(family, character):
                     # Ek-1e catalog symbol of the same item instead of the unshipped glyph
                     replacement = raster_marker(symbol_for_glyph(family, character), old.size(), old.sizeUnit(), old.angle())
                     _owner_of(symbol, path).changeSymbolLayer(index, replacement)
@@ -474,6 +481,9 @@ def apply_eplan_symbology(layer, level, type_name):
                         # another font would draw a wrong symbol, so mark the gap instead.
                         missing.setdefault(label, set()).add(family)
                         family, character, color = "DejaVu Sans", "?", QColor("#8a8f96")
+                elif character == "?":
+                    missing.setdefault(label, set()).add(f"{family}#?")
+                    color = QColor("#8a8f96")
                 font = QgsFontMarkerSymbolLayer(family, character, old.size(), color, old.angle())
                 font.setSizeUnit(old.sizeUnit())
                 font.setStrokeWidth(0)
@@ -710,7 +720,10 @@ def _walk_symbol_element(symbol_element, marks):
 
 
 def _unit_name(mark):
-    return "RenderMetersInMapUnits" if mark["metre"] else "Pixel"
+    # The Ministry's SLD sometimes declares uom="...units/metre" on a symbolizer, taken here at
+    # face value as "this graphic's numbers are millimetres" rather than real ground metres -- see
+    # _fix_metre_uom_units for why (2.8344672 "metre" is exactly 1mm's point-equivalent).
+    return "MM" if mark["metre"] else "Pixel"
 
 
 def _set_option(layer_element, name, value):
@@ -732,7 +745,33 @@ def _set_option(layer_element, name, value):
 
 
 def _unit_of(mark):
-    return Qgis.RenderUnit.MetersInMapUnits if mark["metre"] else Qgis.RenderUnit.Pixels
+    return Qgis.RenderUnit.Millimeters if mark["metre"] else Qgis.RenderUnit.Pixels
+
+
+def _fix_metre_uom_units(symbol, _seen=None):
+    """The Ministry's SLD sometimes declares uom="...units/metre" on a Symbolizer (LineSymbolizer,
+    PointSymbolizer, TextSymbolizer): QGIS's own SLD importer honours that literally, so a border or
+    marker ends up sized in real ground metres -- a boundary line rendered 2.8 m thick regardless of
+    zoom, or a centre icon the size of a city block. The declared unit is the mistake, not QGIS's
+    reading of it: 2.8344672 "metre" is exactly 1 mm's point-equivalent (72/25.4), so every symbol
+    layer QGIS imported as MetersInMapUnits is corrected here to Millimeters, same number."""
+    if _seen is None:
+        _seen = set()
+    if id(symbol) in _seen:
+        return
+    _seen.add(id(symbol))
+    METERS, MM = Qgis.RenderUnit.MetersInMapUnits, Qgis.RenderUnit.Millimeters
+    for index in range(symbol.symbolLayerCount()):
+        layer = symbol.symbolLayer(index)
+        if hasattr(layer, "outputUnit") and layer.outputUnit() == METERS:
+            layer.setOutputUnit(MM)
+        if hasattr(layer, "strokeWidthUnit") and layer.strokeWidthUnit() == METERS:
+            layer.setStrokeWidthUnit(MM)
+        sub = layer.subSymbol()
+        if sub is not None:
+            _fix_metre_uom_units(sub, _seen)
+
+
 def _mark_missing_svg_symbols(symbol):
     """Markers pointing at the Ministry's unpublished TaramaSembol SVGs: the Ek-1e catalog symbol of
     the same item when there is one, otherwise a grey "?". True when a "?" was left."""
