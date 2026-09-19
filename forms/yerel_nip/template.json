@@ -266,27 +266,27 @@
  "styles": {
   "alanlar-5000": {
    "qml": "alanlar-5000.qml",
-   "sha256": "02320985af85d1b30b1adeec5436b2d264375df929a2d6d2ad084f2968221e07"
+   "sha256": "bc0a7ef7af3a3703d7b4476e27523f8c5a14550dff8dfc09c1d3e0a987bc97b3"
   },
   "cizgiler_5000_v2": {
    "qml": "cizgiler_5000_v2.qml",
-   "sha256": "1f3e6ad1ce5a418727bf36a68bd5ccae0508522777bb2b649046506e04086cbe"
+   "sha256": "0b987064bd712dcdaad49dcdafb3402306e33211d55741da273f83db9f164ba5"
   },
   "yollar_ve_Adalar_icin_cizgiler": {
    "qml": "yollar_ve_Adalar_icin_cizgiler.qml",
-   "sha256": "6f7eed641ea744de6ca288fcb70373cc6d454d46f4cc563f05610a579e81b725"
+   "sha256": "041f92c5081842ec306ac4185822df01cbd8f1871677e68fff42cbfe970c3f6c"
   },
   "yolgenisliksembol": {
    "qml": "yolgenisliksembol.qml",
-   "sha256": "afc9c03820f792958eab26537198149597554f5edd045b2c9744993ba5972cad"
+   "sha256": "abf5885a0374c6e7381405a59dfc1536a9c7626c9909ebc64317bde96b9630da"
   },
   "5000_revizyon_planonama_snr": {
    "qml": "5000_revizyon_planonama_snr.qml",
-   "sha256": "93d0b52a1254323532942acb48ef22a0261a2d0071d88c528d9941880325947b"
+   "sha256": "1b42dd1982c6fc49ccdd875f86ba1e3be4e9c5616bff618f89587a7d97e23520"
   },
   "fonksiyonlar-5000_tablo": {
    "qml": "fonksiyonlar-5000_tablo.qml",
-   "sha256": "2b316f6b51597ad381c7f1a402a3fd7f3d25d993527c093fded76d91f741bbac"
+   "sha256": "1c2d737662640ef3250c9d40ac557cd9ec47c453970bebc63fe9c5bb27dff967"
   }
  },
  "skipped": [

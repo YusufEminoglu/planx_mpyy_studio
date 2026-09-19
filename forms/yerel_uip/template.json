@@ -411,27 +411,27 @@
  "styles": {
   "uip-alanlar": {
    "qml": "uip-alanlar.qml",
-   "sha256": "2b8a3c03d23843164faa881130c5566a2201bd242514af4e0b32e6629c1dfe83"
+   "sha256": "4bdae0525a2a9441b55bea3164c81f285ef9cce29bc33cf8ccb169b83b4f9387"
   },
   "uip_cizgiler": {
    "qml": "uip_cizgiler.qml",
-   "sha256": "7c431c30d27fbb01b035bb28167a7642bdfc0be2f9724763b6751a3c22ad4edc"
+   "sha256": "34adcb4e3ac1dbfd41b0c7bb087ec5e68304bb6a1e3d1baf1899e1e7c30d6292"
   },
   "uip-notasyonlar": {
    "qml": "uip-notasyonlar.qml",
-   "sha256": "3a9501242717a4f8b061988db8e94caf2f4ceb3e057e124d138921f9bebcd44c"
+   "sha256": "702217735f5b163fead02466660bbc1bb0bcbd3afa71b9f9b5c7a59fbcd246cd"
   },
   "yapi_yaklasma": {
    "qml": "yapi_yaklasma.qml",
-   "sha256": "201345dcf323d2d5849d9da14754ba273f6d452b05e312c72209e121ce28200f"
+   "sha256": "f40229e556bde687f21002dd1b8b687355ef237d9b3ff2acdf21451de0e3bc6b"
   },
   "uipPolygonTable": {
    "qml": "uipPolygonTable.qml",
-   "sha256": "3e89d9d0ccf5b2dfccd5df9a8b4a5b01f25792896bb51c6743f733a7703c210e"
+   "sha256": "1a4c4402ba0b32522caeddcecf30745805e8b068781bce94537b53418ec71279"
   },
   "uipLineTable": {
    "qml": "uipLineTable.qml",
-   "sha256": "f47c77ce1a6572fded42cbf3cc577f5b4fe74c92f326c48d664eddcdb3acd070"
+   "sha256": "2e5ae9964159c3f15556723aa069601511013352ace1e0bff990849fe9567762"
   }
  },
  "deviations": [

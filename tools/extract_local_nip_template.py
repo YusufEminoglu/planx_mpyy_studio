@@ -115,7 +115,10 @@ def main(source):
         if error:
             raise SystemExit(f"{table}: {error}")
         target = OUT / (table + ".qml")
-        target.write_text(doc.toString(1), encoding="utf-8")
+        # newline="\n": the manifest hash must describe the bytes git stores. The repo is
+        # committed as LF (.gitattributes, * text=auto eol=lf); letting Windows translate to
+        # CRLF here would record a hash no clean checkout can ever reproduce.
+        target.write_text(doc.toString(1), encoding="utf-8", newline="\n")
         exported[table] = {"qml": target.name, "sha256": hashlib.sha256(target.read_bytes()).hexdigest()}
 
     relations = [
@@ -137,8 +140,8 @@ def main(source):
         "skipped": ["halihazir", "meri_5000_nokta", "meri_5000_cizgi", "meri_5000_alan", "meri_1000_alan",
                     "ak_ada_duzeyi_tahmini_calisan_sayisi", "Google Satellite", "cizgiler-5000"],
     }
-    (OUT / "template.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    (OUT / "lookups.json").write_text(json.dumps(lookups, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    (OUT / "template.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
+    (OUT / "lookups.json").write_text(json.dumps(lookups, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
     print("layers", len(exported), "lookup rows", {t: len(v["rows"]) for t, v in lookups.items()},
           "relations", len(relations))
     sys.stdout.flush()

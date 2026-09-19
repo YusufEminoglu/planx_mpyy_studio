@@ -119,7 +119,10 @@ def main(source):
         if error:
             raise SystemExit(f"{table}: {error}")
         target = OUT / (table + ".qml")
-        target.write_text(doc.toString(1), encoding="utf-8")
+        # newline="\n": the manifest hash must describe the bytes git stores. The repo is
+        # committed as LF (.gitattributes, * text=auto eol=lf); letting Windows translate to
+        # CRLF here would record a hash no clean checkout can ever reproduce.
+        target.write_text(doc.toString(1), encoding="utf-8", newline="\n")
         exported[table] = {"qml": target.name, "sha256": hashlib.sha256(target.read_bytes()).hexdigest()}
 
     relations = [
@@ -143,8 +146,8 @@ def main(source):
             "relation widget data source is rebound to the opened workspace at load time",
         ],
     }
-    (OUT / "template.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding="utf-8")
-    (OUT / "lookups.json").write_text(json.dumps(lookups, ensure_ascii=False, indent=1), encoding="utf-8")
+    (OUT / "template.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
+    (OUT / "lookups.json").write_text(json.dumps(lookups, ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
     print(json.dumps({k: v for k, v in manifest.items() if k != "tables"}, ensure_ascii=False, indent=1))
     project.clear()
     sys.stdout.flush()

@@ -13,7 +13,9 @@ def extract(source, output):
         )
         for style_id, table, qml in rows:
             safe = "".join(c if c.isalnum() or c in "-_" else "_" for c in table)
-            (output / f"{style_id:02d}_{safe}.qml").write_text(qml, encoding="utf-8")
+            # newline="\n": the repo is committed as LF (.gitattributes, * text=auto eol=lf),
+            # so a CRLF worktree file would only show up as a phantom modification.
+            (output / f"{style_id:02d}_{safe}.qml").write_text(qml, encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":
