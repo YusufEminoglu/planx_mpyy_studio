@@ -68,6 +68,6 @@ Kayıtlı bütün testler ve taramalar:
 py -3 packaging/pf.py verify planx_mpyy_studio
 ```
 
-[GUI mimarisi](docs/GUI_ARCHITECTURE.md) · [Önceki sürümlerin teknik geçmişi](docs/DEVELOPMENT_HISTORY.md) · [Değişiklik kaydı](CHANGELOG.md)
+[GUI mimarisi](docs/GUI_ARCHITECTURE.md) · [Değişiklik kaydı](CHANGELOG.md)
 
 **Yazar:** Yusuf Eminoğlu · **Lisans:** GPL-2.0-or-later
