@@ -464,12 +464,16 @@ def apply_eplan_symbology(layer, level, type_name):
                 index = path[-1]
                 old = _owner_of(symbol, path).symbolLayer(index)
                 family, character, color = mark["font"][0], mark["font"][1], old.color()
-                # 0x003f ('?') is the Ministry's own placeholder for a glyph they never mapped --
-                # it renders fine (the font family itself may well be installed), but a literal
-                # question mark is never the real design; only a catalog substitute fixes it.
-                unresolved = family not in families or character == "?"
-                if unresolved and symbol_for_glyph(family, character):
-                    # Ek-1e catalog symbol of the same item instead of the unshipped glyph
+                # The Ek-1e catalog is the authority, so its symbol of the same item replaces the
+                # SLD's own glyph wherever one is registered. That is the only repair for a family
+                # the Ministry never shipped (Intelli Eplan) and for their 0x003f "we never mapped
+                # this" marker (Kumsal-Plaj s.97, Kongre ve Sergi Merkezi s.128). 0x003f is *not*
+                # a placeholder in the rest of the pictogram fonts though -- there it is an
+                # ordinary slot holding a designed symbol, checked by rendering the face against
+                # the catalog: MUIP_10_1 draws s.12's İL SINIRI dash-dot there, UIP_10_1 s.142's
+                # arboretum trees, uygulama_imar_07_2 a "KSM" box, UIP_10_2 a beach parasol. With
+                # no catalog symbol registered the glyph is drawn as it stands, never greyed out.
+                if (family not in families or character == "?") and symbol_for_glyph(family, character):
                     replacement = raster_marker(symbol_for_glyph(family, character), old.size(), old.sizeUnit(), old.angle())
                     _owner_of(symbol, path).changeSymbolLayer(index, replacement)
                     continue
@@ -481,9 +485,6 @@ def apply_eplan_symbology(layer, level, type_name):
                         # another font would draw a wrong symbol, so mark the gap instead.
                         missing.setdefault(label, set()).add(family)
                         family, character, color = "DejaVu Sans", "?", QColor("#8a8f96")
-                elif character == "?":
-                    missing.setdefault(label, set()).add(f"{family}#?")
-                    color = QColor("#8a8f96")
                 font = QgsFontMarkerSymbolLayer(family, character, old.size(), color, old.angle())
                 font.setSizeUnit(old.sizeUnit())
                 font.setStrokeWidth(0)

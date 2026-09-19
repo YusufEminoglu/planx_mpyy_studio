@@ -315,78 +315,77 @@
    "height_mm": 2.79,
    "sha256": "f0992e5edd94c2c28166b9c9a03d961339e459af9eba86dc0bf2305cefe422b7"
   },
-  "havai_hat_istasyonu_tarama": {
-   "page": 171,
-   "title": "HAVAİ HAT İSTASYONU",
-   "file": "resources/katalog_sembol/havai_hat_istasyonu_tarama.png",
-   "pixels": [
-    500,
-    115
-   ],
-   "width_mm": 5,
-   "height_mm": 1.15,
-   "sha256": "0185ec7533f984df357bf275dc69f50f8bcdf7c52c3c89c9fd6cc1b4ed952370",
-   "generated": true
-  },
   "saglik_odakli_tatil_koyu": {
    "page": 74,
    "title": "SAĞLIK ODAKLI TATİL KÖYÜ",
    "file": "resources/katalog_sembol/saglik_odakli_tatil_koyu.png",
    "pixels": [
-    275,
-    285
+    243,
+    243
    ],
-   "width_mm": 11.64,
-   "height_mm": 12.06,
-   "sha256": "5fb63e2a7a5859fd946d53dfc38223cb93ff7128fbbc0525f4ccbcd53b072613"
+   "width_mm": 10.29,
+   "height_mm": 10.29,
+   "sha256": "b56a6286161d471b6797f2226ba83ec73f2ee889f2dfd059e6501cd56b68e1cd"
   },
   "gunubirlik_tesis": {
    "page": 76,
    "title": "GÜNÜBİRLİK TESİS ALANI",
    "file": "resources/katalog_sembol/gunubirlik_tesis.png",
    "pixels": [
-    305,
-    305
+    279,
+    279
    ],
-   "width_mm": 12.91,
-   "height_mm": 12.91,
-   "sha256": "90aab09d9d6beaf6228e6c38d2b54b685894d2e6446389b3dcb3efc3e47ef7ac"
+   "width_mm": 11.81,
+   "height_mm": 11.81,
+   "sha256": "1494ecd6b4e15330a40bdc5e23a32db79ab1b998b16b477cf5c915add9da3d41"
   },
   "kis_sporlari_kayak": {
    "page": 76,
    "title": "KIŞ SPORLARI VE KAYAK TESİSİ ALANI",
    "file": "resources/katalog_sembol/kis_sporlari_kayak.png",
    "pixels": [
-    330,
-    260
+    270,
+    226
    ],
-   "width_mm": 13.97,
-   "height_mm": 11.01,
-   "sha256": "cb54ba6350c21a282447f597cfdd2b3ed54a389fc4826d1359a20d5195488536"
+   "width_mm": 11.43,
+   "height_mm": 9.57,
+   "sha256": "e85cb54cd7d8c2c06e7e266739910ffc36bffc240c81877efefc6b9fe41a4ebd"
   },
   "kongre_sergi_merkezi": {
    "page": 128,
    "title": "KONGRE VE SERGİ MERKEZİ ALANI",
    "file": "resources/katalog_sembol/kongre_sergi_merkezi.png",
    "pixels": [
-    295,
-    270
+    276,
+    268
    ],
-   "width_mm": 12.49,
-   "height_mm": 11.43,
-   "sha256": "d458908d4cc4e67873d2b0174a80e89172d71e0ec071b13b0052048c03612ab9"
+   "width_mm": 11.68,
+   "height_mm": 11.35,
+   "sha256": "6e68f317f7a182cc3e00170bbf0870f108d45548a9b7d69f33d5ab34287f032d"
   },
   "kumsal_plaj": {
    "page": 97,
    "title": "KUMSAL-PLAJ",
    "file": "resources/katalog_sembol/kumsal_plaj.png",
    "pixels": [
-    335,
-    390
+    279,
+    350
    ],
-   "width_mm": 14.18,
-   "height_mm": 16.51,
-   "sha256": "57af55aafe888fd765c9fcd5d500a716167e84c7ee3d52d9e4824f220180bc4b"
+   "width_mm": 11.81,
+   "height_mm": 14.82,
+   "sha256": "847b71e8f5db1ec24a4222980e14fdc16e65218ee728706fc16648b1a9e6d6d7"
+  },
+  "yuksekogretim_tesis_alani": {
+   "page": 120,
+   "title": "YÜKSEK ÖĞRETİM ALANI",
+   "file": "resources/katalog_sembol/yuksekogretim_tesis_alani.png",
+   "pixels": [
+    244,
+    243
+   ],
+   "width_mm": 10.33,
+   "height_mm": 10.29,
+   "sha256": "f78f315e93d10cf6bdea2592ecbbfc6de3fd1daf0170183f6aa4dd4a116d756e"
   },
   "ozel_kulturel_tesis": {
    "page": "sentez",
@@ -436,6 +435,18 @@
    "height_mm": 15.24,
    "sha256": "84f1b44116fe5f88725367d8820bcad2932d6db1a44468950373b48de31449b8"
   },
+  "ozel_sosyal_kulturel_tesis": {
+   "page": "sentez",
+   "title": "ÖZEL SOSYAL KÜLTÜREL TESİS ALANI (sentez: MUIPE_10_2 'V' = 'STK' + s.125 'Ö' kuralı)",
+   "file": "resources/katalog_sembol/ozel_sosyal_kulturel_tesis.png",
+   "pixels": [
+    360,
+    360
+   ],
+   "width_mm": 15.24,
+   "height_mm": 15.24,
+   "sha256": "063c170c1249a1cb7ff977c506abe7d242ae07ca6c9b724f811f385eb7b02d4f"
+  },
   "yayla_turizmi": {
    "page": "sentez",
    "title": "YAYLA TURİZMİ (sentez: s.57 GTB/GTA/GTT kısa-kod kuralı, 'YT')",
@@ -447,6 +458,19 @@
    "width_mm": 15.24,
    "height_mm": 15.24,
    "sha256": "4e939f69a9db560cae3a37b24c6848af58a0ccc1798460c43bbcf650c9481eeb"
+  },
+  "havai_hat_istasyonu_tarama": {
+   "page": 171,
+   "title": "HAVAİ HAT İSTASYONU",
+   "file": "resources/katalog_sembol/havai_hat_istasyonu_tarama.png",
+   "pixels": [
+    500,
+    115
+   ],
+   "width_mm": 5,
+   "height_mm": 1.15,
+   "sha256": "0185ec7533f984df357bf275dc69f50f8bcdf7c52c3c89c9fd6cc1b4ed952370",
+   "generated": true
   }
  }
 }

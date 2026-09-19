@@ -265,6 +265,13 @@
     "UIP_10_2#?"
    ]
   },
+  "yuksekogretim_tesis_alani": {
+   "page": 120,
+   "title": "YÜKSEK ÖĞRETİM ALANI",
+   "glyphs": [
+    "Intelli Eplan#O"
+   ]
+  },
   "ozel_kulturel_tesis": {
    "page": "sentez",
    "title": "ÖZEL KÜLTÜREL TESİS ALANI (sentez: s.124 sembolü + s.125 'Ö' kuralı)",
@@ -291,6 +298,13 @@
    "title": "ÖZEL KAPALI SPOR TESİSİ ALAN (sentez: s.127 sembolü + s.125 'Ö' kuralı)",
    "glyphs": [
     "Intelli Eplan#B"
+   ]
+  },
+  "ozel_sosyal_kulturel_tesis": {
+   "page": "sentez",
+   "title": "ÖZEL SOSYAL KÜLTÜREL TESİS ALANI (sentez: MUIPE_10_2 'V' = 'STK' + s.125 'Ö' kuralı)",
+   "glyphs": [
+    "Intelli Eplan#V"
    ]
   },
   "yayla_turizmi": {

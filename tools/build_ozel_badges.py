@@ -1,4 +1,4 @@
-"""Draw the 7 small marker badges the Ek-1e catalog never printed a dedicated page for.
+"""Draw the small marker badges the Ek-1e catalog never printed a dedicated page for.
 
 Ozel Sosyal/Kulturel Tesis Alani ve Ozel Acik/Kapali Spor Tesisi Alani (UIP/NIP, Sosyal ve
 Kulturel Tesis Alanlari alt sinifi): the catalog's own convention for an "Ozel" (private) variant
@@ -8,6 +8,11 @@ Alani (s.125) both just reuse their box with a plain "O"/"OZEL" mark, nothing el
 the same SLD type (Sosyal/Kulturel/Acik Spor/Kapali Spor Tesisi Alani all have their own page and
 their own pictogram, s.124-127) -- reusing that sibling's own glyph with "O" added below it, split
 by a rule the way s.122/125 do, is a documented, non-guessed synthesis, not an invented symbol.
+
+Ozel Sosyal Kulturel Tesis Alani (MUIP, SosyalKulturelAlan; the M-series scale variant of the
+same map): identical situation one scale down -- its SLD rule asks the unshipped Intelli Eplan
+font for 'V', while the sibling Sosyal Kulturel Tesis Alani rule in that very same SLD draws the
+MUIPE_10_2 pictogram at 'V', a box around "STK". Same synthesis, same sibling.
 
 Yayla Turizmi (CDP TurizmAlani): the SLD points at an SVG the catalog never published, and there
 is no dedicated page for it at all (unlike Gunubirlik/Kis/Eko/Saglik Turizmi, which do have one --
@@ -96,6 +101,7 @@ def main():
     compose_ozel("ozel_sosyal_tesis.png", "uygulama_imar_03.ttf", "W")     # UIP Sosyal Tesis Alani
     compose_ozel("ozel_acik_spor_tesis.png", "uygulama_imar_02.ttf", "\"")  # UIP Acik Spor Tesisi Alani
     compose_ozel("ozel_kapali_spor_tesis.png", "UIP_10_2.ttf", "j")        # UIP Kapali Spor Tesisi Alan
+    compose_ozel("ozel_sosyal_kulturel_tesis.png", "MUIPE_10_2.ttf", "V")  # MUIP (bkz. modul docstring'i)
     compose_text("yayla_turizmi.png", "YT")
 
 

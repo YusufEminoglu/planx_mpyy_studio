@@ -173,12 +173,31 @@ class SymbologyGapTests(unittest.TestCase):
             self.assertNotIn("SvgMarker", kinds)
             self.assertIn("FontMarker", kinds)
 
-    def test_ministry_placeholder_glyph_is_treated_as_a_gap_not_a_real_character(self):
-        # The Ministry's own SLD sometimes points a *installed* private font at codepoint 0x003f
-        # ('?') -- their own marker for "we never mapped this glyph". Rendering that literally
-        # would look identical to a real character; it must be treated as a gap like a missing
-        # font, and substituted from the catalog where one is registered (Kumsal-Plaj, s.97;
-        # Kongre ve Sergi Merkezi Alanı, s.128).
+    def test_ministry_glyphs_on_codepoint_3f_are_drawn_unless_the_catalog_overrides_them(self):
+        # The Ministry's SLD points an *installed* pictogram font at codepoint 0x003f ('?') in a
+        # handful of rules. That is not their "we never mapped this glyph" marker: rendering
+        # MUIP_10_1/UIP_10_1/uygulama_imar_07_2/UIP_10_2 against the Ek-1e catalog at 600 dpi
+        # shows an ordinary designed slot there (İl Sınırı's dash-dot on MUIP_10_1, the arboretum
+        # tree group on UIP_10_1, a "KSM" box, a beach parasol). So the catalog is what decides:
+        # where it registers a symbol for that exact family+codepoint the symbol replaces the
+        # glyph (Kumsal-Plaj s.97, Kongre ve Sergi Merkezi Alanı s.128); everywhere else the
+        # glyph is drawn as it stands, never greyed out.
+        naive = ("MUIP", "IlSiniri", "MUIP_IL_SINIRI")
+        along = ("MUIP", "KentinGGBolgeSiniri", "MUIP_KENTIN_GG_BOLGE_SINIRI")
+        arboretum = ("MUIP", "AcikYesilAlan", "ARBORETUM_BOTANIK_PARKI")
+        for level, type_name, label in (naive, along, arboretum):
+            with self.subTest(type_name=type_name):
+                layer = typed_layer(level, type_name, [])
+                apply_eplan_symbology(layer, level, type_name)
+                self.assertIsNone(layer.customProperty("mpyy/missing_symbols"))
+                rule = next(r for r in layer.renderer().rootRule().children() if r.label() == label)
+                fonts = [l for l in walk_layers(rule.symbol()) if l.layerType() == "FontMarker"]
+                # Kentin GG Bölge Sınırı carries a "U" mark beside its "?" band, so only assert
+                # that the 0x003f slot itself is drawn in the family's own black, not greyed.
+                self.assertIn("?", {l.character() for l in fonts}, label)
+                self.assertTrue(all(l.color().name() == "#000000" for l in fonts), label)
+                self.assertNotIn("RasterMarker", [l.layerType() for l in walk_layers(rule.symbol())], label)
+
         kumsal = typed_layer("UIP", "KumsalPlaj", [])
         apply_eplan_symbology(kumsal, "UIP", "KumsalPlaj")
         self.assertIsNone(kumsal.customProperty("mpyy/missing_symbols"))
@@ -234,6 +253,12 @@ class SymbologyGapTests(unittest.TestCase):
             ("UIP", "AfetHizmetAlani", "AfetLojistikAlani"),  # TaramaSembol SVG, s.136
             ("UIP", "AcikYesilAlan", "MILLET_BAHCESI"),  # Intelli Eplan glyph, s.137
             ("CDP", "SitAlanlari", "KENTSEL_ARKEOLOJIK_SIT"),  # s.83
+            # M series (MUIP/MNIP and the other scale variants): the same "unshipped Intelli Eplan
+            # glyph, catalog has the real item" gap one scale down -- s.120 YÜKSEK ÖĞRETİM ALANI
+            # for Intelli Eplan#O, and the s.125 "Ö" convention over the sibling "STK" pictogram
+            # for Intelli Eplan#V.
+            ("MUIP", "EgitimTesisAlani", "YUKSEK_OGRETIM_TESIS_KAMPUS_ALANI"),
+            ("MUIP", "SosyalKulturelAlan", "OZEL_SOSYAL_KULTUREL_TESIS_ALANI"),
         )
         for level, type_name, label in cases:
             with self.subTest(type_name=type_name):

@@ -143,6 +143,7 @@ def band_hatch_tile(spec, pixels_per_mm=100):
 def main(pdf_path):
     document = fitz.open(pdf_path)
     decisions = json.loads(DECISIONS.read_text(encoding="utf-8"))
+    previous = json.loads(OUT_JSON.read_text(encoding="utf-8"))["symbols"] if OUT_JSON.exists() else {}
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     result = {
         "source": Path(pdf_path).name,
@@ -151,6 +152,26 @@ def main(pdf_path):
         "symbols": {},
     }
     for key, entry in decisions["symbols"].items():
+        if not isinstance(entry["page"], int):
+            # Synthesized badges (build_ozel_badges.py, "page": "sentez") have no catalog page to
+            # cut from. The PNG is drawn by that tool and only measured here; an earlier record is
+            # carried over as it stands so a rerun cannot drop or silently re-scale them.
+            target = OUT_DIR / f"{key}.png"
+            if not target.exists():
+                raise LookupError(f"{key}: sayfası sentez, resources/katalog_sembol altında PNG yok")
+            if key in previous:
+                result["symbols"][key] = previous[key]
+            else:
+                image = Image.open(target)
+                result["symbols"][key] = {
+                    "page": "sentez", "title": entry["title"], "file": f"resources/katalog_sembol/{key}.png",
+                    "pixels": list(image.size),
+                    "width_mm": round(image.size[0] / DPI * 25.4, 2),
+                    "height_mm": round(image.size[1] / DPI * 25.4, 2),
+                    "sha256": hashlib.sha256(target.read_bytes()).hexdigest(),
+                }
+            print(key, tuple(result["symbols"][key]["pixels"]), "sentez")
+            continue
         page = document[entry["page"] - 1]
         image, width_mm, height_mm = render(page, symbol_cell(page, entry["title"], entry.get("cell", "SEMBOL")))
         if "part" in entry:
@@ -177,7 +198,7 @@ def main(pdf_path):
             "sha256": hashlib.sha256(target.read_bytes()).hexdigest(), "generated": True,
         }
         print(key, image.size, "tile")
-    OUT_JSON.write_text(json.dumps(result, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    OUT_JSON.write_text(json.dumps(result, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":
