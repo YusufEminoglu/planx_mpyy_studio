@@ -1,6 +1,6 @@
 {
  "version": 1,
- "note": "Anlamsal eşleşme kararları. tools/compile_plangml_eplan_styles.py tarafından uygulanır; her karar gerekçesiyle son kontrole sunulur.",
+ "note": "Anlamsal eşleşme kararları. tools/compile_mpyy_eplan_styles.py tarafından uygulanır; her karar gerekçesiyle son kontrole sunulur.",
  "title_over_index": {
   "karar": "uygula",
   "gerekce": "Kural başlığı nesnenin adını taşır; sıra numarası Bakanlık SLD'lerinde bazı kod listelerinde kaymıştır (UİP OzelEkosistem, TopluTasimaHatti; ÇDP EnerjiUretim, KentselCalisma). Başlık, kodla birebir aynı anlamı veren tek bilgidir."
@@ -11,7 +11,7 @@
  },
  "unresolved_rules": {
   "karar": "atla",
-  "gerekce": "Bu kuralların gösterdiği kod (ilgili kod) ilgili kademenin PlanGML 1.1.7 kod listesinde yoktur; bu değeri taşıyan PlanGML nesnesi üretilemeyeceği için çizilecek nesne de yoktur."
+  "gerekce": "Bu kuralların gösterdiği kod (ilgili kod) ilgili kademenin MPYY 1.1.7 kod listesinde yoktur; bu değeri taşıyan MPYY nesnesi üretilemeyeceği için çizilecek nesne de yoktur."
  },
  "literal_rules": [
   {
@@ -39,7 +39,7 @@
    },
    "AraziKullanimiDevamEttirilerekKorunacakAlanlar": {
     "style": "NIP_ARAZI_KULLANIMI_KORUNACAK_ALAN",
-    "gerekce": "Bakanlık setinde stil adı 'ARAZI_KULLANIMI_KORUNACAK_ALAN'dır; filtre alanı arazi_koruma_kullanim_tip bu tipin AraziKorumaKullanimTip alanıdır (PlanGML 1.1.7'de eklenen tip)."
+    "gerekce": "Bakanlık setinde stil adı 'ARAZI_KULLANIMI_KORUNACAK_ALAN'dır; filtre alanı arazi_koruma_kullanim_tip bu tipin AraziKorumaKullanimTip alanıdır (MPYY 1.1.7'de eklenen tip)."
    },
    "KentselDonusumSinirlari": {
     "style": "NIP_KENTSEL_DONUSUM_SINIR",
@@ -63,13 +63,13 @@
    },
    "AraziKullanimiDevamEttirilerekKorunacakAlanlar": {
     "style": "UIP_ARAZI_KULLANIMI_KORUNACAK_ALAN",
-    "gerekce": "Bakanlık setinde stil adı 'ARAZI_KULLANIMI_KORUNACAK_ALAN'dır; filtre alanı arazi_koruma_kullanim_tip bu tipin AraziKorumaKullanimTip alanıdır (PlanGML 1.1.7'de eklenen tip)."
+    "gerekce": "Bakanlık setinde stil adı 'ARAZI_KULLANIMI_KORUNACAK_ALAN'dır; filtre alanı arazi_koruma_kullanim_tip bu tipin AraziKorumaKullanimTip alanıdır (MPYY 1.1.7'de eklenen tip)."
    }
   },
   "CDP": {
    "AraziKullanimiDevamEttirilerekKorunacakAlanlar": {
     "style": "CDP_ARAZI_KULLANIMI_KORUNACAK_ALAN",
-    "gerekce": "Bakanlık setinde stil adı 'ARAZI_KULLANIMI_KORUNACAK_ALAN'dır; filtre alanı arazi_koruma_kullanim_tip bu tipin AraziKorumaKullanimTip alanıdır (PlanGML 1.1.7'de eklenen tip)."
+    "gerekce": "Bakanlık setinde stil adı 'ARAZI_KULLANIMI_KORUNACAK_ALAN'dır; filtre alanı arazi_koruma_kullanim_tip bu tipin AraziKorumaKullanimTip alanıdır (MPYY 1.1.7'de eklenen tip)."
    }
   },
   "MUIP": {

@@ -3,7 +3,7 @@
 Earlier suites asserted that a form "has tabs" and a relation "is registered".
 Both stayed true while the dropdowns were broken: a generic form builder
 replaced the template's conditional tabs and wrote dropdown codes that the
-GeoPackage CHECK constraints reject, and the PlanGML renderer classified a
+GeoPackage CHECK constraints reject, and the MPYY renderer classified a
 field no form ever fills. These tests drive the real widgets and the real
 database instead.
 """
@@ -46,7 +46,7 @@ from planx_mpyy_studio.core.local_uip_workspace import (  # noqa: E402
     create_local_uip_workspace,
     template,
 )
-from planx_mpyy_studio.core.plangml_styler import PlanGMLStylerEngine  # noqa: E402
+from planx_mpyy_studio.core.mpyy_styler import MPYYStylerEngine  # noqa: E402
 from planx_mpyy_studio.core.project_binding import load_project_layers  # noqa: E402
 from planx_mpyy_studio.core.styler import MPYYStylerEngine  # noqa: E402
 

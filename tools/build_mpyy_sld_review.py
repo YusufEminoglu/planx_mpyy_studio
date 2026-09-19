@@ -1,9 +1,9 @@
 """Final-check workbook: every non-obvious SLD mapping with the decision already taken and why.
 
-    py -3 tools/build_plangml_sld_review.py <output.xlsx>
+    py -3 tools/build_mpyy_sld_review.py <output.xlsx>
 
 Rules whose code-list position and title agree are the Ministry's own mapping
-and are not listed. Everything else was decided in ``styles/plangml_sld/decisions.json``
+and are not listed. Everything else was decided in ``styles/mpyy_sld/decisions.json``
 and is listed here with its reason, so the author only marks an objection.
 """
 
@@ -18,7 +18,7 @@ from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 
 ROOT = Path(__file__).resolve().parents[1]
-SLD_DIR = ROOT / "styles" / "plangml_sld"
+SLD_DIR = ROOT / "styles" / "mpyy_sld"
 
 
 def main(output):
@@ -61,20 +61,20 @@ def main(output):
     guide = book.active
     guide.title = "Açıklama"
     for line in [
-        "PlanGML → resmî e-Plan gösterimi: son kontrol",
+        "MPYY → resmî e-Plan gösterimi: son kontrol",
         "",
         "Kararlar verildi ve uygulandı. Yalnız katılmadığınız satırda 'İtiraz' sütununu seçin, isterseniz 'Not' yazın.",
         "Listelenmeyen kurallar Bakanlığın kendi eşleşmesidir (sıra numarası ile kural başlığı aynı kodu gösteriyor).",
         "",
         f"Listelenen karar: {len(rows)}",
-        "Kaynaklar: PlanGML 1.1.7 XSD (eplan.csb.gov.tr), 'E-Plan SLD.zip' GeoServer stil seti, MPYY detay kataloğu.",
+        "Kaynaklar: MPYY 1.1.7 XSD (eplan.csb.gov.tr), 'E-Plan SLD.zip' GeoServer stil seti, MPYY detay kataloğu.",
     ]:
         guide.append([line])
     guide["A1"].font = Font(bold=True, size=14)
     guide.column_dimensions["A"].width = 120
 
     sheet = book.create_sheet("Son kontrol")
-    sheet.append(["Kademe", "PlanGML tipi", "SLD stili / kaynak", "Kural başlığı / tanım", "Sıra numarasının kodu",
+    sheet.append(["Kademe", "MPYY tipi", "SLD stili / kaynak", "Kural başlığı / tanım", "Sıra numarasının kodu",
                   "Uygulanan", "Karar", "Gerekçe", "İtiraz", "Not"])
     for cell in sheet[1]:
         cell.font = Font(bold=True, color="FFFFFF")

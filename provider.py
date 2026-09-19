@@ -6537,9 +6537,9 @@ class AnalyzeMPYYAccessibilityEquityAlgorithm(LocalizedProcessingAlgorithm):
         }
 
 
-class ImportCadToPlanGMLAlgorithm(LocalizedProcessingAlgorithm):
+class ImportCadToMPYYAlgorithm(LocalizedProcessingAlgorithm):
     def name(self) -> str:
-        return "import_cad_to_plangml"
+        return "import_cad_to_mpyy"
 
     def displayName(self) -> str:
         return tool_text(self, 'title')
@@ -6554,16 +6554,16 @@ class ImportCadToPlanGMLAlgorithm(LocalizedProcessingAlgorithm):
         return tool_text(self, 'help')
 
     def createInstance(self):
-        return ImportCadToPlanGMLAlgorithm()
+        return ImportCadToMPYYAlgorithm()
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFeatureSource("INPUT", "Girdi katmanı", [QgsProcessing.SourceType.TypeVectorAnyGeometry]))
         self.addParameter(QgsProcessingParameterField("TABAKA_FIELD", "Tabaka alanı", "Layer", "INPUT"))
-        self.addParameter(QgsProcessingParameterFile("WORKSPACE", "PlanGML çalışma alanı", extension="gpkg"))
+        self.addParameter(QgsProcessingParameterFile("WORKSPACE", "MPYY çalışma alanı", extension="gpkg"))
         self.addParameter(QgsProcessingParameterFileDestination("OUTPUT_REPORT", "Aktarım raporu", "CSV (*.csv)", optional=True))
 
     def processAlgorithm(self, parameters, context, feedback):
-        from .core.plangml_import import import_cad_layer, write_csv
+        from .core.mpyy_import import import_cad_layer, write_csv
 
         source = self.parameterAsVectorLayer(parameters, "INPUT", context)
         if source is None:
@@ -6578,7 +6578,7 @@ class ImportCadToPlanGMLAlgorithm(LocalizedProcessingAlgorithm):
         for row in report:
             if row["durum"] != "aktarıldı":
                 feedback.pushWarning(f'{row["tabaka"]} ({row["adet"]}): {row["durum"]}')
-        feedback.pushInfo(f'{written} nesne PlanGML tablolarına yazıldı; {sum(1 for r in report if r["aktarilan"])} tabaka eşleşti.')
+        feedback.pushInfo(f'{written} nesne MPYY tablolarına yazıldı; {sum(1 for r in report if r["aktarilan"])} tabaka eşleşti.')
         result = {"WRITTEN": written}
         path = self.parameterAsFileOutput(parameters, "OUTPUT_REPORT", context)
         if path:
@@ -6586,9 +6586,9 @@ class ImportCadToPlanGMLAlgorithm(LocalizedProcessingAlgorithm):
         return result
 
 
-class AuditPlanGMLWorkspaceAlgorithm(LocalizedProcessingAlgorithm):
+class AuditMPYYWorkspaceAlgorithm(LocalizedProcessingAlgorithm):
     def name(self) -> str:
-        return "audit_plangml_workspace"
+        return "audit_mpyy_workspace"
 
     def displayName(self) -> str:
         return tool_text(self, 'title')
@@ -6603,20 +6603,20 @@ class AuditPlanGMLWorkspaceAlgorithm(LocalizedProcessingAlgorithm):
         return tool_text(self, 'help')
 
     def createInstance(self):
-        return AuditPlanGMLWorkspaceAlgorithm()
+        return AuditMPYYWorkspaceAlgorithm()
 
     def initAlgorithm(self, config=None):
-        self.addParameter(QgsProcessingParameterFile("WORKSPACE", "PlanGML çalışma alanı", extension="gpkg"))
+        self.addParameter(QgsProcessingParameterFile("WORKSPACE", "MPYY çalışma alanı", extension="gpkg"))
         self.addParameter(QgsProcessingParameterEnum("PLAN_LEVEL", "Plan kademesi", options=["Dosyadan oku", "UIP", "NIP", "CDP"], defaultValue=0))
         self.addParameter(QgsProcessingParameterFileDestination("OUTPUT_REPORT", "Denetim raporu", "CSV (*.csv)"))
 
     def processAlgorithm(self, parameters, context, feedback):
-        from .core.plangml_import import audit_plangml_workspace, write_csv
+        from .core.mpyy_import import audit_mpyy_workspace, write_csv
 
         workspace = self.parameterAsFile(parameters, "WORKSPACE", context)
         level = [None, "UIP", "NIP", "CDP"][self.parameterAsEnum(parameters, "PLAN_LEVEL", context)]
         try:
-            findings = audit_plangml_workspace(workspace, level)
+            findings = audit_mpyy_workspace(workspace, level)
         except (ValueError, RuntimeError, sqlite3.Error) as error:
             raise QgsProcessingException(str(error)) from error
         counts = {}
@@ -6625,14 +6625,14 @@ class AuditPlanGMLWorkspaceAlgorithm(LocalizedProcessingAlgorithm):
         for problem, count in sorted(counts.items()):
             feedback.pushWarning(f"{problem}: {count}")
         if not findings:
-            feedback.pushInfo('PlanGML şemasına aykırı bulgu yok.')
+            feedback.pushInfo('MPYY şemasına aykırı bulgu yok.')
         path = write_csv(findings, self.parameterAsFileOutput(parameters, "OUTPUT_REPORT", context), ["katman", "fid", "sorun", "ayrinti"])
         return {"OUTPUT_REPORT": path, "FINDINGS": len(findings)}
 
 
-class ConvertPlanGMLLevelAlgorithm(LocalizedProcessingAlgorithm):
+class ConvertMPYYLevelAlgorithm(LocalizedProcessingAlgorithm):
     def name(self) -> str:
-        return "convert_plangml_level"
+        return "convert_mpyy_level"
 
     def displayName(self) -> str:
         return tool_text(self, 'title')
@@ -6647,17 +6647,17 @@ class ConvertPlanGMLLevelAlgorithm(LocalizedProcessingAlgorithm):
         return tool_text(self, 'help')
 
     def createInstance(self):
-        return ConvertPlanGMLLevelAlgorithm()
+        return ConvertMPYYLevelAlgorithm()
 
     def initAlgorithm(self, config=None):
-        self.addParameter(QgsProcessingParameterFile("WORKSPACE", "PlanGML çalışma alanı", extension="gpkg"))
+        self.addParameter(QgsProcessingParameterFile("WORKSPACE", "MPYY çalışma alanı", extension="gpkg"))
         self.addParameter(QgsProcessingParameterEnum("TARGET_LEVEL", "Hedef kademe", options=["NIP", "CDP"], defaultValue=0))
         self.addParameter(QgsProcessingParameterFileDestination("OUTPUT", "Çıktı katmanı", "GeoPackage (*.gpkg)"))
         self.addParameter(QgsProcessingParameterFileDestination("OUTPUT_REPORT", "Dönüşüm raporu", "CSV (*.csv)", optional=True))
 
     def processAlgorithm(self, parameters, context, feedback):
-        from .core.plangml_import import write_csv
-        from .core.plangml_level_conversion import convert_workspace
+        from .core.mpyy_import import write_csv
+        from .core.mpyy_level_conversion import convert_workspace
 
         source = self.parameterAsFile(parameters, "WORKSPACE", context)
         target_level = ["NIP", "CDP"][self.parameterAsEnum(parameters, "TARGET_LEVEL", context)]
@@ -6677,11 +6677,11 @@ class ConvertPlanGMLLevelAlgorithm(LocalizedProcessingAlgorithm):
         return result
 
 
-class ImportPlanGMLFileAlgorithm(LocalizedProcessingAlgorithm):
+class ImportMPYYFileAlgorithm(LocalizedProcessingAlgorithm):
     LEVELS = [None, "MUIP", "MNIP", "MCDP25", "MCDP100", "UIP", "NIP", "CDP"]
 
     def name(self) -> str:
-        return "import_plangml_gml"
+        return "import_mpyy_gml"
 
     def displayName(self) -> str:
         return tool_text(self, 'title')
@@ -6696,25 +6696,25 @@ class ImportPlanGMLFileAlgorithm(LocalizedProcessingAlgorithm):
         return tool_text(self, 'help')
 
     def createInstance(self):
-        return ImportPlanGMLFileAlgorithm()
+        return ImportMPYYFileAlgorithm()
 
     def initAlgorithm(self, config=None):
-        self.addParameter(QgsProcessingParameterFile("GML_FILE", "PlanGML GML dosyası", fileFilter="GML (*.gml *.xml)"))
+        self.addParameter(QgsProcessingParameterFile("GML_FILE", "MPYY GML dosyası", fileFilter="GML (*.gml *.xml)"))
         self.addParameter(QgsProcessingParameterEnum("GML_SCHEMA", "Şema", options=["Otomatik", "MUIP", "MNIP", "MCDP25", "MCDP100", "UIP", "NIP", "CDP"], defaultValue=0))
         self.addParameter(QgsProcessingParameterCrs("KRS", "Koordinat sistemi", optional=True))
         self.addParameter(QgsProcessingParameterFileDestination("OUTPUT", "Çıktı katmanı", "GeoPackage (*.gpkg)"))
         self.addParameter(QgsProcessingParameterFileDestination("OUTPUT_REPORT", "İçe aktarma raporu", "CSV (*.csv)", optional=True))
 
     def processAlgorithm(self, parameters, context, feedback):
-        from .core.plangml_gml import import_plangml_gml
-        from .core.plangml_import import write_csv
+        from .core.mpyy_gml import import_mpyy_gml
+        from .core.mpyy_import import write_csv
 
         path = self.parameterAsFile(parameters, "GML_FILE", context)
         level = self.LEVELS[self.parameterAsEnum(parameters, "GML_SCHEMA", context)]
         crs = self.parameterAsCrs(parameters, "KRS", context)
         output = self.parameterAsFileOutput(parameters, "OUTPUT", context)
         try:
-            result, summary, report = import_plangml_gml(path, output, level, crs if crs.isValid() else None, feedback, context.project())
+            result, summary, report = import_mpyy_gml(path, output, level, crs if crs.isValid() else None, feedback, context.project())
         except (ValueError, RuntimeError, OSError, sqlite3.Error) as error:
             raise QgsProcessingException(str(error)) from error
         feedback.pushInfo(f'Şema: {summary["sema"]} ({summary["belirleme"]}).')
@@ -6748,10 +6748,10 @@ class MPYYProvider(QgsProcessingProvider):
     def loadAlgorithms(self) -> None:
         self.addAlgorithm(CreateLandUseWorkspace())
         self.addAlgorithm(IngestVectorDatasetAlgorithm())
-        self.addAlgorithm(ImportCadToPlanGMLAlgorithm())
-        self.addAlgorithm(AuditPlanGMLWorkspaceAlgorithm())
-        self.addAlgorithm(ConvertPlanGMLLevelAlgorithm())
-        self.addAlgorithm(ImportPlanGMLFileAlgorithm())
+        self.addAlgorithm(ImportCadToMPYYAlgorithm())
+        self.addAlgorithm(AuditMPYYWorkspaceAlgorithm())
+        self.addAlgorithm(ConvertMPYYLevelAlgorithm())
+        self.addAlgorithm(ImportMPYYFileAlgorithm())
         self.addAlgorithm(CalculateBuildingEnvelopeAlgorithm())
         self.addAlgorithm(ExecuteCrosswalkAlgorithm())
         self.addAlgorithm(SynthesizeParcelDensityAlgorithm())

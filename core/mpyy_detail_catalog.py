@@ -11,7 +11,7 @@ corrects the QGIS symbols after the SLD has been loaded:
   bisiklet yolu) are drawn from those measurements;
 * fills and hatches: colours taken from the catalog swatches, hatches the SLD lacks.
 
-Every decision and its catalog page lives in ``styles/plangml_katalog/decisions.json``.
+Every decision and its catalog page lives in ``styles/mpyy_detail_catalog/decisions.json``.
 """
 
 import base64
@@ -37,7 +37,7 @@ from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QColor
 
 PLUGIN_ROOT = Path(__file__).resolve().parents[1]
-CATALOG_DIR = PLUGIN_ROOT / "styles" / "plangml_katalog"
+CATALOG_DIR = PLUGIN_ROOT / "styles" / "mpyy_detail_catalog"
 CURRENT_OF = {"MUIP": "UIP", "MNIP": "NIP", "MCDP25": "CDP", "MCDP100": "CDP"}
 MM = Qgis.RenderUnit.Millimeters
 MAP_METERS = Qgis.RenderUnit.MetersInMapUnits
@@ -411,7 +411,7 @@ def _hatch(symbol, spec, level, type_name, geometry_type):
 def _copied_symbol(address, geometry_type):
     from qgis.core import QgsVectorLayer
 
-    from .plangml_workspace import apply_eplan_symbology
+    from .mpyy_workspace import apply_eplan_symbology
 
     level, type_name, label = address.split("/", 2)
     kinds = {Qgis.GeometryType.Polygon: "MultiPolygon", Qgis.GeometryType.Line: "MultiLineString", Qgis.GeometryType.Point: "Point"}

@@ -1,4 +1,4 @@
-"""Bind canonical PlanGML and Arazi Kullanımı layers into a structured Turkish layer tree with authentic styles and forms."""
+"""Bind canonical MPYY and Arazi Kullanımı layers into a structured Turkish layer tree with authentic styles and forms."""
 
 import os
 from pathlib import Path
@@ -17,7 +17,7 @@ from .actions import attach_layer_actions
 from .db_factory import read_dataset_info
 from .fonts import register_mpyy_fonts
 from .localization import configure_localized_layer
-from .plangml_workspace import KIND as PLANGML_XSD_KIND, load_plangml_layers
+from .mpyy_workspace import KIND as MPYY_XSD_KIND, load_mpyy_layers
 from .local_nip_workspace import KIND as LOCAL_NIP_KIND, load_local_nip_layers
 from .local_uip_workspace import (
     KIND as LOCAL_UIP_KIND,
@@ -57,7 +57,7 @@ def configure_layer_defaults(layer: QgsVectorLayer) -> None:
             )
 
     pk_idx = _field_index(layer, "plan_kademesi")
-    if pk_idx >= 0 and layer.name().startswith("plangml_"):
+    if pk_idx >= 0 and layer.name().startswith("mpyy_"):
         level = layer.name().split("_")[1].upper()
         layer.setDefaultValueDefinition(pk_idx, QgsDefaultValue(f"'{level}'"))
 
@@ -165,8 +165,8 @@ def load_project_layers(path: str | Path, project: QgsProject | None = None) -> 
         return load_local_uip_layers(path, project, dataset_id)
     if kind == LOCAL_NIP_KIND:
         return load_local_nip_layers(path, project, dataset_id)
-    if kind == PLANGML_XSD_KIND:
-        return load_plangml_layers(path, project, dataset_id, info["plan_levels"][0])
+    if kind == MPYY_XSD_KIND:
+        return load_mpyy_layers(path, project, dataset_id, info["plan_levels"][0])
 
     root = project.layerTreeRoot()
     if kind != "ARAZI_KULLANIMI":

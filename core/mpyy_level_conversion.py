@@ -1,7 +1,7 @@
-"""Kademe dönüşümü: bir PlanGML 1.1.7 çalışma alanını üst kademeye (UİP → NİP → ÇDP) aktarır.
+"""Kademe dönüşümü: bir MPYY 1.1.7 çalışma alanını üst kademeye (UİP → NİP → ÇDP) aktarır.
 
-Rules come from ``styles/plangml_level_conversion.json`` (built by
-``tools/build_plangml_level_tables.py``). A source feature is identified by its
+Rules come from ``styles/mpyy_level_conversion.json`` (built by
+``tools/build_mpyy_level_tables.py``). A source feature is identified by its
 type and code (``Konut|KonutTip=YerlesikKonut``); the rule gives the target type
 and code. Codes a coarser plan must decide itself (density classes, the kind of
 education area) are left empty and listed in the report; the schema audit then
@@ -14,10 +14,10 @@ from pathlib import Path
 
 from qgis.core import QgsFeature, QgsVectorLayer
 
-from .plangml_import import FAMILY, workspace_level
-from .plangml_workspace import create_plangml_workspace, level_schema
+from .mpyy_import import FAMILY, workspace_level
+from .mpyy_workspace import create_mpyy_workspace, level_schema
 
-RULES_PATH = Path(__file__).resolve().parents[1] / "styles" / "plangml_level_conversion.json"
+RULES_PATH = Path(__file__).resolve().parents[1] / "styles" / "mpyy_level_conversion.json"
 ORDER = ("UIP", "NIP", "CDP")
 
 
@@ -43,7 +43,7 @@ def _identities(feature, feature_type):
 def convert_workspace(source_path, target_path, target_level, feedback=None):
     source_level = workspace_level(source_path)
     if source_level is None:
-        raise ValueError('Kaynak dosya PlanGML 1.1.7 çalışma alanı değil.')
+        raise ValueError('Kaynak dosya MPYY 1.1.7 çalışma alanı değil.')
     if ORDER.index(target_level) <= ORDER.index(source_level):
         raise ValueError('Hedef kademe kaynaktan daha üst ölçekli olmalıdır (UİP → NİP → ÇDP).')
     table = _rules(source_level, target_level)
@@ -57,7 +57,7 @@ def convert_workspace(source_path, target_path, target_level, feedback=None):
             if probe.isValid():
                 crs = probe.crs()
                 break
-    create_plangml_workspace(target_path, crs, target_level)
+    create_mpyy_workspace(target_path, crs, target_level)
 
     report, targets, batches = {}, {}, {}
     for step, feature_type in enumerate(source_types):

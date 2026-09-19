@@ -2,7 +2,7 @@
 
 Tests cover:
 - Workspace layer tree structure and Turkish group hierarchy.
-- Authentic PlanGML form binding, tab layout, and default value expressions.
+- Authentic MPYY form binding, tab layout, and default value expressions.
 - QgsRelation registration between uip-alanlar and uipPolygonTable.
 - Actions (Street View, TKGM, clipboard copy) and MapTip cards.
 - Land use survey tables with external photo resources.

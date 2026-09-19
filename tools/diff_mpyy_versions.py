@@ -1,6 +1,6 @@
-"""Human-readable difference report between two PlanGML XSD versions in one Ministry zip.
+"""Human-readable difference report between two MPYY XSD versions in one Ministry zip.
 
-    py -3 tools/diff_plangml_versions.py <planGMLShema_1_7.zip> 1.1.6 1.1.7 <output.md>
+    py -3 tools/diff_mpyy_versions.py <planGMLShema_1_7.zip> 1.1.6 1.1.7 <output.md>
 """
 
 import sys
@@ -8,7 +8,7 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from compile_plangml_schema import compile_level  # noqa: E402
+from compile_mpyy_schema import compile_level  # noqa: E402
 
 LEVELS = {"UIP": ("uip", "Uygulama imar planı"), "NIP": ("nip", "Nazım imar planı"), "CDP": ("cdp", "Çevre düzeni planı")}
 TYPE_NAMES = {"MultiPolygon": "alan", "Polygon": "alan", "LineString": "çizgi", "MultiLineString": "çizgi", "Point": "nokta", None: "tablo"}
@@ -96,9 +96,9 @@ def diff_level(old, new, lines):
 
 def main(archive, old_version, new_version, output):
     zip_file = zipfile.ZipFile(archive)
-    lines = [f"# PlanGML {old_version} → {new_version} farkları", "",
+    lines = [f"# MPYY {old_version} → {new_version} farkları", "",
              f"Kaynak: Bakanlık şema paketi `{Path(archive).name}` (eplan.csb.gov.tr). "
-             "Bu rapor `tools/diff_plangml_versions.py` ile XSD dosyalarından üretilmiştir.", ""]
+             "Bu rapor `tools/diff_mpyy_versions.py` ile XSD dosyalarından üretilmiştir.", ""]
     for level, (prefix, title) in LEVELS.items():
         old = compile_level(zip_file.read(f"{prefix}.V.{old_version}.xsd"))
         new = compile_level(zip_file.read(f"{prefix}.V.{new_version}.xsd"))

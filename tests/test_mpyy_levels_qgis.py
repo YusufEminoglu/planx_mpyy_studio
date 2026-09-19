@@ -30,17 +30,17 @@ from qgis.PyQt.QtCore import QSize  # noqa: E402
 APP = QgsApplication.instance() or QgsApplication([], True)
 APP.initQgis()
 
-from planx_mpyy_studio.core.plangml_catalog import catalog  # noqa: E402
-from planx_mpyy_studio.core.plangml_level_conversion import convert_workspace  # noqa: E402
-from planx_mpyy_studio.core.plangml_import import audit_plangml_workspace  # noqa: E402
-from planx_mpyy_studio.core.plangml_workspace import (  # noqa: E402
+from planx_mpyy_studio.core.mpyy_detail_catalog import catalog  # noqa: E402
+from planx_mpyy_studio.core.mpyy_level_conversion import convert_workspace  # noqa: E402
+from planx_mpyy_studio.core.mpyy_import import audit_mpyy_workspace  # noqa: E402
+from planx_mpyy_studio.core.mpyy_workspace import (  # noqa: E402
     PLUGIN_ROOT,
     SLD_DIR,
     all_levels,
     apply_building_notation,
     apply_eplan_symbology,
     apply_line_labels,
-    create_plangml_workspace,
+    create_mpyy_workspace,
     level_schema,
 )
 
@@ -64,7 +64,7 @@ def add(layer, values, wkt=SQUARE):
 
 class LineLabelTests(unittest.TestCase):
     def test_label_table_targets_exist_in_the_schema(self):
-        table = json.loads((PLUGIN_ROOT / "styles" / "plangml_line_labels.json").read_text(encoding="utf-8"))
+        table = json.loads((PLUGIN_ROOT / "styles" / "mpyy_line_labels.json").read_text(encoding="utf-8"))
         for level, rules in table["levels"].items():
             types = {t["name"]: {f["name"]: f for f in t["fields"]} for t in level_schema(level)["feature_types"]}
             for key, rule in rules.items():
@@ -164,7 +164,7 @@ class SymbologyGapTests(unittest.TestCase):
         # the lookup miss for just this call, independent of which items are already fixed today.
         from unittest.mock import patch
 
-        with patch("planx_mpyy_studio.core.plangml_catalog.symbol_for_svg", return_value=None):
+        with patch("planx_mpyy_studio.core.mpyy_detail_catalog.symbol_for_svg", return_value=None):
             layer2 = typed_layer("CDP", "TurizmAlani", [])
             self.assertTrue(apply_eplan_symbology(layer2, "CDP", "TurizmAlani"))
             self.assertEqual(layer2.customProperty("mpyy/missing_symbols"), "TaramaSembol SVG")
@@ -218,7 +218,7 @@ class SymbologyGapTests(unittest.TestCase):
         # mechanism itself, independent of which specific glyphs are already fixed today.
         from unittest.mock import patch
 
-        with patch("planx_mpyy_studio.core.plangml_catalog.symbol_for_glyph", return_value=None):
+        with patch("planx_mpyy_studio.core.mpyy_detail_catalog.symbol_for_glyph", return_value=None):
             sosyal2 = typed_layer("UIP", "SosyalKulturelAlan", [])
             apply_eplan_symbology(sosyal2, "UIP", "SosyalKulturelAlan")
             self.assertIn("Intelli Eplan", sosyal2.customProperty("mpyy/missing_symbols") or "")
@@ -240,12 +240,12 @@ class SymbologyGapTests(unittest.TestCase):
         from unittest.mock import patch
 
         layer = typed_layer("UIP", "SosyalKulturelAlan", [])
-        with patch("planx_mpyy_studio.core.plangml_catalog.symbol_for_glyph", return_value=None):
+        with patch("planx_mpyy_studio.core.mpyy_detail_catalog.symbol_for_glyph", return_value=None):
             apply_eplan_symbology(layer, "UIP", "SosyalKulturelAlan")
         self.assertIn("Intelli Eplan", layer.customProperty("mpyy/missing_symbols") or "")
 
     def test_catalog_symbols_replace_unpublished_assets(self):
-        symbols = json.loads((PLUGIN_ROOT / "styles" / "plangml_katalog" / "symbols.json").read_text(encoding="utf-8"))["symbols"]
+        symbols = json.loads((PLUGIN_ROOT / "styles" / "mpyy_detail_catalog" / "symbols.json").read_text(encoding="utf-8"))["symbols"]
         for key, entry in symbols.items():
             data = (PLUGIN_ROOT / entry["file"]).read_bytes()
             self.assertEqual(hashlib.sha256(data).hexdigest(), entry["sha256"], key)
@@ -615,7 +615,7 @@ class SymbologyGapTests(unittest.TestCase):
 
     def test_catalog_overrides_target_the_schemas_real_geometry_type(self):
         # The Ek-1e catalog's own "GEOMETRİ TİPİ" column is occasionally wrong (Mania Planı Alanı
-        # and Havaalanı Hava Koridoru say "ÇOKLU ÇİZGİ" but plangml_schema.json has them as
+        # and Havaalanı Hava Koridoru say "ÇOKLU ÇİZGİ" but mpyy_schema.json has them as
         # MultiPolygon) -- a "borders" entry keyed to a LineString type, or a line-only "vectors"
         # kind keyed to a polygon type, would silently never fire. Catch that for every entry.
         geometry = {
@@ -864,7 +864,7 @@ class LevelConversionTests(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         QgsProject.instance().clear()
         self.source = Path(self.tmp.name) / "uip.gpkg"
-        create_plangml_workspace(self.source, "EPSG:5254", "UIP")
+        create_mpyy_workspace(self.source, "EPSG:5254", "UIP")
         for type_name, values in (
             ("Konut", {"KonutTip": "YerlesikKonut", "Adi": "Konut 1", "Taks": 0.4, "KatAdedi": 4}),
             ("SitAlanlari", {"SitTip": "1DereceArkeolojikSit", "Adi": "Höyük"}),
@@ -893,7 +893,7 @@ class LevelConversionTests(unittest.TestCase):
             self.assertEqual(con.execute('SELECT MevcutKonutYogunluk FROM "MevcutKonut"').fetchall(), [(None,)])
             self.assertEqual(con.execute('SELECT SitTip FROM "SitAlanlari"').fetchall(), [("1DereceArkeolojikSit",)])
             self.assertEqual(con.execute('SELECT YesilTip FROM "AcikYesilAlan"').fetchall(), [("ParkVeYesilAlan",)])
-        audit = {(f["katman"], f["sorun"], f["ayrinti"]) for f in audit_plangml_workspace(target)}
+        audit = {(f["katman"], f["sorun"], f["ayrinti"]) for f in audit_mpyy_workspace(target)}
         self.assertIn(("MevcutKonut", "Zorunlu alan boş", "MevcutKonutYogunluk"), audit)
 
     def test_uip_to_cdp_and_direction_guard(self):

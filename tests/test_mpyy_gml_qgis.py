@@ -1,4 +1,4 @@
-"""PlanGML GML import (M series) from schema-conformant synthetic GML files.
+"""MPYY GML import (M series) from schema-conformant synthetic GML files.
 
 No real e-Plan GML sample is available; the files below follow the MUIP 1.1.6
 XSD element names, a GML 2 ``coordinates`` and a GML 3 ``posList`` encoding.
@@ -17,7 +17,7 @@ from qgis.core import QgsApplication, QgsCoordinateReferenceSystem, QgsProject, 
 APP = QgsApplication.instance() or QgsApplication([], True)
 APP.initQgis()
 
-from planx_mpyy_studio.core.plangml_gml import detect_level, import_plangml_gml, load_document  # noqa: E402
+from planx_mpyy_studio.core.mpyy_gml import detect_level, import_mpyy_gml, load_document  # noqa: E402
 
 HEADER = '<?xml version="1.0" encoding="UTF-8"?>\n'
 GML2 = HEADER + """<FeatureCollection xmlns="www.csb.gov.tr" xmlns:gml="http://www.opengis.net/gml"
@@ -69,7 +69,7 @@ GML3 = HEADER + """<FeatureCollection xmlns="www.csb.gov.tr" xmlns:gml="http://w
 """
 
 
-class PlanGMLFileImportTests(unittest.TestCase):
+class MPYYFileImportTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         QgsProject.instance().clear()
@@ -87,7 +87,7 @@ class PlanGMLFileImportTests(unittest.TestCase):
         source = self.write("plan.gml", GML2)
         self.assertEqual(detect_level(load_document(source))[0], "MUIP")
         output = Path(self.tmp.name) / "muip.gpkg"
-        _, summary, report = import_plangml_gml(source, output)
+        _, summary, report = import_mpyy_gml(source, output)
         self.assertEqual(summary["kademe"], "MUIP")
         self.assertEqual(summary["bilinmeyen_ogeler"], {"BilinmeyenTip": 1})
         rows = {r["tip"]: r for r in report}
@@ -115,7 +115,7 @@ class PlanGMLFileImportTests(unittest.TestCase):
         self.assertEqual(level, "MUIP")
         self.assertIn("YeniKod", reason)
         output = Path(self.tmp.name) / "gml3.gpkg"
-        _, summary, report = import_plangml_gml(source, output, crs=QgsCoordinateReferenceSystem("EPSG:5254"))
+        _, summary, report = import_mpyy_gml(source, output, crs=QgsCoordinateReferenceSystem("EPSG:5254"))
         self.assertEqual({r["tip"]: r["aktarilan"] for r in report}, {"Konut": 1, "YapiYaklasmaMes": 1})
         with sqlite3.connect(output) as con:
             self.assertEqual(con.execute('SELECT KonutTip FROM "Konut"').fetchall(), [("GelismeKonut",)])
@@ -127,7 +127,7 @@ class PlanGMLFileImportTests(unittest.TestCase):
     def test_explicit_schema_without_matching_types_is_refused(self):
         source = self.write("plan3.gml", GML3)
         with self.assertRaises(ValueError):
-            import_plangml_gml(source, Path(self.tmp.name) / "x.gpkg", level="MCDP100")
+            import_mpyy_gml(source, Path(self.tmp.name) / "x.gpkg", level="MCDP100")
         with self.assertRaises(ValueError):
             load_document(self.write("bozuk.gml", "<FeatureCollection>"))
 

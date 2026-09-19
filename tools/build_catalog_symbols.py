@@ -2,11 +2,11 @@
 
     py -3 tools/build_catalog_symbols.py "<20260122-...-Mekansal-Planlar-Detay-Kataloglari-....pdf>"
 
-For every entry in ``styles/plangml_katalog/decisions.json`` the catalog table whose
+For every entry in ``styles/mpyy_detail_catalog/decisions.json`` the catalog table whose
 title matches is found on the given page, its SEMBOL cell is rendered at 600 dpi (text
 symbols such as MB or KHA included, colour notes inside the cell blanked), near-white
 is made transparent, the result trimmed and written to ``resources/katalog_sembol``.
-``styles/plangml_katalog/symbols.json`` records page, title, pixel size, the drawn size
+``styles/mpyy_detail_catalog/symbols.json`` records page, title, pixel size, the drawn size
 in millimetres and sha256 of each file. Needs PyMuPDF and Pillow (developer only).
 """
 
@@ -22,8 +22,8 @@ import fitz
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-DECISIONS = ROOT / "styles" / "plangml_katalog" / "decisions.json"
-OUT_JSON = ROOT / "styles" / "plangml_katalog" / "symbols.json"
+DECISIONS = ROOT / "styles" / "mpyy_detail_catalog" / "decisions.json"
+OUT_JSON = ROOT / "styles" / "mpyy_detail_catalog" / "symbols.json"
 OUT_DIR = ROOT / "resources" / "katalog_sembol"
 DPI = 600
 

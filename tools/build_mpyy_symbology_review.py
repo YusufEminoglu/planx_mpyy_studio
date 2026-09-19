@@ -1,8 +1,8 @@
-"""Build the PlanGML → e-Plan symbology review workbook for the author to approve.
+"""Build the MPYY → e-Plan symbology review workbook for the author to approve.
 
-    py -3 tools/build_plangml_symbology_review.py <output.xlsx>
+    py -3 tools/build_mpyy_symbology_review.py <output.xlsx>
 
-One row per symbology unit: a PlanGML feature type and the value of its own
+One row per symbology unit: a MPYY feature type and the value of its own
 classifying code list (for example ``KentselCalisma.CalismaTip = TicaretAlani``);
 types without such a list are one unit. Shared lists that do not change the
 land-use legend (value kind, building order, ownership, plan kind, change
@@ -140,13 +140,13 @@ def swatch(level, key, catalog):
 
 
 def main(output):
-    schema = json.loads((ROOT / "styles" / "plangml_schema.json").read_text(encoding="utf-8"))
+    schema = json.loads((ROOT / "styles" / "mpyy_schema.json").read_text(encoding="utf-8"))
     catalog = load_catalog()
     book = Workbook()
     review = book.active
     review.title = "Onay listesi"
     headers = [
-        "Sıra", "Kademe", "PlanGML tipi", "Geometri", "Sınıflandırma alanı", "Kod", "Kod (okunur)",
+        "Sıra", "Kademe", "MPYY tipi", "Geometri", "Sınıflandırma alanı", "Kod", "Kod (okunur)",
         "Durum", "Öneri 1", "Öneri 2", "Öneri 3", "Renk (Öneri 1)", "Onay", "Diğer katalog anahtarı", "Not",
     ]
     review.append(headers)
@@ -155,7 +155,7 @@ def main(output):
         cell.fill = PatternFill("solid", fgColor="1F4E78")
         cell.alignment = Alignment(wrap_text=True, vertical="center")
     exact_sheet = book.create_sheet("Tam eşleşenler")
-    exact_sheet.append(["Kademe", "PlanGML tipi", "Sınıflandırma alanı", "Kod", "e-Plan anahtarı", "Etiket", "Renk"])
+    exact_sheet.append(["Kademe", "MPYY tipi", "Sınıflandırma alanı", "Kod", "e-Plan anahtarı", "Etiket", "Renk"])
 
     counts = {"TAM": 0, "BELİRSİZ": 0, "YOK": 0}
     row_number = 0
@@ -214,7 +214,7 @@ def main(output):
 
     guide = book.create_sheet("Nasıl onaylanır", 0)
     lines = [
-        "PlanGML → e-Plan gösterim eşleşmesi onay listesi",
+        "MPYY → e-Plan gösterim eşleşmesi onay listesi",
         "",
         f'Tam eşleşen: {counts["TAM"]} (ayrı sayfada, bilgi için)   Belirsiz: {counts["BELİRSİZ"]}   Eşleşmeyen: {counts["YOK"]}',
         "",
@@ -226,7 +226,7 @@ def main(output):
         "3. Öneriler yalnızca ortak kelimelere göre sıralanmıştır; doğruluğu garanti edilmez.",
         "4. Kaydedip dosya adını değiştirmeden bana haber verin.",
         "",
-        "Kaynaklar: PlanGML 1.1.7 XSD (eplan.csb.gov.tr) ve eklentideki e-Plan SLD kataloğu (core/eplan_catalog.py).",
+        "Kaynaklar: MPYY 1.1.7 XSD (eplan.csb.gov.tr) ve eklentideki e-Plan SLD kataloğu (core/eplan_catalog.py).",
     ]
     for line in lines:
         guide.append([line])

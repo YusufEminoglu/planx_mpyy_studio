@@ -1,14 +1,14 @@
-"""CAD tabaka → PlanGML 1.1.7 crosswalk for MPYY Studio.
+"""CAD tabaka → MPYY 1.1.7 crosswalk for MPYY Studio.
 
-    py -3 tools/build_plangml_tabaka_crosswalk.py <bundle .js> [<review.xlsx>]
+    py -3 tools/build_mpyy_tabaka_crosswalk.py <bundle .js> [<review.xlsx>]
 
 Source idea and rows: the author's own web application (tabaka tables
 composed per plan type: UIP = dee+Lw+mee, NIP = hee+Lw+pee, CDP = fee+Lw+gee).
 MPYY Studio keeps its own copy; nothing is shared with at runtime.
 
-Every row is validated against ``styles/plangml_schema.json``. A row that does
+Every row is validated against ``styles/mpyy_schema.json``. A row that does
 not fit its level is repaired only by these rules, in order, or left out:
-  1. feature_equivalents in styles/plangml_crosswalk_decisions.json (semantic, per level)
+  1. feature_equivalents in styles/mpyy_crosswalk_decisions.json (semantic, per level)
   2. field: the value belongs to exactly one other code list of the same type
   3. code: exactly one code of the list folds to the value (prefix / one typo)
   4. feature: exactly one type name of the level differs by one character
@@ -21,7 +21,7 @@ import unicodedata
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "styles" / "plangml_tabaka_crosswalk.json"
+OUT = ROOT / "styles" / "mpyy_tabaka_crosswalk.json"
 COMPOSE = {"UIP": ["dee", "Lw", "mee"], "NIP": ["hee", "Lw", "pee"], "CDP": ["fee", "Lw", "gee"]}
 
 
@@ -146,10 +146,10 @@ def repair(level, feature, attrs, schema, decisions):
 
 
 def main(bundle, review=None):
-    schema = json.loads((ROOT / "styles" / "plangml_schema.json").read_text(encoding="utf-8"))["levels"]
-    decisions = json.loads((ROOT / "styles" / "plangml_crosswalk_decisions.json").read_text(encoding="utf-8"))
+    schema = json.loads((ROOT / "styles" / "mpyy_schema.json").read_text(encoding="utf-8"))["levels"]
+    decisions = json.loads((ROOT / "styles" / "mpyy_crosswalk_decisions.json").read_text(encoding="utf-8"))
     tables = extract_tables(bundle)
-    catalog = {"version": 1, "source": "tabaka tabloları (yazarın kendi uygulaması), PlanGML 1.1.7 XSD ile denetlendi", "levels": {}}
+    catalog = {"version": 1, "source": "tabaka tabloları (yazarın kendi uygulaması), MPYY 1.1.7 XSD ile denetlendi", "levels": {}}
     review_rows = []
     for level, parts in COMPOSE.items():
         merged = {}
@@ -208,7 +208,7 @@ def write_review(path, rows):
     guide = book.active
     guide.title = "Açıklama"
     for line in [
-        "CAD tabaka → PlanGML eşleşmesi: son kontrol",
+        "CAD tabaka → MPYY eşleşmesi: son kontrol",
         "",
         "Geçerli satırlar doğrudan alındı. Burada yalnız düzeltilen ve alınmayan satırlar var.",
         "Katılmadığınız satırda 'İtiraz' sütununu seçin.",

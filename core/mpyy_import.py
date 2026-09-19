@@ -1,9 +1,9 @@
-"""CAD tabakası → PlanGML çalışma alanı aktarımı ve PlanGML uygunluk denetimi.
+"""CAD tabakası → MPYY çalışma alanı aktarımı ve MPYY uygunluk denetimi.
 
-The tabaka lookup is MPYY Studio's own ``styles/plangml_tabaka_crosswalk.json``
-(built and validated by ``tools/build_plangml_tabaka_crosswalk.py``). Nothing is
+The tabaka lookup is MPYY Studio's own ``styles/mpyy_tabaka_crosswalk.json``
+(built and validated by ``tools/build_mpyy_tabaka_crosswalk.py``). Nothing is
 guessed at runtime: a tabaka that is not in the table, or whose geometry does
-not fit the PlanGML type, is reported and left out.
+not fit the MPYY type, is reported and left out.
 """
 
 import contextlib
@@ -26,9 +26,9 @@ from qgis.core import (
     QgsWkbTypes,
 )
 
-from .plangml_workspace import all_levels, level_schema
+from .mpyy_workspace import all_levels, level_schema
 
-CROSSWALK_PATH = Path(__file__).resolve().parents[1] / "styles" / "plangml_tabaka_crosswalk.json"
+CROSSWALK_PATH = Path(__file__).resolve().parents[1] / "styles" / "mpyy_tabaka_crosswalk.json"
 FAMILY = {
     "MultiPolygon": Qgis.GeometryType.Polygon,
     "Polygon": Qgis.GeometryType.Polygon,
@@ -38,7 +38,7 @@ FAMILY = {
     "MultiPoint": Qgis.GeometryType.Point,
 }
 FAMILY_NAME = {Qgis.GeometryType.Polygon: "alan", Qgis.GeometryType.Line: "çizgi", Qgis.GeometryType.Point: "nokta"}
-SYSTEM_TABLES = {"plangml_sema", "layer_styles", "mpyy_metadata"}
+SYSTEM_TABLES = {"mpyy_sema", "layer_styles", "mpyy_metadata"}
 
 
 def normalize_tabaka(name):
@@ -54,13 +54,13 @@ def crosswalk(level):
 def workspace_level(path):
     with closing(sqlite3.connect(f"file:{Path(path).resolve().as_posix()}?mode=ro", uri=True)) as con:
         try:
-            return con.execute("SELECT plan_kademesi FROM plangml_sema").fetchone()[0]
+            return con.execute("SELECT plan_kademesi FROM mpyy_sema").fetchone()[0]
         except sqlite3.Error:
             return None
 
 
 def _fit_geometry(geometry, target):
-    """Geometries for a PlanGML type, or [] when the family does not fit.
+    """Geometries for a MPYY type, or [] when the family does not fit.
 
     Closed CAD polylines become polygons for area types; multi parts are split for
     single-part types (LineString, Point, Polygon)."""
@@ -87,12 +87,12 @@ def _fit_geometry(geometry, target):
 
 
 def import_cad_layer(source, tabaka_field, workspace, feedback=None, project=None):
-    """Write ``source`` features into the PlanGML workspace by their tabaka name.
+    """Write ``source`` features into the MPYY workspace by their tabaka name.
 
-    Returns one report row per tabaka: count, PlanGML type, written, and why the rest was not."""
+    Returns one report row per tabaka: count, MPYY type, written, and why the rest was not."""
     level = workspace_level(workspace)
     if level is None:
-        raise ValueError('Hedef dosya PlanGML 1.1.7 çalışma alanı değil (plangml_sema tablosu yok).')
+        raise ValueError('Hedef dosya MPYY 1.1.7 çalışma alanı değil (mpyy_sema tablosu yok).')
     if source.fields().indexFromName(tabaka_field) < 0:
         raise ValueError(f'Kaynakta tabaka alanı yok: {tabaka_field}')
     table = crosswalk(level)
@@ -111,14 +111,14 @@ def import_cad_layer(source, tabaka_field, workspace, feedback=None, project=Non
             feedback.setProgress(100 * step / total)
         key = normalize_tabaka(tabaka)
         entry = table["entries"].get(key)
-        row = {"tabaka": tabaka, "adet": len(features), "plangml_tipi": "", "oznitelik": "", "aktarilan": 0,
+        row = {"tabaka": tabaka, "adet": len(features), "mpyy_tipi": "", "oznitelik": "", "aktarilan": 0,
                "geometri_uyusmayan": 0, "durum": ""}
         if entry is None:
             row["durum"] = table["skipped"].get(key) or "eşleşme tablosunda yok"
             report.append(row)
             continue
         type_name = entry["feature"]
-        row["plangml_tipi"] = type_name
+        row["mpyy_tipi"] = type_name
         row["oznitelik"] = ", ".join(f"{k}={v}" for k, v in entry["attrs"].items())
         target = targets.get(type_name)
         if target is None:
@@ -161,8 +161,8 @@ def import_cad_layer(source, tabaka_field, workspace, feedback=None, project=Non
     return report
 
 
-def audit_plangml_workspace(path, level=None):
-    """Schema conformance findings for a PlanGML 1.1.7 GeoPackage (read only)."""
+def audit_mpyy_workspace(path, level=None):
+    """Schema conformance findings for a MPYY 1.1.7 GeoPackage (read only)."""
     level = level or workspace_level(path)
     if level not in all_levels():
         raise ValueError('Plan kademesi belirlenemedi; kademeyi seçin.')
@@ -172,9 +172,9 @@ def audit_plangml_workspace(path, level=None):
     with closing(sqlite3.connect(f"file:{Path(path).resolve().as_posix()}?mode=ro", uri=True)) as con:
         tables = dict(con.execute("SELECT table_name, data_type FROM gpkg_contents"))
         with contextlib.suppress(sqlite3.Error):
-            stored = con.execute("SELECT xsd_dosyasi FROM plangml_sema").fetchone()[0]
+            stored = con.execute("SELECT xsd_dosyasi FROM mpyy_sema").fetchone()[0]
             if stored != schema["xsd"]["file"]:
-                findings.append({"katman": "plangml_sema", "fid": "", "sorun": "Şema sürümü farklı",
+                findings.append({"katman": "mpyy_sema", "fid": "", "sorun": "Şema sürümü farklı",
                                  "ayrinti": f"Çalışma alanı {stored} ile oluşturulmuş; eklentinin şeması {schema['xsd']['file']}. "
                                             "Yeni tipler ve alanlar bu dosyada yok."})
         columns = {name: {row[1] for row in con.execute(f'PRAGMA table_info("{name}")')} for name in tables if name in types}
@@ -182,7 +182,7 @@ def audit_plangml_workspace(path, level=None):
         if name in SYSTEM_TABLES or name in types or kind not in ("features", "attributes"):
             continue
         findings.append({"katman": name, "fid": "", "sorun": "Şemada olmayan katman",
-                         "ayrinti": f"{level} PlanGML 1.1.7 şemasında '{name}' tipi yok; GML'e aktarılmaz."})
+                         "ayrinti": f"{level} MPYY 1.1.7 şemasında '{name}' tipi yok; GML'e aktarılmaz."})
     for type_name, feature_type in types.items():
         if type_name not in tables:
             findings.append({"katman": type_name, "fid": "", "sorun": "Şemadaki katman dosyada yok",

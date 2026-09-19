@@ -1,6 +1,6 @@
 {
  "version": 1,
- "note": "CAD tabaka → PlanGML 1.1.7 eşleşmesinde kademe karşılığı kararları. tools/build_plangml_tabaka_crosswalk.py uygular; her karar son kontrol listesinde gerekçesiyle görünür.",
+ "note": "CAD tabaka → MPYY 1.1.7 eşleşmesinde kademe karşılığı kararları. tools/build_mpyy_tabaka_crosswalk.py uygular; her karar son kontrol listesinde gerekçesiyle görünür.",
  "feature_equivalents": [
   {
    "from": "Konut",
@@ -111,11 +111,11 @@
    },
    "FONKSIYON_SINIRI": {
     "exclude": true,
-    "gerekce": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; PlanGML 1.1.7'da karşılığı olan bir tip yok."
+    "gerekce": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; MPYY 1.1.7'da karşılığı olan bir tip yok."
    },
    "SINIR_FONKSIYON": {
     "exclude": true,
-    "gerekce": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; PlanGML 1.1.7'da karşılığı olan bir tip yok."
+    "gerekce": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; MPYY 1.1.7'da karşılığı olan bir tip yok."
    },
    "PL_ZEYTINLIK_ALAN": {
     "feature": "Tarim",

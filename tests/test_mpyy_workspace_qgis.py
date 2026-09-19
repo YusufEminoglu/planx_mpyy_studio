@@ -1,4 +1,4 @@
-"""PlanGML 1.1.7 workspace: tables, fields and dropdowns come from the Ministry XSD."""
+"""MPYY 1.1.7 workspace: tables, fields and dropdowns come from the Ministry XSD."""
 
 import os
 import sqlite3
@@ -28,12 +28,12 @@ from qgis.PyQt.QtWidgets import QComboBox  # noqa: E402
 QgsGui.editorWidgetRegistry().initEditors()
 
 from planx_mpyy_studio.core.db_factory import read_dataset_info  # noqa: E402
-from planx_mpyy_studio.core.plangml_workspace import (  # noqa: E402
+from planx_mpyy_studio.core.mpyy_workspace import (  # noqa: E402
     KIND,
     QGIS_NULL,
     audit_required_fields,
     catalog,
-    create_plangml_workspace,
+    create_mpyy_workspace,
     level_schema,
 )
 from planx_mpyy_studio.core.project_binding import load_project_layers  # noqa: E402
@@ -48,7 +48,7 @@ def value_map(layer, field):
     return [value for entry in entries for value in entry.values()]
 
 
-class PlanGMLWorkspaceTests(unittest.TestCase):
+class MPYYWorkspaceTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         QgsProject.instance().clear()
@@ -82,13 +82,13 @@ class PlanGMLWorkspaceTests(unittest.TestCase):
         self.assertEqual(next(f for f in cdp_sit["fields"] if f["name"] == "SitTip")["type"], "enum")
         self.assertEqual(uip["ManiaPlani"]["geometry"], "MultiPolygon")
 
-    @unittest.skipUnless(DOWNLOADED_SCHEMA.exists(), "official PlanGML zip not present")
+    @unittest.skipUnless(DOWNLOADED_SCHEMA.exists(), "official MPYY zip not present")
     def test_catalog_recompiles_identically_from_the_official_zip(self):
         import importlib.util
         import json
 
         root = Path(__file__).resolve().parents[1]
-        spec = importlib.util.spec_from_file_location("compiler", root / "tools" / "compile_plangml_schema.py")
+        spec = importlib.util.spec_from_file_location("compiler", root / "tools" / "compile_mpyy_schema.py")
         compiler = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(compiler)
         compiler.OUT = Path(self.tmp.name) / "schema.json"
@@ -99,7 +99,7 @@ class PlanGMLWorkspaceTests(unittest.TestCase):
         for level in ("UIP", "NIP", "CDP"):
             with self.subTest(level=level):
                 path = Path(self.tmp.name) / f"{level}.gpkg"
-                create_plangml_workspace(path, "EPSG:5254", level)
+                create_mpyy_workspace(path, "EPSG:5254", level)
                 info = read_dataset_info(path)
                 self.assertEqual((info["workspace_kind"], info["plan_levels"]), (KIND, (level,)))
                 schema = level_schema(level)
@@ -116,14 +116,14 @@ class PlanGMLWorkspaceTests(unittest.TestCase):
                         for field in feature_type["fields"]:
                             self.assertEqual(columns.get(field["name"]), SQL_TYPES[field["type"]], (name, field["name"]))
                     tables = {n for n, kind in contents.items() if kind in ("features", "attributes")}
-                    self.assertEqual(tables - {"plangml_sema", "layer_styles"},
+                    self.assertEqual(tables - {"mpyy_sema", "layer_styles"},
                                      {t["name"] for t in schema["feature_types"]})
-                    self.assertEqual(con.execute("SELECT xsd_sha256 FROM plangml_sema").fetchone()[0],
+                    self.assertEqual(con.execute("SELECT xsd_sha256 FROM mpyy_sema").fetchone()[0],
                                      schema["xsd"]["sha256"])
 
     def test_uip_forms_offer_codelists_and_store_schema_codes(self):
         path = Path(self.tmp.name) / "uip.gpkg"
-        create_plangml_workspace(path, "EPSG:5254", "UIP")
+        create_mpyy_workspace(path, "EPSG:5254", "UIP")
         layers = {layer.name(): layer for layer in load_project_layers(path)}
         self.assertEqual(len(layers), 96)
         konut = layers["Konut"]
@@ -156,7 +156,7 @@ class PlanGMLWorkspaceTests(unittest.TestCase):
 
     def test_required_fields_warn_but_allow_drafts_and_are_audited(self):
         path = Path(self.tmp.name) / "uip.gpkg"
-        create_plangml_workspace(path, "EPSG:5254", "UIP")
+        create_mpyy_workspace(path, "EPSG:5254", "UIP")
         layers = {layer.name(): layer for layer in load_project_layers(path)}
         konut = layers["Konut"]
         index = konut.fields().indexFromName("Taks")
@@ -177,7 +177,7 @@ class PlanGMLWorkspaceTests(unittest.TestCase):
         self.assertNotIn("MudahaleYontemi", report["Konut"])
 
         wrong = next(konut.getFeatures())
-        wrong["YapiDuzeni"] = "AYRIK"  # legacy code, not in the PlanGML code list
+        wrong["YapiDuzeni"] = "AYRIK"  # legacy code, not in the MPYY code list
         valid, _ = QgsVectorLayerUtils.validateAttribute(
             konut, wrong, konut.fields().indexFromName("YapiDuzeni"),
             QgsFieldConstraints.ConstraintStrength.ConstraintStrengthHard,
@@ -187,10 +187,10 @@ class PlanGMLWorkspaceTests(unittest.TestCase):
     def test_official_sld_symbology_is_applied_with_schema_codes(self):
         import json
 
-        from planx_mpyy_studio.core.plangml_workspace import SLD_DIR
+        from planx_mpyy_studio.core.mpyy_workspace import SLD_DIR
 
         path = Path(self.tmp.name) / "uip.gpkg"
-        create_plangml_workspace(path, "EPSG:5254", "UIP")
+        create_mpyy_workspace(path, "EPSG:5254", "UIP")
         layers = {layer.name(): layer for layer in load_project_layers(path)}
 
         def rules(layer):
@@ -244,7 +244,7 @@ class PlanGMLWorkspaceTests(unittest.TestCase):
 
     def test_plain_qgis_gets_the_dropdowns_from_the_geopackage(self):
         path = Path(self.tmp.name) / "nip.gpkg"
-        create_plangml_workspace(path, "EPSG:5254", "NIP")
+        create_mpyy_workspace(path, "EPSG:5254", "NIP")
         schema = {t["name"]: t for t in level_schema("NIP")["feature_types"]}
         name, field = next(
             (t["name"], f) for t in schema.values() for f in t["fields"] if f["type"] == "enum"

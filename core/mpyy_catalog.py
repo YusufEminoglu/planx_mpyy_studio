@@ -6,7 +6,7 @@ Yapım Yönetmeliği UİP database compiled and maintained by Yusuf Eminoğlu.
 Do not edit by hand; re-run the compiler.
 
 Gives each UİP tabaka its official identity — upper group and code, function
-and code — so the PlanGML schema columns of an imported plan carry the
+and code — so the MPYY schema columns of an imported plan carry the
 Ministry's own values. ``MPYY_ALIASES`` maps local spellings seen in real
 municipal drawings onto the official tabaka they are the same function as.
 

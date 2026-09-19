@@ -54,7 +54,7 @@ planx_mpyy_studio/
 ├── CHANGELOG.md                  # Keep a Changelog formatında sürüm tarihçesi
 ├── LICENSE                       # GPL-2.0-or-later
 ├── README.md                     # Teknik dokümantasyon
-├── forms/                        # PlanGML UİP/NİP/ÇDP/MSP QML formları
+├── forms/                        # MPYY UİP/NİP/ÇDP/MSP QML formları
 ├── icons/                        # icon.png (Hub onaylı PNG formatı)
 ├── styles/                       # Resmi mevzuat QML ve SLD semboloji kütüphanesi
 ├── tests/                        # unittest test suitleri (LTR ve QGIS 4)
@@ -67,7 +67,7 @@ planx_mpyy_studio/
     ├── cdp_styler.py             # ÇDP (1/50.000 - 1/100.000) semboloji motoru
     ├── chamfer_engine.py         # PAİY Md. 20 köşe pahı (chamfer) kırım motoru
     ├── compliance_engine.py      # PAİY Md. 15, 16, 22 yapılaşabilirlik & ifraz-tevhit denetimi
-    ├── crosswalk.py              # Saha anketinden PlanGML imar fonksiyonuna eşleme
+    ├── crosswalk.py              # Saha anketinden MPYY imar fonksiyonuna eşleme
     ├── db_factory.py             # Taşınabilir GeoPackage ve katalog tabloları fabrikası
     ├── dop_engine.py             # İmar Kanunu Madde 18 DOP hesabı ve tavan (%45) kontrolü
     ├── eplan_catalog.py          # e-Plan Otomasyonu hiyerarşik fonksiyon sözlüğü
@@ -83,7 +83,7 @@ planx_mpyy_studio/
     ├── parking_engine.py         # Otopark Yönetmeliği araç ihtiyacı ve denge analizi
     ├── plan_diff.py              # MPYY Md. 26 plan tadilatı ve eşdeğer alan denetimi
     ├── plan_notes.py             # Mevzuata uygun dinamik imar planı notları ve lejant hükümleri
-    ├── plangml_styler.py         # PlanGML izole stil motoru
+    ├── mpyy_styler.py         # MPYY izole stil motoru
     ├── project_binding.py        # Katman ağacı, QgsRelation ilişkileri ve form bağlama
     ├── qc_engine.py              # Mekânsal kalite kontrolü, çekme ihlali ve çakışma tespiti
     ├── qfield_packager.py        # Mobil QField saha çalışması paketleyicisi

@@ -1,14 +1,14 @@
-"""Compile the Ministry's PlanGML XSD set into the plugin's schema catalog.
+"""Compile the Ministry's MPYY XSD set into the plugin's schema catalog.
 
-    py -3 tools/compile_plangml_schema.py <planGMLShema_1_7.zip>
+    py -3 tools/compile_mpyy_schema.py <planGMLShema_1_7.zip>
 
 Source: https://eplan.csb.gov.tr/e-plan/doc/planGMLShema_1_7.zip
 (linked from the e-Plan "GML Veri Kontrolü" page). Only the derived structure is
-written to ``styles/plangml_schema.json``; the XSD files are not redistributed.
+written to ``styles/mpyy_schema.json``; the XSD files are not redistributed.
 
 Every table, field, type, requiredness and code list below is read from the
 XSD. Feature types are exactly the members of ``plan:features`` (what a
-PlanGML FeatureCollection may contain); inherited elements are flattened in
+MPYY FeatureCollection may contain); inherited elements are flattened in
 schema order, base type first.
 """
 
@@ -33,9 +33,9 @@ GEOMETRY = {
 # M series: schemas that also carry the pre-2014 (mülga regulation) legend vocabulary and a YeniKod field.
 # Compiled separately; used to read such GML files, not to author new plans.
 M_LEVELS = {"MUIP": "muip.V.1.1.6.xsd", "MNIP": "mnip.V.1.1.6.xsd", "MCDP25": "mcdp25.V.1.1.6.xsd", "MCDP100": "mcdp100.V.1.1.6.xsd"}
-M_OUT = Path(__file__).resolve().parents[1] / "styles" / "plangml_m_schema.json"
+M_OUT = Path(__file__).resolve().parents[1] / "styles" / "mpyy_m_schema.json"
 SCALAR = {"xs:string": "string", "xs:double": "double", "xs:int": "int", "xs:long": "long", "xs:dateTime": "dateTime"}
-OUT = Path(__file__).resolve().parents[1] / "styles" / "plangml_schema.json"
+OUT = Path(__file__).resolve().parents[1] / "styles" / "mpyy_schema.json"
 
 
 def compile_level(data):

@@ -1,4 +1,4 @@
-"""TUCBS / Saha Anketi -> PlanGML Fonksiyon Crosswalk Motoru.
+"""TUCBS / Saha Anketi -> MPYY Fonksiyon Crosswalk Motoru.
 
 Mevzuat ve planlama disiplini gereği:
 Belirsiz veya çoklu karşılığı olan arazi kullanım fonksiyonları ASLA otomatik karar

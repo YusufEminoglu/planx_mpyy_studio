@@ -1,10 +1,10 @@
-"""PlanGML GML dosyası içe aktarma (M serisi ve güncel şemalar).
+"""MPYY GML dosyası içe aktarma (M serisi ve güncel şemalar).
 
-Reads a PlanGML FeatureCollection strictly by the XSD structure: every element
+Reads a MPYY FeatureCollection strictly by the XSD structure: every element
 whose local name is a feature type of the chosen schema is one feature; its
 ``GeometryProperty`` child holds a GML geometry (GML 2 ``coordinates`` or GML 3 /
 3.2 ``posList``, surfaces and curves included; parsed by GDAL), its other children are attributes named like the schema fields.
-Values are written to a PlanGML workspace GeoPackage of the same schema, so the
+Values are written to a MPYY workspace GeoPackage of the same schema, so the
 import gets the schema's dropdowns and the Ministry's MUIP/MNIP symbology.
 
 The schema is taken from ``xsi:schemaLocation`` when the file names one of the
@@ -30,8 +30,8 @@ from qgis.PyQt.QtXml import QDomDocument
 
 from osgeo import ogr
 
-from .plangml_import import FAMILY
-from .plangml_workspace import all_levels, create_plangml_workspace
+from .mpyy_import import FAMILY
+from .mpyy_workspace import all_levels, create_mpyy_workspace
 
 CONTAINERS = {"FeatureCollection", "featureMember", "featureMembers", "features"}
 
@@ -80,7 +80,7 @@ def feature_elements(document, type_names):
 
 
 def detect_level(document):
-    """(level, reason) for the PlanGML schema this document was written against."""
+    """(level, reason) for the MPYY schema this document was written against."""
     levels = all_levels()
     root = document.documentElement()
     location = " ".join(
@@ -109,7 +109,7 @@ def detect_level(document):
         if hits:
             scores.append((hits, has_new_code == level.startswith("M"), -len(types), level))
     if not scores:
-        raise ValueError('Dosyada PlanGML nesne tipi bulunamadı; şema belirlenemedi.')
+        raise ValueError('Dosyada MPYY nesne tipi bulunamadı; şema belirlenemedi.')
     best = max(scores)
     return best[3], f"{best[0]} nesne tipi adı eşleşti" + (" ve YeniKod alanı var" if has_new_code else "")
 
@@ -157,7 +157,7 @@ def _value(text, field):
     return text
 
 
-def import_plangml_gml(gml_path, output_path, level=None, crs=None, feedback=None, project=None):
+def import_mpyy_gml(gml_path, output_path, level=None, crs=None, feedback=None, project=None):
     project = project or QgsProject.instance()
     document = load_document(gml_path)
     reason = "kullanıcı seçimi"
@@ -176,7 +176,7 @@ def import_plangml_gml(gml_path, output_path, level=None, crs=None, feedback=Non
             default_crs = QgsCoordinateReferenceSystem.fromOgcWmsCrs(srs.group(1))
     if not default_crs.isValid():
         raise ValueError('GML dosyasında koordinat sistemi (srsName) yok; koordinat sistemini seçin.')
-    create_plangml_workspace(output_path, default_crs, level)
+    create_mpyy_workspace(output_path, default_crs, level)
 
     report, targets, batches = {}, {}, {}
     for step, element in enumerate(elements):

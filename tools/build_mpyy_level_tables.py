@@ -1,16 +1,16 @@
 """Hat etiketleri and kademe dönüşümü tables for MPYY Studio.
 
-    py -3 tools/build_plangml_level_tables.py <bundle .js>
+    py -3 tools/build_mpyy_level_tables.py <bundle .js>
 
 Sources (the author's own application, copied into MPYY Studio's own files):
   * boundary line catalog entries with a ``{tur:"etiket", metin:"A1"}`` pattern part
-    -> ``styles/plangml_line_labels.json``
+    -> ``styles/mpyy_line_labels.json``
   * the UİP/NİP/ÇDP tabaka equivalence table (``ese``)
-    -> ``styles/plangml_level_conversion.json``
+    -> ``styles/mpyy_level_conversion.json``
 
-Catalog names are tied to PlanGML types/codes only through ``LABEL_TARGETS`` below
+Catalog names are tied to MPYY types/codes only through ``LABEL_TARGETS`` below
 (written by hand, checked against the XSD catalog). Level conversion goes
-tabaka -> PlanGML identity through ``styles/plangml_tabaka_crosswalk.json`` on both
+tabaka -> MPYY identity through ``styles/mpyy_tabaka_crosswalk.json`` on both
 sides, so it inherits that table's validation.
 """
 
@@ -21,13 +21,13 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_plangml_tabaka_crosswalk import normalize_tabaka  # noqa: E402
+from build_mpyy_tabaka_crosswalk import normalize_tabaka  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-SCHEMA = json.loads((ROOT / "styles" / "plangml_schema.json").read_text(encoding="utf-8"))["levels"]
-CROSSWALK = json.loads((ROOT / "styles" / "plangml_tabaka_crosswalk.json").read_text(encoding="utf-8"))["levels"]
+SCHEMA = json.loads((ROOT / "styles" / "mpyy_schema.json").read_text(encoding="utf-8"))["levels"]
+CROSSWALK = json.loads((ROOT / "styles" / "mpyy_tabaka_crosswalk.json").read_text(encoding="utf-8"))["levels"]
 
-# Detail catalog name -> PlanGML (type, field, code) per level. None code: the type itself.
+# Detail catalog name -> MPYY (type, field, code) per level. None code: the type itself.
 KUSAK = "KorumaKusaklari", "KusakTip"
 LABEL_TARGETS = {
     "ASKERİ YASAK VE GÜVENLİK BÖLGESİ": {"UIP": ("AskeriYasakBolge", None, None), "NIP": ("AskeriYasakBolge", None, None),
@@ -47,7 +47,7 @@ LABEL_TARGETS = {
     "KENTSEL SİT ALANI": "KentselSit",
     "TARİHİ SİT ALANI": "TarihiSit",
     "SİT ETKİLEŞİM GEÇİŞ ALANI SINIRI": "SitEtkilesimAlani",
-    "KENTSEL ARKEOLOJİK SİT ALANI": "KentselArkeolojikSit",  # added to SitTip in PlanGML 1.1.7
+    "KENTSEL ARKEOLOJİK SİT ALANI": "KentselArkeolojikSit",  # added to SitTip in MPYY 1.1.7
     "HAVAALANI/HAVALİMANI KORUMA KUŞAĞI": {"UIP": (*KUSAK, "HavaalaniKorumaKusagi")},
     "KARAYOLLARI YOL KENARI KORUMA KUŞAĞI": {"UIP": (*KUSAK, "KarayoluKorumaKusagi")},
     "BORU HATTI KORUMA KUŞAĞI": {"UIP": (*KUSAK, "BoruHattiKorumaKusagi")},
@@ -151,7 +151,7 @@ def build_labels(text):
             feature, field, code = "SitAlanlari", "SitTip", target  # ÇDP SitTip is free text; check() allows it
         else:
             if level not in target:
-                skipped[f"{level} {name}"] = "bu kademede PlanGML karşılığı yok"
+                skipped[f"{level} {name}"] = "bu kademede MPYY karşılığı yok"
                 continue
             feature, field, code = target[level]
         try:
@@ -222,10 +222,10 @@ def build_conversion(text):
 def main(bundle):
     text = Path(bundle).read_text(encoding="utf-8", errors="replace")
     labels = build_labels(text)
-    (ROOT / "styles" / "plangml_line_labels.json").write_text(json.dumps(labels, ensure_ascii=False, indent=1), encoding="utf-8")
+    (ROOT / "styles" / "mpyy_line_labels.json").write_text(json.dumps(labels, ensure_ascii=False, indent=1), encoding="utf-8")
     print("labels", {lv: len(v) for lv, v in labels["levels"].items()}, "skipped", labels["skipped"])
     conversion = build_conversion(text)
-    (ROOT / "styles" / "plangml_level_conversion.json").write_text(json.dumps(conversion, ensure_ascii=False, indent=1), encoding="utf-8")
+    (ROOT / "styles" / "mpyy_level_conversion.json").write_text(json.dumps(conversion, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
 if __name__ == "__main__":

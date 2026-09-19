@@ -1,8 +1,8 @@
-"""Official e-Plan GeoServer SLDs -> styles for the PlanGML 1.1.7 workspace tables.
+"""Official e-Plan GeoServer SLDs -> styles for the MPYY 1.1.7 workspace tables.
 
-    py -3 tools/compile_plangml_eplan_styles.py "<E-Plan SLD.zip>"
+    py -3 tools/compile_mpyy_eplan_styles.py "<E-Plan SLD.zip>"
 
-The Ministry's SLDs render PlanGML data directly:
+The Ministry's SLDs render MPYY data directly:
   * style name   = <LEVEL>_ + SNAKE_CASE(feature type)   (KentselCalisma -> UIP_KENTSEL_CALISMA)
   * property     = snake_case(field)                     (CalismaTip -> calisma_tip)
   * literal      = position of the code in the XSD code list (0 -> TicaretAlani)
@@ -38,7 +38,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "styles" / "plangml_sld"
+OUT = ROOT / "styles" / "mpyy_sld"
 RESOURCES = ROOT / "resources"
 SLD = "http://www.opengis.net/sld"
 OGC = "http://www.opengis.net/ogc"
@@ -290,7 +290,7 @@ def main(archive_path):
         if name.startswith("gs-data/") and name.endswith(".sld")
     }
     levels = {}
-    for catalog_file in ("plangml_schema.json", "plangml_m_schema.json"):  # M series: MUIP/MNIP styles exist, MCDP do not
+    for catalog_file in ("mpyy_schema.json", "mpyy_m_schema.json"):  # M series: MUIP/MNIP styles exist, MCDP do not
         levels.update(json.loads((ROOT / "styles" / catalog_file).read_text(encoding="utf-8"))["levels"])
     AVAILABLE_TILES.update(
         info.filename.rsplit("/", 1)[1]

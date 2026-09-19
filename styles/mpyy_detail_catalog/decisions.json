@@ -1682,7 +1682,7 @@
    "dash_mm": 5,
    "alternate": true
   },
-  "_note_metin": "AYB (s.24) ve Riskli Alan/Rezerv Yapı Alanı/Yenileme Alanı Sınırı (s.29-30) kataloğu ayrıca 'sınır üzerine AYB/RA/RYA/YENİLEME yazılacak' diyor: PerimeterCurved + repeatDistance ile çizgi boyunca tekrarlanan yazı olarak core/plangml_workspace.py:_apply_border_text_labels'te uygulandı. Aralık kataloğun ölçmediği bir değer (BORDER_TEXT_REPEAT_MM = 40 mm).",
+  "_note_metin": "AYB (s.24) ve Riskli Alan/Rezerv Yapı Alanı/Yenileme Alanı Sınırı (s.29-30) kataloğu ayrıca 'sınır üzerine AYB/RA/RYA/YENİLEME yazılacak' diyor: PerimeterCurved + repeatDistance ile çizgi boyunca tekrarlanan yazı olarak core/mpyy_workspace.py:_apply_border_text_labels'te uygulandı. Aralık kataloğun ölçmediği bir değer (BORDER_TEXT_REPEAT_MM = 40 mm).",
   "NIP/KentselDonusumSinirlari/RISKLI_ALAN_SINIRI": {
    "page": 29,
    "kind": "dashed",
@@ -2375,7 +2375,7 @@
    "size_mm": 3,
    "text": "YSK"
   },
-  "_note_schema_geometri": "Mania Planı Alanı ve Havaalanı Hava Koridoru kataloğu GEOMETRİ TİPİ'ni 'ÇOKLU ÇİZGİ' yazar ama plangml_schema.json'da ikisi de MultiPolygon; sınır çizgisi gerçekte poligonun kenarıdır, 'vectors' değil 'borders' altında (boundary($geometry) ile).",
+  "_note_schema_geometri": "Mania Planı Alanı ve Havaalanı Hava Koridoru kataloğu GEOMETRİ TİPİ'ni 'ÇOKLU ÇİZGİ' yazar ama mpyy_schema.json'da ikisi de MultiPolygon; sınır çizgisi gerçekte poligonun kenarıdır, 'vectors' değil 'borders' altında (boundary($geometry) ile).",
   "UIP/ManiaPlani/*": {
    "page": 109,
    "kind": "solid",

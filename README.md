@@ -2,9 +2,9 @@
 
 ## Türkçe çalışma alanı — 2.8.0
 
-MPYY planlama iş akışları için QGIS eklentisi. Taşınabilir GeoPackage çalışma alanları, PlanGML/e-Plan ve yerel MPYY stilleri, plan denetimleri, saha araştırması ve rapor üretimini bir araya getirir.
+MPYY planlama iş akışları için QGIS eklentisi. Taşınabilir GeoPackage çalışma alanları, MPYY/e-Plan ve yerel MPYY stilleri, plan denetimleri, saha araştırması ve rapor üretimini bir araya getirir.
 
-Eklentiye ait arayüz **Türkçedir**: araç adları, yardım, parametreler, seçenekler, bildirimler, form sekmeleri, alan etiketleri, kısıt açıklamaları, lejantlar, harita bilgi kartları ve üretilen raporlar. Mevzuat kodları, özgün kataloglar, saklanan değerler, alan adları ve kullanıcının verdiği adlar korunur. QGIS ve PlanGML gibi özel adlar değişmez. QGIS'in kendi iletişim kutularının dili QGIS dil ayarına bağlıdır.
+Eklentiye ait arayüz **Türkçedir**: araç adları, yardım, parametreler, seçenekler, bildirimler, form sekmeleri, alan etiketleri, kısıt açıklamaları, lejantlar, harita bilgi kartları ve üretilen raporlar. Mevzuat kodları, özgün kataloglar, saklanan değerler, alan adları ve kullanıcının verdiği adlar korunur. QGIS ve MPYY gibi özel adlar değişmez. QGIS'in kendi iletişim kutularının dili QGIS dil ayarına bağlıdır.
 
 Panelin üç sekmesi vardır:
 
@@ -20,17 +20,17 @@ Panel QGIS yazı tipi ve renk paletini izler. Metinler dar panellerde satıra b�
 
 ## Çalışma alanları ve stiller
 
-Plan GeoPackage dosyası MSP → ÇDP → NİP → UİP kademelerini içerir. Her kademenin alan, çizgi ve gösterim katmanları vardır. UİP alan formunda PlanGML kimliği, fonksiyon kataloğu, yapı nizamı, TAKS, KAKS/emsal, yükseklik ve çekme mesafeleri bulunur. Koşullu öznitelik formları Türkçedir.
+Plan GeoPackage dosyası MSP → ÇDP → NİP → UİP kademelerini içerir. Her kademenin alan, çizgi ve gösterim katmanları vardır. UİP alan formunda MPYY kimliği, fonksiyon kataloğu, yapı nizamı, TAKS, KAKS/emsal, yükseklik ve çekme mesafeleri bulunur. Koşullu öznitelik formları Türkçedir.
 
-**Yerel UİP (MpyyUipDb çizim şablonu)** ayrı bir çalışma alanı türüdür: `uip-alanlar`, `uip_cizgiler`, `uip-notasyonlar`, `yapi_yaklasma`, `uipPolygonTable` ve `uipLineTable` tabloları kaynak şablonla aynı alan ve türlerle oluşturulur. Semboloji, koşullu sekmeler, açılır listeler ve varsayılan değerler şablonun QGIS projesinden `tools/extract_local_uip_template.py` ile alınır ve `forms/yerel_uip` altında saklanır. UİP fonksiyonu zincirli listedir: önce üst konu grubu, sonra o gruptaki fonksiyon seçilir. Nizam `A`, `B`, `BL` olarak saklanır. Aynı form PlanGML çalışma alanındaki `plangml_uip_*` katmanlarında da kullanılır; genel form düzenleyici yazılmış formu olan katmanlara dokunmaz.
+**Yerel UİP (MpyyUipDb çizim şablonu)** ayrı bir çalışma alanı türüdür: `uip-alanlar`, `uip_cizgiler`, `uip-notasyonlar`, `yapi_yaklasma`, `uipPolygonTable` ve `uipLineTable` tabloları kaynak şablonla aynı alan ve türlerle oluşturulur. Semboloji, koşullu sekmeler, açılır listeler ve varsayılan değerler şablonun QGIS projesinden `tools/extract_local_uip_template.py` ile alınır ve `forms/yerel_uip` altında saklanır. UİP fonksiyonu zincirli listedir: önce üst konu grubu, sonra o gruptaki fonksiyon seçilir. Nizam `A`, `B`, `BL` olarak saklanır. Aynı form MPYY çalışma alanındaki `mpyy_uip_*` katmanlarında da kullanılır; genel form düzenleyici yazılmış formu olan katmanlara dokunmaz.
 
-**PlanGML 1.1.7 çalışma alanı (UİP / NİP / ÇDP)** Bakanlığın XSD şemasından birebir üretilir: tablo ve alan adları GML öğe adlarıdır, kod listeleri açılır listedir. Gösterim Bakanlığın e-Plan SLD setinden gelir; sit ve koruma sınırlarına detay kataloğundaki kısaltmalar (A1, KS, YKK…) yazılır. CAD tabakaları bu çalışma alanına aktarılabilir, kademe dönüştürülebilir (UİP → NİP → ÇDP) ve şema uygunluğu denetlenebilir. 1.1.6'dan farklar: `docs/PLANGML_1.1.6_1.1.7_FARKLAR.md`.
+**MPYY 1.1.7 çalışma alanı (UİP / NİP / ÇDP)** Bakanlığın XSD şemasından birebir üretilir: tablo ve alan adları GML öğe adlarıdır, kod listeleri açılır listedir. Gösterim Bakanlığın e-Plan SLD setinden gelir; sit ve koruma sınırlarına detay kataloğundaki kısaltmalar (A1, KS, YKK…) yazılır. CAD tabakaları bu çalışma alanına aktarılabilir, kademe dönüştürülebilir (UİP → NİP → ÇDP) ve şema uygunluğu denetlenebilir. 1.1.6'dan farklar: `docs/MPYY_1.1.6_1.1.7_FARKLAR.md`.
 
-**PlanGML GML içe aktarma** (`import_plangml_gml`) e-Plan GML dosyasını şemasına göre okur. Güncel şemaların yanında Bakanlık paketindeki M serisi (MUİP, MNİP, MÇDP 1/25.000 ve 1/100.000, sürüm 1.1.6) da desteklenir; bu şemalar eski yönetmelik gösterimlerini ve `YeniKod` alanını taşır. Şema `xsi:schemaLocation` alanından, yoksa öğe adlarından belirlenir. Şemada olmayan öğe ve öznitelikler, kod listesi dışı değerler ve okunamayan geometriler tahmin edilmez, raporlanır. MUİP ve MNİP katmanları Bakanlık SLD gösterimiyle açılır; MÇDP için SLD setinde stil yoktur.
+**MPYY GML içe aktarma** (`import_mpyy_gml`) e-Plan GML dosyasını şemasına göre okur. Güncel şemaların yanında Bakanlık paketindeki M serisi (MUİP, MNİP, MÇDP 1/25.000 ve 1/100.000, sürüm 1.1.6) da desteklenir; bu şemalar eski yönetmelik gösterimlerini ve `YeniKod` alanını taşır. Şema `xsi:schemaLocation` alanından, yoksa öğe adlarından belirlenir. Şemada olmayan öğe ve öznitelikler, kod listesi dışı değerler ve okunamayan geometriler tahmin edilmez, raporlanır. MUİP ve MNİP katmanları Bakanlık SLD gösterimiyle açılır; MÇDP için SLD setinde stil yoktur.
 
 Arazi kullanımı ayrı bir çalışma alanıdır. TUCBS arazi katmanları ile parsel, yapı ve yol araştırma tabloları plan kararlarından ayrı tutulur. Her iki çalışma alanını aynı QGIS projesine yükleyebilirsiniz.
 
-PlanGML/e-Plan varsayılan stil motorudur. Yerel MPYY stilleri seçilebilir alternatiftir. Yerel UİP ve saha stilleri kullanılabilir; NİP taslak durumundadır, ÇDP resmî yedek stili kullanır. Uygulamadan önce seçilen profili inceleyin. MSP sembolleri EK-1e kataloğundan yerel QGIS sembollerine dönüştürülür; GeoServer gerektirmez.
+MPYY/e-Plan varsayılan stil motorudur. Yerel MPYY stilleri seçilebilir alternatiftir. Yerel UİP ve saha stilleri kullanılabilir; NİP taslak durumundadır, ÇDP resmî yedek stili kullanır. Uygulamadan önce seçilen profili inceleyin. MSP sembolleri EK-1e kataloğundan yerel QGIS sembollerine dönüştürülür; GeoServer gerektirmez.
 
 `meri_1000_alan` ve eski paralel UİP katmanları güncel şemada bulunmaz. Özgün QML dosyaları izlenebilirlik için korunur; temel katmanlar programatik formlarla oluşturulur. Türkçe gösterim `core/localization.py` ve `resources/turkish_labels.tsv` dosyalarındadır. Kayıtlı projelerde yerel QGIS ifadeleri kullanılır; özel Python ifade kaydı gerekmez.
 

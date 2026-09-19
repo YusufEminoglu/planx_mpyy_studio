@@ -18,7 +18,7 @@ Use **Ctrl+K** to search, arrow keys to select and **Enter** or **Alt+O** to ope
 
 The UI follows the QGIS application font and palette. Labels and buttons wrap in narrow docks; forms scroll vertically. See [GUI architecture](docs/GUI_ARCHITECTURE.md) for the review and reproducible visual checks.
 
-PlanGML-compatible MPYY spatial planning studio. PlanGML/e-Plan is the default
+MPYY-compatible MPYY spatial planning studio. MPYY/e-Plan is the default
 symbology engine; local MPYY XML styles are selectable alternatives.
 
 ## Workspaces
@@ -26,7 +26,7 @@ symbology engine; local MPYY XML styles are selectable alternatives.
 The planning GeoPackage retains the hierarchy: spatial strategy plan (MSP),
 environmental plan (CDP), master plan (NIP), implementation plan (UIP). Each level
 has one polygon, line and notation layer set. The UIP polygon layer includes
-PlanGML identity, the function catalog, building arrangement, site coverage,
+MPYY identity, the function catalog, building arrangement, site coverage,
 floor area ratio, height and setbacks in a conditional English attribute form.
 
 Land use is a separate workspace: TUCBS land layers and parcel, building and road
@@ -35,7 +35,7 @@ into the same QGIS project.
 
 `meri_1000_alan` and the old parallel UIP layers are no longer in the schema.
 Source QML files are retained for comparison and traceability; primary layers
-are created with programmatic PlanGML forms.
+are created with programmatic MPYY forms.
 
 The `planx_mpyy_studio` Processing provider contains 83 algorithms.
 Advanced production tools introduced since 1.1.0 include:

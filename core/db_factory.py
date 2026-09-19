@@ -1,4 +1,4 @@
-"""Atomic, isolated GeoPackage generators for PlanGML and Arazi Kullanımı."""
+"""Atomic, isolated GeoPackage generators for MPYY and Arazi Kullanımı."""
 
 import json
 import os
@@ -482,7 +482,7 @@ def _create(output_path, crs, tables, kind, levels=()):
                 if "MAHALLE" in fields:
                     con.execute(f"CREATE INDEX IF NOT EXISTS {_quote('idx_' + table + '_mahalle')} ON {_quote(table)}({_quote('MAHALLE')})")
 
-                if table.startswith("plangml_"):
+                if table.startswith("mpyy_"):
                     _create_audit_triggers(con, table, fields)
                 elif table in ("parsel_saha", "yapi_saha", "yol_saha"):
                     _create_survey_audit_triggers(con, table, fields)

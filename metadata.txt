@@ -2,17 +2,17 @@
 name=PlanX MPYY Studio
 qgisMinimumVersion=3.44
 qgisMaximumVersion=4.99
-description=Plan çalışma alanları, PlanGML stilleri, plan denetimleri ve dosya araçları.
+description=Plan çalışma alanları, MPYY stilleri, plan denetimleri ve dosya araçları.
 version=2.8.0
 author=Yusuf Eminoğlu
 email=yusuf.eminoglu@deu.edu.tr
-about=Turkish MPYY and PlanGML compliant urban spatial planning suite: portable GeoPackage workspaces, code-mapped native symbology, analytical zoning tools, and official validation workflows. Online User Manual & Documentation: https://geophilo.com/planx_mpyy_studio/
+about=Turkish MPYY and MPYY compliant urban spatial planning suite: portable GeoPackage workspaces, code-mapped native symbology, analytical zoning tools, and official validation workflows. Online User Manual & Documentation: https://geophilo.com/planx_mpyy_studio/
 category=Vector
-tags=planx,planning,uip,nip,cdp,plangml,tucbs,symbology
+tags=planx,planning,uip,nip,cdp,mpyy,tucbs,symbology
 icon=icons/icon.png
 experimental=True
 deprecated=False
 hasProcessingProvider=yes
 license=GPL-2.0-or-later
 changelog=2.8.0 - Ulaşım ve Altyapı Güzergâhları, Su/Atıksu/Atık Sistemleri ve Afet Tehlikeli Alanlar aileleri Ek-1e ölçüleriyle tamamlandı (Demiryolu, Raylı Toplu Taşıma, Havai Hat/Havaray, Boru Hattı ailesi, Soğutma Suyu Alma Hattı, Tsunami/Heyelan/Taşkın sınırları, Bisiklet Yolu, Sulama Hattı...). Katalogla şema arasında geometri tipi çelişen 3 kalem (ManiaPlani, HavaalaniHavaKoridoru, SulamaHatti) düzeltildi; sessizce hiç uygulanmıyorlardı. create_workspace çökmesi giderildi.
-2.7.0 - Eski MSP/ÇDP/NİP/UİP çalışma alanı şeması kaldırıldı (gerçek PlanGML değildi: geometri türleri katalogla uyuşmuyor, tekrarlı alanlar ve açılır listesiz formlar). Kalanlar: PlanGML 1.1.7 şemaları, Yerel UİP, Yerel NİP ve arazi kullanımı çalışma alanı. Yeni: kullanıcının MpyyNipDB 1/5.000 çizim şablonundan Yerel NİP çalışma alanı. Askeri yasak ve güvenlik bölgesi sınırı Ek-1e s.24 ölçüleriyle çizilir.
+2.7.0 - Eski MSP/ÇDP/NİP/UİP çalışma alanı şeması kaldırıldı (gerçek MPYY değildi: geometri türleri katalogla uyuşmuyor, tekrarlı alanlar ve açılır listesiz formlar). Kalanlar: MPYY 1.1.7 şemaları, Yerel UİP, Yerel NİP ve arazi kullanımı çalışma alanı. Yeni: kullanıcının MpyyNipDB 1/5.000 çizim şablonundan Yerel NİP çalışma alanı. Askeri yasak ve güvenlik bölgesi sınırı Ek-1e s.24 ölçüleriyle çizilir.

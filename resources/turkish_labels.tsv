@@ -2903,15 +2903,15 @@ PLAN TANIMLAYICI (PLAN ID)	Plan Tanımlayıcı (Plan ID)
 PLAN TITLE	Plan başlığı
 PLAN/PARCEL POLYGONS AND PER-PERSON SHELTER ASSUMPTIONS.	Plan/parsel poligonları ve kişi başına sığınak alanı varsayımları.
 PLAN/PARCEL POLYGONS, FAR AND PARKING-AREA ASSUMPTIONS.	Plan/parsel poligonları, emsal ve otopark alanı varsayımları.
-PLANGML / E-PLAN STYLES	PlanGML / e-Plan stilleri
-PLANGML CATALOG IDENTIFIER	PlanGML Katalog ID
-PLANGML IMPLEMENTATION PLAN FORM	PlanGML UİP 8-Sekmeli Koşullu Form
-PLANGML KATALOG ID	PlanGML Katalog ID
-PLANGML ROAD PLATFORM FORM	PlanGML UİP Yol Platform Formu
-PLANGML STATUTORY SYMBOLOGY APPLIED (	PlanGML resmî mevzuat sembolojisi uygulandı (
-PLANGML STYLES CAN ONLY BE APPLIED TO POLYGON AND LINE LAYERS.	PlanGML stili yalnızca alan ve çizgi katmanlarına uygulanabilir.
-PLANGML UIP FORM AND SYMBOLOGY APPLIED.	PlanGML UİP form ve mevzuat sembolojisi uygulandı.
-PLANGML ZONING NOTATION FORM	PlanGML UİP Yapılaşma Notasyon Formu
+MPYY / E-PLAN STYLES	MPYY / e-Plan stilleri
+MPYY CATALOG IDENTIFIER	MPYY Katalog ID
+MPYY IMPLEMENTATION PLAN FORM	MPYY UİP 8-Sekmeli Koşullu Form
+MPYY KATALOG ID	MPYY Katalog ID
+MPYY ROAD PLATFORM FORM	MPYY UİP Yol Platform Formu
+MPYY STATUTORY SYMBOLOGY APPLIED (	MPYY resmî mevzuat sembolojisi uygulandı (
+MPYY STYLES CAN ONLY BE APPLIED TO POLYGON AND LINE LAYERS.	MPYY stili yalnızca alan ve çizgi katmanlarına uygulanabilir.
+MPYY UIP FORM AND SYMBOLOGY APPLIED.	MPYY UİP form ve mevzuat sembolojisi uygulandı.
+MPYY ZONING NOTATION FORM	MPYY UİP Yapılaşma Notasyon Formu
 PLANLAMA ALT BOLGE	PLANLAMA ALT BOLGE
 PLANLAMA BOLGESI	Planlama Bölgesi
 PLANLAMA SINIRLARI	PLANLAMA SINIRLARI
@@ -2951,8 +2951,8 @@ PLANNING PROFILE	Plan profili
 PLANNING REGION	Planlama Bölgesi
 PLANNING SUBREGION	PLANLAMA ALT BOLGE
 PLANNING SUPERVISOR	İmar Şefi
-PLANNING WORKSPACE	PlanGML Çalışma Alanı
-PLANNING WORKSPACE CREATED:	PlanGML çalışma ortamı oluşturuldu: 
+PLANNING WORKSPACE	MPYY Çalışma Alanı
+PLANNING WORKSPACE CREATED:	MPYY çalışma ortamı oluşturuldu: 
 PLANNING-FUNCTION POLYGONS	Plan işlevi poligonları
 PLANX MPYY - PLANNING REPORT TABLES AND LAND-USE ANALYSIS	PlanX MPYY - Plan Açıklama Raporu Tabloları ve Arazi Analizi
 PLANX MPYY FIELD SURVEY PROJECT	PlanX MPYY Saha Anketi Projesi
@@ -4194,7 +4194,7 @@ URGENT DEMOLITION / LIFE SAFETY RISK	Acil Yıktırılacak / Can Güvenliği Risk
 URGENT DEMOLITION REQUIRED	ACIL YIKILACAK
 USE THE COMPACT FORM...	Kısa formu kullan…
 USE:	Kullanım:
-USES THE SHIPPED PLANGML / E-PLAN PLANNING STYLES AND CODE CATALOGS.	Eklentiyle gelen PlanGML / e-Plan stillerini ve kod kataloglarını kullanır.
+USES THE SHIPPED MPYY / E-PLAN PLANNING STYLES AND CODE CATALOGS.	Eklentiyle gelen MPYY / e-Plan stillerini ve kod kataloglarını kullanır.
 UST GRUP ADI	Üst Grup Adı
 UST GRUP KODU	Üst Grup Kodu
 UST KAT KULLANIMI	Üst Kat Kullanımı

@@ -24,7 +24,7 @@ from ..core.crosswalk import execute_layer_crosswalk
 from ..core.db_factory import create_land_use_workspace
 from ..core.local_nip_workspace import create_local_nip_workspace
 from ..core.local_uip_workspace import create_local_uip_workspace
-from ..core.plangml_workspace import create_plangml_workspace
+from ..core.mpyy_workspace import create_mpyy_workspace
 from ..core.dop_engine import DOPEngine
 from ..core.form_designer import MPYYFormDesigner
 from ..core.layout_composer import MPYYLayoutComposer
@@ -56,7 +56,7 @@ class DockActionsMixin:
             elif scope == "YEREL_NIP":
                 create_local_nip_workspace(path, self.crs.crs())
             else:
-                create_plangml_workspace(path, self.crs.crs(), str(scope).split(":", 1)[1])
+                create_mpyy_workspace(path, self.crs.crs(), str(scope).split(":", 1)[1])
             self.load_workspace(path)
         except (ValueError, OSError, RuntimeError, TypeError, sqlite3.Error) as error:
             self.status.setText('Çalışma alanı oluşturulamadı: ' + str(error))
@@ -187,11 +187,11 @@ class DockActionsMixin:
 
         level = self.plan_type.currentData()
         try:
-            if level in ("PLANGML_MSP", "MSP"):
+            if level in ("MPYY_MSP", "MSP"):
                 cnt = self.msp_engine.apply(layer)
                 self._last_engine = self.msp_engine
                 self.status.setText(f'MSP EK-1e PDF mevzuat sembolojisi uygulandı ({cnt} detay sınıfı).')
-            elif level in ("PLANGML_CDP", "CDP"):
+            elif level in ("MPYY_CDP", "CDP"):
                 cnt = self.cdp_engine.apply(layer)
                 self._last_engine = self.cdp_engine
                 self.status.setText(f'ÇDP resmî bölge koruma/gelişme sembolojisi uygulandı ({cnt} kategori).')
@@ -199,7 +199,7 @@ class DockActionsMixin:
                 cnt = self.cdp_engine.apply(layer)
                 self._last_engine = self.cdp_engine
                 self.status.setText('Bilgi: ÇDP için henüz yerel taslak bulunmamaktadır. Resmî mevzuat sembolojisi uygulandı.')
-            elif level in ("PLANGML_NIP", "NIP"):
+            elif level in ("MPYY_NIP", "NIP"):
                 cnt = self.nip_engine.apply(layer)
                 self._last_engine = self.nip_engine
                 self.status.setText(f'NİP resmî brüt yoğunluk ve MNIP font notasyonları uygulandı ({cnt} kural).')
@@ -207,7 +207,7 @@ class DockActionsMixin:
                 cnt = self.nip_engine.apply(layer)
                 self._last_engine = self.nip_engine
                 self.status.setText('Bilgi: 1/5.000 NİP özgün yerel taslağı kullanıcı tarafından hazırlanmaktadır. Mevzuat standardı geçici olarak uygulandı.')
-            elif level == "PLANGML_UIP":
+            elif level == "MPYY_UIP":
                 field_name = next(
                     (name for name in ("uipfonksiyon", "fonksiyon_kodu", "fonksiyon_adi", "catalog_id")
                      if layer.fields().indexFromName(name) >= 0),
@@ -215,10 +215,10 @@ class DockActionsMixin:
                 )
                 if field_name is None:
                     raise ValueError('Katmanda uipfonksiyon, fonksiyon_kodu, fonksiyon_adi veya catalog_id alanı yok.')
-                res = self.plangml_engine.apply(layer, field=field_name, plan_type="UIP")
-                self._last_engine = self.plangml_engine
+                res = self.mpyy_engine.apply(layer, field=field_name, plan_type="UIP")
+                self._last_engine = self.mpyy_engine
                 self.status.setText(
-                    f'PlanGML / e-Plan sembolojisi "{field_name}" alanına uygulandı: '
+                    f'MPYY / e-Plan sembolojisi "{field_name}" alanına uygulandı: '
                     f'{res.official_styles} resmî, {res.fallback_styles} yedek gösterim.'
                 )
             elif level in ("YEREL_UIP", "UIP"):

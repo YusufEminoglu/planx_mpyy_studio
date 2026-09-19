@@ -1,6 +1,6 @@
-# PlanGML 1.1.6 → 1.1.7 farkları
+# MPYY 1.1.6 → 1.1.7 farkları
 
-Kaynak: Bakanlık şema paketi `planGMLShema_1_7.zip` (eplan.csb.gov.tr). Bu rapor `tools/diff_plangml_versions.py` ile XSD dosyalarından üretilmiştir.
+Kaynak: Bakanlık şema paketi `planGMLShema_1_7.zip` (eplan.csb.gov.tr). Bu rapor `tools/diff_mpyy_versions.py` ile XSD dosyalarından üretilmiştir.
 
 ## Uygulama imar planı (UIP)
 

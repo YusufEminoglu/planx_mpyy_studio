@@ -1,4 +1,4 @@
-"""Rigorous QGIS tests for PlanGML and Arazi Kullanımı database isolation."""
+"""Rigorous QGIS tests for MPYY and Arazi Kullanımı database isolation."""
 
 import os
 import sqlite3

@@ -1,17 +1,17 @@
-"""PlanGML çalışma alanı: Bakanlığın PlanGML 1.1.7 XSD şemasından birebir GeoPackage.
+"""MPYY çalışma alanı: Bakanlığın MPYY 1.1.7 XSD şemasından birebir GeoPackage.
 
 One table per member of the schema's ``plan:features`` collection, named exactly
 like the GML element. Fields keep the XSD element names, order and types; code
 lists become dropdowns that store the schema's own enumeration value;
 ``minOccurs="1"`` becomes a not-null constraint. The structure comes only from
-``styles/plangml_schema.json`` (compiled by ``tools/compile_plangml_schema.py``).
+``styles/mpyy_schema.json`` (compiled by ``tools/compile_mpyy_schema.py``).
 
 Not-null constraints are *soft*: QGIS warns but lets a draft be saved, because
 a plan is drawn before every attribute is known. Conformance of a finished plan
 is reported by :func:`audit_required_fields`.
 
 Symbology is the Ministry's own e-Plan GeoServer SLD for the same feature type,
-compiled by ``tools/compile_plangml_eplan_styles.py`` with its filters rewritten
+compiled by ``tools/compile_mpyy_eplan_styles.py`` with its filters rewritten
 to this schema. QGIS' SLD reader turns ``ttf://`` marks into plain circles, so
 those markers are restored from the SLD; tarama images are embedded in the
 style so a GeoPackage stays portable. Types without an official SLD stay neutral.
@@ -46,10 +46,10 @@ from .schema import SCHEMA_VERSION
 
 gdal.UseExceptions()
 
-KIND = "PLANGML_XSD"
+KIND = "MPYY_XSD"
 PLUGIN_ROOT = Path(__file__).resolve().parents[1]
-CATALOG_PATH = PLUGIN_ROOT / "styles" / "plangml_schema.json"
-SLD_DIR = PLUGIN_ROOT / "styles" / "plangml_sld"
+CATALOG_PATH = PLUGIN_ROOT / "styles" / "mpyy_schema.json"
+SLD_DIR = PLUGIN_ROOT / "styles" / "mpyy_sld"
 TARAMA_PLACEHOLDER = "mpyy-tarama:"
 MISSING_SYMBOL_PLACEHOLDER = "mpyy-eksik-sembol:"
 LEVEL_TITLES = {
@@ -61,7 +61,7 @@ LEVEL_TITLES = {
     "MCDP25": "M serisi çevre düzeni planı 1/25.000 (MÇDP25)",
     "MCDP100": "M serisi çevre düzeni planı 1/100.000 (MÇDP100)",
 }
-M_CATALOG_PATH = PLUGIN_ROOT / "styles" / "plangml_m_schema.json"
+M_CATALOG_PATH = PLUGIN_ROOT / "styles" / "mpyy_m_schema.json"
 QGIS_NULL = "{2839923C-8B7D-419E-B84B-CA2FE9B80EC7}"
 
 _OGR_GEOMETRY = {
@@ -94,7 +94,7 @@ def catalog():
 
 
 def all_levels():
-    """Current PlanGML levels plus the M series (read-only import of legacy-legend plans)."""
+    """Current MPYY levels plus the M series (read-only import of legacy-legend plans)."""
     levels = dict(catalog()["levels"])
     levels.update(json.loads(M_CATALOG_PATH.read_text(encoding="utf-8"))["levels"])
     return levels
@@ -103,7 +103,7 @@ def all_levels():
 def level_schema(level):
     levels = all_levels()
     if level not in levels:
-        raise ValueError('PlanGML şemasında olmayan plan kademesi: ' + str(level))
+        raise ValueError('MPYY şemasında olmayan plan kademesi: ' + str(level))
     return levels[level]
 
 
@@ -119,8 +119,8 @@ def _ordered_fields(feature_type):
     return fields + [f for f in feature_type["fields"] if f["name"] == "symbolizer"]
 
 
-def create_plangml_workspace(output_path, crs, level):
-    """Create an empty GeoPackage whose tables are the PlanGML feature types of ``level``."""
+def create_mpyy_workspace(output_path, crs, level):
+    """Create an empty GeoPackage whose tables are the MPYY feature types of ``level``."""
     output = Path(output_path).resolve()
     if output.exists():
         raise FileExistsError(str(output))
@@ -158,16 +158,16 @@ def create_plangml_workspace(output_path, crs, level):
             )
             con.execute("INSERT INTO mpyy_metadata VALUES (?,?,?,?)", (str(uuid.uuid4()), SCHEMA_VERSION, KIND, level))
             con.execute(
-                "CREATE TABLE plangml_sema (plan_kademesi TEXT PRIMARY KEY, xsd_dosyasi TEXT NOT NULL, "
+                "CREATE TABLE mpyy_sema (plan_kademesi TEXT PRIMARY KEY, xsd_dosyasi TEXT NOT NULL, "
                 "xsd_sha256 TEXT NOT NULL, hedef_ad_alani TEXT NOT NULL, kaynak_url TEXT NOT NULL, "
                 "arsiv_sha256 TEXT NOT NULL)"
             )
             con.execute(
                 "INSERT INTO gpkg_contents(table_name, data_type, identifier) "
-                "VALUES ('plangml_sema', 'attributes', 'PlanGML şema kaynağı')"
+                "VALUES ('mpyy_sema', 'attributes', 'MPYY şema kaynağı')"
             )
             con.execute(
-                "INSERT INTO plangml_sema VALUES (?,?,?,?,?,?)",
+                "INSERT INTO mpyy_sema VALUES (?,?,?,?,?,?)",
                 (
                     level,
                     schema["xsd"]["file"],
@@ -192,7 +192,7 @@ def create_plangml_workspace(output_path, crs, level):
     return str(output)
 
 
-def configure_plangml_layer(layer, feature_type, codelists):
+def configure_mpyy_layer(layer, feature_type, codelists):
     """Dropdowns, captions and required-field checks straight from the schema."""
     fields = layer.fields()
     fid = fields.indexFromName("fid")
@@ -202,7 +202,7 @@ def configure_plangml_layer(layer, feature_type, codelists):
     for field in feature_type["fields"]:
         index = fields.indexFromName(field["name"])
         if index < 0:
-            # A workspace created with an older PlanGML version; the audit reports it.
+            # A workspace created with an older MPYY version; the audit reports it.
             missing.append(field["name"])
             continue
         layer.setFieldAlias(index, caption(field["name"]))
@@ -229,11 +229,11 @@ def configure_plangml_layer(layer, feature_type, codelists):
                 allowed = ", ".join("'" + code.replace("'", "''") + "'" for code in codelists[field["codelist"]])
                 layer.setConstraintExpression(
                     index, f'"{field["name"]}" IS NULL OR "{field["name"]}" IN ({allowed})',
-                    f'{caption(field["name"])}: PlanGML kod listesinde olmayan değer.',
+                    f'{caption(field["name"])}: MPYY kod listesinde olmayan değer.',
                 )
     layer.setCustomProperty("mpyy/schema_missing_fields", ", ".join(missing))
-    layer.setCustomProperty("mpyy/form", "PlanGML şeması: " + feature_type["name"])
-    layer.setCustomProperty("mpyy/template", "plangml:" + feature_type["name"])
+    layer.setCustomProperty("mpyy/form", "MPYY şeması: " + feature_type["name"])
+    layer.setCustomProperty("mpyy/template", "mpyy:" + feature_type["name"])
     layer.setCustomProperty("mpyy/workspace_kind", KIND)
 
 
@@ -243,26 +243,26 @@ def _store_default_forms(path, schema):
         layer = QgsVectorLayer(f"{path}|layername={feature_type['name']}", feature_type["name"], "ogr")
         if not layer.isValid():
             raise RuntimeError('Katman açılamadı: ' + feature_type["name"])
-        configure_plangml_layer(layer, feature_type, schema["codelists"])
+        configure_mpyy_layer(layer, feature_type, schema["codelists"])
         apply_eplan_symbology(layer, schema_level(schema), feature_type["name"])
         if not apply_line_labels(layer, schema_level(schema), feature_type["name"]) and not layer.labelsEnabled():
             apply_building_notation(layer)
         # layer_styles.styleName is TEXT(30); the table name already identifies the row.
-        message = layer.saveStyleToDatabase("PlanGML " + schema["xsd"]["file"].split(".V.")[1][:-4], "PlanGML şeması formu", True, "")
+        message = layer.saveStyleToDatabase("MPYY " + schema["xsd"]["file"].split(".V.")[1][:-4], "MPYY şeması formu", True, "")
         if message:
             raise RuntimeError(f'{feature_type["name"]}: stil kaydedilemedi: {message}')
         del layer
 
 
-def load_plangml_layers(path, project=None, dataset_id=None, level=None):
+def load_mpyy_layers(path, project=None, dataset_id=None, level=None):
     project = project or QgsProject.instance()
     if level is None:
         with closing(sqlite3.connect(f"file:{Path(path).resolve().as_posix()}?mode=ro", uri=True)) as con:
-            level = con.execute("SELECT plan_kademesi FROM plangml_sema").fetchone()[0]
+            level = con.execute("SELECT plan_kademesi FROM mpyy_sema").fetchone()[0]
     schema = level_schema(level)
     gpkg = str(Path(path).resolve())
     root = project.layerTreeRoot()
-    title = f'PlanGML {LEVEL_TITLES.get(level, level)}'
+    title = f'MPYY {LEVEL_TITLES.get(level, level)}'
     base = root.findGroup(title) or root.insertGroup(0, title)
     loaded = []
     for group_name, geometries in _GROUPS:
@@ -277,7 +277,7 @@ def load_plangml_layers(path, project=None, dataset_id=None, level=None):
             layer = QgsVectorLayer(f"{gpkg}|layername={feature_type['name']}", feature_type["name"], "ogr")
             if not layer.isValid():
                 raise RuntimeError('Katman açılamadı: ' + feature_type["name"])
-            configure_plangml_layer(layer, feature_type, schema["codelists"])
+            configure_mpyy_layer(layer, feature_type, schema["codelists"])
             if not str(layer.customProperty("mpyy/symbology") or "").startswith(("e-Plan SLD", "Detay kataloğu")):
                 apply_eplan_symbology(layer, level, feature_type["name"])  # default style missing or replaced
             if not layer.labelsEnabled() and not apply_line_labels(layer, level, feature_type["name"]):
@@ -295,7 +295,7 @@ def audit_required_fields(layers):
     report = {}
     for layer in layers:
         name = str(layer.customProperty("mpyy/template") or "")
-        if not name.startswith("plangml:"):
+        if not name.startswith("mpyy:"):
             continue
         required = [
             layer.fields().at(i).name()
@@ -412,7 +412,7 @@ def _owner_of(symbol, path):
 
 
 def apply_eplan_symbology(layer, level, type_name):
-    """Apply the official SLD of this PlanGML type; returns False when the Ministry set has none."""
+    """Apply the official SLD of this MPYY type; returns False when the Ministry set has none."""
     source = SLD_DIR / level / f"{type_name}.sld"
     if not source.exists():
         return _apply_catalog_symbol(layer, level, type_name)
@@ -447,7 +447,7 @@ def apply_eplan_symbology(layer, level, type_name):
     for symbol in symbols:
         if symbol is not None:
             _fix_metre_uom_units(symbol)
-    from .plangml_catalog import apply_catalog_overrides, raster_marker, symbol_for_glyph
+    from .mpyy_detail_catalog import apply_catalog_overrides, raster_marker, symbol_for_glyph
 
     families = installed_font_families()
     missing = {}  # rule label -> gaps left in that rule
@@ -497,7 +497,7 @@ def apply_eplan_symbology(layer, level, type_name):
         _embed_images(symbol)
 
     applied, redrawn, border_text, line_text = apply_catalog_overrides(layer, level, type_name)
-    from .plangml_catalog import catalog_labels
+    from .mpyy_detail_catalog import catalog_labels
 
     for spec in catalog_labels(level, type_name):
         if spec["kind"] == "road_width" and _apply_road_width_labels(layer, None, spec["field"], keep_renderer=True):
@@ -776,7 +776,7 @@ def _fix_metre_uom_units(symbol, _seen=None):
 def _mark_missing_svg_symbols(symbol):
     """Markers pointing at the Ministry's unpublished TaramaSembol SVGs: the Ek-1e catalog symbol of
     the same item when there is one, otherwise a grey "?". True when a "?" was left."""
-    from .plangml_catalog import raster_marker, symbol_for_svg
+    from .mpyy_detail_catalog import raster_marker, symbol_for_svg
 
     found = False
     for index in range(symbol.symbolLayerCount()):
@@ -998,7 +998,7 @@ def apply_line_labels(layer, level, type_name):
         QgsTextFormat,
     )
 
-    table = json.loads((PLUGIN_ROOT / "styles" / "plangml_line_labels.json").read_text(encoding="utf-8"))
+    table = json.loads((PLUGIN_ROOT / "styles" / "mpyy_line_labels.json").read_text(encoding="utf-8"))
     rules = [r for r in table["levels"].get(level, {}).values() if r["feature"] == type_name]
     if not rules:
         return 0

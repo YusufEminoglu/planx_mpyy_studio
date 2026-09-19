@@ -25,7 +25,7 @@ from .eplan_catalog import EPLAN_CATALOG
 
 
 @dataclass(frozen=True)
-class PlanGMLResult:
+class MPYYResult:
     catalog_rows: int
     official_styles: int
     fallback_styles: int
@@ -161,11 +161,11 @@ MPYY_FUNCTION_PALETTES = {
 }
 
 
-class PlanGMLStylerEngine:
+class MPYYStylerEngine:
     def __init__(self):
         root = Path(__file__).resolve().parents[1]
         self._catalog = json.loads(
-            (root / "styles" / "plangml_catalog.json").read_text(encoding="utf-8")
+            (root / "styles" / "mpyy_detail_catalog.json").read_text(encoding="utf-8")
         )["rows"]
         self._tarama = root / "resources"
         self._previous = {}
@@ -278,7 +278,7 @@ class PlanGMLStylerEngine:
         }.get(layer.geometryType())
         if geometry is None:
             raise ValueError(
-                'PlanGML stili yalnızca alan ve çizgi katmanlarına uygulanabilir.'
+                'MPYY stili yalnızca alan ve çizgi katmanlarına uygulanabilir.'
             )
         plan_type = plan_type if plan_type in EPLAN_CATALOG else "UIP"
         rows = [row for row in self._catalog if row["geometry_type"] == geometry]
@@ -314,7 +314,7 @@ class PlanGMLStylerEngine:
         ambiguous = tuple(
             sorted(code for code, count in code_counts.items() if count > 1)
         )
-        return PlanGMLResult(len(categories) - 1, official, len(categories) - 1 - official, ambiguous)
+        return MPYYResult(len(categories) - 1, official, len(categories) - 1 - official, ambiguous)
 
     def restore(self, layer):
         renderer = self._previous.pop(layer.id(), None)

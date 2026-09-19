@@ -1,6 +1,6 @@
 {
  "version": 1,
- "source": "tabaka tabloları (yazarın kendi uygulaması), PlanGML 1.1.7 XSD ile denetlendi",
+ "source": "tabaka tabloları (yazarın kendi uygulaması), MPYY 1.1.7 XSD ile denetlendi",
  "levels": {
   "UIP": {
    "entries": {
@@ -2083,9 +2083,9 @@
    "skipped": {
     "CIZPEN": "yardımcı çizim tabakası",
     "CIZ_PEN": "yardımcı çizim tabakası",
-    "FONKSIYON_SINIRI": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; PlanGML 1.1.7'da karşılığı olan bir tip yok.",
+    "FONKSIYON_SINIRI": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; MPYY 1.1.7'da karşılığı olan bir tip yok.",
     "PAFTA": "yardımcı çizim tabakası",
-    "SINIR_FONKSIYON": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; PlanGML 1.1.7'da karşılığı olan bir tip yok.",
+    "SINIR_FONKSIYON": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; MPYY 1.1.7'da karşılığı olan bir tip yok.",
     "SNR_FONKSIYON": "bu kademede desteklenmiyor"
    }
   },
@@ -3689,14 +3689,14 @@
    "skipped": {
     "CIZPEN": "yardımcı çizim tabakası",
     "CIZ_PEN": "yardımcı çizim tabakası",
-    "FONKSIYON_SINIRI": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; PlanGML 1.1.7'da karşılığı olan bir tip yok.",
+    "FONKSIYON_SINIRI": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; MPYY 1.1.7'da karşılığı olan bir tip yok.",
     "KENTSEL_TASARIM_SINIRI": "NİP 1.1.7 şemasında kentsel tasarım projesi sınırı tipi yok.",
     "MAHALLE_SINIRI": "NİP 1.1.7 şemasında mahalle sınırı tipi yok; plan onama sınırı olarak yazılmamalı.",
     "PAFTA": "yardımcı çizim tabakası",
     "PL_AKARYAKIT_DEPO": "'EnerjiTesisTip=AkaryakitUrunDepolamaAlani' kod listesinde yok",
     "PL_KIYI_KORUMA": "bu kademede desteklenmiyor",
     "PL_YAPAY_ADA": "bu kademede desteklenmiyor",
-    "SINIR_FONKSIYON": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; PlanGML 1.1.7'da karşılığı olan bir tip yok.",
+    "SINIR_FONKSIYON": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; MPYY 1.1.7'da karşılığı olan bir tip yok.",
     "SINIR_KENTSEL_TASARIM": "NİP 1.1.7 şemasında kentsel tasarım projesi sınırı tipi yok.",
     "SINIR_MAHALLE": "NİP 1.1.7 şemasında mahalle sınırı tipi yok; plan onama sınırı olarak yazılmamalı.",
     "SINIR_YAPIYAK": "'YapiYaklasmaSiniri' bu kademenin şemasında yok",
@@ -4514,7 +4514,7 @@
     "ADA_KENARI": "'AdaKenari' bu kademenin şemasında yok",
     "CIZPEN": "yardımcı çizim tabakası",
     "CIZ_PEN": "yardımcı çizim tabakası",
-    "FONKSIYON_SINIRI": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; PlanGML 1.1.7'da karşılığı olan bir tip yok.",
+    "FONKSIYON_SINIRI": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; MPYY 1.1.7'da karşılığı olan bir tip yok.",
     "HAT_IFRAZ": "'AdaKenari' bu kademenin şemasında yok",
     "HAT_KADEME": "'AdaKenari' bu kademenin şemasında yok",
     "IMAR_HAKKI_AKT_SINIRI": "'ImarHakkiAktarimSiniri' bu kademenin şemasında yok",
@@ -4561,7 +4561,7 @@
     "PL_TICARET_T3": "'CalismaTip=3KademeTicaretAlani' kod listesinde yok",
     "PL_YAPAY_ADA": "bu kademede desteklenmiyor",
     "REFUJ": "'DigerYolNesneleri' bu kademenin şemasında yok",
-    "SINIR_FONKSIYON": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; PlanGML 1.1.7'da karşılığı olan bir tip yok.",
+    "SINIR_FONKSIYON": "Fonksiyon ayrım çizgisi plan onama sınırı değildir; MPYY 1.1.7'da karşılığı olan bir tip yok.",
     "SINIR_IMAR_HAKKI": "'ImarHakkiAktarimSiniri' bu kademenin şemasında yok",
     "SINIR_JEO": "'OnlemliAlan' bu kademenin şemasında yok",
     "SINIR_JEOETUD": "'OnlemliAlan' bu kademenin şemasında yok",

@@ -10,7 +10,7 @@ class WorkflowFormsMixin:
     def _build_workspace_forms(self):
 
         # Planning workspace group
-        group_plan = QGroupBox('PlanGML Çalışma Alanı')
+        group_plan = QGroupBox('MPYY Çalışma Alanı')
         form_plan = QFormLayout(group_plan)
         form_plan.setContentsMargins(9, 8, 9, 9)
 
@@ -22,7 +22,7 @@ class WorkflowFormsMixin:
         self.scope.addItem('Yerel UİP — MpyyUipDb çizim şablonu', "YEREL_UIP")
         self.scope.addItem('Yerel NİP — MpyyNipDB çizim şablonu', "YEREL_NIP")
         for code, label in (("UIP", 'UİP'), ("NIP", 'NİP'), ("CDP", 'ÇDP')):
-            self.scope.addItem(f'PlanGML 1.1.7 şeması — {label} (e-Plan XSD)', "PLANGML_XSD:" + code)
+            self.scope.addItem(f'MPYY 1.1.7 şeması — {label} (e-Plan XSD)', "MPYY_XSD:" + code)
         form_plan.addRow('Plan kademesi', self.scope)
 
         btn_create = QPushButton('Çalışma alanı oluştur…')
@@ -62,7 +62,7 @@ class WorkflowFormsMixin:
 
         self.style_family = QComboBox()
         self.style_family.addItem('Yerel MPYY stilleri', "YEREL")
-        self.style_family.addItem('PlanGML / e-Plan stilleri', "PLANGML")
+        self.style_family.addItem('MPYY / e-Plan stilleri', "MPYY")
         self.style_family.currentIndexChanged.connect(self._on_style_family_changed)
 
         self.plan_type = QComboBox()
@@ -107,12 +107,12 @@ class WorkflowFormsMixin:
                 'Yerel UİP ve saha stilleri kullanılabilir. NİP taslaktır; ÇDP resmî yedek stili kullanır. Uygulamadan önce seçilen profili inceleyin.'
             )
         else:
-            self.plan_type.addItem('Uygulama imar planı (UİP, 1:1.000)', "PLANGML_UIP")
-            self.plan_type.addItem('Nazım imar planı (NİP, 1:5.000)', "PLANGML_NIP")
-            self.plan_type.addItem('Çevre düzeni planı (ÇDP)', "PLANGML_CDP")
-            self.plan_type.addItem('Mekânsal Strateji Planı (MSP)', "PLANGML_MSP")
+            self.plan_type.addItem('Uygulama imar planı (UİP, 1:1.000)', "MPYY_UIP")
+            self.plan_type.addItem('Nazım imar planı (NİP, 1:5.000)', "MPYY_NIP")
+            self.plan_type.addItem('Çevre düzeni planı (ÇDP)', "MPYY_CDP")
+            self.plan_type.addItem('Mekânsal Strateji Planı (MSP)', "MPYY_MSP")
             self.style_family_info.setText(
-                'Eklentiyle gelen PlanGML / e-Plan stillerini ve kod kataloglarını kullanır.'
+                'Eklentiyle gelen MPYY / e-Plan stillerini ve kod kataloglarını kullanır.'
             )
 
 
