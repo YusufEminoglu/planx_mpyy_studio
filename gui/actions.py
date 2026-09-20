@@ -215,8 +215,8 @@ class DockActionsMixin:
                 )
                 if field_name is None:
                     raise ValueError('Katmanda uipfonksiyon, fonksiyon_kodu, fonksiyon_adi veya catalog_id alanı yok.')
-                res = self.mpyy_engine.apply(layer, field=field_name, plan_type="UIP")
-                self._last_engine = self.mpyy_engine
+                res = self.mpyy_detail_engine.apply(layer, field=field_name, plan_type="UIP")
+                self._last_engine = self.mpyy_detail_engine
                 self.status.setText(
                     f'MPYY / e-Plan sembolojisi "{field_name}" alanına uygulandı: '
                     f'{res.official_styles} resmî, {res.fallback_styles} yedek gösterim.'

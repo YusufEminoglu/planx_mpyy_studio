@@ -46,7 +46,6 @@ from planx_mpyy_studio.core.local_uip_workspace import (  # noqa: E402
     create_local_uip_workspace,
     template,
 )
-from planx_mpyy_studio.core.mpyy_styler import MPYYStylerEngine  # noqa: E402
 from planx_mpyy_studio.core.project_binding import load_project_layers  # noqa: E402
 from planx_mpyy_studio.core.styler import MPYYStylerEngine  # noqa: E402
 

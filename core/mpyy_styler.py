@@ -161,7 +161,18 @@ MPYY_FUNCTION_PALETTES = {
 }
 
 
-class MPYYStylerEngine:
+class MPYYDetailStylerEngine:
+    """Ek-1e e-Plan detail-catalogue renderer.
+
+    Not the same engine as ``core.styler.MPYYStylerEngine``, despite the shared
+    job description: this one resolves a tabaka/fonksiyon field against
+    ``styles/mpyy_detail_catalog.json`` plus ``EPLAN_CATALOG`` and reports
+    official vs fallback style counts, so its ``apply`` takes ``field`` and
+    ``plan_type``. The two were briefly merged into one name by a rename, which
+    made the dock's e-Plan branch raise TypeError -- see
+    ``tests/test_engine_wiring_pure.py``.
+    """
+
     def __init__(self):
         root = Path(__file__).resolve().parents[1]
         self._catalog = json.loads(

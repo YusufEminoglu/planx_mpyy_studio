@@ -1,5 +1,6 @@
 """Interaction and layout regression tests for the MPYY workbench."""
 
+import inspect
 import tempfile
 import unittest
 import re
@@ -55,6 +56,35 @@ class GuiTests(unittest.TestCase):
                 self.dock.tool_list.setCurrentItem(item)
                 return
         self.fail("Tool not found: " + tool_id)
+
+    def test_dock_owns_two_distinct_styling_engines(self):
+        """The detail engine and the local-XML engine must stay two objects.
+
+        A rename once gave both classes the same name, so the second import in
+        `dock.py` shadowed the first and the attribute was assigned twice: the
+        detail engine never survived construction. The MPYY / e-Plan branch of
+        the dock then drove the surviving class with keywords it does not accept,
+        and the failure was invisible because nothing read either object.
+        """
+        from ..core.mpyy_styler import MPYYDetailStylerEngine
+        from ..core.styler import MPYYStylerEngine
+
+        detail = self.dock.mpyy_detail_engine
+        self.assertIsInstance(detail, MPYYDetailStylerEngine)
+        self.assertNotIsInstance(detail, MPYYStylerEngine)
+        self.assertIsInstance(self.dock.mpyy_engine, MPYYStylerEngine)
+        self.assertIsNot(detail, self.dock.mpyy_engine)
+
+        for engine in (detail, self.dock.mpyy_engine):
+            self.assertTrue(callable(engine.apply))
+            self.assertTrue(callable(engine.restore))
+
+        # The keywords the dock's MPYY / e-Plan branch calls it with. These are
+        # what the shadowed binding broke; pin them against the real signature.
+        parameters = inspect.signature(detail.apply).parameters
+        self.assertIn("field", parameters)
+        self.assertIn("plan_type", parameters)
+        self.assertNotIn("plan_level", parameters)
 
     def test_catalog_covers_every_processing_algorithm(self):
         described = {row[0] for rows in _GROUPS.values() for row in rows if len(row) < 6 or row[5]}

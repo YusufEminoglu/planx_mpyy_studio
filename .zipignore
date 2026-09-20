@@ -3,9 +3,8 @@ tools
 # Claude Code worktrees and scratch QGIS profiles; a worktree holds a second copy
 # of the plugin, which QGIS would try to load as a plugin of its own.
 .claude
-# Internal working documents, not plugin documentation. The first two are work
-# orders addressed to an AI agent, and the third is a development history written
-# before this became a public release. Nothing in the shipped code reads them.
-MASTER_AGENT_SPECIFICATION.md
-NEXT_AGENT_MASTER_DIRECTIVE.md
+# Internal working documents, not plugin documentation. The handoff is addressed to
+# an AI agent, and the history was written before this became a public release.
+# Nothing in the shipped code reads either of them.
+HANDOFF_NEXT_AGENT.md
 docs/DEVELOPMENT_HISTORY.md

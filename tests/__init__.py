@@ -30,13 +30,13 @@ if os.name == "nt" and hasattr(os, "add_dll_directory"):
         if folder.is_dir():
             _DLL_HANDLES.append(os.add_dll_directory(str(folder.resolve())))
     # Explicitly select OSGeo4W Qt before third-party sitecustomize DLL paths.
-    _QT_CORE = ctypes.WinDLL(
-        str(
-            root
-            / "apps"
-            / qt
-            / "bin"
-            / ("Qt5Core.dll" if qt == "qt5" else "Qt6Core.dll")
-        )
+    # Only when the DLL is really there: with OSGEO4W_ROOT and QGIS_PREFIX_PATH
+    # unset -- a plain interpreter importing this package for a qgis-free test --
+    # `root` and `prefix` collapse to "." and this load would raise
+    # FileNotFoundError on a cwd-relative path, taking the whole run down.
+    _qt_core = root / "apps" / qt / "bin" / (
+        "Qt5Core.dll" if qt == "qt5" else "Qt6Core.dll"
     )
+    if _qt_core.is_file():
+        _QT_CORE = ctypes.WinDLL(str(_qt_core))
     os.environ.setdefault("QT_QPA_FONTDIR", str(Path(os.environ["WINDIR"]) / "Fonts"))

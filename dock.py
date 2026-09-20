@@ -2,7 +2,7 @@
 
 from qgis.PyQt.QtWidgets import QDockWidget
 
-from .core.mpyy_styler import MPYYStylerEngine
+from .core.mpyy_styler import MPYYDetailStylerEngine
 from .core.styler import MPYYStylerEngine
 
 
@@ -18,7 +18,7 @@ class MPYYDock(WorkbenchMixin, WorkflowFormsMixin, DockActionsMixin, QDockWidget
         self.setMinimumWidth(320)
         self.iface = iface
 
-        self.mpyy_engine = MPYYStylerEngine()
+        self.mpyy_detail_engine = MPYYDetailStylerEngine()
         self.mpyy_engine = MPYYStylerEngine()
         self._last_engine = None
 
