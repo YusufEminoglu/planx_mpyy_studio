@@ -218,13 +218,12 @@ Re-run this after any further change. `qgis[ltr]` is QGIS 3.44 via
   `tools/generate_reference_manual.py`, which parses the catalogue out of `gui/catalog.py`
   and **fails loudly** if `provider.py` registers an algorithm with no catalogue row — so
   the manual cannot silently drift. Regenerate it after any algorithm change.
-- Two older agent documents that used to sit at the root —
-  `MASTER_AGENT_SPECIFICATION.md` and `NEXT_AGENT_MASTER_DIRECTIVE.md` — were **deleted**
-  on 2026-09-20 (stale: 2.5.2 era, they claimed 83 algorithms and two dock utilities). If
-  you find them cited anywhere, that citation is dead. `docs/DEVELOPMENT_HISTORY.md` (also
-  "through 2.5.1", also 83-algorithm era) **survives on disk, zipignored** — it is a
-  history, not a handoff, and it is just as stale. **This file is now the only handoff.**
-  If it ever stops being accurate, rewrite it rather than adding a second one.
+- Every stale predecessor document was **deleted** on 2026-09-20:
+  `MASTER_AGENT_SPECIFICATION.md`, `NEXT_AGENT_MASTER_DIRECTIVE.md` (both 2.5.2 era,
+  claiming 83 algorithms and two dock utilities) and `docs/DEVELOPMENT_HISTORY.md`
+  ("through 2.5.1", same wrong count). **This file is the only handoff that exists** — if
+  you find any of those three cited anywhere, the citation is dead. If this file ever
+  stops being accurate, rewrite it rather than adding a second one.
 
 ---
 
