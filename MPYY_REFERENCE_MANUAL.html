@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlanX MPYY Studio — Referans El Kitabı</title>
+<meta name="description" content="PlanX MPYY Studio QGIS eklentisinin 86 işlem algoritması, çalışma alanı modeli, gösterim profilleri ve veri alışverişi için referans el kitabı.">
+<style>
+:root{
+  --ink:#16232a; --muted:#5a6f78; --paper:#f6f8f5; --card:#ffffff;
+  --line:#d9e0da; --teal:#156f6a; --copper:#a85729; --blue:#2d5a80;
+  --code:#eef2ee; --th:#e8f1ef; --stripe:rgba(0,0,0,.018);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --ink:#e4eae8; --muted:#9aa9ae; --paper:#101619; --card:#161d21;
+    --line:#2a353a; --teal:#5fc9c0; --copper:#e0915c; --blue:#8fb8d8;
+    --code:#1d262b; --th:#1c2a2c; --stripe:rgba(255,255,255,.028);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  line-height:1.68; font-size:15.5px;
+}
+#layout{display:flex; min-height:100vh; align-items:flex-start}
+#sidebar{
+  width:288px; min-width:288px; position:sticky; top:0; height:100vh; overflow-y:auto;
+  background:var(--card); border-right:1px solid var(--line); padding:26px 18px 40px;
+}
+#sidebar .brand{font-weight:800; font-size:16px; line-height:1.35; display:block}
+#sidebar .brand small{display:block; font-weight:600; font-size:12px; color:var(--copper);
+  text-transform:uppercase; letter-spacing:.07em; margin-top:6px}
+#toc{list-style:none; margin:20px 0 0; padding:0; font-size:13.5px}
+#toc a{display:block; padding:5px 10px; border-radius:5px; border-left:3px solid transparent;
+  color:var(--ink); text-decoration:none}
+#toc a:hover,#toc a:focus{background:rgba(21,111,106,.09); border-left-color:var(--teal); color:var(--teal)}
+#toc .sub a{padding-left:24px; font-size:12.7px; color:var(--muted)}
+#main{flex:1; max-width:1010px; padding:38px 44px 90px; min-width:0}
+h1{font-size:2rem; line-height:1.25; margin:0 0 6px; color:var(--teal)}
+.lede{color:var(--muted); font-size:1rem; margin:0 0 34px}
+h2{font-size:1.45rem; color:var(--blue); border-bottom:2px solid var(--line);
+  padding-bottom:.35rem; margin:2.6rem 0 1rem; scroll-margin-top:16px}
+h3{font-size:1.1rem; color:var(--copper); margin:1.7rem 0 .5rem; scroll-margin-top:16px}
+p{margin:0 0 .85rem}
+ul,ol{margin:.5rem 0 .9rem 1.4rem}
+li{margin-bottom:.32rem}
+a{color:var(--teal)}
+code{background:var(--code); padding:.1em .38em; border-radius:4px;
+  font-family:"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace; font-size:.88em}
+pre{background:var(--code); border:1px solid var(--line); border-left:3px solid var(--teal);
+  border-radius:6px; padding:.8rem 1rem; overflow-x:auto}
+pre code{background:none; padding:0}
+kbd{background:var(--card); border:1px solid var(--line); border-bottom-width:2px;
+  border-radius:4px; padding:.08em .4em; font-size:.82em; font-family:inherit}
+table{width:100%; border-collapse:collapse; margin:1rem 0 1.4rem; font-size:.9rem}
+th,td{border:1px solid var(--line); padding:.48rem .68rem; text-align:left; vertical-align:top}
+th{background:var(--th); font-weight:650}
+tbody tr:nth-child(even){background:var(--stripe)}
+.table-wrap{overflow-x:auto; margin:1rem 0 1.4rem}
+.table-wrap table{margin:0; min-width:760px}
+td.id code{white-space:nowrap; font-size:.84em}
+.cat{margin-top:2rem}
+.cat h3{margin-bottom:.15rem}
+.cat .count{color:var(--muted); font-size:.85rem; margin:0 0 .7rem}
+.warn{border-left:3px solid var(--copper); background:var(--code);
+  padding:.7rem .95rem; border-radius:0 6px 6px 0}
+footer{margin-top:3.4rem; padding-top:1.2rem; border-top:1px solid var(--line);
+  color:var(--muted); font-size:.86rem}
+@media (max-width:880px){
+  #layout{flex-direction:column}
+  #sidebar{position:static; width:100%; min-width:0; height:auto; border-right:0;
+    border-bottom:1px solid var(--line)}
+  #main{padding:24px 18px 70px; max-width:100%}
+  #toc{columns:2; column-gap:14px}
+}
+@media print{
+  #sidebar{display:none} #main{max-width:100%; padding:0}
+  body{background:#fff; font-size:11pt; color:#000}
+  h2{page-break-after:avoid} tr{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="layout">
+  <nav id="sidebar">
+    <span class="brand">PlanX MPYY Studio<small>Referans El Kitabı · 1.0.0</small></span>
+    <ul id="toc">
+          <li><a href="#genel-bakis">Genel bakış</a></li>
+          <li><a href="#kurulum">Kurulum</a></li>
+          <li><a href="#calisma-alanlari">Çalışma alanları</a></li>
+          <li><a href="#gosterim">Gösterim ve semboloji</a></li>
+          <li><a href="#veri-alisverisi">Veri alışverişi</a></li>
+          <li><a href="#fontlar">Yazı tipleri</a></li>
+          <li><a href="#arayuz">Arayüz</a></li>
+          <li><a href="#denetim">Denetim yaklaşımı</a></li>
+          <li><a href="#katalog">Araç kataloğu</a></li>
+          <li class="sub"><a href="#kat-1">Çalışma alanı ve veri (10)</a></li>
+          <li class="sub"><a href="#kat-2">Parsel tasarımı (8)</a></li>
+          <li class="sub"><a href="#kat-3">Kentsel analiz (10)</a></li>
+          <li class="sub"><a href="#kat-4">Ulaşım ve erişim (6)</a></li>
+          <li class="sub"><a href="#kat-5">Plan denetimleri (17)</a></li>
+          <li class="sub"><a href="#kat-6">Plan dosyası ve dayanaklar (20)</a></li>
+          <li class="sub"><a href="#kat-7">Raporlar ve teslim (15)</a></li>
+          <li><a href="#panel-araclari">Panel araçları</a></li>
+          <li><a href="#kalite">Kalite güvencesi</a></li>
+          <li><a href="#sinirlar">Sınırlar</a></li>
+          <li><a href="#lisans">Lisans ve atıf</a></li>
+    </ul>
+  </nav>
+  <main id="main">
+    <h1>PlanX MPYY Studio</h1>
+    <p class="lede">86 işlem algoritması ve 3 panel aracıyla MPYY
+    uyumlu plan üretimi, denetimi ve teslimi için QGIS ortamı.</p>
+<h2 id="genel-bakis">Genel bakış</h2>
+        <p><strong>PlanX MPYY Studio</strong>, Türkiye planlama pratiğinde MPYY uyumlu
+        mekânsal planlama iş akışları için bir QGIS eklentisidir. Taşınabilir GeoPackage
+        çalışma alanları, Bakanlık kaynaklı gösterimler, plan denetimleri, saha
+        araştırması ve rapor üretimini tek bir panelde birleştirir.</p>
+
+        <table>
+          <tbody>
+            <tr><th>Eklenti adı</th><td>PlanX MPYY Studio</td></tr>
+            <tr><th>Sürüm</th><td>1.0.0</td></tr>
+            <tr><th>Sağlayıcı kimliği</th><td><code>planx_mpyy_studio</code></td></tr>
+            <tr><th>Hedef QGIS</th><td>3.44 LTR ve 4.x (4.99'a kadar)</td></tr>
+            <tr><th>Lisans</th><td>GPL-2.0-or-later</td></tr>
+            <tr><th>Yazar</th><td>Yusuf Eminoğlu</td></tr>
+            <tr><th>Kapsam</th><td>86 işlem algoritması, 3 panel aracı</td></tr>
+          </tbody>
+        </table>
+
+        <p>Arayüz dili Türkçedir: araç adları, yardım metinleri, parametre etiketleri,
+        seçenekler, bildirimler, form sekmeleri, alan etiketleri, kısıt açıklamaları,
+        lejantlar, harita bilgi kartları ve üretilen raporlar. Mevzuat kodları, özgün
+        kataloglar, saklanan değerler, alan adları ve kullanıcının verdiği adlar
+        değiştirilmez. QGIS'in kendi iletişim kutularının dili QGIS dil ayarını izler.</p>
+
+        <p>Eklenti bir <em>hesap aracı</em> değil, <em>plan üretim ve denetim ortamıdır</em>.
+        Analizler karar vermez; bulguyu, kullanılan varsayımı ve incelenmesi gereken
+        kaydı ayrı ayrı raporlar.</p>
+<h2 id="kurulum">Kurulum</h2>
+        <p>Yerel ZIP paketini QGIS eklenti yöneticisindeki <strong>ZIP'ten kur</strong>
+        seçeneğiyle yükleyin. Geliştirme için <code>QGIS_PLUGINPATH</code> değerini
+        eklentilerin kök klasörüne ayarlayıp QGIS'i yeniden başlatabilirsiniz.</p>
+        <p>Sembol yazı tipleri paketle birlikte gelir ve eklenti yüklenirken kaydedilir;
+        sisteme font kurmak gerekmez. QGIS 4 tarafında da aynı kayıt yolu kullanılır.</p>
+        <pre><code>py -3 packaging/pf.py verify planx_mpyy_studio</code></pre>
+        <p>Bu komut kapıları ve test paketini iki QGIS çalışma zamanında birlikte koşar.</p>
+<h2 id="calisma-alanlari">Çalışma alanları</h2>
+        <p>Eklenti dört ayrı çalışma alanı türü tanır. Hepsi taşınabilir GeoPackage
+        dosyasıdır ve aynı QGIS projesine birlikte yüklenebilir.</p>
+
+        <h3>1. MPYY 1.1.7 çalışma alanı (UİP / NİP / ÇDP)</h3>
+        <p>Bakanlığın XSD şemasından birebir üretilir: tablo ve alan adları GML öğe
+        adlarıdır, kod listeleri açılır listedir. Gösterim Bakanlığın e-Plan SLD
+        setinden gelir. Sit ve koruma sınırlarına detay kataloğundaki kısaltmalar
+        (A1, KS, YKK…) yazılır.</p>
+        <p>UİP alan formunda MPYY kimliği, fonksiyon kataloğu, yapı nizamı, TAKS,
+        KAKS/emsal, yükseklik ve çekme mesafeleri bulunur.</p>
+
+        <h3>2. Yerel UİP çalışma alanı (çizim şablonu)</h3>
+        <p>Ayrı bir çalışma alanı türüdür. <code>uip-alanlar</code>,
+        <code>uip_cizgiler</code>, <code>uip-notasyonlar</code>,
+        <code>yapi_yaklasma</code>, <code>uipPolygonTable</code> ve
+        <code>uipLineTable</code> tabloları kaynak şablonla aynı alan ve türlerle
+        oluşturulur. Semboloji, koşullu sekmeler, açılır listeler ve varsayılan
+        değerler şablonun QGIS projesinden alınır ve <code>forms/yerel_uip</code>
+        altında saklanır.</p>
+        <p>UİP fonksiyonu zincirli listedir: önce üst konu grubu, sonra o gruptaki
+        fonksiyon seçilir. Nizam <code>A</code>, <code>B</code>, <code>BL</code>
+        olarak saklanır. Aynı form MPYY çalışma alanındaki <code>mpyy_uip_*</code>
+        katmanlarında da kullanılır.</p>
+
+        <h3>3. Saha / arazi kullanımı çalışma alanı</h3>
+        <p>Arazi kullanımı ayrı bir çalışma alanıdır. TUCBS arazi katmanları ile
+        parsel, yapı ve yol araştırma tabloları plan kararlarından ayrı tutulur.
+        Saha işlevleri plan işlevlerine ayrı bir eşleştirme adımıyla bağlanır.</p>
+
+        <h3>4. Mekânsal strateji planı (MSP)</h3>
+        <p>MSP için gereklilik denetimi ve eylem izleme araçları ayrı bir grup
+        oluşturur. MSP sembolleri EK-1e kataloğundan yerel QGIS sembollerine
+        dönüştürülür; GeoServer gerektirmez.</p>
+
+        <h3>Kademe dönüşümü</h3>
+        <p>UİP çalışma alanı NİP veya ÇDP şemasına, NİP çalışma alanı ÇDP şemasına
+        tip ve kod karşılıklarıyla aktarılır. Karşılığı olmayan ya da planlamacının
+        doldurması gereken kodlar tahmin edilmez, ayrıca raporlanır.</p>
+
+        <h3>Geometri onarımı ve sürüm birleştirme</h3>
+        <p>Poligon hataları temizlenebilir; isteğe bağlı yakalama toleransı ile küçük
+        sınır farklılıkları giderilir. Çalışma alanı sürümleri birleştirilmeden önce
+        farklar önizlenebilir; birleştirme politikası kullanıcı tarafından seçilir ve
+        çözülemeyen çakışmalar ayrı raporlanır.</p>
+<h2 id="gosterim">Gösterim ve semboloji</h2>
+        <p>Varsayılan stil motoru MPYY/e-Plan gösterimidir. Yerel MPYY stilleri
+        seçilebilir alternatiftir. Uygulamadan önce seçilen profili inceleyin.</p>
+
+        <table>
+          <thead><tr><th>Profil</th><th>Kaynak</th><th>Durum</th></tr></thead>
+          <tbody>
+            <tr><td>e-Plan SLD</td><td>Bakanlık e-Plan SLD seti</td><td>Varsayılan</td></tr>
+            <tr><td>Detay kataloğu</td><td>Ek-1e detay sembol kataloğu</td><td>Kısaltma notasyonu</td></tr>
+            <tr><td>Yerel MPYY stilleri</td><td>Paketle gelen yerel setler</td><td>Alternatif</td></tr>
+            <tr><td>UİP</td><td>Yerel çizim şablonu</td><td>Kullanılabilir</td></tr>
+            <tr><td>NİP</td><td>Yerel set</td><td>Taslak</td></tr>
+            <tr><td>ÇDP</td><td>Bakanlık yedek stili</td><td>Resmî yedek</td></tr>
+            <tr><td>MSP</td><td>EK-1e kataloğu</td><td>Yerel QGIS sembolüne dönüştürülür</td></tr>
+          </tbody>
+        </table>
+
+        <p>Gösterim kaynağı kayıt altındadır. <code>styles/provenance.json</code>
+        dosyası kaynak dosyaların boyutunu ve SHA-256 özetini, eşleştirme yöntemini,
+        belirsiz olduğu için dışarıda bırakılan kodları ve geometri uyuşmazlıklarını
+        kaydeder. Bu dosyaya göre kaynak gösterim setinde <strong>300 üst düzey
+        sembol</strong> ve toplam <strong>1100 sembol düğümü</strong> bulunur; 800
+        düğüm yalnızca iç içe geçmiş durumdadır.</p>
+
+        <p>Özgün QML dosyaları izlenebilirlik için korunur; temel katmanlar programatik
+        formlarla oluşturulur. Kayıtlı projelerde yerel QGIS ifadeleri kullanılır;
+        özel Python ifade kaydı gerekmez.</p>
+<h2 id="veri-alisverisi">Veri alışverişi</h2>
+
+        <h3>MPYY GML içe aktarma</h3>
+        <p><code>import_mpyy_gml</code> e-Plan MPYY dosyasını şemasına göre okur.
+        Güncel şemaların yanında Bakanlık paketindeki M serisi (MUİP, MNİP, MÇDP —
+        1/25.000 ve 1/100.000, sürüm 1.1.6) da desteklenir; bu şemalar eski yönetmelik
+        gösterimlerini ve <code>YeniKod</code> alanını taşır. Şema
+        <code>xsi:schemaLocation</code> alanından, yoksa öğe adlarından belirlenir.</p>
+        <p><strong>Şemada olmayan öğe ve öznitelikler, kod listesi dışı değerler ve
+        okunamayan geometriler tahmin edilmez, raporlanır.</strong> MUİP ve MNİP
+        katmanları Bakanlık SLD gösterimiyle açılır; MÇDP için SLD setinde stil
+        yoktur.</p>
+
+        <h3>CAD tabakalarını aktarma</h3>
+        <p><code>import_cad_to_mpyy</code> CAD/NCZ tabaka adlarını MPYY 1.1.7 nesne
+        tiplerine ve kodlarına çevirerek çalışma alanına yazar. Eşleşmeyen tabakalar
+        sessizce düşürülmez; tabaka bazında aktarım raporunda listelenir.</p>
+
+        <h3>Şema profili ve kimlik denetimi</h3>
+        <p>İdarenin UTF-8 CSV sözlüğü açık JSON sütun eşlemesiyle şema profiline
+        dönüştürülebilir. Tablo, alan ve SQLite türü zorunludur. Boş değer, birincil
+        anahtar, geometri ve koordinat sistemi sütunları isteğe bağlıdır. Belirsiz
+        başlıklar, yinelenen alanlar ve çelişkili geometri tanımları reddedilir.</p>
+        <p>Kimlik denetimi gömülü SHA-256 özetini, isteğe bağlı kaynak sözlüğünü ve
+        ayrı saklanan bağımsız özeti karşılaştırır. <strong>İçerik tutarlılığı kurumun
+        özgünlüğünü tek başına kanıtlamaz;</strong> sonuç raporunda
+        <code>issuer_authenticity: NOT_VERIFIED</code> korunur. Şema denetimi
+        GeoPackage dosyasını salt okunur açar.</p>
+
+        <h3>Sayısal teslim</h3>
+        <p>Teslim paketi için dosya envanteri (boyut ve SHA-256), içerik listesi
+        denetimi ve tarih sırası incelemesi ayrı araçlardır. Denetim raporları
+        makine tarafından okunabilir biçimde birleştirilebilir.</p>
+<h2 id="fontlar">Yazı tipleri</h2>
+        <p>Eklenti, sembol çizimi için gereken <strong>131 TTF dosyasını</strong>
+        <code>resources/fonts</code> altında paketle birlikte taşır ve
+        <code>core/fonts.py</code> içindeki <code>register_mpyy_fonts()</code> ile
+        kaydeder. Kayıt, panel kurulurken yapılır; QGIS açılışında eklenti yüklüyse
+        proje okunmadan önce fontlar hazırdır. Bu sıra önemlidir: sembol katmanı
+        ailesini oluşturulma anında çözer, dolayısıyla geç kayıt çizimi düzeltmez.</p>
+        <p>Okunabilir arayüz yazı tipinin CAD sembol fontları tarafından ele
+        geçirilmemesi için metin fontları (DejaVu ailesi) önce kaydedilir ve
+        uygulamanın varsayılan ailesi korunur.</p>
+        <p class="warn">Paketlenen yazı tiplerinin yeniden dağıtım durumu
+        <code>styles/provenance.json</code> içinde <em>doğrulanmamış</em> olarak
+        kayıtlıdır ve bu dosya aile envanterinin yalnızca bir bölümünü listeler.
+        Ayrıntı için <a href="#sinirlar">Sınırlar</a> bölümüne bakın.</p>
+<h2 id="arayuz">Arayüz</h2>
+        <p>Panelin üç sekmesi vardır:</p>
+        <ul>
+          <li><strong>Başlangıç:</strong> çalışma alanı oluşturma, veri aktarma,
+          biçimlendirme, karar inceleme ve teslim adımları.</li>
+          <li><strong>Araçlar:</strong> 86 işlem algoritması ve
+          3 panel aracı; kategori, arama, kaydedilen kısayollar ve son
+          açılanlar.</li>
+          <li><strong>İşlem Kaydı:</strong> yapılandırma açılışları ve sonuçlar; tam
+          ayrıntıları kopyalayabilirsiniz.</li>
+        </ul>
+        <p>Araç seçildiğinde amacı, gerekli girdileri ve beklenen sonucu görürsünüz.
+        <strong>Aracı aç</strong> yapılandırmayı açar; hesaplamayı İşlem Araç
+        Kutusunda başlatırsınız. Hafif işler için <strong>Kısa formu kullan</strong>
+        sonuçları mevcut projeye uygular. Geri dönüldüğünde girdiler korunur.</p>
+
+        <h3>Klavye ve arama</h3>
+        <p><kbd>Ctrl</kbd>+<kbd>K</kbd> aramaya geçer, ok tuşları araç seçer,
+        <kbd>Enter</kbd> veya <kbd>Alt</kbd>+<kbd>O</kbd> aracı açar,
+        <kbd>Tab</kbd> kontroller arasında ilerler. Arama Türkçe karakterlere duyarlı
+        değildir: <code>erişilebilirlik</code> ve <code>erisilebilirlik</code> aynı
+        eşleşmeleri verir. Algoritma kimlikleriyle de arayabilirsiniz.</p>
+
+        <h3>Erişilebilirlik</h3>
+        <p>Panel QGIS yazı tipi ve renk paletini izler. Metinler dar panellerde satıra
+        bölünür; formlar dikey kayar. Uzun sonuçlar İşlem Kaydı sekmesinde saklanır.
+        Test paletlerinde metin kontrastı 4,5:1 altına düşmez. Bu kontroller tüm ekran
+        okuyucular veya işletim sistemi temaları için uyumluluk belgesi değildir.</p>
+<h2 id="denetim">Denetim yaklaşımı</h2>
+        <p>Denetim araçları iki ilkeye uyar.</p>
+        <ol>
+          <li><strong>Eksik dayanak uydurulmaz.</strong> Eksik güzergâha süre atanmaz,
+          şemada olmayan öğe tahmin edilmez, karşılığı olmayan kod boş bırakılır.</li>
+          <li><strong>Bulgu, varsayım ve kayıt ayrı raporlanır.</strong> Her araç
+          hangi varsayımla çalıştığını ve hangi kaydın incelenmesi gerektiğini
+          çıktısında taşır.</li>
+        </ol>
+        <p>Ölçütler mevzuat ve idare verisinden gelir; eklenti kendi başına bir
+        uygunluk kararı vermez. Denetim sonuçları <em>inceleme listesi</em>dir,
+        <em>onay</em> değildir.</p>
+        <p>Erişilebilirlik analizlerinde girdiler aynı, metre birimli projeksiyonlu
+        koordinat sistemini kullanmalıdır. Ağ kesişimleri ortak düğümlerle temsil
+        edilmelidir; yakalama ağ kenarına değil düğümlerine yapılır. Süre eşiği,
+        hızlar ve aktarma cezası kullanıcı girdileridir. Güzergâh kazanımı/kaybı ve
+        yakalama belirsizliği ayrı sınıflardır.</p>
+        <h2 id="katalog">Araç kataloğu</h2>
+        <p>Eklenti <strong>86 işlem algoritması</strong> kaydeder ve bunları
+        7 kategoride sunar. Aşağıdaki liste <code>gui/catalog.py</code>
+        dosyasındaki kullanıcı açıklamalarından üretilir; <em>Kimlik</em> sütunu İşlem Araç
+        Kutusunda ve Python ifadelerinde kullanılan algoritma kimliğidir.</p>
+        <p>Her araç bir <em>inceleme</em> üretir; hiçbiri tek başına uygunluk kararı
+        vermez. Eşleşmeyen kod, eksik dayanak ve okunamayan geometri tahmin edilmez,
+        bulgu olarak raporlanır.</p>
+        <div class="cat">
+          <h3 id="kat-1">Çalışma alanı ve veri</h3>
+          <p class="count">10 algoritma</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:2.6rem">#</th><th>Araç</th><th>Kimlik</th>
+              <th>Amaç</th><th>Girdiler</th><th>Çıktı</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Saha çalışma alanı oluştur</td><td class="id"><code>create_land_use_workspace</code></td><td>Arazi kullanım araştırmalarını plan kararlarından ayrı saklar.</td><td>Koordinat sistemi ve yeni bir GeoPackage dosyası seçin.</td><td>Arazi kullanımı ve saha katmanlarını içeren GeoPackage dosyası.</td></tr>
+                <tr><td>2</td><td>Vektör veri içe aktar</td><td class="id"><code>ingest_vector_dataset</code></td><td>Mevcut CBS veya CAD vektörlerini çalışma alanına aktarır.</td><td>Kaynak vektör katmanı ve hedef GeoPackage katmanı.</td><td>Aktarılan nesneler ve içe aktarma özeti.</td></tr>
+                <tr><td>3</td><td>CAD tabakalarını MPYY çalışma alanına aktar</td><td class="id"><code>import_cad_to_mpyy</code></td><td>CAD/NCZ tabaka adlarını MPYY 1.1.7 nesne tiplerine ve kodlarına çevirerek çalışma alanına yazar; eşleşmeyen tabakaları raporlar.</td><td>Tabaka adı alanı olan CAD veya CBS vektör katmanı ve MPYY 1.1.7 çalışma alanı.</td><td>MPYY tablolarına yazılan nesneler ve tabaka bazında aktarım raporu.</td></tr>
+                <tr><td>4</td><td>MPYY şema uygunluğunu denetle</td><td class="id"><code>audit_mpyy_workspace</code></td><td>Zorunlu alanları, kod listesi değerlerini, geometri türünü ve şemada olmayan katmanları denetler.</td><td>MPYY 1.1.7 çalışma alanı GeoPackage dosyası.</td><td>Katman ve nesne bazında şema aykırılıkları raporu.</td></tr>
+                <tr><td>5</td><td>MPYY kademesini dönüştür</td><td class="id"><code>convert_mpyy_level</code></td><td>UİP çalışma alanını NİP veya ÇDP şemasına, NİP çalışma alanını ÇDP şemasına tip ve kod karşılıklarıyla aktarır.</td><td>MPYY 1.1.7 UİP veya NİP çalışma alanı ve hedef kademe.</td><td>Yeni MPYY çalışma alanı ve karşılığı olmayan ya da planlamacının doldurması gereken kodların raporu.</td></tr>
+                <tr><td>6</td><td>MPYY GML dosyasını içe aktar (M serisi dahil)</td><td class="id"><code>import_mpyy_gml</code></td><td>e-Plan MPYY dosyasını şemasına göre okur; eski yönetmelik gösterimlerini taşıyan M serisi (MUİP, MNİP, MÇDP) ve güncel şemalar desteklenir.</td><td>MPYY GML dosyası; şema otomatik belirlenir, koordinat sistemi dosyada yoksa seçilmelidir.</td><td>Şemanın tablolarını, açılır listelerini ve Bakanlık gösterimini taşıyan GeoPackage ile içe aktarma raporu.</td></tr>
+                <tr><td>7</td><td>Plan geometrisini onar</td><td class="id"><code>clean_planning_geometries</code></td><td>Poligon hatalarını temizler; isteğe bağlı olarak küçük sınır farklılıklarını yakalama toleransı ile giderir.</td><td>Plan poligonları ve belirtilmiş yakalama toleransı.</td><td>Onarılmış geometri katmanı; kullanmadan önce değişiklikleri inceleyin.</td></tr>
+                <tr><td>8</td><td>Çalışma alanı farklarını önizle</td><td class="id"><code>preview_workspace_reconciliation</code></td><td>Çalışma alanı sürümlerini birleştirmeden önce farkları gösterir.</td><td>Başlangıç ve düzenlenmiş GeoPackage sürümleri.</td><td>Birleştirme önizlemesi ve çakışma bulguları.</td></tr>
+                <tr><td>9</td><td>Çalışma alanı sürümlerini birleştir</td><td class="id"><code>reconcile_workspace_versions</code></td><td>Seçilen sürüm birleştirme politikasını uygular.</td><td>Çalışma alanı sürümleri, birleştirme politikası ve hedef dosya.</td><td>Birleştirilmiş çalışma alanı ve çözülemeyen çakışmalar.</td></tr>
+                <tr><td>10</td><td>Saha arazi kullanım kodlarını eşleştir</td><td class="id"><code>crosswalk_saha_to_plan</code></td><td>Kaynak saha işlevlerini plan işlevleriyle eşleştirir.</td><td>Saha katmanı ve işlev kodu alanı. Kısa formda hedef plan katmanı da gerekir.</td><td>Eşleşen kodlar ve incelenmesi gereken belirsiz eşleşmeler.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="cat">
+          <h3 id="kat-2">Parsel tasarımı</h3>
+          <p class="count">8 algoritma</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:2.6rem">#</th><th>Araç</th><th>Kimlik</th>
+              <th>Amaç</th><th>Girdiler</th><th>Çıktı</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Yapılaşma zarfını hesapla</td><td class="id"><code>calculate_building_envelope</code></td><td>Parselde çekme mesafelerinin içinde kalan yapılaşabilir alanı belirler.</td><td>Parsel poligonları ve çekme mesafeleri.</td><td>Yapılaşma zarfı poligonları.</td></tr>
+                <tr><td>2</td><td>Parsel yapılaşabilirliğini denetle</td><td class="id"><code>validate_paiy_compliance</code></td><td>Parsel boyutlarını ve belirtilen imar parametrelerini ön denetimden geçirir.</td><td>Parsel poligonları, yapı nizamı, kat sayısı ve çekme mesafeleri.</td><td>Parsel uygunluk ön denetimi katmanı.</td></tr>
+                <tr><td>3</td><td>Parsel bölünmelerini tasarla</td><td class="id"><code>optimize_parcel_subdivision</code></td><td>Büyük parselleri belirtilen cephe, derinlik ve alan kısıtlarına göre böler.</td><td>Kaynak parseller, isteğe bağlı komşu yollar, yapı nizamı, kullanım, kat sayısı ve hedef cephe.</td><td>Önerilen parsel geometrileri ve inceleme notları.</td></tr>
+                <tr><td>4</td><td>Parsel köşelerine pah uygula</td><td class="id"><code>apply_corner_chamfer</code></td><td>Parsel köşelerini belirtilen pah mesafesine göre keser.</td><td>Ada veya parsel poligonları ve pah mesafesi.</td><td>Pah uygulanmış poligonlar.</td></tr>
+                <tr><td>5</td><td>Düzenleme ortaklık payını hesapla</td><td class="id"><code>calculate_dop_reallocation</code></td><td>DOP kesintisini ve net tahsis alanlarını hesaplar.</td><td>Kadastro parselleri, kamu alanı geometrisi ve kesinti varsayımları.</td><td>DOP ve net alan sonuçları.</td></tr>
+                <tr><td>6</td><td>Tahsis matrisi oluştur</td><td class="id"><code>generate_land_readjustment_matrix</code></td><td>Kadastro parsellerinden imar parsellerine tahsis kayıtlarını hazırlar.</td><td>Kadastro ve imar parselleri ile belirtilmiş DOP oranı.</td><td>Tahsis matrisi ve alan dengesi sonuçları.</td></tr>
+                <tr><td>7</td><td>Dönüşüm fizibilitesini değerlendir</td><td class="id"><code>evaluate_transformation_feasibility</code></td><td>Dönüşüm hakedişlerini ve mali varsayımları karşılaştırır.</td><td>Dönüşüm parselleri ve malik/müteahhit payı varsayımları.</td><td>Hakediş ve fizibilite sonuçları.</td></tr>
+                <tr><td>8</td><td>Üç boyutlu yapı kütleleri oluştur</td><td class="id"><code>generate_procedural_3d_massing</code></td><td>İmar ve çatı parametrelerinden yapı hacimleri oluşturur.</td><td>İmar öznitelikli parseller ve çatı oluşturma tercihi.</td><td>Üç boyutlu kütle geometrisi ve hacim ölçümleri.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="cat">
+          <h3 id="kat-3">Kentsel analiz</h3>
+          <p class="count">10 algoritma</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:2.6rem">#</th><th>Araç</th><th>Kimlik</th>
+              <th>Amaç</th><th>Girdiler</th><th>Çıktı</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Parsel, plan ve yapıları sentezle</td><td class="id"><code>synthesize_parcel_density</code></td><td>Parsel doluluğunu, yapı yoğunluğunu ve plan işlevlerini ölçer.</td><td>Parsel, plan işlevi ve isteğe bağlı yapı poligonları.</td><td>Yoğunluk özniteliklerini içeren parsel sentezi katmanı.</td></tr>
+                <tr><td>2</td><td>Yapı ve nüfus kapasitesini hesapla</td><td class="id"><code>estimate_plan_capacity</code></td><td>Belirtilen inşaat alanı ve konut varsayımlarıyla kapasiteyi hesaplar.</td><td>Plan poligonları, emsal, taban alanı oranı ve ortalama konut alanı.</td><td>İnşaat alanı ve nüfus kapasitesi tahminleri.</td></tr>
+                <tr><td>3</td><td>Donatı yeterliliğini değerlendir</td><td class="id"><code>analyze_amenity_standards</code></td><td>Ölçülen donatı alanlarını nüfusa dayalı ön denetim standartlarıyla karşılaştırır.</td><td>Plan poligonları, işlev kodları ve çalışma nüfusu.</td><td>Donatı arzı ve açık sonuçları.</td></tr>
+                <tr><td>4</td><td>Otopark ihtiyacını hesapla</td><td class="id"><code>calculate_parking_requirement</code></td><td>Otopark kapasitesini ve belirtilen yapı varsayımlarını karşılaştırır.</td><td>Plan/parsel poligonları, emsal ve otopark alanı varsayımları.</td><td>Otopark ihtiyacı ve denge sonuçları.</td></tr>
+                <tr><td>5</td><td>Sığınak ihtiyacını hesapla</td><td class="id"><code>calculate_shelter_requirement</code></td><td>Belirtilen kullanıcı sayısı varsayımlarıyla sığınak kapasitesini ön denetimden geçirir.</td><td>Plan/parsel poligonları ve kişi başına sığınak alanı varsayımları.</td><td>Sığınak ihtiyacı ve kapasite sonuçları.</td></tr>
+                <tr><td>6</td><td>Dönüşüm önceliklerini belirle</td><td class="id"><code>prioritize_urban_transformation</code></td><td>Mevcut yapıları belirtilen risk göstergelerine göre sıralar.</td><td>Yapı veya parsel katmanı ve değerlendirme yılı.</td><td>Risk ön değerlendirme puanları ve öncelik grupları.</td></tr>
+                <tr><td>7</td><td>Yapı biçimini ölç</td><td class="id"><code>analyze_mpyy_building_morphology</code></td><td>Kompaktlık, yönlenme ve ortak duvar ilişkilerini ölçer.</td><td>Projeksiyonlu koordinat sisteminde yapı taban poligonları.</td><td>Yapı morfolojisi katmanı.</td></tr>
+                <tr><td>8</td><td>Kentsel yoğunluğu ölç</td><td class="id"><code>analyze_mpyy_spacematrix_density</code></td><td>Çalışma birimleri için Spacematrix yoğunluk ölçütlerini hesaplar.</td><td>Yapı tabanları, kat sayısı alanı veya varsayılan kat sayısı ve isteğe bağlı çalışma adaları.</td><td>FSI, GSI ve ilgili yoğunluk ölçütleri.</td></tr>
+                <tr><td>9</td><td>Yol ağı biçimini ölç</td><td class="id"><code>analyze_mpyy_street_network_morphology</code></td><td>Ağ bağlantılılığını ve yol yapısını ölçer.</td><td>Projeksiyonlu koordinat sisteminde çizgi yol ağı.</td><td>Yol ve ağ morfolojisi ölçütleri.</td></tr>
+                <tr><td>10</td><td>Plan göstergelerini karşılaştır</td><td class="id"><code>compare_mpyy_plan_scenarios</code></td><td>Adlandırılmış sayısal göstergeleri, birleşik bir puan üretmeden karşılaştırır.</td><td>Göstergeleri ve tercihleri belirtilmiş iki senaryo JSON dosyası.</td><td>Gösterge farkları ve belirtilen tercih yönleri.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="cat">
+          <h3 id="kat-4">Ulaşım ve erişim</h3>
+          <p class="count">6 algoritma</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:2.6rem">#</th><th>Araç</th><th>Kimlik</th>
+              <th>Amaç</th><th>Girdiler</th><th>Çıktı</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Ağ üzerinden yürüme erişimini ölç</td><td class="id"><code>analyze_nip_uip_routed_accessibility</code></td><td>Bağlantılı ağda talep noktalarından tesislere olan mesafeyi ölçer.</td><td>Aynı projeksiyonlu koordinat sisteminde ağ, talep ve tesis katmanları.</td><td>Her talep nesnesi için ağ mesafesi ve erişilebilirlik durumu.</td></tr>
+                <tr><td>2</td><td>Tesislere yürüme mesafelerini denetle</td><td class="id"><code>audit_mpyy_article12_walking_distances</code></td><td>Tesis türüne göre mesafe ön denetimi yapar; istisnaları ayrıca inceler.</td><td>Yürüme ağı, talep katmanı ve türleri belirtilmiş tesis katmanı.</td><td>Yürüme mesafesi ön denetimi ve istisna bulguları.</td></tr>
+                <tr><td>3</td><td>Aktif ulaşım sürekliliğini denetle</td><td class="id"><code>audit_nip_uip_active_mobility_network</code></td><td>Yaya ve bisiklet ağlarının sürekliliğini denetler.</td><td>NİP/UİP ulaşım ağı, isteğe bağlı merkezler ve yakalama/erişim mesafesi toleransları.</td><td>Ağ sürekliliği bulguları.</td></tr>
+                <tr><td>4</td><td>Çok modlu yolculuk süresini ölç</td><td class="id"><code>analyze_mpyy_multimodal_accessibility</code></td><td>Tesislere yürüme, bisiklet ve toplu taşıma yolculuklarını ölçer.</td><td>Aynı projeksiyonlu koordinat sisteminde ulaşım türü kodlanmış bağlantılı ağ, talep ve tesisler.</td><td>Yolculuk süresi, ulaşım türü sırası, tesis ve erişim durumu.</td></tr>
+                <tr><td>5</td><td>Erişilebilirlik senaryolarını karşılaştır</td><td class="id"><code>compare_mpyy_accessibility_scenarios</code></td><td>Ağ ve tesis değişikliklerini aynı talep katmanını kullanarak karşılaştırır.</td><td>Metre birimli aynı koordinat sisteminde iki ağ, iki tesis grubu ve ortak talep.</td><td>Süre farkları, kazanılan/kaybedilen güzergâhlar ve yakalama incelemesi sonuçları.</td></tr>
+                <tr><td>6</td><td>Erişilebilirlik eşitliğini ölç</td><td class="id"><code>analyze_mpyy_accessibility_equity</code></td><td>Erişilebilirlik dağılımını nüfus ağırlıklarıyla karşılaştırır.</td><td>Erişilebilirlik ölçümleri ve nüfus/ağırlık öznitelikleri.</td><td>Ağırlıklı dağılım ve eşitsizlik ölçütleri.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="cat">
+          <h3 id="kat-5">Plan denetimleri</h3>
+          <p class="count">17 algoritma</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:2.6rem">#</th><th>Araç</th><th>Kimlik</th>
+              <th>Amaç</th><th>Girdiler</th><th>Çıktı</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Topoloji ve çekme mesafelerini denetle</td><td class="id"><code>validate_quality_control</code></td><td>Çakışan parselleri ve yapı/çekme mesafesi ihlallerini belirler.</td><td>Parsel poligonları, isteğe bağlı yapı poligonları ve çekme mesafesi.</td><td>Geometri ve çekme mesafesi sorunları katmanı.</td></tr>
+                <tr><td>2</td><td>Plan revizyonlarını karşılaştır</td><td class="id"><code>evaluate_plan_revision</code></td><td>Mevcut ve önerilen plan geometrilerini ve donatı değişikliklerini karşılaştırır.</td><td>Mevcut ve önerilen plan katmanları ile inceleme mesafesi varsayımları.</td><td>Plan değişikliği ve eşdeğer alan bulguları.</td></tr>
+                <tr><td>3</td><td>Belediye düzenleme parametrelerini denetle</td><td class="id"><code>audit_municipal_bylaw_compliance</code></td><td>Belirtilen parametreleri seçilen kural profiliyle karşılaştırır.</td><td>Parsel/yapı öznitelikleri ve belirtilmiş belediye profili.</td><td>İncelenmesi gereken parametre uyuşmazlıkları.</td></tr>
+                <tr><td>4</td><td>Mekânsal strateji planı gerekliliklerini denetle</td><td class="id"><code>audit_msp_plan_requirements</code></td><td>MSP için belirtilen plan dayanaklarını ve gerekliliklerini denetler.</td><td>MSP plan nesneleri ve belirtilmiş harita ölçeği.</td><td>MSP gereklilik bulguları katmanı.</td></tr>
+                <tr><td>5</td><td>Çevre düzeni planı gerekliliklerini denetle</td><td class="id"><code>audit_cdp_plan_requirements</code></td><td>ÇDP için belirtilen plan dayanaklarını ve gerekliliklerini denetler.</td><td>ÇDP plan nesneleri ve belirtilmiş harita ölçeği.</td><td>ÇDP gereklilik bulguları katmanı.</td></tr>
+                <tr><td>6</td><td>Nazım imar planı gerekliliklerini denetle</td><td class="id"><code>audit_nip_plan_requirements</code></td><td>NİP için belirtilen plan dayanaklarını ve gerekliliklerini denetler.</td><td>NİP plan nesneleri ve belirtilmiş harita ölçeği.</td><td>NİP gereklilik bulguları katmanı.</td></tr>
+                <tr><td>7</td><td>Uygulama imar planı gerekliliklerini denetle</td><td class="id"><code>audit_uip_plan_requirements</code></td><td>UİP için belirtilen plan dayanaklarını ve gerekliliklerini denetler.</td><td>UİP plan nesneleri ve belirtilmiş harita ölçeği.</td><td>UİP gereklilik bulguları katmanı.</td></tr>
+                <tr><td>8</td><td>Plan kademeleri tutarlılığını denetle</td><td class="id"><code>audit_plan_hierarchy_consistency</code></td><td>Üst ve alt kademe plan kararlarını karşılaştırır.</td><td>İlgili plan kademelerinin katmanları.</td><td>Plan kademeleri tutarlılık bulguları.</td></tr>
+                <tr><td>9</td><td>Eşik kısıtlarını ön denetimden geçir</td><td class="id"><code>screen_mpyy_threshold_constraints</code></td><td>Plan kararlarını belirtilen kısıtlarla çakıştırır.</td><td>Eşik kısıtı öznitelikleri belirtilmiş plan nesneleri ve inceleme oranı.</td><td>İncelenmesi gereken kısıt kesişimleri.</td></tr>
+                <tr><td>10</td><td>Yol planı değişikliklerini denetle</td><td class="id"><code>audit_mpyy_road_plan_change</code></td><td>Yol değişikliği geometrisini ve destekleyici dayanakları inceler.</td><td>Mevcut/önerilen yol planı verisi ve değişiklik dayanakları.</td><td>Yol değişikliği denetim bulguları.</td></tr>
+                <tr><td>11</td><td>Yoğunluk ve yükseklik değişikliklerini denetle</td><td class="id"><code>audit_mpyy_density_height_change</code></td><td>Değişen yoğunluk/yükseklik parametrelerini ve dayanaklarını inceler.</td><td>Mevcut/önerilen plan öznitelikleri ve değişiklik dayanakları.</td><td>Yoğunluk ve yükseklik değişikliği bulguları.</td></tr>
+                <tr><td>12</td><td>Çevre düzeni planı revizyon kapsamını sınıflandır</td><td class="id"><code>classify_cdp_revision_scope</code></td><td>Belirtilen ÇDP müdahalesinin kapsamını ön denetimden geçirir.</td><td>Mevcut/önerilen çevre düzeni planı verisi.</td><td>Revizyon kapsamı sınıflandırması ve inceleme notları.</td></tr>
+                <tr><td>13</td><td>Komşu plan sınırlarını denetle</td><td class="id"><code>audit_adjacent_plan_boundary_consistency</code></td><td>Komşu planların sınır uyuşmazlıklarını belirler.</td><td>Ortak projeksiyonlu koordinat sisteminde komşu plan katmanları.</td><td>Sınır tutarlılığı bulguları.</td></tr>
+                <tr><td>14</td><td>Plan dokusunu denetle</td><td class="id"><code>audit_plan_fabric_topology</code></td><td>Plan kararlarındaki boşlukları ve çakışmaları belirler.</td><td>Plan karar poligonları ve topoloji toleransları.</td><td>Plan dokusu topoloji bulguları.</td></tr>
+                <tr><td>15</td><td>Resmî gösterim kodlarını denetle</td><td class="id"><code>audit_mpyy_article10_official_legend</code></td><td>Belirtilen gösterim kodlarını eklentiyle gelen kataloglarla eşleştirir.</td><td>Gösterim kodu öznitelikli plan nesneleri ve plan kademesi.</td><td>Tam eşleşmeler ve incelenmesi gereken eşleşmeyen kodlar.</td></tr>
+                <tr><td>16</td><td>Plan müdahalesini sınıflandır</td><td class="id"><code>classify_mpyy_article25_plan_intervention</code></td><td>Revizyon, ilave ve plan değişikliği inceleme durumlarını ayırt eder.</td><td>Mevcut/önerilen kararlar ve müdahale dayanakları.</td><td>Destekleyici bulgularla birlikte müdahale sınıflandırması.</td></tr>
+                <tr><td>17</td><td>Karma kullanım ayrıntılarını denetle</td><td class="id"><code>audit_mpyy_mixed_use_details</code></td><td>Belirtilen konut oranlarını ve destekleyici plan ayrıntılarını denetler.</td><td>Karma kullanım karar nesneleri ve destekleyici ayrıntı öznitelikleri.</td><td>Eksik ayrıntı ve karma kullanım inceleme bulguları.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="cat">
+          <h3 id="kat-6">Plan dosyası ve dayanaklar</h3>
+          <p class="count">20 algoritma</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:2.6rem">#</th><th>Araç</th><th>Kimlik</th>
+              <th>Amaç</th><th>Girdiler</th><th>Çıktı</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Plan dosyası başlat</td><td class="id"><code>initialize_mpyy_plan_dossier</code></td><td>Düzenlenebilir kayıtlarla düzenli bir yerel plan dosyası oluşturur.</td><td>Plan kimliği, kapsamı ve hedef klasör.</td><td>Plan dosyası klasörleri ve örnek içerik listeleri.</td></tr>
+                <tr><td>2</td><td>Teslim dayanaklarını denetle</td><td class="id"><code>audit_plan_submission_dossier</code></td><td>Plan teslimini destekleyen dayanakları denetler.</td><td>Plan teslim dosyasının içerik listesi.</td><td>Teslim dayanakları denetim raporu.</td></tr>
+                <tr><td>3</td><td>Plan dosyası bütünlüğünü denetle</td><td class="id"><code>audit_mpyy_dossier_completeness</code></td><td>Belirtilen bağlam için gerekli plan bileşenlerini denetler.</td><td>Plan dosyası klasörü ve bileşen listesi.</td><td>Eksik bileşen ve dosya kimliği bulguları.</td></tr>
+                <tr><td>4</td><td>Dayanak kaynaklarını denetle</td><td class="id"><code>audit_mpyy_evidence_provenance</code></td><td>Kurum, sürüm, tarih, ölçek ve kimlik izlenebilirliğini denetler.</td><td>Dayanak kaynak listesi ve isteğe bağlı yerel dosyalar.</td><td>Dayanak kaynak izlenebilirliği bulguları.</td></tr>
+                <tr><td>5</td><td>Dayanak güncelliğini denetle</td><td class="id"><code>audit_mpyy_evidence_freshness</code></td><td>Veri sahibinin belirttiği inceleme/geçerlilik sürelerini uygular.</td><td>Dayanak kayıtları ve belirtilmiş güncellik politikası.</td><td>Süresi dolmuş, ileri tarihli ve geçersiz dayanak bulguları.</td></tr>
+                <tr><td>6</td><td>Kurum görüşlerini denetle</td><td class="id"><code>audit_institution_opinion_register</code></td><td>Talep/yanıt tarih sırasını ve belirtilen süre uzatımlarını inceler.</td><td>Kurum görüşleri kayıt dosyası.</td><td>Görüş tarih sırası ve beklenen yanıt bulguları.</td></tr>
+                <tr><td>7</td><td>Rapor içeriğini denetle</td><td class="id"><code>audit_mpyy_plan_report_content</code></td><td>Belirtilen plan bağlamı için rapor bölümlerini denetler.</td><td>Plan raporu içerik listesi.</td><td>Eksik bölüm ve uygulanabilirlik bulguları.</td></tr>
+                <tr><td>8</td><td>Koruma amaçlı plan dayanaklarını denetle</td><td class="id"><code>audit_conservation_plan_dossier</code></td><td>Koruma bağlamındaki dayanakları ve belirtilen kararları denetler.</td><td>Koruma amaçlı plan dosyası içerik listesi.</td><td>Koruma dayanağı bulguları.</td></tr>
+                <tr><td>9</td><td>Kıyı planı dayanaklarını denetle</td><td class="id"><code>audit_integrated_coastal_plan_dossier</code></td><td>Kıyı analizi temalarını ve strateji dayanaklarını denetler.</td><td>Bütünleşik kıyı planı dosyasının içerik listesi.</td><td>Kıyı dayanağı bulguları.</td></tr>
+                <tr><td>10</td><td>Kentsel tasarım ön koşullarını denetle</td><td class="id"><code>audit_urban_design_project_prerequisites</code></td><td>Plan onayını ve tasarımı destekleyen dayanakları denetler.</td><td>Kentsel tasarım ön koşulları içerik listesi.</td><td>Ön koşul ve uygulamaya hazırlık bulguları.</td></tr>
+                <tr><td>11</td><td>Araştırma dayanaklarını denetle</td><td class="id"><code>audit_mpyy_article8_research_dossier</code></td><td>Belirtilen araştırma, kaynak ve kurum dayanaklarını denetler.</td><td>Araştırma dosyası içerik listesi.</td><td>Araştırma dayanağı bulguları.</td></tr>
+                <tr><td>12</td><td>Standartların uygulama bağlamını denetle</td><td class="id"><code>audit_mpyy_article11_standards_context</code></td><td>Bağlama bağlı standartların dayanaklarını denetler.</td><td>Standart bağlamı içerik listesi.</td><td>Eksik gerekçe ve bağlam bulguları.</td></tr>
+                <tr><td>13</td><td>Askı ve itiraz kayıtlarını denetle</td><td class="id"><code>audit_mpyy_publication_objection_register</code></td><td>Askı sürelerini ve itirazların tarih sırasını inceler.</td><td>Askı ve itiraz kayıt dosyası.</td><td>Tarih sırası, ilan ve itiraz bulguları.</td></tr>
+                <tr><td>14</td><td>Katılım dayanaklarını denetle</td><td class="id"><code>audit_mpyy_participation_register</code></td><td>Katılım yöntemlerini, paydaşları ve önerilerin değerlendirilmesini denetler.</td><td>Katılım etkinlikleri kayıt dosyası.</td><td>Katılım dayanağı ve kapsama bulguları.</td></tr>
+                <tr><td>15</td><td>İptal edilen planın yeniden kullanılan dayanaklarını denetle</td><td class="id"><code>audit_mpyy_cancelled_plan_evidence</code></td><td>Yeniden kullanılan, geçersiz kılınan ve reddedilen dayanakların yeniden değerlendirilmesini denetler.</td><td>İptal edilen plan dayanakları kayıt dosyası.</td><td>Dayanak yeniden kullanımı ve güncel sürüm bulguları.</td></tr>
+                <tr><td>16</td><td>Plan bileşeni kimliklerini denetle</td><td class="id"><code>audit_mpyy_plan_component_consistency</code></td><td>Plan dosyası bileşenlerinin plan kimliklerini ve sürümlerini karşılaştırır.</td><td>Plan bileşeni kimlik listesi.</td><td>Kimlik ve sürüm tutarlılığı bulguları.</td></tr>
+                <tr><td>17</td><td>Onay paftalarını denetle</td><td class="id"><code>audit_mpyy_approval_sheet_register</code></td><td>Belirtilen onay işaretlerini, tarihleri ve pafta kimliklerini denetler.</td><td>Onay paftası kayıt dosyası.</td><td>Onay kayıt bulguları.</td></tr>
+                <tr><td>18</td><td>Plan notu bağlantılarını denetle</td><td class="id"><code>audit_mpyy_plan_note_decision_links</code></td><td>Not-karar referanslarını ve yinelenen kimlikleri inceler.</td><td>Plan notu/karar bağlantı listesi.</td><td>Bağlantısız, yinelenen ve metni eksik kayıt bulguları.</td></tr>
+                <tr><td>19</td><td>Plan sürüm geçmişini denetle</td><td class="id"><code>audit_mpyy_version_chain</code></td><td>İçerik özetlerini, tam üst sürüm bağlantılarını ve tarih sırasını denetler.</td><td>Tarih sıralı sürüm zinciri listesi.</td><td>Kopuk zincir ve sürüm tarih sırası bulguları.</td></tr>
+                <tr><td>20</td><td>Strateji eylem izlemeyi denetle</td><td class="id"><code>evaluate_msp_action_monitoring</code></td><td>Belirtilen eylem hedeflerini ve izleme dayanaklarını karşılaştırır.</td><td>Eylem izleme nesneleri ve değerlendirme tarihi.</td><td>Eylem ilerlemesi ve izleme bulguları.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="cat">
+          <h3 id="kat-7">Raporlar ve teslim</h3>
+          <p class="count">15 algoritma</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:2.6rem">#</th><th>Araç</th><th>Kimlik</th>
+              <th>Amaç</th><th>Girdiler</th><th>Çıktı</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Plan özetini dışa aktar</td><td class="id"><code>export_planning_report</code></td><td>Plan alanlarını ve arazi kullanım dengesini özetler.</td><td>Plan GeoPackage dosyası, rapor başlığı ve çıktı klasörü.</td><td>HTML/CSV plan özeti.</td></tr>
+                <tr><td>2</td><td>Plan raporu hazırla</td><td class="id"><code>generate_comprehensive_report</code></td><td>Yazdırılabilir plan açıklaması ve arazi kullanım dengesi hazırlar.</td><td>Plan nesneleri, rapor başlığı ve hedef dosyalar.</td><td>Yazdırılabilir HTML raporu ve CSV arazi kullanım dengesi.</td></tr>
+                <tr><td>3</td><td>Plan notları hazırla</td><td class="id"><code>generate_plan_notes</code></td><td>Seçilen plan bağlamı ve kodlarından plan notları üretir.</td><td>Plan nesneleri, plan başlığı ve ölçek.</td><td>İncelenmesi gereken üretilmiş plan notları.</td></tr>
+                <tr><td>4</td><td>Pafta indeksi oluştur</td><td class="id"><code>generate_pafta_grid</code></td><td>Seçilen ölçek için pafta poligonları oluşturur.</td><td>Plan sınırı, pafta ölçeği ve adlandırma öneki.</td><td>Pafta indeks katmanı.</td></tr>
+                <tr><td>5</td><td>Baskı düzeni oluştur</td><td class="id"><code>generate_print_layout</code></td><td>Plan ve idare bilgileriyle pafta baskı düzeni oluşturur.</td><td>Kâğıt boyutu, başlık, idare ve pafta bilgileri.</td><td>QGIS baskı düzeni.</td></tr>
+                <tr><td>6</td><td>İmar durumu belgesi hazırla</td><td class="id"><code>generate_zoning_certificate</code></td><td>Parsel imar bilgilerini ve yapılaşma zarfını hazırlar.</td><td>Seçilen parsel/imar verisi ve belge bilgileri.</td><td>HTML ve Markdown imar durumu belgesi dosyaları.</td></tr>
+                <tr><td>7</td><td>Parsel atlas paftasını dışa aktar</td><td class="id"><code>export_official_zoning_atlas</code></td><td>Parsel merkezli imar paftasını dışa aktarır.</td><td>Parsel, harita katmanları ve belge bilgileri.</td><td>Dışa aktarılmış atlas paftası.</td></tr>
+                <tr><td>8</td><td>Parsel atlasını toplu dışa aktar</td><td class="id"><code>export_official_zoning_atlas_batch</code></td><td>Birden fazla parsel merkezli imar paftasını dışa aktarır.</td><td>Parsel nesneleri, harita katmanları ve toplu belge bilgileri.</td><td>Dışa aktarılmış atlas paftaları.</td></tr>
+                <tr><td>9</td><td>Mobil saha paketi hazırla</td><td class="id"><code>package_for_qfield</code></td><td>Çalışma alanı verisini saha araştırması için paketler.</td><td>Çalışma alanı ve yerel hedef klasör.</td><td>Taşınabilir saha araştırması paketi.</td></tr>
+                <tr><td>10</td><td>Sayısal teslim içeriğini denetle</td><td class="id"><code>audit_mpyy_digital_delivery_package</code></td><td>Dosyaları, kimlikleri ve belirtilen teslim tarih sırasını inceler.</td><td>Teslim paketi klasörü ve içerik listesi.</td><td>Sayısal teslim denetim bulguları.</td></tr>
+                <tr><td>11</td><td>Plan dosyası envanteri oluştur</td><td class="id"><code>generate_mpyy_dossier_inventory</code></td><td>Alt klasörlerdeki dosya boyutlarını ve SHA-256 kimliklerini kaydeder.</td><td>Plan dosyası klasörü ve envanter çıktı dosyası.</td><td>Tekrarlanabilir dosya envanteri.</td></tr>
+                <tr><td>12</td><td>Denetim raporlarını birleştir</td><td class="id"><code>consolidate_mpyy_audit_reports</code></td><td>Önceki denetim raporlarının kimliklerini doğrular ve raporları birleştirir.</td><td>Makine tarafından okunabilir denetim raporlarını içeren klasör.</td><td>Birleştirilmiş denetim paketi.</td></tr>
+                <tr><td>13</td><td>GeoPackage şema uygunluğunu denetle</td><td class="id"><code>audit_mpyy_gpkg_schema_profile</code></td><td>Tabloları, alanları, geometri kaydını ve belirtilen profil kimliğini inceler.</td><td>GeoPackage dosyası ve idarenin sağladığı JSON şema profili.</td><td>Veriyi değiştirmeyen şema denetim raporu.</td></tr>
+                <tr><td>14</td><td>Şema sözlüğünü içe aktar</td><td class="id"><code>import_mpyy_gpkg_schema_profile</code></td><td>İdarenin CSV sözlüğünü denetim profiline dönüştürür.</td><td>UTF-8 CSV sözlüğü ve açık JSON sütun eşlemesi.</td><td>Kaynak kimliklerini içeren sürümlü şema profili.</td></tr>
+                <tr><td>15</td><td>Şema profili kimliğini doğrula</td><td class="id"><code>audit_mpyy_schema_profile_identity</code></td><td>Gömülü kimliği ve isteğe bağlı kaynak yeniden oluşturmasını veya bağımsız özeti denetler.</td><td>Profil JSON dosyası; isteğe bağlı kaynak CSV ve ayrı saklanan SHA-256 özeti.</td><td>İçerik kimliği raporu; düzenleyen kurumun özgünlüğü doğrulanmaz.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+<h2 id="panel-araclari">Panel araçları</h2>
+        <p>Aşağıdaki araçlar İşlem Araç Kutusuna çıkmaz; doğrudan panelden çalışır ve
+        bir GeoPackage çıktısı üretmez.</p>
+                <div class="table-wrap">
+          <table>
+            <thead><tr><th>Panel aracı</th><th>Kategori</th><th>Kimlik</th>
+            <th>Amaç</th><th>Girdiler</th><th>Sonuç</th></tr></thead>
+            <tbody>
+            <tr><td>Etkin GeoPackage dosyasını incele</td><td>Çalışma alanı ve veri</td><td class="id"><code>database_report</code></td><td>Veri sayımlarını ve çalışma alanı istatistiklerini okur.</td><td>QGIS projesinde etkin GeoPackage vektör katmanı.</td><td>İşlem Kaydı sekmesinde veritabanı durum özeti.</td></tr>
+            <tr><td>Katmanı biçimlendir ve formları düzenle</td><td>Çalışma alanı ve veri</td><td class="id"><code>style_and_forms</code></td><td>Vektör katmanına plan stili ve öznitelik formu uygular.</td><td>Vektör katmanı, plan profili ve stil ailesi.</td><td>Güncellenmiş katman stili ve öznitelik formları; önceki stil geri yüklenebilir.</td></tr>
+            <tr><td>Plan çalışma alanı oluştur</td><td>Çalışma alanı ve veri</td><td class="id"><code>create_workspace</code></td><td>Yerel UİP çizim şablonundan ya da MPYY 1.1.7 şemasından taşınabilir bir çalışma alanı üretir.</td><td>Koordinat sistemi ile çalışma alanı türünü (Yerel UİP veya MPYY kademesi) ve yeni bir GeoPackage dosyası seçin.</td><td>Katmanları, formları ve gösterimi hazır GeoPackage dosyası.</td></tr>
+            </tbody>
+          </table>
+        </div>
+<h2 id="kalite">Kalite güvencesi</h2>
+        <p>Eklentinin kapıları ve test paketi tek komutla, iki QGIS çalışma zamanında
+        koşulur:</p>
+        <pre><code>py -3 packaging/pf.py verify planx_mpyy_studio</code></pre>
+        <p>Kapsam: kod kapıları, güvenlik taraması, Qt6 uyum taraması, çalışma alanı
+        ve içe aktarma testleri, kademe ve GML testleri, font kayıt testi, dil
+        testleri ve arayüz görüntü üretimi (360/600 piksel panel, 10/15 punto,
+        açık/koyu palet; çıktı klasöründe <code>index.html</code>,
+        <code>qa.json</code> ve PNG dosyaları).</p>
+        <p>Dil testleri 86 aracın adını, yardımını, parametrelerini ve
+        seçeneklerini; plan/saha formlarını, alan etiketlerini, kısıtları, açılır
+        listeleri, lejantları ve QML gösterimlerini tarar. Kaynak kodlar, şema
+        kimlikleri, filtreler ve kullanıcı adları değişmez.</p>
+<h2 id="sinirlar">Sınırlar ve doğrulanmamış durumlar</h2>
+        <p>Bu bölüm, eklentinin ne <em>iddia etmediğini</em> kaydeder.</p>
+        <ul>
+          <li><strong>Gösterim kaynaklarının yeniden dağıtım durumu
+          doğrulanmamıştır.</strong> <code>styles/provenance.json</code> içindeki
+          <code>distribution_status</code> alanı
+          <em>"unverified; local development only until source redistribution rights
+          are established"</em> değerini taşır. Bu, kaynak gösterim setinin ve
+          paketlenen 131 yazı tipi dosyasının yeniden dağıtım hakkının belgelenmiş
+          olmadığı anlamına gelir.</li>
+          <li><strong>Yazı tipi envanteri eksiktir.</strong> Aynı dosyadaki
+          <code>font_families</code> alanı yalnızca dört aile kaydeder; pakette 131
+          TTF dosyası vardır. Dosya bazında provenance kaydı yoktur.</li>
+          <li><strong>MÇDP için SLD gösterimi yoktur.</strong> M serisi şemaları
+          okunur, ancak Bakanlık SLD setinde MÇDP stili bulunmaz.</li>
+          <li><strong>NİP stili taslaktır</strong>, ÇDP resmî yedek stili kullanır.</li>
+          <li><strong>Bazı eski katmanlar güncel şemada yoktur.</strong>
+          <code>meri_1000_alan</code> ve eski paralel UİP katmanları güncel şemada
+          bulunmaz.</li>
+          <li><strong>Kimlik denetimi özgünlük kanıtı değildir.</strong> İçerik
+          kimliği doğrulanabilir; düzenleyen kurumun özgünlüğü doğrulanmaz
+          (<code>NOT_VERIFIED</code>).</li>
+          <li><strong>Arayüz uyumluluk belgesi değildir.</strong> Kontrast ve klavye
+          testleri tüm ekran okuyucular veya işletim sistemi temaları için uyumluluk
+          iddiası taşımaz.</li>
+        </ul>
+<h2 id="lisans">Lisans ve atıf</h2>
+        <p><strong>PlanX MPYY Studio</strong> — Yusuf Eminoğlu. Lisans:
+        GPL-2.0-or-later.</p>
+        <p>Bakanlığın e-Plan şema ve gösterim kaynakları ile üçüncü taraf bileşenlerin
+        atıfları eklenti kökündeki <code>THIRD_PARTY_NOTICES.md</code> dosyasındadır.
+        Kaynak dosyaların özetleri ve eşleştirme kararları
+        <code>styles/provenance.json</code> içinde tutulur.</p>
+        <p>"e-Plan", "MPYY", "TUCBS" ve ilgili mevzuat adları ilgili kurumların ürün ve
+        düzenleme adlarıdır; bu eklenti bağımsız bir araçtır ve adı geçen kurumlar
+        tarafından geliştirilmemiş veya onaylanmamıştır.</p>
+    <footer>
+      <p>PlanX MPYY Studio 1.0.0 · Yusuf Eminoğlu · GPL-2.0-or-later<br>
+      Bu el kitabı <code>tools/generate_reference_manual.py</code> ile eklentinin kendi
+      kataloğundan üretilir; araç listesi elle yazılmaz.</p>
+    </footer>
+  </main>
+</div>
+</body>
+</html>
