@@ -11,3 +11,10 @@ HANDOFF_NEXT_AGENT.md
 # published online; no shipped code path opens a local copy.
 # Same convention as planx_geostats.
 MPYY_REFERENCE_MANUAL.html
+# Repository-only content, not part of the installed plugin.
+#
+# docs/ is the source of the published manual and landing page; no shipped code
+# path opens anything inside it -- every Help link resolves to the online manual
+# at geophilo.com/planx_mpyy_studio/. Same convention as planx_suitability_lab
+# and zero2cartolab.
+docs
