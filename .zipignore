@@ -6,3 +6,8 @@ tools
 # Internal working document, not plugin documentation: a handoff addressed to an
 # AI agent. Nothing in the shipped code reads it.
 HANDOFF_NEXT_AGENT.md
+# Repository-only content, not part of the installed plugin.
+# Written by tools/generate_reference_manual.py (itself already excluded) and
+# published online; no shipped code path opens a local copy.
+# Same convention as planx_geostats.
+MPYY_REFERENCE_MANUAL.html
