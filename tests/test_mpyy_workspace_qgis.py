@@ -28,7 +28,11 @@ from qgis.PyQt.QtWidgets import QComboBox  # noqa: E402
 QgsGui.editorWidgetRegistry().initEditors()
 
 from planx_mpyy_studio.core.db_factory import read_dataset_info  # noqa: E402
+from planx_mpyy_studio.core.mpyy_detail_hierarchy import records_for_level  # noqa: E402
 from planx_mpyy_studio.core.mpyy_workspace import (  # noqa: E402
+    DETAIL_HIERARCHY_COLUMNS,
+    DETAIL_HIERARCHY_LAYER_NAME,
+    DETAIL_HIERARCHY_TABLE,
     KIND,
     QGIS_NULL,
     audit_required_fields,
@@ -116,16 +120,39 @@ class MPYYWorkspaceTests(unittest.TestCase):
                         for field in feature_type["fields"]:
                             self.assertEqual(columns.get(field["name"]), SQL_TYPES[field["type"]], (name, field["name"]))
                     tables = {n for n, kind in contents.items() if kind in ("features", "attributes")}
-                    self.assertEqual(tables - {"mpyy_sema", "layer_styles"},
+                    # mpyy_detay_katalogu is the Ek-1e companion table: it holds the
+                    # catalogue's classification of existing symbols and adds no XSD
+                    # field, so like the schema metadata tables it is not a feature
+                    # type.  It is named from the constant so a rename cannot pass.
+                    self.assertEqual(tables - {DETAIL_HIERARCHY_TABLE, "mpyy_sema", "layer_styles"},
                                      {t["name"] for t in schema["feature_types"]})
                     self.assertEqual(con.execute("SELECT xsd_sha256 FROM mpyy_sema").fetchone()[0],
                                      schema["xsd"]["sha256"])
+                    # The companion table stores the level's catalogue rows column by
+                    # column, in DETAIL_HIERARCHY_COLUMNS order.  Every column is compared,
+                    # not a count, because that is what makes a column-order drift in the
+                    # INSERT fail here: no two columns of a level hold the same value in
+                    # every one of its rows, so any swap changes a stored row.  (Verified
+                    # by swapping two columns and watching this assertion fail.)
+                    expected_rows = [
+                        tuple(record[column] for column in DETAIL_HIERARCHY_COLUMNS)
+                        for record in records_for_level(level)
+                    ]
+                    self.assertTrue(expected_rows, level)
+                    stored = con.execute(
+                        f"SELECT {', '.join(DETAIL_HIERARCHY_COLUMNS)} FROM {DETAIL_HIERARCHY_TABLE}"
+                    ).fetchall()
+                    self.assertEqual(sorted(stored), sorted(expected_rows))
 
     def test_uip_forms_offer_codelists_and_store_schema_codes(self):
         path = Path(self.tmp.name) / "uip.gpkg"
         create_mpyy_workspace(path, "EPSG:5254", "UIP")
         layers = {layer.name(): layer for layer in load_project_layers(path)}
-        self.assertEqual(len(layers), 96)
+        # 96 XSD feature/attribute layers plus the Ek-1e catalogue companion table,
+        # which load_project_layers adds to the "Katalog" group like any other layer.
+        # Naming it here keeps the count from being the only witness to it.
+        self.assertEqual(len(layers), 97)
+        self.assertIn(DETAIL_HIERARCHY_LAYER_NAME, layers)
         konut = layers["Konut"]
         self.assertEqual(value_map(konut, "YapiDuzeni"), ["Ayrik", "Bitisik", "Blok", "Serbest", "Ikiz"])
         self.assertEqual(QgsWkbTypes.geometryType(konut.wkbType()), QgsWkbTypes.GeometryType.PolygonGeometry)

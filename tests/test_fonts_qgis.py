@@ -7,10 +7,11 @@ does not repaint it.  Registering from the readProject handler is therefore
 already too late; the call has to sit in initGui(), which a plugin loaded at
 QGIS start-up reaches before any project is read.
 
-What this module does NOT claim: that a glyph renders correctly on a real
-desktop.  Headless font metrics are not the desktop's, so the end-to-end proof
-stays a manual run with the fonts uninstalled from the system (see
-``docs/TRAPS.md`` in the monorepo root, one level above this plugin).
+The portability contract is that users do not install fonts themselves: the
+plugin registers its bundled notation fonts at application scope and uses its
+bundled DejaVu Sans for ordinary text when a source family is unavailable.
+Headless tests verify that every shipped file can be registered; they do not
+make pixel-identical rendering claims across operating systems.
 """
 
 import os
@@ -95,6 +96,16 @@ class BundledFontPayloadTests(unittest.TestCase):
             if font_id < 0 or not QFontDatabase.applicationFontFamilies(font_id):
                 unusable.append(path.name)
         self.assertEqual(unusable, [])
+
+    def test_portable_text_fallback_is_bundled(self):
+        files = sorted(FONTS_DIR.glob("DejaVuSans*.[tT][tT][fF]"))
+        self.assertTrue(files, "portable DejaVu Sans fallback missing")
+        families = set()
+        for path in files:
+            font_id = QFontDatabase.addApplicationFont(str(path))
+            self.assertGreaterEqual(font_id, 0, path.name)
+            families.update(QFontDatabase.applicationFontFamilies(font_id))
+        self.assertIn("DejaVu Sans", families)
 
 
 if __name__ == "__main__":

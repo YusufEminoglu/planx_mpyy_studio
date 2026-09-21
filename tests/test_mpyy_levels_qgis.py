@@ -30,7 +30,10 @@ from qgis.PyQt.QtCore import QSize  # noqa: E402
 APP = QgsApplication.instance() or QgsApplication([], True)
 APP.initQgis()
 
-from planx_mpyy_studio.core.mpyy_detail_catalog import catalog  # noqa: E402
+from planx_mpyy_studio.core.mpyy_detail_catalog import (  # noqa: E402
+    _ground_spec,
+    catalog,
+)
 from planx_mpyy_studio.core.mpyy_level_conversion import convert_workspace  # noqa: E402
 from planx_mpyy_studio.core.mpyy_import import audit_mpyy_workspace  # noqa: E402
 from planx_mpyy_studio.core.mpyy_workspace import (  # noqa: E402
@@ -115,6 +118,21 @@ def walk_layers(symbol, into_sub=True):
             yield layer
         else:
             yield from walk_layers(layer.subSymbol())
+
+
+def boundary_marker_lines(symbol):
+    """Marker lines the catalog stacks on a ``boundary()`` generator, containers included.
+
+    ``walk_layers`` replaces a container with its children, so the marker line itself is
+    only reachable below the generator and with ``into_sub`` off.
+    """
+    for index in range(symbol.symbolLayerCount()):
+        generator = symbol.symbolLayer(index)
+        if generator.layerType() != "GeometryGenerator" or generator.subSymbol() is None:
+            continue
+        for item in walk_layers(generator.subSymbol(), into_sub=False):
+            if item.layerType() == "MarkerLine":
+                yield item
 
 
 def evaluate(layer, expression):
@@ -327,7 +345,7 @@ class SymbologyGapTests(unittest.TestCase):
         road = typed_layer("CDP", "Yolorta", [])
         apply_eplan_symbology(road, "CDP", "Yolorta")
         otoyol = next(r for r in road.renderer().rootRule().children() if r.label() == "ERISME_KONTROLLU_KARAYOLU_OTOYOL").symbol()
-        self.assertEqual([round(l.width(), 2) for l in walk_layers(otoyol)], [3.6, 3.0, 1.0])  # s.147
+        self.assertEqual([round(l.width(), 2) for l in walk_layers(otoyol)], [90.0, 75.0, 25.0])  # s.147 at 1/25,000
         island = typed_layer("NIP", "YapayAda", [])
         apply_eplan_symbology(island, "NIP", "YapayAda")
         fills = [l.color().getRgb()[:3] for l in walk_layers(island.renderer().rootRule().children()[0].symbol()) if l.layerType() == "SimpleFill"]
@@ -339,6 +357,46 @@ class SymbologyGapTests(unittest.TestCase):
         self.assertNotIn("SimpleFill", rules["EkolojikOnemeSahipAlan"])  # s.90: no ground colour
         self.assertEqual(rules["Dogal Ekolojik Korunacak Alan"].count("SimpleFill"), 1)
         self.assertIn("katalog", " ".join(protected.customPropertyKeys()))
+
+    def test_catalog_paper_mm_are_ground_metres_at_each_nominal_scale(self):
+        self.assertEqual(_ground_spec({"width_mm": 0.3}, "UIP")["width_mm"], 0.3)
+        self.assertEqual(_ground_spec({"width_mm": 0.3}, "NIP")["width_mm"], 1.5)
+        self.assertEqual(_ground_spec({"width_mm": 0.3}, "CDP")["width_mm"], 7.5)
+        self.assertEqual(_ground_spec({"width_mm": 0.3}, "MCDP100")["width_mm"], 30.0)
+
+        risk = typed_layer("NIP", "AfetTehlikeliAlanlar", [])
+        apply_eplan_symbology(risk, "NIP", "AfetTehlikeliAlanlar")
+        rule = next(
+            item
+            for item in risk.renderer().rootRule().children()
+            if item.label() == "KENTSEL_RISK_ALANI"
+        )
+        line = next(
+            item for item in walk_layers(rule.symbol()) if item.layerType() == "SimpleLine"
+        )
+        self.assertEqual(round(line.width(), 2), 2.0)  # 0.4 mm at 1/5,000
+        self.assertEqual(line.widthUnit(), Qgis.RenderUnit.MetersInMapUnits)
+        self.assertEqual(
+            [round(value, 2) for value in line.customDashVector()], [10.0, 10.0]
+        )
+        self.assertEqual(
+            line.customDashPatternUnit(), Qgis.RenderUnit.MetersInMapUnits
+        )
+
+        road = typed_layer("CDP", "Yolorta", [])
+        apply_eplan_symbology(road, "CDP", "Yolorta")
+        rule = next(
+            item
+            for item in road.renderer().rootRule().children()
+            if item.label() == "3_DERECE_YOL"
+        )
+        lines = [
+            item for item in walk_layers(rule.symbol()) if item.layerType() == "SimpleLine"
+        ]
+        self.assertEqual(sorted(round(item.width(), 2) for item in lines), [10.0, 25.0])
+        self.assertTrue(
+            all(item.widthUnit() == Qgis.RenderUnit.MetersInMapUnits for item in lines)
+        )
 
     def test_administrative_boundary_lines_use_catalog_dot_and_tick_patterns(self):
         # Ek-1e s.12: dash - perpendicular tick - open circle - tick, repeating; catalog mm, not
@@ -467,8 +525,8 @@ class SymbologyGapTests(unittest.TestCase):
         rule = next(r for r in layer.renderer().rootRule().children() if r.label() == "SAGLIKLASTIRMA_ALAN_SINIRI")
         lines = [l for l in walk_layers(rule.symbol()) if l.layerType() == "SimpleLine"]
         self.assertEqual(len(lines), 1)  # katalog çizgisi SLD'nin "K/Y/S" rozetini değiştirmez
-        self.assertEqual(round(lines[0].width(), 2), 0.5)
-        self.assertEqual([round(v, 2) for v in lines[0].customDashVector()], [10.0, 2.0])
+        self.assertEqual(round(lines[0].width(), 2), 2.5)
+        self.assertEqual([round(v, 2) for v in lines[0].customDashVector()], [50.0, 10.0])
 
         # s.19: İmar Hakkı Aktarım Alanı Sınırı -- two concentric hollow red circles per mark.
         imar = typed_layer("UIP", "ImarHakkiAktarimSiniri", [])
@@ -499,6 +557,19 @@ class SymbologyGapTests(unittest.TestCase):
         rule = next(r for r in gecekondu.renderer().rootRule().children() if r.label() == "GECEKONDU_ONLEME_BOLGESI")
         cross = next(l for l in walk_layers(rule.symbol()) if l.layerType() == "SimpleMarker")
         self.assertEqual(cross.shape(), Qgis.MarkerShape.Cross)
+        # The annex's "2 mm" is the clear gap *after* the 3 mm mark, not its
+        # centre-to-centre interval: a bare 2 mm interval overlapped the marks.
+        marks = next(boundary_marker_lines(rule.symbol()))
+        self.assertEqual((marks.interval(), marks.intervalUnit()),
+                         (5.0, Qgis.RenderUnit.MetersInMapUnits))
+        # NİP repeats the same paper dimensions at 1/5.000, so on the ground -- the unit
+        # every catalog mark uses -- the same gap is five times larger.
+        nip = typed_layer("NIP", "DonusumKonutAlanlari", [(SQUARE, {"DonusumTip": "GecekonduOnlemeBolgesi"})])
+        apply_eplan_symbology(nip, "NIP", "DonusumKonutAlanlari")
+        nip_rule = next(r for r in nip.renderer().rootRule().children() if r.label() == "GECEKONDU_ONLEME_BOLGESI")
+        nip_marks = next(boundary_marker_lines(nip_rule.symbol()))
+        self.assertEqual((nip_marks.interval(), nip_marks.intervalUnit()),
+                         (25.0, Qgis.RenderUnit.MetersInMapUnits))
 
         # s.34: Diğer Özel Kanunlarla Belirlenen Alan Sınırları -- 2 filled + 1 hollow triangle.
         diger = typed_layer("UIP", "DigerOzelSinir", [])
@@ -686,7 +757,7 @@ class SymbologyGapTests(unittest.TestCase):
         apply_eplan_symbology(road, "CDP", "Yolorta")
         rule = next(r for r in road.renderer().rootRule().children() if r.label() == "3_DERECE_YOL")
         widths = sorted(round(l.width(), 2) for l in walk_layers(rule.symbol()) if l.layerType() == "SimpleLine")
-        self.assertEqual(widths, [0.4, 1.0])
+        self.assertEqual(widths, [10.0, 25.0])
 
         # s.157: Demiryolu -- 2x5mm dolu dikdörtgen ties on a plain rail; Hızlı Tren Hattı
         # alternates dolu/boş and adds a double side rail 1mm/2mm out.
@@ -857,6 +928,102 @@ class SymbologyGapTests(unittest.TestCase):
         anchors = evaluate(layer, rules["TAKS"].settings().geometryGenerator)
         self.assertEqual((anchors[0].asPoint().x(), anchors[1].asWkt()), (500045, "Point (500050 4250030)"))
         self.assertEqual(rules["TAKS"].minimumScale(), 2000)
+
+    def test_every_catalog_border_target_is_present_and_uses_ground_units(self):
+        """Expand every border decision so missing rules cannot hide in aggregate counts."""
+        expected_dash = {"dashed", "dots", "tick_circle", "gears", "circle_triangle"}
+        missing_targets = []
+        missing_boundaries = []
+        missing_dashes = []
+        unit_mismatches = []
+        checked = 0
+
+        def descendants(symbol):
+            for index in range(symbol.symbolLayerCount()):
+                symbol_layer = symbol.symbolLayer(index)
+                yield symbol_layer
+                sub_symbol = symbol_layer.subSymbol()
+                if sub_symbol is not None:
+                    yield from descendants(sub_symbol)
+
+        decisions = catalog()["decisions"]["borders"]
+        addresses = [address for address in decisions
+                     if address != "note" and not address.startswith("_")]
+        for address in addresses:
+            raw_spec = decisions[address]
+            level, type_name, label = address.split("/", 2)
+            layer = typed_layer(level, type_name, [])
+            self.assertTrue(apply_eplan_symbology(layer, level, type_name), address)
+            renderer = layer.renderer()
+            if renderer.type() == "RuleRenderer":
+                available = [
+                    (rule.label(), rule.symbol())
+                    for rule in renderer.rootRule().children()
+                    if rule.symbol() is not None and not rule.isElse()
+                ]
+            else:
+                available = [("*", renderer.symbol())]
+            targets = (
+                available
+                if label == "*"
+                else [(rule_label, symbol) for rule_label, symbol in available if rule_label == label]
+            )
+            if not targets:
+                missing_targets.append(address)
+                continue
+
+            spec = _ground_spec(raw_spec, level)
+            dash_required = (
+                spec["kind"] in expected_dash
+                or (spec["kind"] == "triangle_cluster" and bool(spec.get("dash_mm")))
+                or (spec["kind"] == "circles" and bool(spec.get("dash_mm")))
+            )
+            for rule_label, symbol in targets:
+                checked += 1
+                generators = [
+                    symbol.symbolLayer(index)
+                    for index in range(symbol.symbolLayerCount())
+                    if symbol.symbolLayer(index).layerType() == "GeometryGenerator"
+                ]
+                where = f"{level}/{type_name}/{rule_label}"
+                if not generators:
+                    missing_boundaries.append(where)
+                    continue
+                generated = [
+                    item
+                    for generator in generators
+                    for item in descendants(generator.subSymbol())
+                ]
+                lines = [item for item in generated if item.layerType() == "SimpleLine"]
+                if dash_required and not any(item.useCustomDashPattern() for item in lines):
+                    missing_dashes.append(where)
+                for item in generated:
+                    if item.layerType() == "SimpleLine":
+                        if item.widthUnit() != Qgis.RenderUnit.MetersInMapUnits:
+                            unit_mismatches.append(where + ": line width")
+                        if (
+                            item.useCustomDashPattern()
+                            and item.customDashPatternUnit()
+                            != Qgis.RenderUnit.MetersInMapUnits
+                        ):
+                            unit_mismatches.append(where + ": dash pattern")
+                    elif item.layerType() in ("SimpleMarker", "RasterMarker"):
+                        if item.sizeUnit() != Qgis.RenderUnit.MetersInMapUnits:
+                            unit_mismatches.append(where + ": marker size")
+
+        # Two counts, because either can move on its own: the number of border
+        # decisions in styles/mpyy_detail_catalog/decisions.json, and the number
+        # of concrete renderer rules those decisions expand to.  A wildcard
+        # address covers every rule of its type, so adding one decision row can
+        # move the second count by more than one.  Borders carrying no catalogue
+        # decision stay outside this guard: it covers the decisions, not the
+        # plugin's every SLD rule.
+        self.assertEqual(221, len(addresses))
+        self.assertEqual(236, checked)
+        self.assertEqual([], missing_targets, "catalog border target missing:\n" + "\n".join(missing_targets))
+        self.assertEqual([], missing_boundaries, "catalog border was not generated:\n" + "\n".join(missing_boundaries))
+        self.assertEqual([], missing_dashes, "catalog dash pattern missing:\n" + "\n".join(missing_dashes))
+        self.assertEqual([], unit_mismatches, "catalog unit mismatch:\n" + "\n".join(unit_mismatches))
 
 
 class LevelConversionTests(unittest.TestCase):

@@ -9,6 +9,20 @@ def label_key(text):
     return ''.join(c for c in unicodedata.normalize('NFKD', text) if not unicodedata.combining(c))
 
 
+def label_fold(text):
+    """Letters-only key: two spellings of one label compare equal.
+
+    Ek-1e prints the same catalog label with and without the Turkish dotted İ
+    ('DENIZYOLLARI' for 'DENİZYOLLARI'), and one label runs its words together.
+    Folding case, spacing, punctuation and the İ/ı dots away is what makes those
+    compare as one label instead of two, so a catalog compiler can prove it
+    ships one spelling per label.  `label_key` cannot do that job: it keeps
+    spaces, which is right for looking up a printed label and wrong for
+    deciding whether two labels are the same.
+    """
+    return ''.join(c for c in unicodedata.normalize('NFKD', str(text).upper()) if c.isalnum())
+
+
 LABELS = {}
 for line in (Path(__file__).resolve().parents[1] / 'resources' / 'turkish_labels.tsv').read_text(encoding='utf-8').splitlines():
     if '\t' in line:

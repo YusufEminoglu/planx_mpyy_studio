@@ -22,6 +22,7 @@ from qgis.PyQt.QtXml import QDomDocument
 
 
 from .localization import localized_category
+from .fonts import register_mpyy_fonts
 
 @dataclass(frozen=True)
 class StyleResult:
@@ -56,6 +57,10 @@ class MPYYStylerEngine:
             self.load_mappings(mappings)
 
     def load_catalog(self, path: str | Path) -> dict:
+        # Keep catalog rendering independent of fonts installed on the user's
+        # operating system.  This also covers direct engine use outside the
+        # normal plugin initGui() path.
+        register_mpyy_fonts()
         path = Path(path)
         if path.suffix == ".gz":
             with gzip.open(path, "rb") as stream:
@@ -100,6 +105,7 @@ class MPYYStylerEngine:
             families = set(QFontDatabase.families())
         except TypeError:
             families = set(QFontDatabase().families())
+        text_fallback = "DejaVu Sans"
         missing_fonts = set()
         # QDomNodeList is live: mutating while indexing repeatedly rebuilds it.
         option_elements = [options.at(i).toElement() for i in range(options.count())]
@@ -107,10 +113,10 @@ class MPYYStylerEngine:
             value = option.attribute("value")
             if option.attribute("name") == "font" and value and value not in families:
                 missing_fonts.add(value)
-                # A named text font fallback prevents symbol-font substitution.
-                option.setAttribute(
-                    "value", "Arial" if "Arial" in families else "sans-serif"
-                )
+                # DejaVu Sans ships with the plugin, so ordinary catalog text
+                # remains readable on Windows, Linux and macOS without relying
+                # on Arial, Calibri or another system-only family.
+                option.setAttribute("value", text_fallback)
         data = doc.toString().encode("utf-8")
         style = QgsStyle()
         style.createMemoryDatabase()

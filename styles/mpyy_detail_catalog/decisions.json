@@ -943,6 +943,39 @@
    "from": "UIP/AfetTehlikeliAlanlar/TASKINA_MARUZ_ALAN",
    "note": "Katalog UİP ve NİP için aynı taramayı tanımlar; NİP SLD'si yalnız saydam dolgu verir."
   },
+  "UIP/EnerjiDagitimDepolama/YED": {
+   "page": 174,
+   "kind": "copy",
+   "from": "UIP/EnerjiUretim/YED",
+   "note": "Aynı YED katalog gösterimi Enerji Üretim katmanında doğru, Dağıtım/Depolama SLD'sinde ise siyah dolguya dönüşüyor."
+  },
+  "UIP/SitAlanlari/KENTSEL_ARKEOLOJIK_SIT": {
+   "page": 83,
+   "kind": "double_lines",
+   "color": "255/0/0",
+   "width_mm": 0.4,
+   "pair_gap_mm": 1,
+   "spacing_mm": 3,
+   "angle_deg": 0
+  },
+  "NIP/SitAlanlari/KENTSEL_ARKEOLOJIK_SIT": {
+   "page": 83,
+   "kind": "double_lines",
+   "color": "255/0/0",
+   "width_mm": 0.4,
+   "pair_gap_mm": 1,
+   "spacing_mm": 3,
+   "angle_deg": 0
+  },
+  "CDP/SitAlanlari/KENTSEL_ARKEOLOJIK_SIT": {
+   "page": 83,
+   "kind": "double_lines",
+   "color": "255/0/0",
+   "width_mm": 0.4,
+   "pair_gap_mm": 1,
+   "spacing_mm": 3,
+   "angle_deg": 0
+  },
   "UIP/Durak/HAVAI_HAT_ISTASYONU": {
    "page": 171,
    "kind": "tile",
@@ -1642,7 +1675,7 @@
    "color": "255/0/0",
    "width_mm": 0.3,
    "size_mm": 3,
-   "interval_mm": 2
+   "gap_mm": 2
   },
   "NIP/DonusumKonutAlanlari/GECEKONDU_ONLEME_BOLGESI": {
    "page": 26,
@@ -1651,7 +1684,7 @@
    "color": "255/0/0",
    "width_mm": 0.3,
    "size_mm": 3,
-   "interval_mm": 2
+   "gap_mm": 2
   },
   "UIP/DonusumKonutAlanlari/TOPLU_KONUT_ALANLARI": {
    "page": 27,
@@ -1661,7 +1694,7 @@
    "width_mm": 0.3,
    "size_mm": 3,
    "ring_mm": 3,
-   "interval_mm": 2
+   "gap_mm": 2
   },
   "NIP/DonusumKonutAlanlari/TOPLU_KONUT_ALANLARI": {
    "page": 27,
@@ -1671,7 +1704,17 @@
    "width_mm": 0.3,
    "size_mm": 3,
    "ring_mm": 3,
-   "interval_mm": 2
+   "gap_mm": 2
+  },
+  "UIP/TmKtkgbAlan/*": {
+   "page": 20,
+   "kind": "cross_cluster",
+   "color": "0/92/230",
+   "width_mm": 0.4,
+   "circle_mm": 5,
+   "cluster_gap_mm": 1,
+   "edge_gap_mm": 1,
+   "dash_mm": 5
   },
   "NIP/DonusumKonutAlanlari/KENTSEL_DONUSUM_PROJE_ALANI": {
    "page": 28,

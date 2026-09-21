@@ -70,8 +70,8 @@ blocking Qt6 gate. A genuinely blocked version number is **burned**; you cannot 
 | git remote | **none** (`git remote -v` is empty; `plugins.toml` has `repo = ""`) |
 | git tags | **none** |
 | Published to the QGIS Hub? | **NEVER.** Not once. |
-| Last commit | `12bc49e` "Referans el kitabi ve portal sayfasi eklendi" |
-| Latest gate result | **`VERIFY OK`**, both runtimes, 11 QGIS suites each, 3/3 pure |
+| Last commit | `f8fbb5e` "Packaging: keep docs/ out of the release zip" (`12bc49e` is an older ancestor, not HEAD) |
+| Latest gate result | **`VERIFY OK`**, both runtimes, 11 QGIS suites each, 10 passed / 39 subtests (2 pure files) |
 
 **Do not read "1.0.0" as "released".** It is a *working* version number. The 2.x numbering
 was deliberately voided and the tree reset to 1.0.0 for a first public release that has
@@ -88,28 +88,280 @@ Every further change keeps the version at **1.0.0**: do **not** bump `metadata.t
 
 ## 3. ⚠️ Uncommitted work — read this before you touch anything
 
-The tree is **dirty**. A regression fix was completed and fully verified but
-**deliberately not committed** (Yusuf's pattern is to say "commit et" explicitly; he had
-not as of this writing).
+The engine-wiring regression described below was committed as `f40ffee` and the stale
+development-history cleanup as `bde68c6`. The tree was clean when the 2026-09-20 follow-up
+started. The current uncommitted work is two source-backed changes that were developed together —
+the ground-metre sizing pass and the Ek-1e detail-hierarchy integration:
 
 ```
- M core/mpyy_styler.py
- M dock.py
- M docs/GUI_ARCHITECTURE.md
- M gui/actions.py
- M tests/__init__.py
- M tests/test_forms_dropdowns_qgis.py
- M tests/test_gui_qgis.py
-?? tests/test_engine_wiring_pure.py
+ M CHANGELOG.md
+ M HANDOFF_NEXT_AGENT.md
+ M core/mpyy_detail_catalog.py
+ M core/mpyy_workspace.py
+ M core/styler.py
+ M styles/mpyy_detail_catalog/decisions.json
+ M tests/test_fonts_qgis.py
+ M tests/test_mpyy_levels_qgis.py
+ M tests/test_mpyy_workspace_qgis.py
+?? core/mpyy_detail_hierarchy.py
+?? styles/mpyy_detail_hierarchy.json
+?? tools/compile_mpyy_detail_hierarchy.py
 ```
 
-Plus, in the **workspace root** (not a git repo, so it never shows in any `git status`):
+No workspace-root file changed in this follow-up. `plugins.toml` already contains
+`tests/test_engine_wiring_pure.py` from the committed wiring fix.
 
-- `plugins.toml` line 35 — `tests_pure` was `[]`, now
-  `["tests/test_engine_wiring_pure.py"]`.
+### 3.1 Ground-metre sizing
 
-**Decide with Yusuf what to do with this before starting new work.** Options: commit it as
-one focused commit, or verify it again from scratch. Do **not** `git add -A` — `scratch/`
+The sizing work converts every catalog paper measurement to ground metres at the nominal
+plan scale (`mm × scale / 1000`) across widths, marker sizes, offsets, intervals, hatch
+spacing, dash vectors and repeated text. The scale table is UİP/MUİP 1:1,000; NİP/MNİP
+1:5,000; ÇDP/MÇDP25 1:25,000; MÇDP100 1:100,000. A runtime audit expands **221** border
+decision rows to **236 concrete rules** and asserts every target exists, generates its
+boundary, preserves required dash patterns and uses map metres. Both counts are pinned in
+`tests/test_mpyy_levels_qgis.py`, and they move independently: a wildcard address covers
+every rule of its type, so one added decision row can shift the second count by more than
+one. It passes in isolation on QGIS 3.44 and 4.2. The same isolation run exposed and fixed
+two state-dependent symbol-tree assumptions: `MarkerLine` containers are no longer
+mistaken for sized marker leaves, and a layer reporting `RasterFill` is touched only when
+it actually exposes `imageFilePath()`. The same pass also made ordinary text fallback
+explicitly portable: catalog loading registers the bundled fonts even when the engine is
+used outside `initGui()`, and missing Arial/Calibri-style text families fall back to
+bundled DejaVu Sans. No system font install is required.
+
+One `cross` family needed a geometry fix, not just a unit change. The annex's "2 mm" is the
+clear **gap after** a 3 mm mark, not its centre-to-centre interval; the old reading made
+the marks overlap, most visibly on Toplu Konut and Gecekondu Önleme. Those four decision
+rows were renamed `interval_mm` → `gap_mm`, and the resulting interval — 5 mm of paper,
+i.e. 5 m at 1:1,000 and 25 m at 1:5,000 — is asserted exactly, in both values and both
+units, in `tests/test_mpyy_levels_qgis.py`.
+
+### 3.2 Ek-1e detail hierarchy
+
+`styles/mpyy_detail_hierarchy.json` holds the Ek-1e polygon/line classification: **592
+records** (UİP 275, NİP 199, ÇDP 118), each with symbol name, detail class and subclass,
+plan level, geometry, SLD rule and source page. It is compiled by
+`tools/compile_mpyy_detail_hierarchy.py` — which does **not** ship, because `tools` is in
+`.zipignore` — and read at runtime by `core/mpyy_detail_hierarchy.py`.
+
+`create_mpyy_workspace` writes it into a **companion table, `mpyy_detay_katalogu`**, beside
+the XSD-backed tables rather than inside them: it adds no field to any feature type and
+leaves every code list untouched. `test_catalog_recompiles_identically_from_the_official_zip`
+is what proves that promise — it recompiles the schema from
+`~/Downloads/planGMLShema_1_7.zip` and asserts the result equals the bundled catalog, so a
+hand-edited code list fails there. The table loads as one more layer, "Detay kataloğu
+hiyerarşisi", and its rows feed the rule descriptions (`sembol adı → detay sınıfı → detay
+alt sınıfı`) and the layer custom properties `mpyy/detay_sinifi`, `mpyy/detay_alt_sinifi`
+and `mpyy/detay_hiyerarsisi`.
+
+Two traps this work produced, both now guarded:
+
+- **The INSERT is a plain literal, and that is deliberate.** The Hub's Bandit gate (B608)
+  reads *any* f-string whose text reads `INSERT INTO ... VALUES` as a SQL injection vector
+  and blocks the upload. Bandit inspects only strings built by f-string / `%` / `+` /
+  `.format()` / `.replace()`; a plain literal passed to `execute` is not a string-building
+  operation, so it is not flagged at all. Do not "tidy" it back into an f-string, and do
+  not reach for `# nosec` — neither is needed, and the suppression would be the worse
+  answer. The adjacent-string-literal form is still one `Constant` after parsing, so the
+  statement stays readable across lines.
+- **`tests/test_mpyy_workspace_qgis.py` compares the stored rows column by column**, in
+  `DETAIL_HIERARCHY_COLUMNS` order, because a bare row count cannot see a column-order
+  drift in the INSERT. No two columns of a level hold the same value in every one of its
+  rows, so any swap fails the assertion; that was measured by performing the swap.
+
+Residual, and now **decided: leave the matching exactly as it is.** 38 of the 592 records —
+exactly one for each of 38 level/type pairs, including `IcmesuTesis` and `KatiAtikTesis` at
+all three levels — carry `sld_kurali: "*"`. `record_for_rule`
+matches a rule by exact label, so a `*` record never matches and its rule-level description
+is never applied. That is the correct behaviour; turning it into a fallback would write
+wrong data. Measured 2026-09-21 across `UIP/SuYuzeyi`, `UIP/PlanSiniri`, `UIP/KiyiYapilari`,
+`NIP/TeknikAltyapi`, `NIP/EnerjiUretim`, the three `KatiAtikTesis` types and several more:
+
+- **`*` does not mean "every rule of this type."** On `UIP/KiyiYapilari` the `*` record is
+  "LİMAN" while the type's other 14 rules each have their own record. A fallback would
+  stamp "LİMAN" on the one remaining rule — which is the `ELSE` catch-all the engine
+  appends, "Kodu girilmemiş / resmî gösterimi yok". All 38 types would get their umbrella
+  name glued to that rule.
+- **Where the type's rules are genuinely distinct, the umbrella name is simply wrong.**
+  `UIP/PlanSiniri`'s `*` is "PLAN ONAMA SINIRI" sitting over the rules PLAN, REVIZYON,
+  ILAVE and ILAVE_REVIZYON — a revision boundary is not the plan approval boundary. Same
+  shape on `NIP/TeknikAltyapi`, whose `*` is "TEKNİK ALTYAPI ALANI" over ENERJI, ICMESUYU,
+  ATIKSU, KATI_ATIK, KANALIZASYON and ULASTIRMA.
+- **Nothing is lost by leaving it.** The annex data reaches the user at layer level,
+  computed from all of a type's records: `mpyy/detay_sinifi`, `mpyy/detay_alt_sinifi` and
+  the full `mpyy/detay_hiyerarsisi` JSON are all set even when `*` is the type's only
+  record (verified on `UIP/SuYuzeyi`, `UIP/PlanSiniri`, `NIP/BoruHatti`), and
+  `UIP/KiyiYapilari`'s 14 named rules keep their own descriptions.
+
+So `*` means "this annex row is keyed to the **type**, not to a single SLD rule label" —
+which is the same statement as the 32 of 38 pairs that have no other record at all. Do not
+implement a fallback, and do not edit the JSON to invent rule labels for those rows.
+
+Two defects reached that metadata, both resolved 2026-09-21. They are one investigation:
+fixing the second is what made the last of the first visible. A third change to the same
+field — the label set itself, fourteen pairs in all — is recorded in §6.
+
+**Defect 1 — the annex does not treat one spelling as canonical; it prints both, and labels
+were shipping as two.** `UIP/KiyiYapilari`'s `mpyy/detay_alt_sinifi` read
+`DENIZYOLLARI | DENİZYOLLARI` because the compiled catalogue carried both spellings and
+`apply_renderer_hierarchy` joins a type's distinct subclasses with a pipe. **Nine labels were
+affected**: four found and repaired first (60 rows), the pairing fix below exposing the rest
+(9 further rows, 69 in all), the plural/singular merge of §6 adding 14 — **82 distinct rows,
+one of them counted in both passes**. Five further labels were *not* duplicates anywhere in
+the catalogue and were invisible to that hunt; they were found by a label-versus-code-list
+pass and repaired the same day, **79 rows** (§6). **161 rows of 592 carry a label this work
+renamed**, shipped by a change set of **113 records** against the recorded baseline — 109
+`detay_alt_sinifi` and 6 `detay_sinifi` field changes. The table below is all fourteen:
+
+| shipped before | shipped now | rows repaired | why that spelling |
+| --- | --- | --- | --- |
+| `DENIZYOLLARI` | `DENİZYOLLARI` | 31 | code-list group `DENİZYOLLARI` |
+| `AÇIK VE YEŞIL ALANLAR` | `AÇIK VE YEŞİL ALANLAR` | 26 | code-list group `AÇIK VE YEŞİL ALANLAR` |
+| `YERLEŞIM ALANLARI` | `YERLEŞİM ALANLARI` | 2 | code list spells it so, inside `KONUT ALANLARI / YERLEŞİM ALANLARI` |
+| `SOSYALVE KÜLTÜREL TESIS ALANLARI` | `SOSYAL VE KÜLTÜREL TESİS ALANI` | 1 | run-together word split; the singular is where the row below ends up |
+| `ALAN KULANIMLARI` | `ALAN KULLANIMLARI` | 2 | 509 rows against 2; misspelling of the DETAY SINIFI value |
+| `SOSYAL ALTYAPI ALANLARI` | `SOSYAL ALT YAPI ALANLARI` | 2 | code-list group `SOSYAL ALT YAPI ALANLARI` |
+| `ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLARI` | `ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR` | 3 | code-list group `… VE SINIRLAR` |
+| `ALAN KULLANIMI` | `ALAN KULLANIMLARI` | 2 | 509 rows against 2; singular of the same DETAY SINIFI value |
+| `SOSYAL VE KÜLTÜREL TESIS ALANLARI` | `SOSYAL VE KÜLTÜREL TESİS ALANI` | 14 | code-list group `SOSYAL VE KÜLTÜREL TESİS ALANI`; **merged**, not respelled — see §6 |
+| `DEMIRYOLLARI` | `DEMİRYOLLARI` | 11 | code-list group `DEMİRYOLLARI`; shipped undotted only |
+| `ENERJI ÜRETIM, DAĞITIM VE DEPOLAMA` | `ENERJI ÜRETİM DAĞITIM VE DEPOLAMA` | 34 | code-list group name exactly, which dots `ÜRETİM`, leaves `ENERJI` undotted and drops the comma |
+| `İDARI SINIRLAR` | `İDARİ SINIRLAR` | 18 | code-list group `İDARİ SINIRLAR`; shipped undotted only |
+| `SAĞLIK TESISLERI ALANLARI` | `SAĞLIK TESİSLERİ ALANI` | 5 | code-list group is the **singular**; merged |
+| `EĞITIM TESISLERI ALANLARI` | `EĞİTİM TESİSLERİ ALANI` | 11 | code-list group is the **singular**; merged |
+
+**Read that last column exactly as written; an earlier draft of this file said "what the
+code list says" for all of them and that is false.** Ten of the twelve distinct kept
+spellings *are* `ust_grup_adi` values in `styles/mpyy_detail_catalog.json`: `DENİZYOLLARI`,
+`AÇIK VE YEŞİL ALANLAR`, `SOSYAL ALT YAPI ALANLARI`, `ÖZEL KANUNLARLA BELİRLENEN ALAN VE
+SINIRLAR`, `SOSYAL VE KÜLTÜREL TESİS ALANI`, `DEMİRYOLLARI`, `ENERJI ÜRETİM DAĞITIM VE
+DEPOLAMA`, `İDARİ SINIRLAR`, `SAĞLIK TESİSLERİ ALANI` and `EĞİTİM TESİSLERİ ALANI`. The other
+two are not settled by the code list at all: `YERLEŞİM ALANLARI` appears in it only inside the
+longer group name `KONUT ALANLARI / YERLEŞİM ALANLARI`, and `ALAN KULLANIMLARI` is a DETAY
+SINIFI value with no code-list counterpart that wins on count. The tie-break is *not* "the
+majority spelling": for `DENİZYOLLARI` the kept form was the minority one before the repair.
+
+The last row is the one to understand before deleting anything. p.64 prints the singular
+`ALAN KULLANIMI` in exactly one DETAY SINIFI cell in the entire annex — 302 cells print the
+plural — and that cell belongs to `ELEKTRİKLİ ARAÇ ŞARJ İSTASYONU`, whose own block the
+pairing fix now reads. Those two rows (UIP and NIP) are repaired rather than spelling-swapped,
+which is why the table counts them: their class reads `ALAN KULLANIMLARI` before and after,
+because the old pairing had given them a *different* row's plural. Measured by removing the
+entry and recompiling: the two rows then ship `ALAN KULLANIMI` while 507 others ship the
+plural. Its sibling `ALAN KULANIMLARI` is not dead weight either — it prints in one DETAY
+SINIFI cell as well (p.96, the `… MAKİLİK-FUNDALIK ALAN` row) and carries its own 2 rows, so
+removing that entry likewise puts 2 more rows on a second spelling.
+`_assert_one_spelling_per_label` does **not** fire on either — the two spellings fold to
+different keys — so the one-letter check in `tests/test_detail_hierarchy_pure.py` is the only
+thing standing between the catalogue and a duplicate the plugin's own fold-based guards
+cannot see.
+
+Each pair is one label. Most differ only by the Turkish dotted İ, by a word that ran together,
+by a dropped letter or plural, or by a trailing `-I`; four (the three merges of §6 and the
+run-together plural that reaches one of them) go further and file one concept under two names,
+and those are three characters apart folded rather than one letter. Every variant **is printed
+in EK-1e itself**, so nothing was invented and no third spelling was added — the only question
+was which of the annex's own spellings to keep. `EK-1e.docx` cannot answer that alone either.
+Measured on its own `word/document.xml` (runs concatenated; the file carries real U+0130 İ, so
+an exact substring count is the count): it prints **both** spellings for **ten of the fourteen**
+pairs, and for the other four it prints only the annex's own form — `İDARI SINIRLAR` (7 cells),
+`SAĞLIK TESISLERI ALANLARI` (5), `EĞITIM TESISLERI ALANLARI` (9) and `ENERJI ÜRETIM, DAĞITIM VE
+DEPOLAMA` (19, the comma'd spelling); it never dots or singularises any of those four. Where it
+does lean on the ten, it leans against the compiler: it prints the undotted `DENIZYOLLARI` in 18
+cells against 2 dotted, so the dotted form that ships wins on the code list alone, not on any
+reproduction's preference.
+The rule the compiler follows is therefore two tiers, and the table above spells out which
+label falls in which: the Ministry's
+machine-readable list (`ust_grup_adi` in `styles/mpyy_detail_catalog.json`) where the label
+is a code-list value, and otherwise the spelling the catalogue itself already carries on the
+most rows. Either way the same value reaches `resources/turkish_labels.tsv` and the rule
+descriptions, so a planner sees one classification, not two.
+
+**Defect 2 — the extractor's text order is not the printed order, so a title borrowed the
+class of the symbol printed above it.** `pypdf`'s plain `extract_text()` does not emit a
+page's blocks in printed (top-to-bottom) order. Measured on p.64: the stream is
+`ELEKTRİKLİ ARAÇ ŞARJ İSTASYONU` (y=773.8, top of page), then `AKARYAKIT VE SERVİS
+İSTASYONU ALANI` (y=430.5), then **that second symbol's** block at y=401.2
+(`ALAN KULLANIMLARI` / `KENTSEL ÇALIŞMA ALANLARI`), and only then the top symbol's own
+block at y=740.1 (`KARAYOLLARI`). The blocks come out bottom-up while the titles come out
+top-down, so a block's own title is not the nearest title before it in the text — pairing
+around a block's text position hands a symbol the classification of its neighbour. 13
+records inherited a whole classification that way. `_page_hierarchy` now pairs by printed
+position — the block directly below the title's own printed line, with no other title
+between them — using per-character y from the same `visitor_text` extraction the file
+already used, so no shipped value changed except the ones that were wrong. Two further
+faults surfaced and are handled: a title that **wraps onto a second 12 pt line** (the
+anchor is the bottom line of the title, not the top), and an **empty `DETAY SINIFI` cell**,
+whose missing whitespace lets the lazy regex run on and swallow the rest of the page (a
+match that ends below the next printed title is rejected). p.19's
+`İMAR HAKKI AKTARIM ALANI SINIRI` has both label cells blank in the annex *and* in
+`EK-1e.docx`, so its class comes from the Ministry's code list, which files layer
+`SNR_IMAR_HAKKI_AKT` under `ust_grup_adi` = PLANLAMA SINIRLARI, same as every other
+`*_SINIRI` continuation on those pages — recorded in `CONTINUATION_HIERARCHY`.
+
+The 13 re-paired records, by page (only `detay_sinifi` / `detay_alt_sinifi` moved; no
+`sembol_adi`, `sld_kurali` or `plan_gml_tipi` was touched anywhere):
+
+| page | symbol | was | now |
+| --- | --- | --- | --- |
+| 19 | `İMAR HAKKI AKTARIM ALANI SINIRI` | (page-spill garbage class) | `SINIRLAR` / `PLANLAMA SINIRLARI` |
+| 23 | `ORGANİZE SANAYİ BÖLGESİ HİZMET VE DESTEK ALANI (HDA)` | `SINIRLAR` / `ÖZEL KANUNLARLA…` | `KENTSEL ÇALIŞMA ALANLARI` / `ORGANİZE SANAYİ BÖLGESİ HİZMET VE DESTEK ALANLARI` |
+| 64 | `ELEKTRİKLİ ARAÇ ŞARJ İSTASYONU` | `ALAN KULLANIMLARI` / `KENTSEL ÇALIŞMA ALANLARI` | `ALAN KULLANIMLARI` / `KARAYOLLARI` |
+| 160 | `SU ULAŞIM BAĞLANTISI` | `ALAN KULLANIMLARI` / `DENİZYOLLARI` | `ALAN KULLANIMLARI` / `DİĞER SU YOLLARI` |
+| 191 | `FAY SAKINIM ZONU/TAMPON ALANI` | `ALAN KULLANIMLARI` / `SU, ATIKSU VE ATIK SİSTEMLERİ` | `ALAN KULLANIMLARI` / `AFET TEHLİKELİ ALANLAR` |
+| 192 | `SOKAK HAYVANLARI BARINAĞI ALANI` | `ALAN KULLANIMLARI` / `KARAYOLLARI` | `ALAN KULLANIMLARI` / `SOSYAL ALT YAPI ALANLARI` |
+
+p.61 `ÜNİVERSİTE ALANI`, p.138 `MESİRE ALANI`, p.96 `MAKİLİK- FUNDALIK ALAN` and p.34
+`DİĞER ÖZEL KANUNLARLA BELİRLENEN ALAN SINIRLARI` changed for the spelling reason only, so
+the two defects account for all 20 changed records.
+
+**Independent confirmation, from two sources apart from the annex's printed blocks.** The
+Ministry's code list agrees with three of the corrected pairings outright — `ELEKTRİKLİ ARAÇ
+ŞARJ İSTASYONU` and `SOKAK HAYVANLARI BARINAĞI ALANI` under their new upper groups, and
+`SNR_IMAR_HAKKI_AKT` under PLANLAMA SINIRLARI. `EK-1e.docx` gives the same *alt sınıfı* the
+fix now ships for five of the six re-paired symbols — `KARAYOLLARI` (p.64), `KENTSEL ÇALIŞMA
+ALANLARI` as the *sınıfı* of the `ORGANİZE SANAYİ BÖLGESİ HİZMET VE DESTEK ALANLARI` row
+(p.23), `DİĞER SU YOLLARI` (p.160), `AFET TEHLİKELİ ALANLAR` (p.191) and `SOSYAL ALT YAPI
+ALANLARI` (p.192); its p.64 block even repeats the annex's lone singular `ALAN KULLANIMI`.
+The p.23 attribution is the one to sanity-check, because the docx prints that row's title
+against two neighbours' blocks: the pair the fix ships sits beside the `ORGANİZE SANAYİ
+BÖLGESİ HİZMET VE DESTEK ALANI (HDA)` / `ENDÜSTRİ BÖLGESİ` titles, and the *other* block there
+— `SINIRLAR` / `ÖZEL KANUNLARLA BELİRLENEN ALAN VE SINIRLAR` — is the one our own catalogue
+gives to the separate p.23 `ENDÜSTRİ BÖLGESİ` symbol, i.e. exactly the pair the old code had
+wrongly lent to the HDA row. The sixth cannot be checked: p.19's symbol is in the docx with
+**both label cells empty** (which is why it needed `CONTINUATION_HIERARCHY`), and the code
+list is the only thing that classifies it.
+So that is five of five checkable, and it is the strongest evidence here:
+the docx was parsed by a different tool, from a different file format, and had never been
+fed to the compiler.
+
+`tools/compile_mpyy_detail_hierarchy.py` repairs each variant (`SPELLING_REPAIRS`), applies
+it to the three human-facing label fields only — never to `sld_kurali` or `plan_gml_tipi`,
+which `record_for_rule` and the XSD match on — and then **raises** if any two spellings of
+one label survive (`_assert_one_spelling_per_label`). So a re-extraction that reintroduces a
+spelling fails the build instead of shipping. `tests/test_detail_hierarchy_pure.py` holds
+both invariants over the shipped JSON, plus one guard per renamed label: it reports **28
+failed, 5 passed, 8 subtests passed** against the recorded baseline
+(`~/Downloads/mpyy_detail_hierarchy.BEFORE.json`; every repaired spelling, both label fields,
+and all ten pinned symbols named in the output) and **7 passed, 39 subtests passed** now.
+Recompiling is byte-reproducible — verified on **raw bytes**, not on decoded text, since
+`write_text` emits CRLF here and `read_text` hides it (TRAPS §6.1): a fresh compile and the
+shipped file are both 207 496 bytes, sha256 `99e599d81de23365…`. The only fields that moved
+are the two label fields, in **113 of 592 records** (109 `detay_alt_sinifi` + 6
+`detay_sinifi`; no `sembol_adi` moved), and the provenance block is byte-identical.
+`detay_sinifi` carries 4 distinct labels in the baseline and 3 here, `detay_alt_sinifi` 29 in
+both: the repairs split one value in two net and the merge put two back into one, so the
+vocabulary count returned to where it started while 113 rows changed spelling.
+
+**Both invariants now hold over the two label fields** (`detay_sinifi`, `detay_alt_sinifi`):
+no value is a second spelling of another by `label_fold`, and none is one letter away from
+another. `sembol_adi` is checked for fold-duplicates only, and deliberately not for one-letter
+pairs — it holds 10 of those and every one is legitimate: `MOTEL ALANI`/`OTEL ALANI`,
+`ÖÇK BÖLGESİ HASSAS ALAN (A)`/`(B)`/`(C)`, and the `1.`/`2.`/`3.DERECE` arkeolojik and doğal
+`SİT ALANI` symbols, which the code list names separately. A one-letter check over
+`sembol_adi` would fail on correct data.
+
+Do not commit unless Yusuf explicitly says `commit et`. Do **not** `git add -A` — `scratch/`
 and similar paths are untracked but **not** gitignored in this plugin.
 
 ---
@@ -144,7 +396,7 @@ TypeError: apply() got an unexpected keyword argument 'field'
 **Why the green gate missed it:** a same-name shadow is not an `ImportError`; no suite
 read either engine object; and no suite drove that branch. Green gate, dead feature.
 
-**The fix (in the uncommitted diff):**
+**The fix (committed as `f40ffee`):**
 
 - `core/mpyy_styler.py` — the class is now **`MPYYDetailStylerEngine`** (named after
   `styles/mpyy_detail_catalog.json`), with a docstring explaining it is *not* the same
@@ -191,7 +443,7 @@ Also in the same change set:
   [PASS] validate_plugin — 0 warnings
   [PASS] Hub gate: security scan (blocking) — CLEAN
   [PASS] Qt6 compatibility (advisory) — no Qt6 errors
-  [PASS] pure: pytest (1 files) — 3 passed
+  [PASS] pure: pytest (2 files) — 10 passed, 39 subtests passed
   [PASS] qgis[ltr]  — 11 suites, all PASS
   [PASS] qgis[qgis4] — 11 suites, all PASS
 VERIFY OK: 1 plugin(s)
@@ -227,40 +479,120 @@ Re-run this after any further change. `qgis[ltr]` is QGIS 3.44 via
 
 ---
 
-## 6. Open items — and which ones are NOT yours to close
+## 6. Open items and owner decisions
 
-### Not an agent's to decide (escalate to Yusuf)
+### Owner decisions recorded on 2026-09-20
 
-1. **`styles/provenance.json` says `distribution_status = "unverified; local development
-   only until source redistribution rights are established"`** — the same unresolved
-   status applies to the Ministry's source XML and to the bundled fonts. This is a
-   **publication blocker** for a first public release, and it is a rights decision, not a
-   code change. **Do not write anywhere that public distribution is approved.** Fixing
-   `THIRD_PARTY_NOTICES.md` wording to *match* reality is fine; inventing a right is not.
-2. **The real-desktop font proof.** With system fonts uninstalled
-   (`install_mpyy_fonts.ps1 -Uninstall`), restart QGIS and open
-   `Downloads\PlanGML_Sembol_Kontrol_Grid\konak_sembol_kontrol.qgz`. No
-   `Font "…" not available on system` warning may appear, and symbols must draw correctly.
-   A headless `QT_QPA_PLATFORM=offscreen` metrics check **does not substitute** for this.
-   If it fails, **shorten the text** rather than re-tuning dimensions.
+1. **Do not work on legal/provenance questions for now.** Yusuf stated that he created
+   the styles and explicitly directed agents to leave the legal topic alone at this stage.
+   Preserve the existing provenance and notice files unless he asks for a change; legal
+   review is not part of the current engineering backlog.
+2. **Font portability, not typeface identity, is the requirement.** Arial or any other
+   readable sans-serif is acceptable, but the plugin must not depend on fonts installed on
+   Yusuf's workstation. The implementation registers bundled notation fonts in the QGIS
+   process and substitutes unavailable ordinary text families with bundled DejaVu Sans.
+   The automated payload/registration tests are the acceptance guard; the former manual
+   "uninstall system fonts and prove this exact desktop" step is not a release blocker.
 3. **Whether an English manual is wanted.**
 
-### Genuine engineering backlog
+### Resolved 2026-09-21 — the plural/singular label pair, merged on Yusuf's instruction
 
-4. **Symbol and line sizes must look right for every user.** The Ministry's SLD sizes carry
-   no consistent scale (measured ratio to catalogue millimetres: **1.07–5.65**). The agreed
-   direction is to make the catalogue's paper millimetres the sizing authority, converted
-   as `ground m = mm × scale / 1000`. A border audit against the catalogue found
-   **218 conforming, 45 problematic** (28 unit mismatches, 14 missing borders, 3 missing
-   dash patterns).
-5. **5 drawable symbols can never appear with the test data** — 4 are `symbolizer = ''`
-   rules against a **NULL** GPKG column (`NULL = ''` is false in QGIS; it is the Ministry's
-   own SLD, and our `mapping.json` records `literal: null`), and the 5th is
-   `UIP · YayaYolu` requiring `"Genislik" > 0`. Separately, 240 layers carry the
-   "no official representation" **ELSE** fallback, and the generated style emits some rules
-   **twice** (e.g. `AskeriBolgeTip = 'X' OR AskeriBolgeTip = 'X'`).
-6. **Large-extent warning** before an as-is download (carried over from a sibling plugin's
-   backlog — check whether it applies here before acting).
+The catalogue shipped two forms of one classification. This pass first left them **unmerged**,
+because the difference is the plural morpheme (`ALANLARI`/`ALANI`) and not a dropped *letter* —
+folding erases the dotted İ, so the two are three characters apart once folded — and because
+**no symbol carried both**:
+
+| label | `detay_alt_sinifi` rows | symbols |
+| --- | --- | --- |
+| `SOSYAL VE KÜLTÜREL TESIS ALANLARI` (plural) | 14 | 12 |
+| `SOSYAL VE KÜLTÜREL TESİS ALANI` (singular, dotted İ) | 2 | **1** — `SEMT SPOR ALANI` |
+
+Yusuf's decision was **merge**, into the singular, and the direction is not a coin toss: the
+plural occurs **zero** times in the plugin's own code list (`styles/mpyy_detail_catalog.json`),
+while the singular is `ust_grup_adi` on 15 of its 274 rows and is also what the plugin already
+reads elsewhere — 15 times in `core/mpyy_catalog.py`, 10 in `forms/yerel_nip/lookups.json`, once
+in `core/crosswalk.py`. So the plural was the outlier, and merging aligns the catalogue with the
+rest of the plugin instead of renaming a classification the code list endorses. The two official
+sources still disagree — `EK-1e.docx` prints the plural 12 times against the singular once
+(re-measured 2026-09-21), the opposite majority — so this was settled on the code-list tier, the
+same tier that decided ten of the twelve spelling repairs. The annex's third, run-together
+variant (`SOSYALVE KÜLTÜREL TESIS ALANLARI`, 1 row) was repaired into the plural form first,
+because that one differs by a word split rather than by a plural; it reaches the singular with
+the rest.
+
+Effect: 14 rows renamed (pages 123–129), `detay_alt_sinifi` 30 → 29 distinct values, 16 rows on
+the singular. Guarded by `SPELLING_REPAIRS`, `REPAIRED` and
+`test_the_plural_class_merged_into_the_singular`; measured by putting the 16 rows back on the
+plural, which is what a recompile without that entry produces — `tests/test_detail_hierarchy_pure.py`
+then reports **3 failed, 6 passed, 37 subtests passed** and the other file stays green.
+
+Measured across both label fields: **no two distinct labels in a field share a symbol** — so
+every symbol maps to exactly one classification.
+
+### Resolved 2026-09-21 — five labels that shipped undotted, 79 rows
+
+Measuring the merge turned up a wider set, left as an open question for one pass and then
+repaired on Yusuf's instruction the same day. These values shipped the annex's own undotted İ
+where the Ministry's code list dots it:
+
+| shipped value | code-list spelling | rows | what `EK-1e.docx` prints (exact substring count) |
+| --- | --- | --- | --- |
+| `DEMIRYOLLARI` | `DEMİRYOLLARI` | 11 | both — 5 undotted against 1 dotted |
+| `ENERJI ÜRETIM, DAĞITIM VE DEPOLAMA` | `ENERJI ÜRETİM DAĞITIM VE DEPOLAMA` | 34 | the undotted, **comma'd** form only, 19 times; the comma-less spelling the code list uses appears 0 times |
+| `İDARI SINIRLAR` | `İDARİ SINIRLAR` | 18 | the undotted form only, 7 times |
+| `SAĞLIK TESISLERI ALANLARI` | `SAĞLIK TESİSLERİ ALANI` | 5 | the undotted plural only, 5 times |
+| `EĞITIM TESISLERI ALANLARI` | `EĞİTİM TESİSLERİ ALANI` | 11 | the undotted plural only, 9 times |
+
+"Only for `DEMİRYOLLARI` does the reproduction print the spelling that was kept" is also the
+answer to why the passes before this one did not see them: four the annex never prints in the
+kept form at all, and the fifth only once. The `SAĞLIK TESİSİ ALANI` / `ÖZEL SAĞLIK TESİSİ
+ALANI` cells the docx also carries are its own catalog symbols, not variants of this group name,
+so they are not counted here.
+
+None of the five was a duplicate **inside** the catalogue: each shipped in exactly one form, so
+no layer metadata read `A | B`, no two values folded together, and neither invariant in
+`tests/test_detail_hierarchy_pure.py` fired. That is why the duplicate hunt this entry is about
+could not reach them and a label-versus-code-list pass was needed instead. `İDARI SINIRLAR` is
+the pure İ case, and no singular form of it arises; the last two are the plural/singular shape
+one group over, so repairing them was also a merge.
+
+The repair took the code-list tier for all five, and it is worth reading what that did **not**
+change: the ENERJI group name the code list carries is itself undotted in `ENERJI` while dotting
+`ÜRETİM`, and it has no comma — so the shipped label is `ENERJI ÜRETİM DAĞITIM VE DEPOLAMA`, one
+comma shorter than the annex and no better accented than the annex in its first word. The
+plugin's own files agree with the code list, not with the annex: `core/mpyy_catalog.py` carries
+`ENERJI ÜRETİM DAĞITIM VE DEPOLAMA` 18 times, and `SAĞLIK TESİSLERİ ALANI` / `EĞİTİM TESİSLERİ
+ALANI` in the singular that `core/crosswalk.py` also uses. That is the same evidence that
+settled the SOSYAL merge, applied to five more labels.
+
+Effect: **79 rows renamed in place** (pages 12–15, 116–123, 157–159, 173–182), `detay_alt_sinifi`
+still 29 distinct values because none of the five merged into an existing label. Guarded by
+`SPELLING_REPAIRS`, `REPAIRED`, `UNDOTTED_REPAIRED` and
+`test_the_undotted_labels_ship_the_code_list_spelling`, which pins each label's row count;
+restoring the pre-repair catalogue makes `tests/test_detail_hierarchy_pure.py` report **11
+failed, 6 passed** while the shipped catalogue gives **7 passed, 39 subtests passed**.
+
+### Completed follow-up audits (not backlog)
+
+4. **The old “28 SLD-only borders” item was a classification error, not an unfinished
+   style set.** A fresh runtime inventory found 35 polygon rules with top-level line/marker
+   layers outside the catalogue boundary geometry generator. Seven are clearly road/fill
+   graphics; the remaining 28 mix catalogue symbols, hatches, protected-area borders and
+   raw Ministry SLD constructs. The Ek-1e comparison workbook marks all 617 schema-backed
+   catalogue rows complete (the other eight have no PlanGML 1.1.7 counterpart), while the
+   catalogue decision table's 235 concrete boundary targets all pass their runtime audit.
+   Do not bulk-scale or restyle the residual group: it is not a list of 28 missing borders,
+   and Yusuf explicitly owns the style decisions.
+5. **The old “5 drawable symbols never appear” item is stale.** The current Konak control
+   project contains 252 layers and 795 features. After reapplying the current styles, all
+   **785 non-else drawable rules** match at least one feature; unmatched count is zero.
+6. **The sibling-plugin large-extent download warning does not apply.** This plugin has no
+   as-is/Overpass data-download workflow. Its only remote-looking features are user-triggered
+   web actions and an optional OSM XYZ base map in a local QField package.
+
+There is no known technical release blocker after the complete verification matrix. Two owner
+choices are open: whether an English manual is wanted, and the plural/singular label pair
+above. Legal/provenance work remains explicitly deferred by Yusuf.
 
 ---
 
@@ -314,6 +646,6 @@ Re-run this after any further change. `qgis[ltr]` is QGIS 3.44 via
 3. Re-run `py -3 packaging/pf.py verify planx_mpyy_studio` and confirm `VERIFY OK`.
 4. Read `tests/test_engine_wiring_pure.py` and understand why it exists — then never
    weaken it.
-5. Ask Yusuf which of §6 he wants next. Item 1 (distribution rights) blocks publication
-   and is his call; item 4 (symbol sizing) is the largest real engineering task.
+5. Do not reopen the deferred legal/provenance topic or restyle Yusuf's source styles unless
+   he explicitly asks for it.
 6. Commit only under **Yusuf Eminoğlu's** name, with no trailer of any kind.

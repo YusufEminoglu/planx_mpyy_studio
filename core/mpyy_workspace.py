@@ -63,6 +63,16 @@ LEVEL_TITLES = {
 }
 M_CATALOG_PATH = PLUGIN_ROOT / "styles" / "mpyy_m_schema.json"
 QGIS_NULL = "{2839923C-8B7D-419E-B84B-CA2FE9B80EC7}"
+DETAIL_HIERARCHY_TABLE = "mpyy_detay_katalogu"
+DETAIL_HIERARCHY_LAYER_NAME = "Detay kataloğu hiyerarşisi"
+# The companion table's column contract, in the order the rows are inserted.  The
+# acceptance suite reads the table back through this list, so a column added here but
+# not written, or written in another order, fails there rather than silently shifting
+# every field one place to the right.
+DETAIL_HIERARCHY_COLUMNS = (
+    "sembol_adi", "detay_sinifi", "detay_alt_sinifi", "plan_kademesi", "geometri",
+    "plan_gml_tipi", "sld_kurali", "kaynak_sayfa",
+)
 
 _OGR_GEOMETRY = {
     "MultiPolygon": ogr.wkbMultiPolygon,
@@ -177,6 +187,7 @@ def create_mpyy_workspace(output_path, crs, level):
                     source["sha256"],
                 ),
             )
+            _store_detail_hierarchy(con, level)
             integrity = con.execute("PRAGMA integrity_check").fetchone()[0]
             if integrity != "ok":
                 raise RuntimeError('Veritabanı bütünlüğü doğrulanamadı: ' + str(integrity))
@@ -190,6 +201,38 @@ def create_mpyy_workspace(output_path, crs, level):
 
     _store_default_forms(output, schema)
     return str(output)
+
+
+def _store_detail_hierarchy(connection, level):
+    """Store the Ek-1e polygon/line classification next to, not inside, the XSD schema."""
+    from .mpyy_detail_hierarchy import records_for_level
+
+    connection.execute(
+        f"CREATE TABLE {DETAIL_HIERARCHY_TABLE} ("
+        "id INTEGER PRIMARY KEY, sembol_adi TEXT NOT NULL, detay_sinifi TEXT NOT NULL, "
+        "detay_alt_sinifi TEXT NOT NULL, plan_kademesi TEXT NOT NULL, geometri TEXT NOT NULL, "
+        "plan_gml_tipi TEXT NOT NULL, sld_kurali TEXT NOT NULL, kaynak_sayfa INTEGER NOT NULL)"
+    )
+    connection.execute(
+        "INSERT INTO gpkg_contents(table_name, data_type, identifier) VALUES (?,?,?)",
+        (DETAIL_HIERARCHY_TABLE, "attributes", "Ek-1e detay kataloğu hiyerarşisi"),
+    )
+    # One literal statement, table name included, rather than an f-string.  The Hub's
+    # Bandit gate reads any f-string whose text reads "INSERT INTO ... VALUES" as a SQL
+    # injection vector and blocks the upload (B608); a plain literal is not a
+    # string-building operation, so nothing needs suppressing.  The literal column list
+    # and DETAIL_HIERARCHY_COLUMNS must stay in step -- tests/test_mpyy_workspace_qgis.py
+    # reads every column back in that order and compares row by row, so a swap fails
+    # there instead of silently writing each field into its neighbour's column.
+    connection.executemany(
+        "INSERT INTO mpyy_detay_katalogu "
+        "(sembol_adi, detay_sinifi, detay_alt_sinifi, plan_kademesi, geometri, "
+        "plan_gml_tipi, sld_kurali, kaynak_sayfa) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        [
+            tuple(record[column] for column in DETAIL_HIERARCHY_COLUMNS)
+            for record in records_for_level(level)
+        ],
+    )
 
 
 def configure_mpyy_layer(layer, feature_type, codelists):
@@ -287,6 +330,20 @@ def load_mpyy_layers(path, project=None, dataset_id=None, level=None):
             project.addMapLayer(layer, False)
             group.addLayer(layer)
             loaded.append(layer)
+    with closing(sqlite3.connect(f"file:{Path(path).resolve().as_posix()}?mode=ro", uri=True)) as con:
+        has_catalog = con.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (DETAIL_HIERARCHY_TABLE,)
+        ).fetchone() is not None
+    if has_catalog:
+        catalog_layer = QgsVectorLayer(
+            f"{gpkg}|layername={DETAIL_HIERARCHY_TABLE}", DETAIL_HIERARCHY_LAYER_NAME, "ogr"
+        )
+        if catalog_layer.isValid():
+            group = base.findGroup("Katalog") or base.addGroup("Katalog")
+            group.setExpanded(False)
+            project.addMapLayer(catalog_layer, False)
+            group.addLayer(catalog_layer)
+            loaded.append(catalog_layer)
     return loaded
 
 
@@ -396,10 +453,13 @@ def _marker_paths(symbol, prefix=()):
     valid while the tree is walked and edited."""
     paths = []
     for index in range(symbol.symbolLayerCount()):
-        if symbol.symbolLayer(index).type() == Qgis.SymbolType.Marker:
+        layer = symbol.symbolLayer(index)
+        # MarkerLine/CentroidFill containers report a marker symbol type too,
+        # but they have no size() and must not be paired with an SLD Graphic.
+        if layer.type() == Qgis.SymbolType.Marker and hasattr(layer, "size"):
             paths.append(prefix + (index,))
-        if symbol.symbolLayer(index).subSymbol() is not None:
-            paths.extend(_marker_paths(symbol.symbolLayer(index).subSymbol(), prefix + (index,)))
+        if layer.subSymbol() is not None:
+            paths.extend(_marker_paths(layer.subSymbol(), prefix + (index,)))
     return paths
 
 
@@ -409,6 +469,53 @@ def _owner_of(symbol, path):
     for index in path[:-1]:
         current = current.symbolLayer(index).subSymbol()
     return current
+
+
+_COMBINED_CATALOG_RULES = {
+    "IcmesuTesis": {
+        "values": ("Depolama", "Aritma", "TerfiMerkezi"),
+        "label": "İÇME SUYU TESİSLERİ ALANI (DEPOLAMA-ARITMA-TERFİ MERKEZİ)",
+    },
+    "KatiAtikTesis": {
+        "values": ("Bosaltma", "Bertaraf", "Isleme", "Transfer", "Depolama"),
+        "label": "KATI ATIK TESİSLERİ ALANI (BOŞALTMA, BERTARAF, İŞLEME, TRANSFER VE DEPOLAMA)",
+    },
+}
+
+
+def _combine_catalog_rules(layer, type_name):
+    """Keep XSD values separate while presenting a single Ek-1e catalog display rule."""
+    specification = _COMBINED_CATALOG_RULES.get(type_name)
+    renderer = layer.renderer()
+    if specification is None or not isinstance(renderer, QgsRuleBasedRenderer):
+        return
+    root = renderer.rootRule()
+    selected = [
+        rule for rule in root.children()
+        if rule.symbol() is not None and any(f"'{value}'" in rule.filterExpression() for value in specification["values"])
+    ]
+    if len(selected) != len(specification["values"]):
+        return
+    keeper = selected[0]
+    keeper.setFilterExpression("(" + ") OR (".join(rule.filterExpression() for rule in selected) + ")")
+    keeper.setLabel(specification["label"])
+    keeper.setDescription(specification["label"])
+    for rule in selected[1:]:
+        root.removeChild(rule)
+
+
+def _restore_source_ground_units(symbol):
+    """A small set of official SLD boundary marks really are specified in ground metres."""
+    for index in range(symbol.symbolLayerCount()):
+        layer = symbol.symbolLayer(index)
+        if hasattr(layer, "setSizeUnit"):
+            layer.setSizeUnit(Qgis.RenderUnit.MetersInMapUnits)
+        if hasattr(layer, "setIntervalUnit"):
+            layer.setIntervalUnit(Qgis.RenderUnit.MetersInMapUnits)
+        if hasattr(layer, "setOffsetAlongLineUnit"):
+            layer.setOffsetAlongLineUnit(Qgis.RenderUnit.MetersInMapUnits)
+        if layer.subSymbol() is not None:
+            _restore_source_ground_units(layer.subSymbol())
 
 
 def apply_eplan_symbology(layer, level, type_name):
@@ -503,10 +610,10 @@ def apply_eplan_symbology(layer, level, type_name):
         if spec["kind"] == "road_width" and _apply_road_width_labels(layer, None, spec["field"], keep_renderer=True):
             applied.append(f"genişlik yazısı: s.{spec['page']}")
     if border_text and layer.geometryType() == Qgis.GeometryType.Polygon:
-        _apply_border_text_labels(layer, border_text)
+        _apply_border_text_labels(layer, border_text, level)
         applied.append("sınır yazısı: " + ", ".join(sorted({text for text, _ in border_text.values()})))
     if line_text and layer.geometryType() == Qgis.GeometryType.Line:
-        _apply_line_text_labels(layer, line_text)
+        _apply_line_text_labels(layer, line_text, level)
         applied.append("çizgi yazısı: " + ", ".join(sorted({text for text, _ in line_text.values()})))
     missing = set().union(*[gaps for label, gaps in missing.items() if label not in redrawn])
     if applied:
@@ -520,6 +627,14 @@ def apply_eplan_symbology(layer, level, type_name):
         fallback.setColor(QColor("#9aa3ab"))
         else_rule = QgsRuleBasedRenderer.Rule(fallback, 0, 0, "ELSE", "Kodu girilmemiş / resmî gösterimi yok")
         root.appendChild(else_rule)
+    if level == "UIP" and type_name == "BuyuksehirSiniri" and root is not None:
+        for rule in root.children():
+            if rule.label() == "UIP_BUYUKSEHIR_SINIRI" and rule.symbol() is not None:
+                _restore_source_ground_units(rule.symbol())
+    _combine_catalog_rules(layer, type_name)
+    from .mpyy_detail_hierarchy import apply_renderer_hierarchy
+
+    apply_renderer_hierarchy(layer, level, type_name)
     layer.setCustomProperty("mpyy/symbology", "e-Plan SLD: " + level + "/" + type_name)
     if missing:
         layer.setCustomProperty("mpyy/missing_symbols", ", ".join(sorted(missing)))
@@ -615,12 +730,13 @@ BORDER_TEXT_REPEAT_MM = 40  # katalog "uygun aralıklarla ... yazılacak" der, a
 LINE_TEXT_REPEAT_MM = 15  # s.183: üçgenlerle aynı 15mm aralık
 
 
-def _apply_repeating_text_labels(layer, texts, placement, repeat_mm):
+def _apply_repeating_text_labels(layer, texts, placement, repeat_mm, level):
     """Repeat each rule's catalog text around/along its geometry, one label rule per SLD rule so
     unrelated rules of the same type stay unlabelled."""
     from qgis.core import QgsPalLayerSettings, QgsRuleBasedLabeling, QgsTextFormat
 
     from .fonts import register_mpyy_fonts
+    from .mpyy_detail_catalog import _level_scale
 
     renderer = layer.renderer()
     if not isinstance(renderer, QgsRuleBasedRenderer):
@@ -636,12 +752,13 @@ def _apply_repeating_text_labels(layer, texts, placement, repeat_mm):
         settings.isExpression = True
         settings.fieldName = "'" + text.replace("'", "''") + "'"
         settings.placement = placement
-        settings.repeatDistance = repeat_mm
-        settings.repeatDistanceUnit = Qgis.RenderUnit.Millimeters
+        factor = _level_scale(level) / 1000.0
+        settings.repeatDistance = repeat_mm * factor
+        settings.repeatDistanceUnit = Qgis.RenderUnit.MetersInMapUnits
         text_format = QgsTextFormat()
         text_format.setFont(QFont("DejaVu Sans"))
-        text_format.setSizeUnit(Qgis.RenderUnit.Millimeters)
-        text_format.setSize(3)
+        text_format.setSizeUnit(Qgis.RenderUnit.MetersInMapUnits)
+        text_format.setSize(3 * factor)
         text_format.setColor(QColor(*[int(v) for v in color.split("/")]))
         settings.setFormat(text_format)
         label_rule = QgsRuleBasedLabeling.Rule(settings)
@@ -653,16 +770,24 @@ def _apply_repeating_text_labels(layer, texts, placement, repeat_mm):
         layer.setLabelsEnabled(True)
 
 
-def _apply_border_text_labels(layer, border_text):
+def _apply_border_text_labels(layer, border_text, level):
     """Repeat each border's catalog text (AYB, RA, RYA, YENİLEME, TEA...) around its polygon's
     perimeter (s.24 etc.: 'uygun aralıklarla sınır üzerine ... yazılacak')."""
-    _apply_repeating_text_labels(layer, border_text, Qgis.LabelPlacement.PerimeterCurved, BORDER_TEXT_REPEAT_MM)
+    _apply_repeating_text_labels(
+        layer,
+        border_text,
+        Qgis.LabelPlacement.PerimeterCurved,
+        BORDER_TEXT_REPEAT_MM,
+        level,
+    )
 
 
-def _apply_line_text_labels(layer, line_text):
+def _apply_line_text_labels(layer, line_text, level):
     """Repeat each line's catalog text (Soğutma Suyu Alma Hattı's 'S') along the line itself,
     between the chevron markers (s.183: 'ardışık iki üçgen arasında orta noktada ... S harfi')."""
-    _apply_repeating_text_labels(layer, line_text, Qgis.LabelPlacement.Line, LINE_TEXT_REPEAT_MM)
+    _apply_repeating_text_labels(
+        layer, line_text, Qgis.LabelPlacement.Line, LINE_TEXT_REPEAT_MM, level
+    )
 
 
 def installed_font_families():
@@ -801,7 +926,7 @@ def _mark_missing_svg_symbols(symbol):
 def _embed_images(symbol):
     for index in range(symbol.symbolLayerCount()):
         layer = symbol.symbolLayer(index)
-        if layer.layerType() == "RasterFill":
+        if layer.layerType() == "RasterFill" and hasattr(layer, "imageFilePath"):
             path = layer.imageFilePath()
             if path.startswith("file:"):
                 from qgis.PyQt.QtCore import QUrl
@@ -838,6 +963,9 @@ def _apply_catalog_symbol(layer, level, type_name):
     spec = symbols.get(level, {}).get(type_name) or symbols.get(M_BASE.get(level), {}).get(type_name)
     if not spec:
         return False
+    from .mpyy_detail_catalog import _ground_spec
+
+    spec = _ground_spec(spec, level)
     from qgis.core import (
         QgsFillSymbol,
         QgsLineSymbol,
@@ -849,9 +977,9 @@ def _apply_catalog_symbol(layer, level, type_name):
     )
 
     color = QColor(*[int(v) for v in spec["rgb"].split("/")])
-    millimeters = Qgis.RenderUnit.Millimeters
+    map_meters = Qgis.RenderUnit.MetersInMapUnits
     carrier = QgsSimpleLineSymbolLayer(color, spec["line_width_mm"])
-    carrier.setWidthUnit(millimeters)
+    carrier.setWidthUnit(map_meters)
     layers = [carrier]
     cursor, markers = 0.0, []
     for part in spec["pattern"]:
@@ -862,15 +990,15 @@ def _apply_catalog_symbol(layer, level, type_name):
             cursor += part["length_mm"]
     for center, part in markers:
         circle = QgsSimpleMarkerSymbolLayer(Qgis.MarkerShape.Circle, part["diameter_mm"])
-        circle.setSizeUnit(millimeters)
+        circle.setSizeUnit(map_meters)
         circle.setColor(color if part["filled"] else QColor("white"))
         circle.setStrokeColor(color)
         circle.setStrokeWidth(spec["line_width_mm"])
-        circle.setStrokeWidthUnit(millimeters)
+        circle.setStrokeWidthUnit(map_meters)
         line = QgsMarkerLineSymbolLayer(False, cursor)
-        line.setIntervalUnit(millimeters)
+        line.setIntervalUnit(map_meters)
         line.setOffsetAlongLine(center)
-        line.setOffsetAlongLineUnit(millimeters)
+        line.setOffsetAlongLineUnit(map_meters)
         line.setSubSymbol(QgsMarkerSymbol([circle]))
         layers.append(line)
     if layer.geometryType() == Qgis.GeometryType.Polygon:
@@ -997,6 +1125,7 @@ def apply_line_labels(layer, level, type_name):
         QgsTextBufferSettings,
         QgsTextFormat,
     )
+    from .mpyy_detail_catalog import _level_scale
 
     table = json.loads((PLUGIN_ROOT / "styles" / "mpyy_line_labels.json").read_text(encoding="utf-8"))
     rules = [r for r in table["levels"].get(level, {}).values() if r["feature"] == type_name]
@@ -1004,24 +1133,25 @@ def apply_line_labels(layer, level, type_name):
         return 0
     root = QgsRuleBasedLabeling.Rule(None)
     polygon = layer.geometryType() == Qgis.GeometryType.Polygon
+    factor = _level_scale(level) / 1000.0
     for rule in rules:
         settings = QgsPalLayerSettings()
         settings.fieldName = "'" + rule["text"].replace("'", "''") + "'"
         settings.isExpression = True
         settings.placement = Qgis.LabelPlacement.PerimeterCurved if polygon else Qgis.LabelPlacement.Curved
-        settings.repeatDistance = 60
-        settings.repeatDistanceUnit = Qgis.RenderUnit.Millimeters
+        settings.repeatDistance = 60 * factor
+        settings.repeatDistanceUnit = Qgis.RenderUnit.MetersInMapUnits
         line_settings = settings.lineSettings()
         line_settings.setPlacementFlags(Qgis.LabelLinePlacementFlag.OnLine)
         settings.setLineSettings(line_settings)
         text_format = QgsTextFormat()
-        text_format.setSize(2.5)
-        text_format.setSizeUnit(Qgis.RenderUnit.Millimeters)
+        text_format.setSize(2.5 * factor)
+        text_format.setSizeUnit(Qgis.RenderUnit.MetersInMapUnits)
         text_format.setColor(QColor(rule["color"]))
         buffer = QgsTextBufferSettings()
         buffer.setEnabled(True)
-        buffer.setSize(0.6)
-        buffer.setSizeUnit(Qgis.RenderUnit.Millimeters)
+        buffer.setSize(0.6 * factor)
+        buffer.setSizeUnit(Qgis.RenderUnit.MetersInMapUnits)
         buffer.setColor(QColor("white"))
         text_format.setBuffer(buffer)
         settings.setFormat(text_format)
