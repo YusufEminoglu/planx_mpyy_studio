@@ -68,6 +68,24 @@ class DockActionsMixin:
         )
 
 
+    def draw_plan_function(self):
+        """Open the chosen function's MPYY layer with its values as defaults and start drawing."""
+        from ..core.function_picker import activate, plan_functions
+
+        record_id = self.fn_choice.currentData()
+        chosen = next((f for f in plan_functions(self.fn_level.currentData()) if f.record_id == record_id), None)
+        if chosen is None:
+            self.status.setText('Listeden bir plan fonksiyonu seçin.')
+            return None
+        try:
+            layer = activate(chosen, iface=self.iface)
+        except LookupError as error:
+            self.status.setText(f'{error} Önce bu kademede bir MPYY çalışma alanı açın.')
+            return None
+        self.status.setText(f'{chosen.name}: {chosen.describe()} çizmeye hazır; '
+                            f'"{layer.name()}" katmanında yeni nesneler bu değerlerle gelir.')
+        return layer
+
     def create_workspace(self):
         path, _ = QFileDialog.getSaveFileName(self, 'Plan çalışma alanı oluştur', "", "GeoPackage (*.gpkg)")
         if not path:

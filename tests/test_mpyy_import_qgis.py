@@ -101,6 +101,38 @@ class MPYYImportTests(unittest.TestCase):
             self.assertEqual(con.execute('SELECT DISTINCT DemirTip FROM "Demiryolu"').fetchall(), [("HizliTrenHat",)])
         self.assertEqual(count(path, "AdaKenari"), 0)
 
+    def test_plan_values_read_from_the_drawing_land_in_the_mpyy_fields(self):
+        """KatAdedi, Taks, YapiDuzeni ... carried by name, only as the form would accept them."""
+        path = Path(self.tmp.name) / "uip_values.gpkg"
+        create_mpyy_workspace(path, "EPSG:5254", "UIP")
+        layer = QgsVectorLayer(
+            "Polygon?crs=EPSG:5254&field=Layer:string&field=YapiDuzeni:string&field=KatAdedi:integer"
+            "&field=Taks:double&field=EmsalKaks:double&field=OnBahceMesafesi:double", "cad", "memory")
+        square = "POLYGON((500000 4250000,500100 4250000,500100 4250100,500000 4250100,500000 4250000))"
+        rows = [
+            ("PL_KONUT", "AYRIK", 4, 0.35, 1.40, 5.0),   # as the text extractor writes them
+            ("PL_KONUT", "YOK_BOYLE", 3, 35.0, None, None),   # TAKS read as 35: must not land
+        ]
+        features = []
+        for values in rows:
+            feature = QgsFeature(layer.fields())
+            feature.setAttributes(list(values))
+            feature.setGeometry(QgsGeometry.fromWkt(square))
+            features.append(feature)
+        layer.dataProvider().addFeatures(features)
+        row = import_cad_layer(layer, "Layer", path)[0]
+        self.assertEqual(row["aktarilan"], 2)
+        self.assertEqual(row["tasinan_deger"], 6)   # 5 from the first, only KatAdedi from the second
+        skipped = " ".join(row["atlanan_deger"])
+        self.assertIn("Taks=35", skipped)
+        self.assertIn("YapiDuzeni=YOK_BOYLE", skipped)
+        with sqlite3.connect(path) as con:
+            stored = con.execute(
+                'SELECT YapiDuzeni, KatAdedi, Taks, EmsalKaks, OnBahceMesafesi FROM "Konut" ORDER BY KatAdedi DESC'
+            ).fetchall()
+        self.assertEqual(stored[0], ("Ayrik", 4, 0.35, 1.4, 5.0))     # code-list value, not "AYRIK"
+        self.assertEqual(stored[1], (None, 3, None, None, None))      # impossible TAKS left empty
+
     def test_audit_reports_schema_violations(self):
         path = Path(self.tmp.name) / "nip.gpkg"
         create_mpyy_workspace(path, "EPSG:5254", "NIP")

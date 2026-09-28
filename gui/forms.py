@@ -1,6 +1,7 @@
 """Focused forms extracted from the original dock, with existing action bindings."""
 
 from qgis.core import QgsProject
+from qgis.PyQt.QtCore import Qt
 from qgis.gui import QgsMapLayerComboBox, QgsProjectionSelectionWidget
 from qgis.PyQt.QtWidgets import (QComboBox, QDoubleSpinBox, QFormLayout, QGroupBox, QLabel, QLineEdit, QSpinBox)
 from .widgets import FieldSelector, WrappedButton as QPushButton
@@ -35,6 +36,34 @@ class WorkflowFormsMixin:
         form_plan.addRow(btn_open)
         self._register_inline_form("create_workspace", group_plan)
 
+        # Draw by plan function: the planner picks the function, not the table
+        group_fn = QGroupBox('Fonksiyon seçerek çiz')
+        form_fn = QFormLayout(group_fn)
+        form_fn.setContentsMargins(9, 8, 9, 9)
+        info_fn = QLabel('Plan fonksiyonunu seçin; doğru MPYY katmanı açılır, türü ve kodu yeni '
+                         'nesnelere hazır gelir, çizim aracı başlar. Değerler formda değiştirilebilir.')
+        info_fn.setWordWrap(True)
+        info_fn.setObjectName("mutedText")
+        form_fn.addRow(info_fn)
+        self.fn_level = QComboBox()
+        for code, label in (("UIP", 'UİP'), ("NIP", 'NİP'), ("CDP", 'ÇDP')):
+            self.fn_level.addItem(label, code)
+        self.fn_level.currentIndexChanged.connect(self._refresh_plan_functions)
+        form_fn.addRow('Plan kademesi', self.fn_level)
+        self.fn_choice = QComboBox()
+        self.fn_choice.setEditable(True)
+        self.fn_choice.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
+        completer = self.fn_choice.completer()
+        completer.setFilterMode(Qt.MatchFlag.MatchContains)
+        completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+        form_fn.addRow('Plan fonksiyonu', self.fn_choice)
+        btn_fn = QPushButton('Seç ve çiz')
+        btn_fn.setObjectName("primaryButton")
+        btn_fn.clicked.connect(self.draw_plan_function)
+        form_fn.addRow(btn_fn)
+        self._refresh_plan_functions()
+        self._register_inline_form("draw_plan_function", group_fn)
+
         # Land use workspace group
         group_land = QGroupBox('Arazi Kullanımı ve Saha Anketi')
         form_land = QFormLayout(group_land)
@@ -54,6 +83,15 @@ class WorkflowFormsMixin:
         form_land.addRow(btn_open_land)
         self._register_inline_form("create_land_use_workspace", group_land)
 
+
+    def _refresh_plan_functions(self, *_args):
+        from ..core.function_picker import plan_functions
+
+        self.fn_choice.clear()
+        for function in plan_functions(self.fn_level.currentData()):
+            self.fn_choice.addItem(function.label, function.record_id)
+            self.fn_choice.setItemData(self.fn_choice.count() - 1, function.describe(),
+                                       Qt.ItemDataRole.ToolTipRole)
 
     def _build_style_form(self):
         group = QGroupBox('Katman stili ve öznitelik formları')

@@ -23,6 +23,7 @@ class ToolDescription:
 _GROUPS = {
     'Çalışma alanı ve veri': (
         ("create_workspace", 'Plan çalışma alanı oluştur', 'Yerel UİP çizim şablonundan ya da MPYY 1.1.7 şemasından taşınabilir bir çalışma alanı üretir.', 'Koordinat sistemi ile çalışma alanı türünü (Yerel UİP veya MPYY kademesi) ve yeni bir GeoPackage dosyası seçin.', 'Katmanları, formları ve gösterimi hazır GeoPackage dosyası.', False),
+        ("draw_plan_function", 'Fonksiyon seçerek çiz', 'Ek-1e kataloğundaki plan fonksiyonunu (ör. YERLEŞİK KONUT ALANI) seçtirir; doğru MPYY katmanını düzenlemeye açar, türünü ve kodunu yeni nesnelerin varsayılanı yapar ve çizim aracını başlatır.', 'Yüklü bir MPYY 1.1.7 çalışma alanı ve plan kademesi.', 'Fonksiyonu ve kodu hazır gelen yeni plan nesnesi.', False),
         ("create_land_use_workspace", 'Saha çalışma alanı oluştur', 'Arazi kullanım araştırmalarını plan kararlarından ayrı saklar.', 'Koordinat sistemi ve yeni bir GeoPackage dosyası seçin.', 'Arazi kullanımı ve saha katmanlarını içeren GeoPackage dosyası.'),
         ("ingest_vector_dataset", 'Vektör veri içe aktar', 'Mevcut CBS veya CAD vektörlerini çalışma alanına aktarır.', 'Kaynak vektör katmanı ve hedef GeoPackage katmanı.', 'Aktarılan nesneler ve içe aktarma özeti.'),
         ("import_cad_to_mpyy", 'CAD tabakalarını MPYY çalışma alanına aktar', 'CAD/NCZ tabaka adlarını MPYY 1.1.7 nesne tiplerine ve kodlarına çevirerek çalışma alanına yazar; eşleşmeyen tabakaları raporlar.', 'Tabaka adı alanı olan CAD veya CBS vektör katmanı ve MPYY 1.1.7 çalışma alanı.', 'MPYY tablolarına yazılan nesneler ve tabaka bazında aktarım raporu.'),
@@ -144,6 +145,7 @@ def build_catalog(algorithm_ids: Iterable[str], search_aliases: Mapping[str, str
         )
         tools.append(replace(tool, keywords=(search_aliases or {}).get(algorithm_id, "")))
     tools.append(descriptions["create_workspace"])
+    tools.append(descriptions["draw_plan_function"])
     tools.append(ToolDescription(
         "style_and_forms", 'Katmanı biçimlendir ve formları düzenle', 'Çalışma alanı ve veri',
         'Vektör katmanına plan stili ve öznitelik formu uygular.',

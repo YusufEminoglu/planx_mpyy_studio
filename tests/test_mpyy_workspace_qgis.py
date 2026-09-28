@@ -226,8 +226,27 @@ class MPYYWorkspaceTests(unittest.TestCase):
         konut = {layer.name(): layer for layer in load_project_layers(path)}["Konut"]
         taks = konut.fields().indexFromName("Taks")
         kat = konut.fields().indexFromName("KatAdedi")
-        self.assertEqual(konut.editorWidgetSetup(taks).config()["Style"], "Slider")
         self.assertEqual(konut.editorWidgetSetup(taks).config()["Max"], 1.0)
+        # The planner must be able to *enter* 0.35 through the form itself. The
+        # Range "Slider" style is an integer QSlider (0 or 1 only) - this failed.
+        from qgis.gui import QgsEditorWidgetWrapper
+        konut.startEditing()
+        draft_feature = QgsVectorLayerUtils.createFeature(
+            konut, QgsGeometry.fromWkt(POLYGON), {}, konut.createExpressionContext())
+        konut.addFeature(draft_feature)
+        fid = [x.id() for x in konut.getFeatures()][-1]
+        form = QgsAttributeForm(konut, konut.getFeature(fid), QgsAttributeEditorContext())
+        form.setMode(QgsAttributeEditorContext.Mode.SingleEditMode)
+        form.show()
+        APP.processEvents()
+        wrapper = next(w for w in form.findChildren(QgsEditorWidgetWrapper) if w.fieldIdx() == taks)
+        wrapper.setValues(0.35, [])
+        APP.processEvents()
+        self.assertAlmostEqual(wrapper.value(), 0.35)
+        self.assertTrue(form.save())
+        self.assertAlmostEqual(konut.getFeature(fid)["Taks"], 0.35)
+        form.close()
+        konut.rollBack()
 
         def hard_ok(feature, index):
             return QgsVectorLayerUtils.validateAttribute(
@@ -311,6 +330,31 @@ class MPYYWorkspaceTests(unittest.TestCase):
         self.assertEqual(konut.customProperty("mpyy/legend"), "mevcut")
         self.assertIn("GelismeKonut", filters(konut))
         self.assertIn("YerlesikKonut", filters(konut))
+
+    def test_drawing_starts_from_the_plan_function(self):
+        from unittest.mock import MagicMock
+        from planx_mpyy_studio.core.function_picker import activate, plan_functions
+
+        path = Path(self.tmp.name) / "uip_function.gpkg"
+        create_mpyy_workspace(path, "EPSG:5254", "UIP")
+        load_project_layers(path)
+        by_name = {f.name: f for f in plan_functions("UIP")}
+        iface = MagicMock()
+        konut = activate(by_name["YERLEŞİK KONUT ALANI"], iface=iface)
+        self.assertEqual(konut.name(), "Konut")
+        self.assertTrue(konut.isEditable())
+        iface.setActiveLayer.assert_called_with(konut)
+        iface.actionAddFeature().trigger.assert_called()
+        f = QgsVectorLayerUtils.createFeature(konut, QgsGeometry.fromWkt(POLYGON), {}, konut.createExpressionContext())
+        self.assertEqual(f["KonutTip"], "YerlesikKonut")
+        # switching function replaces the default, never leaves the old one behind
+        activate(by_name["GELİŞME KONUT ALANI"], iface=iface)
+        f = QgsVectorLayerUtils.createFeature(konut, QgsGeometry.fromWkt(POLYGON), {}, konut.createExpressionContext())
+        self.assertEqual(f["KonutTip"], "GelismeKonut")
+        konut.rollBack()
+        QgsProject.instance().clear()
+        with self.assertRaises(LookupError):
+            activate(by_name["PARK"], iface=iface)
 
     def test_required_fields_warn_but_allow_drafts_and_are_audited(self):
         path = Path(self.tmp.name) / "uip.gpkg"

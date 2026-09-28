@@ -117,7 +117,7 @@ class GuiTests(unittest.TestCase):
         self.assertFalse(self.dock.open_tool_button.isEnabled())
         self.assertFalse(self.dock.empty_tools.isHidden())
         self.dock._reset_filters()
-        self.assertEqual(self.dock.tool_list.count(), 89)
+        self.assertEqual(self.dock.tool_list.count(), 90)  # + draw_plan_function
         self.assertEqual(self.iface.opened, [])
 
     def test_turkish_names_and_accent_insensitive_search(self):
