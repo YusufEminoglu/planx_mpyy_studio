@@ -2,7 +2,7 @@
 
     py -3 tools/build_mpyy_level_tables.py <bundle .js>
 
-Sources (the author's own application, copied into MPYY Studio's own files):
+Sources (MPYY Studio's own files):
   * boundary line catalog entries with a ``{tur:"etiket", metin:"A1"}`` pattern part
     -> ``styles/mpyy_line_labels.json``
   * the UİP/NİP/ÇDP tabaka equivalence table (``ese``)
@@ -164,7 +164,7 @@ def build_labels(text):
         key = f"{feature}|{field}={code}" if field else feature
         labels[level][key] = {"feature": feature, "field": field, "code": code, "text": texts[0], "color": color,
                               "kaynak": name}
-    return {"version": 1, "source": "sınır çizgisi kataloğu (detay kataloğu çizgi tanımları)",
+    return {"version": 1, "source": "Resmi sınır çizgisi kataloğu (detay kataloğu çizgi tanımları)",
             "levels": {lv: dict(sorted(v.items())) for lv, v in labels.items()}, "skipped": skipped}
 
 

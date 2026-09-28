@@ -18,3 +18,11 @@ MPYY_REFERENCE_MANUAL.html
 # at geophilo.com/planx_mpyy_studio/. Same convention as planx_suitability_lab
 # and zero2cartolab.
 docs
+# A second, byte-identical copy of the whole tarama tile set: 969 files, 13.61 MB,
+# which roughly doubles the archive's tile weight (the live set under resources/ is
+# 956 files, 13.40 MB). No call site reaches it -- both tile resolvers build their
+# path under resources/: core/mpyy_styler.py (the tile directory) and
+# core/mpyy_workspace.py:529 (the SLD TARAMA placeholder token), and no shipped XML
+# or JSON names "patterns" anywhere. Kept path-prefixed on purpose: _should_skip
+# also matches on the basename, so a bare `patterns` would reach further than meant.
+resources/patterns

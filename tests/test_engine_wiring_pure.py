@@ -18,9 +18,18 @@ they run on both runtimes and cannot be skipped for want of a QGIS import. They
 pin the wiring rather than the behaviour:
 
 1. no module may import one local name from two different sources;
-2. the dock must bind two distinct engine classes, from two distinct modules;
-3. every `self.<engine>.<method>(...)` call in the actions must match the
-   signature of the class the dock actually binds to that attribute.
+2. the dock must bind distinct engine classes, from distinct modules;
+3. every `self.<engine>.<method>(...)` call in the actions must name an engine
+   the dock actually binds, and must match that class's real signature.
+
+Check 3 earned its first half the hard way. It used to skip a call whose
+attribute the dock never bound -- `continue  # bound by a mixin, not by the
+dock` -- so `self.msp_engine`, `self.cdp_engine` and `self.nip_engine` were all
+skipped and three branches of `apply_style` stayed dead behind a green gate,
+raising `AttributeError: 'MPYYDock' object has no attribute 'msp_engine'` on
+every use. An unbound engine name is a defect, not a mixin, which is what the
+half-underscore exemption below records: `self._last_engine` is bookkeeping
+bound to `None`, and no mixin binds any `_engine` attribute at all.
 """
 
 from __future__ import annotations
@@ -34,8 +43,9 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCK = ROOT / "dock.py"
 ACTIONS = ROOT / "gui" / "actions.py"
 
-# The two engines the dock is expected to own, as source modules. Named on
-# purpose: collapsing them back into one is the regression this file exists for.
+# The engines the dock is expected to own, as source modules. Named on purpose:
+# collapsing any two of them back into one is the regression this file exists
+# for.
 EXPECTED_ENGINES = {"core.styler", "core.mpyy_styler"}
 
 
@@ -131,8 +141,8 @@ class EngineWiringTest(unittest.TestCase):
             + "\n  ".join(offenders),
         )
 
-    def test_dock_binds_two_distinct_engines(self):
-        """Both engines must exist as separate objects, not one overwritten."""
+    def test_dock_binds_distinct_engines(self):
+        """Every engine must exist as its own object, not one overwritten."""
         imports = _imports(_parse(DOCK))
         bound = _bound_attributes(_parse(DOCK))
 
@@ -167,6 +177,16 @@ class EngineWiringTest(unittest.TestCase):
 
         checked = 0
         for line, attr, method, node in _engine_calls(_parse(ACTIONS)):
+            if attr.startswith("_"):
+                continue  # `self._last_engine` bookkeeping, not an engine
+            if attr.endswith("_engine"):
+                self.assertIn(
+                    attr,
+                    bound,
+                    f"actions.py:{line} calls self.{attr}.{method}(...), but the "
+                    f"dock never binds self.{attr}: the branch raises "
+                    f"AttributeError on every use and no other check can see it",
+                )
             cls = bound.get(attr)
             if cls is None:
                 continue  # bound by a mixin, not by the dock

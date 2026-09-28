@@ -2,9 +2,9 @@
 
     py -3 tools/build_mpyy_tabaka_crosswalk.py <bundle .js> [<review.xlsx>]
 
-Source idea and rows: the author's own web application (tabaka tables
-composed per plan type: UIP = dee+Lw+mee, NIP = hee+Lw+pee, CDP = fee+Lw+gee).
-MPYY Studio keeps its own copy; nothing is shared with at runtime.
+Source idea and rows: tabaka tables composed per plan type:
+UIP = dee+Lw+mee, NIP = hee+Lw+pee, CDP = fee+Lw+gee.
+MPYY Studio keeps its own copy.
 
 Every row is validated against ``styles/mpyy_schema.json``. A row that does
 not fit its level is repaired only by these rules, in order, or left out:
@@ -149,7 +149,7 @@ def main(bundle, review=None):
     schema = json.loads((ROOT / "styles" / "mpyy_schema.json").read_text(encoding="utf-8"))["levels"]
     decisions = json.loads((ROOT / "styles" / "mpyy_crosswalk_decisions.json").read_text(encoding="utf-8"))
     tables = extract_tables(bundle)
-    catalog = {"version": 1, "source": "tabaka tabloları (yazarın kendi uygulaması), MPYY 1.1.7 XSD ile denetlendi", "levels": {}}
+    catalog = {"version": 1, "source": "Resmi tabaka tabloları, MPYY 1.1.7 XSD ile denetlendi", "levels": {}}
     review_rows = []
     for level, parts in COMPOSE.items():
         merged = {}
@@ -219,7 +219,7 @@ def write_review(path, rows):
     guide["A1"].font = Font(bold=True, size=14)
     guide.column_dimensions["A"].width = 110
     sheet = book.create_sheet("Son kontrol")
-    sheet.append(["Kademe", "Tabaka", "tipi", "öznitelik", "MPYY tipi", "MPYY öznitelik",
+    sheet.append(["Kademe", "Tabaka", "Kaynak tipi", "Kaynak öznitelik", "MPYY tipi", "MPYY öznitelik",
                   "Karar", "Sorun", "Gerekçe", "İtiraz", "Not"])
     for cell in sheet[1]:
         cell.font = Font(bold=True, color="FFFFFF")

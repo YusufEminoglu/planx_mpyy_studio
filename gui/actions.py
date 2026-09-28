@@ -42,7 +42,32 @@ from ..core.feasibility_engine import UrbanTransformationFeasibilityEngine
 from ..core.zoning_certificate import ZoningCertificateEngine
 
 
+#: Fields a target layer may carry a UİP/ÇDP/NİP classification in, most
+#: specific first: the local MpyyUipDb form writes the function *name* into
+#: ``uipfonksiyon``, coded layers carry ``fonksiyon_kodu``, and ``catalog_id``
+#: is geometry + source FID, which keeps every catalogue row addressable.
+STYLE_FIELDS = ("uipfonksiyon", "fonksiyon_kodu", "fonksiyon_adi", "catalog_id")
+
+
+
 class DockActionsMixin:
+    def _styling_field(self, layer, candidates=STYLE_FIELDS):
+        """The field the chosen profile classifies on.
+
+        Raises ``ValueError`` naming the candidates when the layer carries none
+        of them: the caller's ``except`` turns that into one status line, which
+        is more use to a planner than an empty render.
+        """
+
+        for name in candidates:
+            if layer.fields().indexFromName(name) >= 0:
+                return name
+        raise ValueError(
+            'Katmanda ' + ", ".join(candidates[:-1]) + ' veya ' + candidates[-1]
+            + ' alanı bulunamadı.'
+        )
+
+
     def create_workspace(self):
         path, _ = QFileDialog.getSaveFileName(self, 'Plan çalışma alanı oluştur', "", "GeoPackage (*.gpkg)")
         if not path:
@@ -188,33 +213,36 @@ class DockActionsMixin:
         level = self.plan_type.currentData()
         try:
             if level in ("MPYY_MSP", "MSP"):
-                cnt = self.msp_engine.apply(layer)
-                self._last_engine = self.msp_engine
-                self.status.setText(f'MSP EK-1e PDF mevzuat sembolojisi uygulandı ({cnt} detay sınıfı).')
-            elif level in ("MPYY_CDP", "CDP"):
-                cnt = self.cdp_engine.apply(layer)
-                self._last_engine = self.cdp_engine
-                self.status.setText(f'ÇDP resmî bölge koruma/gelişme sembolojisi uygulandı ({cnt} kategori).')
-            elif level == "YEREL_CDP":
-                cnt = self.cdp_engine.apply(layer)
-                self._last_engine = self.cdp_engine
-                self.status.setText('Bilgi: ÇDP için henüz yerel taslak bulunmamaktadır. Resmî mevzuat sembolojisi uygulandı.')
-            elif level in ("MPYY_NIP", "NIP"):
-                cnt = self.nip_engine.apply(layer)
-                self._last_engine = self.nip_engine
-                self.status.setText(f'NİP resmî brüt yoğunluk ve MNIP font notasyonları uygulandı ({cnt} kural).')
-            elif level == "YEREL_NIP":
-                cnt = self.nip_engine.apply(layer)
-                self._last_engine = self.nip_engine
-                self.status.setText('Bilgi: 1/5.000 NİP özgün yerel taslağı kullanıcı tarafından hazırlanmaktadır. Mevzuat standardı geçici olarak uygulandı.')
-            elif level == "MPYY_UIP":
-                field_name = next(
-                    (name for name in ("uipfonksiyon", "fonksiyon_kodu", "fonksiyon_adi", "catalog_id")
-                     if layer.fields().indexFromName(name) >= 0),
-                    None,
+                raise ValueError('MSP gösterimi bu sürümde etkin değil.')
+            elif level in ("MPYY_CDP", "CDP", "YEREL_CDP"):
+                res = self.mpyy_detail_engine.apply(
+                    layer, field=self._styling_field(layer), plan_type="CDP"
                 )
-                if field_name is None:
-                    raise ValueError('Katmanda uipfonksiyon, fonksiyon_kodu, fonksiyon_adi veya catalog_id alanı yok.')
+                self._last_engine = self.mpyy_detail_engine
+                prefix = (
+                    'Bilgi: ÇDP için henüz yerel taslak bulunmamaktadır. '
+                    if level == "YEREL_CDP" else ''
+                )
+                self.status.setText(
+                    prefix + f'ÇDP resmî bölge koruma/gelişme sembolojisi uygulandı: '
+                    f'{res.official_styles} resmî, {res.fallback_styles} yedek gösterim.'
+                )
+            elif level in ("MPYY_NIP", "NIP", "YEREL_NIP"):
+                res = self.mpyy_detail_engine.apply(
+                    layer, field=self._styling_field(layer), plan_type="NIP"
+                )
+                self._last_engine = self.mpyy_detail_engine
+                prefix = (
+                    'Bilgi: 1/5.000 NİP özgün yerel taslağı kullanıcı tarafından '
+                    'hazırlanmaktadır. Mevzuat standardı geçici olarak uygulandı. '
+                    if level == "YEREL_NIP" else ''
+                )
+                self.status.setText(
+                    prefix + f'NİP resmî brüt yoğunluk ve MNIP font notasyonları '
+                    f'uygulandı: {res.official_styles} resmî, {res.fallback_styles} yedek gösterim.'
+                )
+            elif level == "MPYY_UIP":
+                field_name = self._styling_field(layer)
                 res = self.mpyy_detail_engine.apply(layer, field=field_name, plan_type="UIP")
                 self._last_engine = self.mpyy_detail_engine
                 self.status.setText(
@@ -227,11 +255,10 @@ class DockActionsMixin:
                     self._last_engine = None
                     self.status.setText('MpyyUipDb çizim şablonunun sembolojisi ve koşullu formu uygulandı.')
                 else:
-                    field_name = None
-                    for candidate in ("uipfonksiyon", "fonksiyon_kodu", "fonksiyon_adi", "catalog_id"):
-                        if layer.fields().indexFromName(candidate) >= 0:
-                            field_name = candidate
-                            break
+                    field_name = next(
+                        (name for name in STYLE_FIELDS if layer.fields().indexFromName(name) >= 0),
+                        None,
+                    )
                     if field_name:
                         res = self.mpyy_engine.apply(layer, field_name=field_name, plan_level="UIP")
                         self._last_engine = self.mpyy_engine

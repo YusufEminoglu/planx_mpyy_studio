@@ -56,6 +56,24 @@ plural/singular merge and is 29 after it, because two of those values were one
 classification; the five undotted labels were renamed in place, so they did not
 move it.
 
+Provenance.  None of the above says where a classification came from: the version
+this suite first shipped against recorded only `kaynak_sayfa`, and a page prints
+about forty blocks, so a shipped class could not be traced to the block it was
+read from -- and six records were not read from a page at all.  The catalogue now
+carries, outside `records`, one `kaynak` entry per record: the workbook cell and
+page it was located by, the two printed cells as the text layer spells them
+*before* any repair, and which of the two readings supplied the pair.  The rules
+that stand between the two are shipped with it under `duzeltmeler`, so the whole
+file can be re-derived from its own evidence -- which is what
+`DetailHierarchyProvenanceTests` does, reading the declared tables rather than a
+copy of them.
+
+Two things that pass is not: the compiler proves the extraction is faithful to
+the two Ministry files, and those are one document rendered twice.  The 592
+labels are also a *transcription* of the annex, not an independent statement
+about it; nothing here would notice a PDF re-issue that changed a label, which
+is what `--diff` against a new annex is for.
+
 These checks are qgis-free, so they run on both runtimes and cannot be skipped
 for want of a QGIS import.
 """
@@ -157,6 +175,7 @@ class DetailHierarchyLabelTests(unittest.TestCase):
         self.text = HIERARCHY.read_text(encoding="utf-8")
         self.catalogue = json.loads(self.text)
         self.records = self.catalogue["records"]
+        self.rules = self.catalogue["duzeltmeler"]
 
     def test_every_label_is_shipped_in_exactly_one_spelling(self):
         for field in LABEL_FIELDS:
@@ -184,12 +203,18 @@ class DetailHierarchyLabelTests(unittest.TestCase):
 
     def test_each_pair_ships_only_the_spelling_the_catalog_keeps(self):
         """Not "the code-list spelling": only ten of the twelve kept spellings are code-list values."""
+        shipped = json.dumps(self.records, ensure_ascii=False)
         for defective, official in REPAIRED:
             with self.subTest(label=official):
                 self.assertIn(official, self.text)
-                # Substring, not equality: this also catches a defective spelling
-                # left behind in a row the repair did not visit.
-                self.assertNotIn(defective, self.text)
+                # Substring over the shipped labels, not equality: this also
+                # catches a defective spelling left behind in a row the repair did
+                # not visit.  Scanned over `records` rather than the whole file
+                # because the file *should* print the defective form -- it is the
+                # key of its own repair rule and the reading the rule acted on --
+                # and a scan of the whole text would now fail on that evidence.
+                self.assertNotIn(defective, shipped)
+                self.assertIn(defective, self.rules["yazim"])
 
     def test_the_plural_class_merged_into_the_singular(self):
         """The one pair that is not a spelling slip, so REPAIRED alone would not show it landed.
@@ -229,11 +254,15 @@ class DetailHierarchyLabelTests(unittest.TestCase):
         # 79 rows the five labels carry in total, and it is what a re-extraction
         # that dropped one of them would move.
         self.assertEqual(shipped, 79)
+        labels = json.dumps(self.records, ensure_ascii=False)
         for undotted in ("DEMIRYOLLARI", "ENERJI ÜRETIM, DAĞITIM VE DEPOLAMA",
                          "İDARI SINIRLAR", "SAĞLIK TESISLERI ALANLARI",
                          "EĞITIM TESISLERI ALANLARI"):
             with self.subTest(undotted=undotted):
-                self.assertNotIn(undotted, self.text)
+                # Over the shipped labels, not the whole file: the undotted form
+                # is exactly what the reading cells and the rule tables record.
+                self.assertNotIn(undotted, labels)
+                self.assertIn(undotted, self.rules["yazim"])
 
     def test_rows_the_old_pairing_mis_assigned_keep_their_own_class(self):
         for page, symbol, detail_class, subclass in PINNED:
@@ -254,6 +283,233 @@ class DetailHierarchyLabelTests(unittest.TestCase):
         )
         for record in self.records:
             self.assertEqual(sorted(record), sorted(self.records[0]), record)
+
+
+# The six records whose pair came from `devam_tablosu` and not off a printed page:
+# the page prints the title, but no DETAY SINIFI block could be paired with it, so
+# the hand-written table stands in.  Named individually because "six records have
+# no printed source" is the fact a re-extraction would move, and a count alone
+# cannot say which symbol lost its evidence.
+FALLBACK_ROWS = (
+    ("MPYY-285", 19, "KIRSAL YERLEŞİK ALAN SINIRI"),
+    ("MPYY-286", 17, "MEVCUT PLANDAKİ DURUMU KORUNACAK ALAN SINIRI"),
+    ("MPYY-289", 18, "SAĞLIKLAŞTIRMA ALANI SINIRI"),
+    ("MPYY-290", 18, "YENİDEN DÜZENLENECEK ALAN SINIRI"),
+    ("MPYY-292", 19, "İMAR HAKKI AKTARIM ALANI SINIRI"),
+    ("MPYY-571", 19, "İMAR HAKKI AKTARIM ALANI SINIRI"),
+)
+
+# The two records whose printed reading differs from the shipped label by more
+# than an accent: the annex's own text layer prints `SU-ATIKSU VE ATIK SİSTEMLERİ`
+# on p.183 and `SU, ATIKSU VE ATIK SİSTEMLERİ` on p.185, and its own EK-1e.docx
+# prints the comma'd form fourteen times against the hyphen once, so the comma is
+# what ships and the hyphen is recorded in the reading rather than lost.
+HYPHENATED_ROWS = ("MPYY-254", "MPYY-504")
+
+#: Records whose printed reading carries one of the declared `turkce` fragments,
+#: so their shipped class is a repair of the text layer rather than of the annex.
+#: Nineteen rows, and the count is of rows rather than of replacements: the three
+#: `SİT` rows matched two fragments each while a `"SIT VE"` rule that could never
+#: fire was still declared.
+TURKISH_REPAIRED_ROWS = 19
+
+#: The three p.12 rows whose `Katalog kalemi` cell carries the section heading
+#: glued to the front of the symbol name.
+PREFIXED_ROWS = 3
+
+
+class DetailHierarchyProvenanceTests(unittest.TestCase):
+    """Every shipped classification has to be re-derivable from its own evidence.
+
+    The defect these hold is the one the MSP catalogue shipped 67 of: a field
+    named after the source, holding a value the source never gave.  Here the two
+    label fields are a closed vocabulary that four checks already pin, so a
+    fabricated *value* is hard to land -- but a value with no traceable cell
+    behind it is not, and neither is a repair nobody declared.  So these tests
+    take the catalogue's own recorded readings, apply the catalogue's own
+    declared rules, and require the shipped labels back.
+    """
+
+    def setUp(self):
+        self.text = HIERARCHY.read_text(encoding="utf-8")
+        self.catalogue = json.loads(self.text)
+        self.records = self.catalogue["records"]
+        self.kaynak = self.catalogue["kaynak"]
+        self.rules = self.catalogue["duzeltmeler"]
+        # The file ships the repair pairs as the source prints them, because that
+        # is the form a reader audits -- it names the defect letter for letter,
+        # the way REPAIRED above does.  The *match* is by folded form, so the
+        # lookup table is built the same way the compiler builds it; a test that
+        # matched raw keys would agree with itself and miss every accent.
+        self._spellings = {
+            label_fold(source): target for source, target in self.rules["yazim"].items()
+        }
+
+    # The compiler's two transforms, read from the file's own tables rather than
+    # restated here: a rule table that moved fails on the evidence, which is the
+    # point -- a copy of the rules in the test would agree with itself forever.
+    def _turkish(self, value):
+        for fragment, repair in self.rules["turkce"].items():
+            value = value.replace(fragment, repair)
+        return value
+
+    def _canonical(self, value):
+        # The compiler's fallback branch is `_clean(value)`; every input here is
+        # already whitespace-collapsed by the compiler before it is recorded, so
+        # the two agree on this data.
+        return self._spellings.get(label_fold(value), value)
+
+    def test_every_record_carries_exactly_one_evidence_entry(self):
+        identifiers = [record["id"] for record in self.records]
+        self.assertEqual(len(set(identifiers)), len(identifiers), "id tekrarı")
+        self.assertEqual(set(self.kaynak), set(identifiers))
+        # `id` is what the layer metadata and a bug report would quote, so it has
+        # to be a position in the shipped file and not a second sort key.
+        self.assertEqual(identifiers, sorted(identifiers))
+        for identifier, known in self.kaynak.items():
+            with self.subTest(identifier=identifier):
+                self.assertEqual(
+                    sorted(known),
+                    sorted(["katalog_kalemi", "sayfa", "baslik", "hiyerarsi_kaynak",
+                            "baski_detay_sinifi", "baski_detay_alt_sinifi"]),
+                )
+
+    def test_a_class_follows_from_the_reading_its_record_names(self):
+        """The check MSP's reconciliation needed: no shipped value without a cell."""
+        for record in self.records:
+            known = self.kaynak[record["id"]]
+            with self.subTest(identifier=record["id"]):
+                if known["hiyerarsi_kaynak"] == "sayfa":
+                    expected = (
+                        self._canonical(self._turkish(known["baski_detay_sinifi"])),
+                        self._canonical(self._turkish(known["baski_detay_alt_sinifi"])),
+                    )
+                else:
+                    pair = self.catalogue["devam_tablosu"].get(known["baslik"])
+                    self.assertIsNotNone(
+                        pair, f"{record['id']}: baskı hücresi boş, devam tablosunda da yok"
+                    )
+                    expected = (pair[0], pair[1])
+                self.assertEqual(
+                    (record["detay_sinifi"], record["detay_alt_sinifi"]), expected
+                )
+                self.assertEqual(record["sembol_adi"], self._canonical(known["baslik"]))
+
+    def test_the_reading_says_which_of_the_two_sources_it_used(self):
+        for record in self.records:
+            known = self.kaynak[record["id"]]
+            with self.subTest(identifier=record["id"]):
+                self.assertIn(known["hiyerarsi_kaynak"], ("sayfa", "devam_tablosu"))
+                # The page is the workbook's own locator, so the two must agree:
+                # a record whose provenance points at another page than it ships
+                # is a reading that was recorded against the wrong row.
+                self.assertEqual(known["sayfa"], record["kaynak_sayfa"])
+                printed = (known["baski_detay_sinifi"], known["baski_detay_alt_sinifi"])
+                if known["hiyerarsi_kaynak"] == "sayfa":
+                    self.assertTrue(all(printed), "sayfa kaynağı ama boş okuma")
+                else:
+                    # Empty is the whole signal: a fallback that also carried
+                    # printed cells would read as page evidence it never had.
+                    self.assertEqual(printed, ("", ""))
+
+    def test_the_six_table_rows_are_the_ones_the_page_could_not_pair(self):
+        fallbacks = [
+            (record["id"], self.kaynak[record["id"]]["sayfa"],
+             self.kaynak[record["id"]]["baslik"])
+            for record in self.records
+            if self.kaynak[record["id"]]["hiyerarsi_kaynak"] != "sayfa"
+        ]
+        self.assertEqual(sorted(fallbacks), sorted(FALLBACK_ROWS))
+        for identifier, _, title in FALLBACK_ROWS:
+            with self.subTest(identifier=identifier):
+                self.assertIn(title, self.catalogue["devam_tablosu"])
+
+    def test_the_declared_tables_are_the_ones_that_ran(self):
+        # Pinned against REPAIRED, so the file cannot ship a rule set the suite
+        # has never seen: a compiler that dropped a pair would leave the file
+        # self-consistent and the label unrepaired.
+        self.assertEqual(self.rules["yazim"], dict(REPAIRED))
+        self.assertEqual(
+            self.rules["turkce"],
+            {"TURIZM": "TURİZM", "SIT ": "SİT ", "SU-ATIKSU": "SU, ATIKSU"},
+        )
+        self.assertEqual(self.rules["baslik_oneki"], "DETAY KATALOĞU")
+        self.assertEqual(
+            self.catalogue["devam_tablosu"],
+            {title: ["SINIRLAR", "PLANLAMA SINIRLARI"] for _, _, title in FALLBACK_ROWS},
+        )
+
+    def test_no_declared_rule_can_never_fire(self):
+        """A substring rule the rules before it already rewrote is dead weight.
+
+        The table is applied in order, so a rule whose own source text is changed
+        by an earlier rule can never match anything: the case it names is gone
+        before the loop reaches it.  A `"SIT VE": "SİT VE"` entry stood in this
+        table until the readings were recorded and the check could be written --
+        `"SIT "` runs first and subsumes it, so it had never fired once.  A dead
+        rule reads as handled, which is how a real gap hides behind it.
+        """
+        rules = list(self.rules["turkce"].items())
+        for index, (fragment, _) in enumerate(rules):
+            surviving = fragment
+            for earlier, repair in rules[:index]:
+                surviving = surviving.replace(earlier, repair)
+            with self.subTest(fragment=fragment):
+                self.assertEqual(
+                    surviving, fragment,
+                    f"{fragment!r} kuralı önceki kurallar yüzünden hiç çalışamaz",
+                )
+
+    def test_the_reading_keeps_the_artifacts_the_repairs_then_fix(self):
+        """The pre-repair text has to be in the file, or the repairs are invisible."""
+        repaired = [
+            record["id"] for record in self.records
+            if self.kaynak[record["id"]]["baski_detay_sinifi"]
+            and (self._turkish(self.kaynak[record["id"]]["baski_detay_sinifi"])
+                 != self.kaynak[record["id"]]["baski_detay_sinifi"]
+                 or self._turkish(self.kaynak[record["id"]]["baski_detay_alt_sinifi"])
+                 != self.kaynak[record["id"]]["baski_detay_alt_sinifi"])
+        ]
+        self.assertEqual(len(repaired), TURKISH_REPAIRED_ROWS)
+        for identifier in HYPHENATED_ROWS:
+            with self.subTest(identifier=identifier):
+                self.assertEqual(
+                    self.kaynak[identifier]["baski_detay_alt_sinifi"],
+                    "SU-ATIKSU VE ATIK SİSTEMLERİ",
+                )
+                self.assertIn(identifier, repaired)
+        # And no shipped label carries the artifact: the comma'd form is what 39
+        # rows read, and a hyphen would be a second spelling of one label.  Said
+        # over `records`, because the hyphen is exactly what the reading and the
+        # rule table are supposed to preserve.
+        self.assertNotIn("SU-ATIKSU", json.dumps(self.records, ensure_ascii=False))
+        self.assertIn("SU-ATIKSU", self.rules["turkce"])
+
+    def test_the_title_prefix_is_visible_in_the_cell_it_was_cut_from(self):
+        """A stripped heading is a difference between the cell and the label.
+
+        Three p.12 rows carry the whole section heading glued to the front of the
+        symbol name.  Cutting it is right, but the cut is a transformation like
+        any other, so the cell that carried it is in the file: `katalog_kalemi`
+        is the workbook's text verbatim and `baslik` is what the matcher saw.
+        """
+        prefixed = [
+            record["id"] for record in self.records
+            if self.kaynak[record["id"]]["katalog_kalemi"]
+            != self.kaynak[record["id"]]["baslik"]
+        ]
+        self.assertEqual(len(prefixed), PREFIXED_ROWS)
+        for record in self.records:
+            known = self.kaynak[record["id"]]
+            with self.subTest(identifier=record["id"]):
+                if record["id"] in prefixed:
+                    self.assertIn(self.rules["baslik_oneki"], known["katalog_kalemi"])
+                    self.assertTrue(
+                        known["katalog_kalemi"].endswith(known["baslik"]),
+                        "kesilen önek etiketin önünde değil",
+                    )
+                else:
+                    self.assertEqual(known["katalog_kalemi"], known["baslik"])
 
 
 if __name__ == "__main__":

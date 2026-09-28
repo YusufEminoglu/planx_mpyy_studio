@@ -95,9 +95,26 @@ class MPYYWorkspaceTests(unittest.TestCase):
         spec = importlib.util.spec_from_file_location("compiler", root / "tools" / "compile_mpyy_schema.py")
         compiler = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(compiler)
-        compiler.OUT = Path(self.tmp.name) / "schema.json"
+        # The compiler writes two catalogues: the 1.1.7 set the plugin loads and
+        # the M series it only reads GML with.  Redirect every output path the
+        # module owns, found rather than listed by hand -- redirecting only the
+        # one this test asserts on leaves the other writing into the repository,
+        # so a test run rewrites a committed catalogue and its staleness can never
+        # be observed.  See docs/TRAPS.md 5.23.
+        outputs = {name: value for name, value in vars(compiler).items()
+                   if isinstance(value, Path) and root in value.parents}
+        self.assertEqual(set(outputs), {"OUT", "M_OUT"},
+                         "the compiler gained an output path: redirect it here as well")
+        for name, value in outputs.items():
+            setattr(compiler, name, Path(self.tmp.name) / value.name)
         compiler.main(str(DOWNLOADED_SCHEMA))
-        self.assertEqual(json.loads(compiler.OUT.read_text(encoding="utf-8")), catalog())
+        # Beyond hermeticity: every catalogue the compiler writes has to equal the
+        # committed one, including the M series nothing else asserts on.
+        compiled = {}
+        for name, value in outputs.items():
+            compiled[name] = json.loads((Path(self.tmp.name) / value.name).read_text(encoding="utf-8"))
+            self.assertEqual(compiled[name], json.loads(value.read_text(encoding="utf-8")), name)
+        self.assertEqual(compiled["OUT"], catalog())
 
     def test_every_level_creates_exactly_the_schema_tables(self):
         for level in ("UIP", "NIP", "CDP"):

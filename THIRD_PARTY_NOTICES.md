@@ -20,6 +20,36 @@ The source has 300 top-level symbols and 1,100 symbols including nested ones.
 118200 is ambiguous; polygon codes 119004 and 114200 lack fill symbols.
 No source point code mapping exists. These limitations are not filled by guesses.
 
+## Ministry tarama tiles and annex artwork
+
+Two groups of images in this package come from the Ministry's own published
+material. None of them is this plugin's artwork, none has been redrawn, and for
+none of them has a redistribution term been established — they ship under the
+same unverified `distribution_status` as the copy above. This section records
+what the package contains; it does not assert a right to redistribute it.
+
+**`resources/*.png`** — 956 tarama (hatch pattern) tiles. They are
+redistributed **byte for byte, unmodified**, under the Ministry's own file
+names, from the plan gösterimleri SLD style set published on the e-Plan portal
+of the T.C. Çevre, Şehircilik ve İklim Değişikliği Bakanlığı — Coğrafi Bilgi
+Sistemleri Genel Müdürlüğü (<https://eplan.csb.gov.tr/>), and carry the official
+planning symbology defined in Ek-2 of the Mekânsal Planlar Yapım Yönetmeliği.
+853 of the 956 are **BMP** bytes despite the `.png` extension; that is how the
+Ministry ships them, and they are left exactly as published rather than
+re-encoded. `resources/patterns/` holds a second, unreferenced copy of the same
+tiles; see [`resources/SOURCE.md`](resources/SOURCE.md).
+
+**`resources/katalog_sembol/*.png`** — 45 point symbols cut from **Ek-1e
+Mekânsal Planlar Detay Katalogları** by `tools/build_catalog_symbols.py`. Each is
+the SEMBOL cell of a catalogue table rendered at 600 dpi, near-white made
+transparent and the image trimmed. They replace point symbols the Ministry SLDs
+load from unpublished `TaramaSembol` SVGs or from the unshipped `Intelli Eplan`
+font, which this package does not substitute.
+
+Ek-1e is an annex to the Mekânsal Planlar Yapım Yönetmeliği. Its source file
+name and sha256 digest are recorded in the `source` block of
+`styles/mpyy_detail_catalog/symbols.json`.
+
 ## Embedded SVG dependencies
 
 `styles/water.svg`: Font Awesome Free 6.7.2, Copyright 2024 Fonticons, Inc.

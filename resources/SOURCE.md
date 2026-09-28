@@ -1,6 +1,6 @@
 # Source of these files
 
-These 451 tarama (hatch pattern) tiles are **not** original 02CadGis artwork.
+These 956 tarama (hatch pattern) tiles are **not** this plugin's own artwork.
 They are redistributed **byte for byte, unmodified**, under their original file
 names, from the plan gösterimleri SLD style set published on the e-Plan portal
 of the **T.C. Çevre, Şehircilik ve İklim Değişikliği Bakanlığı — Coğrafi Bilgi
@@ -10,17 +10,34 @@ They carry the official planning symbology defined in **Ek-2 of the Mekânsal
 Planlar Yapım Yönetmeliği**, so that an imar plan imported from CAD is drawn the
 way the regulation requires.
 
+They sit directly in `resources/`, because that is where `core/mpyy_styler.py`
+resolves a tile name (`resources/<uuid>.png`) and where
+`core/mpyy_workspace.py` points its SLD tile token.
+
+`resources/patterns/` holds a **second copy** of the same Ministry tiles — 969
+files, and every one of the 956 names above is present in it and byte-identical
+(sha256 compared on a sample of the pairs, name set compared in full). No code
+path reads that folder: `core/`, `gui/` and `provider.py` resolve tiles under
+`resources/` only. It is recorded here because it is shipped payload, not
+because it is used.
+
 Two things worth knowing before touching them:
 
-- Despite the `.png` extension, 119 of the 131 files are **BMP** bytes — that is
+- Despite the `.png` extension, 853 of the 956 files are **BMP** bytes — that is
   how the Ministry ships them. Qt detects the format from content, so they are
   left exactly as published rather than being re-encoded.
 - The file names are the Ministry's own UUIDs and are referenced by
   `core/eplan_catalog.py`. Renaming one breaks the catalog, so leave them
   exactly as published.
 
+The counts above are what a byte-level check of the folder reports today
+(`file(1)`-style magic-byte sniffing, not the extension). Older revisions of
+this file carried the counts of the set as it stood when the paragraph was
+written; they are not preserved, because a stale count reads exactly like a
+measured one.
+
 Copyright and the basis for redistribution are recorded in
-[`THIRD_PARTY_NOTICES.md`](../../THIRD_PARTY_NOTICES.md).
+[`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md).
 
 ## MPYY workspace symbology
 

@@ -5,9 +5,17 @@ identifier alongside the human-facing catalog symbol name.  This lets a QGIS
 workspace expose the requested ``sembol adı → detay sınıfı → detay alt sınıfı``
 relationship without changing the XSD's legal code lists.
 
+Every record also carries a ``kaynak`` entry, outside ``records``, holding the
+two source cells it was read from and the named kind of reading that supplied
+them -- so a shipped classification can be traced to the printed block it came
+from instead of to the page it shares with forty others.  The transform tables
+themselves ship alongside it, under ``duzeltmeler``, which is what makes the
+whole file re-derivable from its own evidence.
+
 Usage::
 
     py -3 tools/compile_mpyy_detail_hierarchy.py <Ek-1e.pdf> <comparison.xlsx>
+    py -3 tools/compile_mpyy_detail_hierarchy.py --diff
 """
 
 from __future__ import annotations
@@ -16,6 +24,7 @@ import hashlib
 import json
 import re
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 from openpyxl import load_workbook
@@ -32,8 +41,22 @@ from planx_mpyy_studio.core.localization import label_fold  # noqa: E402
 OUTPUT = ROOT / "styles" / "mpyy_detail_hierarchy.json"
 SHEET = "Karşılaştırma"
 
+#: The catalog-item cell of three p.12 rows carries the whole section heading
+#: glued to the front of the symbol name.  It is not part of the label, so it is
+#: cut off before matching -- and the record's ``kaynak`` keeps the cell verbatim,
+#: which is what lets a reader see that the cut happened at all.
+TITLE_PREFIX = "DETAY KATALOĞU"
+
 # These p.18/p.19 entries are printed in the same continuation block as the
 # immediately preceding planlama sınırları items, without repeating headers.
+#
+# All six reach this table the same way: the page *does* print the title, but no
+# DETAY SINIFI / DETAY ALT SINIFI block could be paired to it, so the page
+# contributed nothing to the classification and this table stands in.  A record
+# that takes its pair from here says so in its own ``kaynak`` entry
+# (``"hiyerarsi_kaynak": "devam_tablosu"``) and carries empty ``baski_*`` cells,
+# because "the annex never printed this" and "the annex printed this" must not
+# look alike in the shipped file.
 CONTINUATION_HIERARCHY = {
     "MEVCUT PLANDAKİ DURUMU KORUNACAK ALAN SINIRI": ("SINIRLAR", "PLANLAMA SINIRLARI"),
     "YENİDEN DÜZENLENECEK ALAN SINIRI": ("SINIRLAR", "PLANLAMA SINIRLARI"),
@@ -157,16 +180,80 @@ def _assert_one_spelling_per_label(records: list[dict]) -> None:
 
 
 def _turkish(value: str) -> str:
-    """Repair the few ASCII-only Turkish words produced by PDF text extraction."""
-    replacements = {
-        "TURIZM": "TURİZM",
-        "SIT ": "SİT ",
-        "SIT VE": "SİT VE",
-        "SU-ATIKSU": "SU, ATIKSU",
-    }
-    for old, new in replacements.items():
+    """Repair the fragments of Turkish the PDF's text layer gets wrong.
+
+    A substring rewrite, not a label lookup: it fires inside a longer label.
+
+    Three of the four are pure accents the Ministry's typesetting dropped.  The
+    fourth is not: the annex prints this one label two ways, `SU, ATIKSU` on
+    p.185 and `SU-ATIKSU` on p.183, and its own `EK-1e.docx` prints the comma'd
+    form fourteen times against the hyphen once -- so the hyphen is the annex
+    disagreeing with itself, and the majority spelling is the one kept.  The two
+    documents are renderings of one Ministry source, so that count is not a
+    second opinion; it is the same document being more consistent in one
+    rendering than the other.
+
+    The fix belongs to the *reading*, not to the annex: a re-extraction that
+    produced all four correctly would leave this table nothing to do, which is
+    why the shipped file records each record's pre-repair reading beside the rule
+    that changed it.
+    """
+
+    for old, new in TURKISH_REPAIRS.items():
         value = value.replace(old, new)
     return value
+
+
+#: The three fragments of Turkish the PDF's text layer gets wrong, and the repair.
+#:
+#: Three, not four: a `"SIT VE": "SİT VE"` entry stood here until the readings
+#: were recorded and the table could be checked against itself.  It could never
+#: have fired -- every string containing `SIT VE` contains `SIT `, which the rule
+#: above rewrites first, so by the time the table reached it there was nothing
+#: left to match.  A rule that cannot fire is worse than a missing one: it reads
+#: as though the case is handled.  `test_no_declared_rule_can_never_fire` holds
+#: that shut for the rules that remain.
+TURKISH_REPAIRS = {
+    "TURIZM": "TURİZM",
+    "SIT ": "SİT ",
+    "SU-ATIKSU": "SU, ATIKSU",
+}
+
+
+@dataclass(frozen=True)
+class Hierarchy:
+    """One symbol's detail class, and the reading it was read from.
+
+    ``detay_sinifi`` and ``detay_alt_sinifi`` are the shipped pair, after both
+    repair tables have run.  ``baski_detay_sinifi``/``baski_detay_alt_sinifi``
+    are the same two cells as the page's own text layer spells them, before any
+    repair, and are empty when no printed page supplied them at all -- so a
+    reader can always tell a page reading from a table lookup, and can apply the
+    declared rules to the raw text and arrive back at the shipped value.
+    """
+
+    detay_sinifi: str
+    detay_alt_sinifi: str
+    #: ``"sayfa"`` when the pair came off the printed page, ``"devam_tablosu"``
+    #: when ``CONTINUATION_HIERARCHY`` stood in because no block could be paired.
+    kaynak: str
+    baski_detay_sinifi: str = ""
+    baski_detay_alt_sinifi: str = ""
+
+
+def _from_page(detail: str, sub: str) -> Hierarchy:
+    return Hierarchy(
+        _turkish(detail), _turkish(sub), "sayfa", detail, sub
+    )
+
+
+def _from_continuation(title: str) -> Hierarchy | None:
+    """The table's pair for ``title``, as a reading with no printed cells behind it."""
+
+    pair = CONTINUATION_HIERARCHY.get(title)
+    if pair is None:
+        return None
+    return Hierarchy(pair[0], pair[1], "devam_tablosu")
 
 
 # A page prints a full-width stack of [title][DETAY SINIFI / DETAY ALT SINIFI
@@ -251,7 +338,7 @@ def _title_lines(lines: list[dict], title: str) -> list[int] | None:
     return None
 
 
-def _page_hierarchy(page_data: tuple[str, list[float], list[dict]], title: str):
+def _page_hierarchy(page_data: tuple[str, list[float], list[dict]], title: str) -> Hierarchy | None:
     """Find the detail class block belonging to ``title`` on one printed page.
 
     The plain extraction does not always hand a page's blocks over in printed
@@ -259,11 +346,14 @@ def _page_hierarchy(page_data: tuple[str, list[float], list[dict]], title: str):
     pairing a block with "the text printed before it" hands the wrong class to
     the title.  Blocks are paired by printed position instead: the one directly
     below the title, with no other title printed in between.
+
+    Returns ``None`` only when neither the page nor the continuation table has
+    anything for ``title``; the reading says which of the two it was.
     """
     text, positions, lines = page_data
     title_at = _title_lines(lines, title)
     if title_at is None:
-        return CONTINUATION_HIERARCHY.get(title)
+        return _from_continuation(title)
     # Some titles wrap, so the anchor is the bottom line of the printed title.
     anchor = min(lines[index]["y"] for index in title_at)
     own = {lines[index]["y"] for index in title_at}
@@ -291,13 +381,124 @@ def _page_hierarchy(page_data: tuple[str, list[float], list[dict]], title: str):
             continue
         blocks.append((start, detail, sub))
     if not blocks:
-        return CONTINUATION_HIERARCHY.get(title)
+        return _from_continuation(title)
     _, detail, sub = max(blocks, key=lambda block: block[0])
-    return _turkish(detail), _turkish(sub)
+    return _from_page(detail, sub)
 
 
 def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _assert_labels_derive_from_source(records: list[dict], kaynak: dict) -> None:
+    """Every shipped label has to follow from that record's own recorded reading.
+
+    This is what makes ``kaynak`` evidence rather than commentary: take one
+    record's raw cells, apply the two tables this file declares, and the labels
+    it ships have to come back.  A value with nothing behind it -- the failure
+    the MSP reconciliation found 67 of, in a catalogue that looked complete --
+    fails here at compile time instead of shipping.
+
+    The two pipelines are mirrored exactly, including the one place they differ:
+    a page reading goes through ``_turkish`` before ``_canonical``, a
+    ``CONTINUATION_HIERARCHY`` pair is hand-written and carries no extraction
+    artifact, so it goes through ``_canonical`` alone.
+    """
+
+    for record in records:
+        known = kaynak[record["id"]]
+        if known["hiyerarsi_kaynak"] == "sayfa":
+            expected = [
+                _canonical(_turkish(known["baski_detay_sinifi"])),
+                _canonical(_turkish(known["baski_detay_alt_sinifi"])),
+            ]
+        else:
+            pair = CONTINUATION_HIERARCHY.get(known["baslik"])
+            if pair is None:
+                raise RuntimeError(
+                    f"{record['id']}: baski_* boş ama {known['baslik']!r} "
+                    "devam tablosunda yok"
+                )
+            expected = [_canonical(pair[0]), _canonical(pair[1])]
+        for field, value in zip(("detay_sinifi", "detay_alt_sinifi"), expected):
+            if record[field] != value:
+                raise RuntimeError(
+                    f"{record['id']}.{field} kaynaktan türetilemiyor: "
+                    f"{record[field]!r} ≠ {value!r}"
+                )
+        if record["sembol_adi"] != _canonical(known["baslik"]):
+            raise RuntimeError(
+                f"{record['id']}.sembol_adi kaynaktan türetilemiyor: "
+                f"{record['sembol_adi']!r} ≠ {_canonical(known['baslik'])!r}"
+            )
+
+
+def _identity(record: dict) -> str:
+    """The key two compilations of this file are matched on, whatever their version.
+
+    The sort tuple, not ``id``: it is unique across all 592 records -- the
+    property that let ``id`` be introduced at all -- and unlike ``id`` it exists
+    in a version-1 file too, so a diff can pair the two.  ``id`` names a record
+    in the report; it is never what the two sides are joined on.
+    """
+
+    return "|".join(record.get(key, "") for key in (
+        "plan_kademesi", "detay_sinifi", "detay_alt_sinifi",
+        "sembol_adi", "plan_gml_tipi", "sld_kurali",
+    ))
+
+
+def _diff(compiled: dict, committed: dict) -> list[str]:
+    """Every place the committed file and a fresh read of the sources disagree.
+
+    Records first, by identity, then the evidence beside them, then the declared
+    tables -- a rule table that moved is a difference even when no record's value
+    did, which is exactly the shape a single line count cannot show.  A file that
+    predates the ``kaynak`` map is reported as missing it once rather than once
+    per record.
+    """
+
+    findings = []
+    for key in ("version", "duzeltmeler", "devam_tablosu"):
+        if committed.get(key) != compiled[key]:
+            findings.append(
+                f"{key}: katalogda {committed.get(key)!r}, Ek-1e'de {compiled[key]!r}"
+            )
+    old = {_identity(record): record for record in committed.get("records", [])}
+    for record in compiled["records"]:
+        previous = old.get(_identity(record))
+        if previous is None:
+            findings.append(f"{record['id']}: committed katalogda yok")
+            continue
+        for key, value in record.items():
+            if key == "id":
+                continue
+            if previous.get(key) != value:
+                findings.append(
+                    f"{record['id']}.{key}: katalogda {previous.get(key)!r}, "
+                    f"Ek-1e'de {value!r}"
+                )
+    for identifier in sorted(set(old) - {_identity(record) for record in compiled["records"]}):
+        findings.append(f"{identifier}: Ek-1e'de yok")
+    old_kaynak = committed.get("kaynak")
+    if old_kaynak is None:
+        findings.append("kaynak: committed katalogda yok")
+        return findings
+    # The provenance a version-1 file has none of is keyed by identity, so the
+    # same record is found on both sides by identity and reported by its new id.
+    identity_of = {record["id"]: _identity(record) for record in compiled["records"]}
+    for identifier, known in compiled["kaynak"].items():
+        previous = old_kaynak.get(identifier) or old_kaynak.get(identity_of[identifier], {})
+        if not previous:
+            findings.append(f"{identifier}.kaynak: committed katalogda yok")
+            continue
+        for key, value in known.items():
+            if previous.get(key) != value:
+                findings.append(
+                    f"{identifier}.kaynak.{key}: katalogda {previous.get(key)!r}, "
+                    f"Ek-1e'de {value!r}"
+                )
+    return findings
 
 
 def compile_hierarchy(pdf_path: Path, workbook_path: Path) -> dict:
@@ -307,6 +508,11 @@ def compile_hierarchy(pdf_path: Path, workbook_path: Path) -> dict:
     sheet = workbook[SHEET]
     headers = [str(value) for value in next(sheet.iter_rows(values_only=True))]
 
+    # One entry per record, in the same order: (workbook cell verbatim, title as
+    # matched, page, reading).  The two lists are zipped into pairs before the
+    # sort so a record and its reading cannot drift apart there, and `kaynak` is
+    # built from the pairs once the ids are out.
+    readings: list[tuple[str, str, int, Hierarchy]] = []
     records = []
     unresolved = []
     for values in sheet.iter_rows(min_row=2, values_only=True):
@@ -316,9 +522,13 @@ def compile_hierarchy(pdf_path: Path, workbook_path: Path) -> dict:
         geometry = _clean(row["Geometri"])
         if "POLİGON" not in geometry and "ÇİZGİ" not in geometry:
             continue
-        title = _clean(row["Katalog kalemi"])
-        if "DETAY KATALOĞU" in title:
-            title = title.split("DETAY KATALOĞU", 1)[1].strip()
+        # The cell verbatim, before the whitespace collapse below: it is what the
+        # record's `kaynak` keeps, so a reader can see the heading cut and the
+        # match that followed rather than only the label that resulted.
+        item = str(row["Katalog kalemi"] or "")
+        title = _clean(item)
+        if TITLE_PREFIX in title:
+            title = title.split(TITLE_PREFIX, 1)[1].strip()
         page = int(row["Sayfa"])
         if page not in pages:
             pages[page] = _read_page(reader.pages[page - 1])
@@ -326,32 +536,52 @@ def compile_hierarchy(pdf_path: Path, workbook_path: Path) -> dict:
         if hierarchy is None:
             unresolved.append(f"s.{page}: {title}")
             continue
-        detail_class, detail_subclass = hierarchy
         records.append({
             # The three labels a planner reads are repaired to one spelling each.
             # `sld_kurali` and `plan_gml_tipi` are left verbatim on purpose: one
             # is matched by record_for_rule() against the SLD's own rule ids and
             # the other names the XSD's feature type, so a spelling repair would
             # silently break the lookup rather than improve a label.
+            "id": "",
             "sembol_adi": _canonical(title),
-            "detay_sinifi": _canonical(detail_class),
-            "detay_alt_sinifi": _canonical(detail_subclass),
+            "detay_sinifi": _canonical(hierarchy.detay_sinifi),
+            "detay_alt_sinifi": _canonical(hierarchy.detay_alt_sinifi),
             "plan_kademesi": _clean(row["Kademe"]),
             "geometri": geometry,
             "plan_gml_tipi": _clean(row["PlanGML tipi"]),
             "sld_kurali": _clean(row["SLD kuralı"]),
             "kaynak_sayfa": page,
         })
+        readings.append((item, title, page, hierarchy))
     if unresolved:
         raise RuntimeError("Detay sınıfı çözülemedi: " + "; ".join(unresolved))
     _assert_one_spelling_per_label(records)
 
-    records.sort(key=lambda item: (
-        item["plan_kademesi"], item["detay_sinifi"], item["detay_alt_sinifi"],
-        item["sembol_adi"], item["plan_gml_tipi"], item["sld_kurali"],
+    # The record and its reading have to travel together through the sort, so the
+    # ids are handed out in the order the file ships rather than in extraction
+    # order -- MPYY-<n> then names a position in the catalogue a planner can see,
+    # the same way MSP-<n> does in styles/msp_catalog.json.
+    ordered = list(zip(records, readings))
+    ordered.sort(key=lambda pair: (
+        pair[0]["plan_kademesi"], pair[0]["detay_sinifi"], pair[0]["detay_alt_sinifi"],
+        pair[0]["sembol_adi"], pair[0]["plan_gml_tipi"], pair[0]["sld_kurali"],
     ))
+    records, kaynak = [], {}
+    for index, (record, (item, title, page, hierarchy)) in enumerate(ordered, start=1):
+        identifier = f"MPYY-{index:03d}"
+        record["id"] = identifier
+        records.append(record)
+        kaynak[identifier] = {
+            "sayfa": page,
+            "katalog_kalemi": item,
+            "baslik": title,
+            "hiyerarsi_kaynak": hierarchy.kaynak,
+            "baski_detay_sinifi": hierarchy.baski_detay_sinifi,
+            "baski_detay_alt_sinifi": hierarchy.baski_detay_alt_sinifi,
+        }
+    _assert_labels_derive_from_source(records, kaynak)
     return {
-        "version": 1,
+        "version": 2,
         "source": {
             "catalog_pdf": pdf_path.name,
             "catalog_pdf_sha256": _sha256(pdf_path),
@@ -360,17 +590,45 @@ def compile_hierarchy(pdf_path: Path, workbook_path: Path) -> dict:
             "sheet": SHEET,
         },
         "record_count": len(records),
+        # The rules that stand between the readings above and the labels below,
+        # shipped so the file can be re-derived from its own evidence: applying
+        # them to a record's `baski_*` cells reproduces its shipped labels.
+        "duzeltmeler": {
+            "baslik_oneki": TITLE_PREFIX,
+            "yazim": SPELLING_REPAIRS,
+            "turkce": TURKISH_REPAIRS,
+        },
+        # The one fallback in the pipeline, named as such: these titles print on
+        # their page, but no DETAY SINIFI block could be paired to them, so the
+        # pair below stands in and the record's `baski_*` cells stay empty.
+        "devam_tablosu": {
+            title: list(pair) for title, pair in CONTINUATION_HIERARCHY.items()
+        },
         "records": records,
+        "kaynak": kaynak,
     }
 
 
 def main(argv: list[str]) -> int:
-    if len(argv) != 3:
+    arguments = [value for value in argv[1:] if not value.startswith("--")]
+    if len(arguments) != 2:
         print(__doc__.strip())
         return 2
-    result = compile_hierarchy(Path(argv[1]), Path(argv[2]))
-    OUTPUT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"{OUTPUT}: {result['record_count']} alan/çizgi eşlemesi")
+    compiled = compile_hierarchy(Path(arguments[0]), Path(arguments[1]))
+
+    if "--diff" in argv:
+        committed = json.loads(OUTPUT.read_text(encoding="utf-8"))
+        findings = _diff(compiled, committed)
+        if not findings:
+            print(f"{OUTPUT.name}: Ek-1e ile uyuşuyor ({compiled['record_count']} kayıt)")
+            return 0
+        print(f"{len(findings)} fark:")
+        for finding in findings:
+            print("  " + finding)
+        return 1
+
+    OUTPUT.write_text(json.dumps(compiled, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"{OUTPUT}: {compiled['record_count']} alan/çizgi eşlemesi, Ek-1e'den derlendi")
     return 0
 
 
