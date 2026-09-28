@@ -198,6 +198,116 @@ class MPYYWorkspaceTests(unittest.TestCase):
         stored = {(f["YapiDuzeni"], f["KonutTip"]) for f in konut.getFeatures()}
         self.assertIn(("Bitisik", "GelismeKonut"), stored)
 
+    def test_numeric_fields_get_range_widgets_and_hard_bounds(self):
+        from planx_mpyy_studio.core.form_rules import NUMERIC_RULES
+        from planx_mpyy_studio.core.mpyy_import import audit_mpyy_workspace
+
+        for level in ("UIP", "NIP", "CDP"):
+            path = Path(self.tmp.name) / f"{level.lower()}_numeric.gpkg"
+            create_mpyy_workspace(path, "EPSG:5254", level)
+            layers = {layer.name(): layer for layer in load_project_layers(path)}
+            covered = 0
+            for feature_type in level_schema(level)["feature_types"]:
+                layer = layers[feature_type["name"]]
+                for field in feature_type["fields"]:
+                    if field["type"] not in ("double", "int", "long"):
+                        continue
+                    setup = layer.editorWidgetSetup(layer.fields().indexFromName(field["name"]))
+                    with self.subTest(level=level, type=feature_type["name"], field=field["name"]):
+                        # Every numeric field the schema has is bounded: none is left a free text box.
+                        self.assertIn(field["name"], NUMERIC_RULES)
+                        self.assertEqual(setup.type(), "Range")
+                        covered += 1
+            self.assertGreater(covered, 0, level)
+            QgsProject.instance().clear()
+
+        path = Path(self.tmp.name) / "uip_values.gpkg"
+        create_mpyy_workspace(path, "EPSG:5254", "UIP")
+        konut = {layer.name(): layer for layer in load_project_layers(path)}["Konut"]
+        taks = konut.fields().indexFromName("Taks")
+        kat = konut.fields().indexFromName("KatAdedi")
+        self.assertEqual(konut.editorWidgetSetup(taks).config()["Style"], "Slider")
+        self.assertEqual(konut.editorWidgetSetup(taks).config()["Max"], 1.0)
+
+        def hard_ok(feature, index):
+            return QgsVectorLayerUtils.validateAttribute(
+                konut, feature, index, QgsFieldConstraints.ConstraintStrength.ConstraintStrengthHard)[0]
+
+        f = QgsVectorLayerUtils.createFeature(konut, QgsGeometry.fromWkt(POLYGON), {}, konut.createExpressionContext())
+        f["Taks"] = 35          # typed for 0.35
+        self.assertFalse(hard_ok(f, taks))
+        f["Taks"] = 0.35
+        self.assertTrue(hard_ok(f, taks))
+        f["Taks"] = 0
+        self.assertFalse(hard_ok(f, taks))
+        f["KatAdedi"] = 0
+        self.assertFalse(hard_ok(f, kat))
+        f["KatAdedi"] = 4
+        self.assertTrue(hard_ok(f, kat))
+        draft = QgsVectorLayerUtils.createFeature(konut, QgsGeometry.fromWkt(POLYGON), {}, konut.createExpressionContext())
+        self.assertTrue(hard_ok(draft, taks))   # NULL: a draft is saved before values are known
+
+        # Values that bypass the form (GML, CAD transfer) are caught by the audit.
+        konut.startEditing()
+        bad = QgsVectorLayerUtils.createFeature(konut, QgsGeometry.fromWkt(POLYGON), {}, konut.createExpressionContext())
+        konut.addFeature(bad)
+        self.assertTrue(konut.commitChanges(), konut.commitErrors())
+        fid = next(konut.getFeatures()).id()
+        konut.dataProvider().changeAttributeValues({fid: {taks: 35.0, konut.fields().indexFromName("EmsalKaks"): 0.2}})
+        findings = [r for r in audit_mpyy_workspace(path, "UIP") if r["katman"] == "Konut"]
+        problems = {r["sorun"] for r in findings}
+        self.assertIn("Değer aralık dışında", problems)
+        konut.dataProvider().changeAttributeValues({fid: {taks: 0.4}})
+        findings = [r for r in audit_mpyy_workspace(path, "UIP") if r["katman"] == "Konut"]
+        self.assertIn("Tutarsız değer (uyarı)", {r["sorun"] for r in findings})     # KAKS 0.2 < TAKS 0.4
+        self.assertNotIn("Değer aralık dışında", {r["sorun"] for r in findings})
+
+    def test_legend_lists_only_the_values_the_plan_uses(self):
+        from qgis.core import QgsFeature
+        from planx_mpyy_studio.core.legend_scope import full_renderer
+
+        def filters(layer):
+            return " ".join(rule.filterExpression() for rule in layer.renderer().rootRule().descendants())
+
+        def leaves(renderer):
+            return [r for r in renderer.rootRule().descendants() if not r.children()]
+
+        path = Path(self.tmp.name) / "uip_legend.gpkg"
+        create_mpyy_workspace(path, "EPSG:5254", "UIP")
+        writer = QgsVectorLayer(f"{path}|layername=Konut", "Konut", "ogr")
+        plan = []
+        for _ in range(2):
+            f = QgsFeature(writer.fields())
+            f.setGeometry(QgsGeometry.fromWkt(POLYGON))
+            f["KonutTip"] = "YerlesikKonut"
+            plan.append(f)
+        self.assertTrue(writer.dataProvider().addFeatures(plan)[0])
+        del writer
+
+        layers = {layer.name(): layer for layer in load_project_layers(path)}
+        konut = layers["Konut"]
+        self.assertIn("YerlesikKonut", filters(konut))
+        self.assertNotIn("GelismeKonut", filters(konut))           # not in this plan: not in its legend
+        # Hold the renderer: a temporary one is freed mid-walk and takes its rules with it.
+        full = full_renderer(konut)
+        self.assertIn("GelismeKonut", " ".join(r.filterExpression() for r in full.rootRule().descendants()))
+        self.assertLess(len(leaves(konut.renderer())), len(leaves(full)))
+        self.assertEqual(konut.customProperty("mpyy/legend"), "mevcut")
+        # A type the plan does not use at all shows no symbol.
+        self.assertEqual(len(layers["AcikYesilAlan"].renderer().rootRule().children()), 0)
+
+        # Editing brings the full set back, so a new value is drawn with its own symbol ...
+        konut.startEditing()
+        self.assertIn("GelismeKonut", filters(konut))
+        f = QgsVectorLayerUtils.createFeature(konut, QgsGeometry.fromWkt(POLYGON), {}, konut.createExpressionContext())
+        f["KonutTip"] = "GelismeKonut"
+        self.assertTrue(konut.addFeature(f))
+        self.assertTrue(konut.commitChanges(), konut.commitErrors())
+        # ... and after saving the legend is trimmed again, now with the new value in it.
+        self.assertEqual(konut.customProperty("mpyy/legend"), "mevcut")
+        self.assertIn("GelismeKonut", filters(konut))
+        self.assertIn("YerlesikKonut", filters(konut))
+
     def test_required_fields_warn_but_allow_drafts_and_are_audited(self):
         path = Path(self.tmp.name) / "uip.gpkg"
         create_mpyy_workspace(path, "EPSG:5254", "UIP")
@@ -237,8 +347,16 @@ class MPYYWorkspaceTests(unittest.TestCase):
         create_mpyy_workspace(path, "EPSG:5254", "UIP")
         layers = {layer.name(): layer for layer in load_project_layers(path)}
 
+        from planx_mpyy_studio.core.legend_scope import full_renderer
+
+        # The loaded legend lists only the values a plan uses; the official set is
+        # the stored full renderer. Held here: its rules die with it.
+        held = []
+
         def rules(layer):
-            return {rule.label(): rule for rule in layer.renderer().rootRule().children()}
+            renderer = full_renderer(layer)
+            held.append(renderer)
+            return {rule.label(): rule for rule in renderer.rootRule().children()}
 
         konut = rules(layers["Konut"])
         self.assertEqual(konut["YERLESIK_KONUT"].filterExpression().replace('"', ""), "KonutTip = 'YerlesikKonut'")
