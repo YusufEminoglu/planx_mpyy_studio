@@ -293,6 +293,10 @@ class MPYYWorkspaceTests(unittest.TestCase):
         self.assertIn("GelismeKonut", " ".join(r.filterExpression() for r in full.rootRule().descendants()))
         self.assertLess(len(leaves(konut.renderer())), len(leaves(full)))
         self.assertEqual(konut.customProperty("mpyy/legend"), "mevcut")
+        # Paper-unit sizes (SLD glyphs, tiles, labels) behave as the 1:1000 sheet, so
+        # they zoom together with the parts drawn in ground metres.
+        self.assertEqual(konut.renderer().referenceScale(), 1000)
+        self.assertEqual(full_renderer(konut).referenceScale(), 1000)
         # A type the plan does not use at all shows no symbol.
         self.assertEqual(len(layers["AcikYesilAlan"].renderer().rootRule().children()), 0)
 
