@@ -112,6 +112,32 @@ class NotationOnPoints(unittest.TestCase):
         self.assertGreater(right - left, 15.0 * 2.5 * 0.5)       # the circle, not a dot
 
 
+class CepheWidthFromTheField(unittest.TestCase):
+    def test_onerilen_cephe_is_drawn_at_its_cizgi_kalinligi(self):
+        """The SLD draws AdaKenari cephe at CizgiKalinligi; QGIS's SLD reader dropped it."""
+        from qgis.core import QgsExpressionContext, QgsSymbolLayer
+
+        from planx_mpyy_studio.core.mpyy_workspace import apply_eplan_symbology
+
+        layer = QgsVectorLayer("LineString?crs=EPSG:5254&field=AdaKenariCizgiTip:string&field=CizgiKalinligi:double",
+                               "ada", "memory")
+        self.assertTrue(apply_eplan_symbology(layer, "UIP", "AdaKenari"))
+        rules = {rule.label(): rule for rule in layer.renderer().rootRule().children()}
+        onerilen = rules["ONERILEN"].symbol().clone()
+        line = onerilen.symbolLayer(0)
+        expression = line.dataDefinedProperties().property(QgsSymbolLayer.Property.StrokeWidth).expressionString()
+        self.assertIn('"CizgiKalinligi"', expression)
+        feature = QgsFeature(layer.fields())
+        context = QgsExpressionContext()
+        context.setFields(layer.fields())
+        for value, expected in ((2.5, 2.5), (None, line.width())):
+            feature["CizgiKalinligi"] = value
+            context.setFeature(feature)
+            width, _ok = line.dataDefinedProperties().valueAsDouble(
+                QgsSymbolLayer.Property.StrokeWidth, context, -1.0)
+            self.assertAlmostEqual(width, expected, msg=str(value))
+
+
 if __name__ == "__main__":
     result = unittest.main(exit=False).result
     import sys

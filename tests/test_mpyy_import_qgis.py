@@ -133,6 +133,29 @@ class MPYYImportTests(unittest.TestCase):
         self.assertEqual(stored[0], ("Ayrik", 4, 0.35, 1.4, 5.0))     # code-list value, not "AYRIK"
         self.assertEqual(stored[1], (None, 3, None, None, None))      # impossible TAKS left empty
 
+    def test_an_aliased_column_fills_its_mpyy_field(self):
+        """The drawing layer's pen (line_width_mm) becomes AdaKenari.CizgiKalinligi."""
+        path = Path(self.tmp.name) / "uip_alias.gpkg"
+        create_mpyy_workspace(path, "EPSG:5254", "UIP")
+        layer = QgsVectorLayer("LineString?crs=EPSG:5254&field=Layer:string&field=line_width_mm:double", "cad", "memory")
+        line = "LINESTRING(500000 4250000,500100 4250000)"
+        features = []
+        for width in (0.6, None):
+            feature = QgsFeature(layer.fields())
+            feature.setAttributes(["ADAKENARI", width])
+            feature.setGeometry(QgsGeometry.fromWkt(line))
+            features.append(feature)
+        layer.dataProvider().addFeatures(features)
+        row = import_cad_layer(layer, "Layer", path, aliases={"CizgiKalinligi": "line_width_mm"})[0]
+        self.assertEqual((row["aktarilan"], row["tasinan_deger"]), (2, 1))
+        with sqlite3.connect(path) as con:
+            stored = sorted(con.execute('SELECT CizgiKalinligi FROM "AdaKenari"').fetchall(), key=str)
+        self.assertEqual(stored, [(0.6,), (None,)])
+        # without the alias nothing is carried: the column name is not an MPYY field
+        path2 = Path(self.tmp.name) / "uip_alias2.gpkg"
+        create_mpyy_workspace(path2, "EPSG:5254", "UIP")
+        self.assertEqual(import_cad_layer(layer, "Layer", path2)[0]["tasinan_deger"], 0)
+
     def test_audit_reports_schema_violations(self):
         path = Path(self.tmp.name) / "nip.gpkg"
         create_mpyy_workspace(path, "EPSG:5254", "NIP")
