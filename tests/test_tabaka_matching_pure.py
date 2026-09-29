@@ -56,6 +56,64 @@ class ResolutionTiers(unittest.TestCase):
         self.assertNotIn("PL_SANAYI_TESIS", dini)
         self.assertEqual(tm.suggest("UIP", "PL_OYUN_ALANI")[0].key, "PL_COCUK_BAHCESI")
 
+    def test_proposals_read_the_functions_own_names(self):
+        # Tire UİP tabaka the old whole-name similarity proposed nothing, or the
+        # wrong thing, for (SIT_3_ARKEOLOJIK -> Jeolojik etüt).
+        cases = {
+            "PL_ARITMA": ("AtiksuTesis", {}),
+            "PL_DISPANSER": ("SaglikTesisAlani", {"SaglikTip": "SaglikTesisAlani"}),
+            "PL_ORTAOGRETIM": ("EgitimTesisAlani", {"EgitimTesisTip": "LiseAlani"}),
+            "PL_HAZIRE": ("AcikYesilAlan", {"AcikYesilTip": "MezarlikAlani"}),
+            "SNR_SIT_3_ARKEOLOJIK": ("SitAlanlari", {"SitTip": "3DereceArkeolojikSit"}),
+            "KA_TESCIL_ANIT": ("TescilliAlan", {"TescilTip": "TescilliAnitYapi"}),
+            "PL_DOGALGAZ_REGULATR": ("EnerjiDagitimDepolama", {"EnerjiTesisTip": "RegulatorAlani"}),
+            "PL_SU_DEPOSU": ("IcmesuTesis", {}),
+        }
+        for name, (feature, attrs) in cases.items():
+            with self.subTest(name=name):
+                proposals = tm.suggest("UIP", name, geometry="polygon")
+                self.assertTrue(proposals, name)
+                self.assertEqual((proposals[0].entry["feature"], proposals[0].entry["attrs"]), (feature, attrs))
+                self.assertTrue(proposals[0].label)
+                self.assertFalse(tm.resolve("UIP", name, user={}).resolved)  # still only a proposal
+        self.assertNotIn("Jeolojik", " ".join(s.label.title() for s in tm.suggest("UIP", "SNR_SIT_3_ARKEOLOJIK")))
+
+    def test_the_layer_geometry_limits_the_proposals(self):
+        functions = tm.targets("UIP")
+        for geometry in ("polygon", "line"):
+            for proposal in tm.suggest("UIP", "PL_SPOR_TESISLERI", geometry=geometry, limit=20):
+                self.assertEqual(functions[proposal.key].geometry, geometry)
+        self.assertEqual(tm.suggest("UIP", "HAT_DERE", geometry="line"), [])
+
+    def test_netcad_notation_layers_are_not_functions(self):
+        # ... nor are the cadastre, texts, sheet indexes or notes (PARSEL drew
+        # "Tescilli parsel" for 20 700 Tire parcels), nor a bare "other".
+        for name in ("SM_YAPILASMA", "SM_KAKS", "SM_ADA_NO", "PARSEL", "PARSEL_YENI", "ADA_NO", "ADA_AYRIM",
+                     "YAZI_FONKSIYON", "EKLE_TESCILLI_YAPI", "PINDEX_1000", "BELEDIYE_NOT", "SNR_DIGER", "T_H"):
+            self.assertEqual(tm.suggest("UIP", name), [], name)
+
+    def test_abbreviations_endings_and_run_together_words(self):
+        self.assertTrue(tm._is_abbreviation("KULTR", "KULTUR"))
+        self.assertTrue(tm._is_abbreviation("VRLIGI", "VARLIGI"))
+        self.assertTrue(tm._is_abbreviation("REGULATR", "REGULATOR"))
+        self.assertFalse(tm._word_match("YAPILASMA", "YAPI")[0])      # a longer word is not its prefix
+        self.assertEqual(tm._singular("TESISLERI"), "TESIS")
+        self.assertEqual(tm._singular("DEPOSU"), "DEPO")
+        self.assertEqual(tm._singular("SANAYI"), "SANAYI")
+        words = tm._vocabulary("UIP").words
+        self.assertIn("KORUMA", tm._segment("TESCILCEPHEKORUMA", words))
+        self.assertEqual(tm._segment("ORTAOGRETIM", words), ["ORTAOGRETIM"])   # a listed word stays whole
+
+    def test_a_function_without_a_ministry_tabaka_can_be_confirmed(self):
+        only_ek1e = [key for key in tm.targets("UIP") if key.startswith("fn:")]
+        self.assertTrue(only_ek1e)
+        key = only_ek1e[0]
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "eslesme.json"
+            tm.confirm("UIP", "PL_OZEL_ADI", key, path=path)
+            m = tm.resolve("UIP", "PL_OZEL_ADI", user=tm.load_user_mappings(path))
+            self.assertEqual((m.method, m.key, m.entry), ("onayli", key, tm.targets("UIP")[key].entry))
+
     def test_a_confirmed_mapping_is_remembered_and_reused(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / "eslesme.json"
