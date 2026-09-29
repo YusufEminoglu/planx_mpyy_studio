@@ -86,6 +86,21 @@ class GuiTests(unittest.TestCase):
         self.assertIn("plan_type", parameters)
         self.assertNotIn("plan_level", parameters)
 
+    def test_shared_parameter_names_keep_each_tools_meaning(self):
+        # PLAN_LEVEL / OUTPUT_REPORT are declared by several tools with different
+        # meanings; one shared label made "CDP" audit a plan as UIP.
+        from ..provider import AuditMPYYWorkspaceAlgorithm
+
+        alg = AuditMPYYWorkspaceAlgorithm()
+        alg.initAlgorithm()
+        options = alg.parameterDefinition("PLAN_LEVEL").options()
+        self.assertEqual(len(options), 4)
+        self.assertIn("Dosyadan", options[0])
+        self.assertIn("UİP", options[1])
+        self.assertIn("NİP", options[2])
+        self.assertIn("ÇDP", options[3])
+        self.assertEqual(alg.parameterDefinition("OUTPUT_REPORT").description(), "Denetim raporu")
+
     def test_catalog_covers_every_processing_algorithm(self):
         described = {row[0] for rows in _GROUPS.values() for row in rows if len(row) < 6 or row[5]}
         actual = {tool.id for tool in self.dock.tools if tool.processing}

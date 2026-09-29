@@ -666,6 +666,21 @@ class IntegrationTests(unittest.TestCase):
         self.assertEqual(res["TOTAL_UNITS"], 270)
         self.assertEqual(res["TOTAL_POPULATION"], 864)
 
+    def test_mpyy_paiy_a_shallow_parcel_is_not_buildable(self):
+        """Depth was computed but never checked: a 17.5 m square passed as buildable."""
+        from planx_mpyy_studio.core.compliance_engine import ComplianceEngine
+
+        uri = "MultiPolygon?crs=EPSG:5254&field=ada:string&field=parsel:string&field=nizam:string&field=kat:integer"
+        layer = QgsVectorLayer(uri, "paiy_shallow", "memory")
+        feature = QgsFeature(layer.fields())
+        # 17.5 m x 17.5 m = 306 m2, AYRIK 4 kat: area >= 300 and frontage >= 12, depth 17.5 < 18
+        feature.setGeometry(QgsGeometry.fromRect(QgsRectangle(0, 0, 17.5, 17.5)))
+        feature["ada"], feature["parsel"], feature["nizam"], feature["kat"] = "201", "9", "AYRIK", 4
+        layer.dataProvider().addFeatures([feature])
+        results, _summary = ComplianceEngine.evaluate_parcels(list(layer.getFeatures()))
+        self.assertEqual(results[0].durum, "TEVHID_ZORUNLU")
+        self.assertIn("Derinlik", results[0].aciklama)
+
     def test_mpyy_paiy_compliance_engine_and_algorithm(self):
         """Kriter PAİY: Parsellerin nizam, cephe, derinlik, alan ve çekme zarfı denetimi."""
         from planx_mpyy_studio.core.compliance_engine import ComplianceEngine
@@ -1576,6 +1591,37 @@ class IntegrationTests(unittest.TestCase):
         res_alg = alg.processAlgorithm(params, ctx, fb)
         self.assertEqual(res_alg["TOPLAM_PARSEL"], 1)
         self.assertEqual(res_alg["TOPLAM_YENI_INSAAT_M2"], 2000.0)
+
+    def test_zoning_certificate_invents_nothing_and_names_its_defaults(self):
+        """A parcel without data used to be certified as ada 101 / parsel 1, KONUT ALANI,
+        ground class "UA (Uygun Alan)" and a corner parcel."""
+        layer = QgsVectorLayer("Polygon?crs=EPSG:5254", "bare", "memory")
+        bare = QgsFeature(layer.fields())
+        bare.setGeometry(QgsGeometry.fromRect(QgsRectangle(0, 0, 20, 30)))
+        cert = ZoningCertificateEngine.generate_certificate(bare)
+        self.assertEqual((cert.ada_no, cert.parsel_no), ("—", "—"))
+        self.assertEqual(cert.plan_fonksiyonu, "Belirtilmemiş")
+        self.assertEqual(cert.yerlesime_uygunluk, "Belirtilmemiş")
+        self.assertIsNone(cert.kose_parsel_mi)
+        self.assertNotIn("Uygun Alan", cert.html_content)
+        self.assertNotIn("KÖŞE BAŞI PARSEL", cert.html_content)
+        self.assertEqual(set(cert.varsayilan_degerler),
+                         {"Yapılaşma nizamı", "Kat adedi", "TAKS", "KAKS / Emsal",
+                          "Ön bahçe mesafesi", "Yan bahçe mesafesi"})
+        self.assertIn("varsayılan değerle doldurulan", cert.html_content)
+        self.assertIn("varsayılan değerle doldurulan", cert.markdown_content)
+
+        uri = ("Polygon?crs=EPSG:5254&field=ada:string&field=parsel:string&field=nizam:string"
+               "&field=taks:double&field=kaks:double&field=katadedi:string&field=onbahce:double&field=yanbahce:double")
+        full_layer = QgsVectorLayer(uri, "full", "memory")
+        full = QgsFeature(full_layer.fields())
+        full.setGeometry(QgsGeometry.fromRect(QgsRectangle(0, 0, 20, 30)))
+        for name, value in (("ada", "205"), ("parsel", "12"), ("nizam", "AYRIK"), ("taks", 0.35), ("kaks", 1.4),
+                            ("katadedi", "4"), ("onbahce", 5.0), ("yanbahce", 3.0)):
+            full[name] = value
+        cert = ZoningCertificateEngine.generate_certificate(full)
+        self.assertEqual(cert.varsayilan_degerler, [])
+        self.assertNotIn("varsayılan değerle doldurulan", cert.html_content)
 
     def test_zoning_certificate_paiy5_and_hud(self):
         """Kriter WP3 & WP8: İmar çapında PAİY Md. 5 emsal harici alan hesaplanır ve CAD HUD üretilir."""

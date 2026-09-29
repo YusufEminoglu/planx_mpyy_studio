@@ -11,8 +11,12 @@ from planx_mpyy_studio.core.function_picker import plan_functions  # noqa: E402
 class PlanFunctionCatalogue(unittest.TestCase):
     def test_every_level_offers_its_catalogue(self):
         counts = {level: len(plan_functions(level)) for level in ("UIP", "NIP", "CDP")}
-        self.assertEqual(sum(counts.values()), 592)          # every hierarchy record, once
+        # every hierarchy record once, but the six road records drawn by three
+        # tables at once (Yolorta + AdaKenari + DigerYolNesneleri): no single layer
+        self.assertEqual(sum(counts.values()), 592 - 6)
         self.assertTrue(all(counts.values()))
+        for level in counts:
+            self.assertFalse([f for f in plan_functions(level) if "+" in f.feature_type])
 
     def test_functions_carry_the_ministry_rule_values(self):
         by_name = {f.name: f for f in plan_functions("UIP")}

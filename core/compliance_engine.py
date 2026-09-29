@@ -204,13 +204,17 @@ class ComplianceEngine:
             frontage_deficit = cephe < rule_frontage
             depth_deficit = derinlik < min_depth
 
-            if area_deficit or frontage_deficit:
+            # Depth was computed but never checked, while a passing parcel is
+            # told it meets "alan, cephe, derinlik ve çekme" standards.
+            if area_deficit or frontage_deficit or depth_deficit:
                 durum = "TEVHID_ZORUNLU"
                 tevhid_req += 1
                 if area_deficit:
                     reasons.append(f"Alan ({area_m2:.1f} m² < {min_area:.0f} m²) yetersiz")
                 if frontage_deficit:
                     reasons.append(f"Cephe ({cephe:.1f} m < {rule_frontage:.1f} m) yetersiz")
+                if depth_deficit:
+                    reasons.append(f"Derinlik ({derinlik:.1f} m < {min_depth:.1f} m) yetersiz")
                 aciklama = 'PAİY Madde 16: ' + ", ".join(reasons) + '. Komşu parsel ile tevhit zorunludur.'
             elif envelope_area < min_building_core_m2:
                 durum = "CEKME_YETERSIZ"

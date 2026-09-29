@@ -29,6 +29,8 @@ class ResolutionTiers(unittest.TestCase):
             "ADAKENARI_NETCAD": "ADAKENARI",           # Netcad export suffix
             "PL_BAKIMAKARYAKIT": "PL_BAKIM_AKARYAKIT",  # words run together
             "SNR_YAPI_YAKLASMA": "SNR_YAPIYAKLASMA",
+            "PL_ADAKENARI": "ADAKENARI",                 # PL_ only says "plan layer"
+            "PL_KALDIRIM": "KALDIRIM",
         }
         for name, key in cases.items():
             with self.subTest(name=name):
@@ -103,6 +105,20 @@ class ResolutionTiers(unittest.TestCase):
         words = tm._vocabulary("UIP").words
         self.assertIn("KORUMA", tm._segment("TESCILCEPHEKORUMA", words))
         self.assertEqual(tm._segment("ORTAOGRETIM", words), ["ORTAOGRETIM"])   # a listed word stays whole
+
+    def test_one_word_that_fits_many_functions_is_not_guessed(self):
+        # A_SINIR ("boundary") drew "Önlemli alan" 0.93; KORUMA fits 29 functions.
+        for name in ("A_SiNiR", "PL_KORUMA_SAHASI"):
+            self.assertEqual(tm.suggest("UIP", name, geometry="polygon"), [], name)
+        self.assertTrue(tm.suggest("UIP", "PL_ISTASYON", geometry="polygon"))    # 4 stations: still offered
+
+    def test_only_single_mpyy_tables_are_offered(self):
+        # Six Ek-1e road records name "Yolorta + AdaKenari + DigerYolNesneleri":
+        # confirming one made the import look for a table of that name.
+        for level in ("UIP", "NIP", "CDP"):
+            self.assertFalse([k for k, t in tm.targets(level).items() if "+" in t.entry["feature"]], level)
+        stale = {"UIP": {"A_SERVISYOLU": "fn:MPYY-410"}}          # BÖLÜNMÜŞ TAŞIT YOLU, composite
+        self.assertFalse(tm.resolve("UIP", "A_SERVISYOLU", user=stale).resolved)
 
     def test_a_function_without_a_ministry_tabaka_can_be_confirmed(self):
         only_ek1e = [key for key in tm.targets("UIP") if key.startswith("fn:")]

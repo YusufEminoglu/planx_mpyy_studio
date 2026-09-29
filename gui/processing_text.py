@@ -45,7 +45,7 @@ PARAMETERS = {
     'TYPICAL_FLOOR_HEIGHT': 'Tipik kat yüksekliği',
     'PROTECTED_AREA': 'Koruma alanı',
     'CRS': 'Çalışma alanı koordinat sistemi', 'LEVELS': 'Plan kademeleri',
-    'TABAKA_FIELD': 'Tabaka adı alanı', 'WORKSPACE': 'MPYY çalışma alanı', 'OUTPUT_REPORT': 'Rapor dosyası (CSV)',
+    'TABAKA_FIELD': 'Tabaka adı alanı', 'WORKSPACE': 'MPYY çalışma alanı',
     'PLAN_LEVEL': 'Plan kademesi', 'TARGET_LEVEL': 'Hedef kademe', 'GML_FILE': 'MPYY GML dosyası', 'GML_SCHEMA': 'Şema', 'WRITTEN': 'Yazılan nesne sayısı', 'FINDINGS': 'Bulgu sayısı',
     'INPUT': 'Girdi katmanı', 'OUTPUT': 'Çıktı katmanı', 'DISTANCE': 'Çekme Mesafesi (m)',
     'FIELD': 'İşlev kodu alanı', 'PARCELS': 'Parsel poligonları', 'BUILDINGS': 'Yapı poligonları',
@@ -82,7 +82,7 @@ PARAMETERS = {
     'OUTPUT_DIRECTORY': 'Çıktı klasörü', 'INCLUDE_ROOF': 'Çatıları ekle', 'PROFILE': 'Kural / şema profili',
     'CUSTOM_PROFILE_FILE': 'Özel profil kayıt dosyası (isteğe bağlı)', 'CUSTOM_PROFILE_CODE': 'Özel profil kodu',
     'BASE_WORKSPACE': 'Başlangıç GeoPackage dosyası', 'INCOMING_WORKSPACE': 'Gelen GeoPackage dosyası',
-    'CONFLICT_STRATEGY': 'Çakışma çözüm politikası', 'OUTPUT_REPORT': 'JSON rapor dosyası',
+    'CONFLICT_STRATEGY': 'Çakışma çözüm politikası',
     'MAP_SCALE': 'Belirtilen harita ölçeği paydası', 'PARENT': 'Üst kademe plan katmanı',
     'PARENT_LEVEL': 'Üst plan kademesi', 'CHILD': 'Alt kademe plan katmanı', 'CHILD_LEVEL': 'Alt plan kademesi',
     'MINIMUM_COVERAGE': 'Asgari kapsama oranı', 'MANIFEST': 'JSON içerik listesi dosyası',
@@ -99,7 +99,7 @@ PARAMETERS = {
     'TOLERANCE': 'Sınır toleransı (m)', 'DECISIONS': 'Plan karar poligonları',
     'BOUNDARY': 'Plan sınırı (isteğe bağlı)', 'AREA_TOLERANCE': 'Alan toleransı (m²)', 'GAPS': 'Boşluk poligonları',
     'DEMAND_SERVICE_FIELD': 'Talep hizmet türü alanı', 'FACILITY_TYPE_FIELD': 'Tesis türü alanı',
-    'CODE_FIELD': 'Gösterim kodu alanı', 'PLAN_LEVEL': 'Plan kademesi', 'ADJACENCY_TOLERANCE': 'Komşuluk toleransı (m)',
+    'CODE_FIELD': 'Gösterim kodu alanı', 'ADJACENCY_TOLERANCE': 'Komşuluk toleransı (m)',
     'INPUT_DIRECTORY': 'Girdi klasörü', 'PURPOSE': 'Plan amacı', 'AS_OF_DATE': 'Değerlendirme tarihi (YYYY-AA-GG)',
     'GEOPACKAGE': 'GeoPackage dosyası', 'OUTPUT_PROFILE': 'JSON şema profili çıktısı',
     'DICTIONARY': 'Kaynak CSV sözlüğü (isteğe bağlı)', 'EXPECTED_SHA256': 'Bağımsız SHA-256 özeti (isteğe bağlı)',
@@ -115,10 +115,25 @@ PARAMETERS = {
     'SOURCE_INSTITUTION': 'Kaynak kurum', 'SOURCE_REFERENCE': 'Kaynak referansı', 'PROFILE_VERSION': 'Profil sürümü',
 }
 
+# Parameters several tools declare under one name with different meanings keep
+# the description their tool gives: OUTPUT_REPORT is a CSV in four tools and a
+# JSON in others, and one shared label called all of them "JSON rapor dosyası".
+OWN_DESCRIPTION = frozenset(('OUTPUT_REPORT',))
+
+# Option labels chosen by the tool's own options, for a name tools share with
+# different option lists. PLAN_LEVEL was one dict key written twice, so the
+# workspace audit's "Dosyadan oku / UIP / NIP / CDP" showed "MSP / CDP / NIP / UIP":
+# picking "CDP" imported the plan as UIP.
+ENUM_OPTIONS_BY_SOURCE = {
+    ('Dosyadan oku', 'UIP', 'NIP', 'CDP'): ['Dosyadan oku', 'Uygulama imar planı (UİP)',
+                                           'Nazım imar planı (NİP)', 'Çevre düzeni planı (ÇDP)'],
+    ('MSP', 'ÇDP', 'NİP', 'UİP'): ['Mekânsal strateji planı (MSP)', 'Çevre düzeni planı (ÇDP)',
+                                  'Nazım imar planı (NİP)', 'Uygulama imar planı (UİP)'],
+}
+
 ENUM_OPTIONS = {
     'TARGET_LEVEL': ['Nazım imar planı (NİP)', 'Çevre düzeni planı (ÇDP)'],
     'GML_SCHEMA': ['Otomatik', 'M serisi UİP (MUİP)', 'M serisi NİP (MNİP)', 'M serisi ÇDP 1/25.000', 'M serisi ÇDP 1/100.000', 'Uygulama imar planı (UİP)', 'Nazım imar planı (NİP)', 'Çevre düzeni planı (ÇDP)'],
-    'PLAN_LEVEL': ['Dosyadan oku', 'Uygulama imar planı (UİP)', 'Nazım imar planı (NİP)', 'Çevre düzeni planı (ÇDP)'],
     'LEVELS': ['Tüm kademeler (MSP, ÇDP, NİP, UİP)', 'Yalnızca uygulama imar planı (UİP 1:1.000)',
                'Yalnızca nazım imar planı (NİP 1:5.000)', 'Yalnızca çevre düzeni planı (ÇDP 1:50.000 - 1:100.000)',
                'Yalnızca mekânsal strateji planı (MSP 1:250.000 - 1:500.000)', 'İmar planları (NİP + UİP)'],
@@ -127,7 +142,6 @@ ENUM_OPTIONS = {
     'PAGE_SIZE': ['A3 yatay', 'A4 dikey'],
     'CONFLICT_STRATEGY': ['Elle inceleme', 'Gelen sürümü tercih et', 'Daha yeni tarihli kaydı tercih et'],
     'PARENT_LEVEL': ['MSP', 'CDP', 'NIP'], 'CHILD_LEVEL': ['CDP', 'NIP', 'UIP'],
-    'PLAN_LEVEL': ['MSP', 'CDP', 'NIP', 'UIP'],
     'SCALE': ['1:1.000 (500 m × 500 m - UİP)', '1:2.000 (1.000 m × 1.000 m)', '1:5.000 (2.500 m × 2.000 m - NİP)'],
     'PURPOSE': ['Yeni plan', 'Revizyon', 'İlave plan', 'Plan değişikliği'],
 }
@@ -157,10 +171,15 @@ class LocalizedProcessingAlgorithm(QgsProcessingAlgorithm):
                 prefix = ('Başlangıç' if scenario == 'BASELINE_' else 'Önerilen') + ' - '
                 name = name[len(scenario):]
                 break
-        parameter.setDescription(prefix + PARAMETERS.get(name, field_alias(name)))
+        if name not in OWN_DESCRIPTION:
+            parameter.setDescription(prefix + PARAMETERS.get(name, field_alias(name)))
         if name == 'OUTPUT' and isinstance(parameter, QgsProcessingParameterFileDestination):
             parameter.setDescription('GeoPackage çıktı dosyası' if '*.gpkg' in parameter.fileFilter() else 'Belge çıktı dosyası')
-        if isinstance(parameter, QgsProcessingParameterEnum) and name in ENUM_OPTIONS:
+        by_source = (ENUM_OPTIONS_BY_SOURCE.get(tuple(parameter.options()))
+                     if isinstance(parameter, QgsProcessingParameterEnum) else None)
+        if by_source is not None:
+            parameter.setOptions(by_source)
+        elif isinstance(parameter, QgsProcessingParameterEnum) and name in ENUM_OPTIONS:
             options = ENUM_OPTIONS[name]
             if len(options) != len(parameter.options()):
                 raise ValueError('Türkçe seçenek etiketleri özgün sıralamayı korumalıdır: ' + name)
