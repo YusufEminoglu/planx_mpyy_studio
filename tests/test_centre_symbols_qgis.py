@@ -5,7 +5,7 @@ import unittest
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from qgis.core import Qgis, QgsApplication, QgsVectorLayer  # noqa: E402
+from qgis.core import QgsApplication, QgsVectorLayer  # noqa: E402
 
 APP = QgsApplication.instance() or QgsApplication([], True)
 APP.initQgis()
@@ -13,8 +13,11 @@ APP.initQgis()
 from planx_mpyy_studio.core.centre_symbols import (  # noqa: E402
     SYMBOL_MM,
     _table,
+    _centre_elements,
+    _options,
+    _rule_symbols,
+    _symbol_element,
     centre_markers,
-    in_millimetres,
     measure_ink,
     scale_factor,
 )
@@ -46,10 +49,16 @@ class CentreSymbolSizeTests(unittest.TestCase):
                 if layer is None:
                     continue
                 renderer = layer.renderer()
-                for (label, holder), entry in zip(centre_markers(renderer), _table()[level].get(type_name, [])):
-                    marker = holder.subSymbol()
-                    units = {marker.symbolLayer(i).sizeUnit() for i in range(marker.symbolLayerCount())}
-                    self.assertNotIn(Qgis.RenderUnit.Pixels, units, f"{level}/{type_name}/{label} in screen pixels")
+                for label, symbol, _setter in _rule_symbols(renderer):
+                    _document, element = _symbol_element(symbol)
+                    for marker_element in _centre_elements(element):
+                        layer_element = marker_element.firstChildElement("layer")
+                        while not layer_element.isNull():
+                            unit = _options(layer_element).get("size_unit")
+                            self.assertNotEqual(unit.attribute("value") if unit is not None else "", "Pixel",
+                                                f"{level}/{type_name}/{label} in screen pixels")
+                            layer_element = layer_element.nextSiblingElement("layer")
+                for (label, marker), entry in zip(centre_markers(renderer), _table()[level].get(type_name, [])):
                     if entry["carpan"] is None:
                         continue
                     ink = measure_ink(marker, scale)
@@ -61,7 +70,7 @@ class CentreSymbolSizeTests(unittest.TestCase):
     def test_the_reported_small_symbols_are_now_full_size(self):
         # TIRE UİP: askeri alan and ticaret(-konut) were drawn about 4 mm high at 1:1000.
         layer = styled("UIP", "KentselCalisma")
-        sizes = {label: measure_ink(holder.subSymbol(), 1000) for label, holder in centre_markers(layer.renderer())}
+        sizes = {label: measure_ink(marker, 1000) for label, marker in centre_markers(layer.renderer())}
         for rule in ("ASKERI_ALAN", "TICARET_ALANI", "TICARET_KONUT_ALANI"):
             self.assertGreaterEqual(min(sizes[rule]), SYMBOL_MM["UIP"] - TOLERANCE_MM, rule)
         # ÇDP pictograms came at 15 mm, three times the regulated 5 mm.
@@ -70,8 +79,8 @@ class CentreSymbolSizeTests(unittest.TestCase):
             layer = styled("CDP", type_name)
             if layer is not None and centre_markers(layer.renderer()):
                 break
-        for label, holder in centre_markers(layer.renderer()):
-            self.assertLessEqual(min(measure_ink(holder.subSymbol(), _level_scale("CDP"))),
+        for label, marker in centre_markers(layer.renderer()):
+            self.assertLessEqual(min(measure_ink(marker, _level_scale("CDP"))),
                                  SYMBOL_MM["CDP"] + TOLERANCE_MM, label)
 
     def test_marks_that_are_not_pictograms_are_left_as_drawn(self):
@@ -79,10 +88,10 @@ class CentreSymbolSizeTests(unittest.TestCase):
         self.assertIsNone(scale_factor([0.79, 0.79], "NIP"))     # a dot
         self.assertAlmostEqual(scale_factor([4.2, 4.2], "UIP"), 10 / 4.2)
         layer = styled("UIP", "AcikYesilAlan")
-        park = [holder for label, holder in centre_markers(layer.renderer()) if label == "PARK"][0]
+        park = [marker for label, marker in centre_markers(layer.renderer()) if label == "PARK"][0]
         stored = [e for e in _table()["UIP"]["AcikYesilAlan"] if e["kural"] == "PARK"][0]
         self.assertIsNone(stored["carpan"])
-        self.assertEqual(measure_ink(park.subSymbol(), 1000), stored["murekkep_mm"])
+        self.assertEqual(measure_ink(park, 1000), stored["murekkep_mm"])
 
     def test_stored_measurements_match_the_current_styles(self):
         # The table is generated (tools/measure_centre_symbols.py); an SLD, catalogue or font
@@ -94,8 +103,8 @@ class CentreSymbolSizeTests(unittest.TestCase):
                 if layer is None:
                     continue
                 renderer = layer.renderer()
-                measured = [(label, measure_ink(in_millimetres(holder.subSymbol()), scale))
-                            for label, holder in centre_markers(renderer)]
+                measured = [(label, measure_ink(marker, scale))
+                            for label, marker in centre_markers(renderer)]
                 stored = [(e["kural"], e["murekkep_mm"]) for e in _table()[level].get(type_name, [])]
                 with self.subTest(level=level, type=type_name):
                     self.assertEqual([m[0] for m in measured], [s[0] for s in stored])

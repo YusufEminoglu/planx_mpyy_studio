@@ -25,7 +25,7 @@ app = QgsApplication([], False)
 app.initQgis()
 
 from planx_mpyy_studio.core.centre_symbols import (  # noqa: E402
-    SYMBOL_MM, TABLE_PATH, centre_markers, in_millimetres, measure_ink, scale_factor)
+    SYMBOL_MM, TABLE_PATH, centre_markers, measure_ink, scale_factor)
 from planx_mpyy_studio.core.mpyy_detail_catalog import _level_scale  # noqa: E402
 from planx_mpyy_studio.core.mpyy_workspace import SLD_DIR, all_levels, apply_eplan_symbology  # noqa: E402
 
@@ -41,8 +41,8 @@ def measure_level(level):
             continue
         renderer = layer.renderer()
         entries = []
-        for label, holder in centre_markers(renderer):
-            ink = measure_ink(in_millimetres(holder.subSymbol()), scale)
+        for label, marker in centre_markers(renderer):
+            ink = measure_ink(marker, scale)
             factor = scale_factor(ink, level)
             entries.append({"kural": label, "murekkep_mm": ink,
                             "carpan": round(factor, 4) if factor else None})
