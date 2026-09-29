@@ -949,7 +949,14 @@ class SymbologyGapTests(unittest.TestCase):
         decisions = catalog()["decisions"]["borders"]
         addresses = [address for address in decisions
                      if address != "note" and not address.startswith("_")]
-        for address in addresses:
+
+        def check(address):
+            """One address, in its own frame: every wrapper into this layer's renderer
+            tree dies with the frame, before the next layer is built (docs/TRAPS.md
+            4.7). Left bound across loop turns they dangled once the next layer
+            replaced the tree, and a new symbol layer came back under a dead
+            wrapper's class ('QgsMarkerLineSymbolLayer' has no 'sizeUnit')."""
+            found = {"targets": [], "boundaries": [], "dashes": [], "units": [], "checked": 0}
             raw_spec = decisions[address]
             level, type_name, label = address.split("/", 2)
             layer = typed_layer(level, type_name, [])
@@ -969,8 +976,8 @@ class SymbologyGapTests(unittest.TestCase):
                 else [(rule_label, symbol) for rule_label, symbol in available if rule_label == label]
             )
             if not targets:
-                missing_targets.append(address)
-                continue
+                found["targets"].append(address)
+                return found
 
             spec = _ground_spec(raw_spec, level)
             dash_required = (
@@ -979,7 +986,7 @@ class SymbologyGapTests(unittest.TestCase):
                 or (spec["kind"] == "circles" and bool(spec.get("dash_mm")))
             )
             for rule_label, symbol in targets:
-                checked += 1
+                found["checked"] += 1
                 generators = [
                     symbol.symbolLayer(index)
                     for index in range(symbol.symbolLayerCount())
@@ -987,7 +994,7 @@ class SymbologyGapTests(unittest.TestCase):
                 ]
                 where = f"{level}/{type_name}/{rule_label}"
                 if not generators:
-                    missing_boundaries.append(where)
+                    found["boundaries"].append(where)
                     continue
                 generated = [
                     item
@@ -996,20 +1003,29 @@ class SymbologyGapTests(unittest.TestCase):
                 ]
                 lines = [item for item in generated if item.layerType() == "SimpleLine"]
                 if dash_required and not any(item.useCustomDashPattern() for item in lines):
-                    missing_dashes.append(where)
+                    found["dashes"].append(where)
                 for item in generated:
                     if item.layerType() == "SimpleLine":
                         if item.widthUnit() != Qgis.RenderUnit.MetersInMapUnits:
-                            unit_mismatches.append(where + ": line width")
+                            found["units"].append(where + ": line width")
                         if (
                             item.useCustomDashPattern()
                             and item.customDashPatternUnit()
                             != Qgis.RenderUnit.MetersInMapUnits
                         ):
-                            unit_mismatches.append(where + ": dash pattern")
+                            found["units"].append(where + ": dash pattern")
                     elif item.layerType() in ("SimpleMarker", "RasterMarker"):
                         if item.sizeUnit() != Qgis.RenderUnit.MetersInMapUnits:
-                            unit_mismatches.append(where + ": marker size")
+                            found["units"].append(where + ": marker size")
+            return found
+
+        for address in addresses:
+            found = check(address)
+            missing_targets.extend(found["targets"])
+            missing_boundaries.extend(found["boundaries"])
+            missing_dashes.extend(found["dashes"])
+            unit_mismatches.extend(found["units"])
+            checked += found["checked"]
 
         # Two counts, because either can move on its own: the number of border
         # decisions in styles/mpyy_detail_catalog/decisions.json, and the number
