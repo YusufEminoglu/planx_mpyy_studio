@@ -25,6 +25,7 @@ from ..core.db_factory import create_land_use_workspace
 from ..core.local_nip_workspace import create_local_nip_workspace
 from ..core.local_uip_workspace import create_local_uip_workspace
 from ..core.mpyy_workspace import create_mpyy_workspace
+from ..core.msp_workspace import create_msp_workspace
 from ..core.dop_engine import DOPEngine
 from ..core.form_designer import MPYYFormDesigner
 from ..core.layout_composer import MPYYLayoutComposer
@@ -48,6 +49,9 @@ from ..core.zoning_certificate import ZoningCertificateEngine
 #: is geometry + source FID, which keeps every catalogue row addressable.
 STYLE_FIELDS = ("uipfonksiyon", "fonksiyon_kodu", "fonksiyon_adi", "catalog_id")
 
+#: The same, for an MSP layer: the annex's own ``msp_kodu`` comes first, and the
+#: e-Plan function fields are the fallbacks so a converted layer still styles.
+MSP_FIELDS = ("msp_kodu",) + STYLE_FIELDS
 
 
 class DockActionsMixin:
@@ -98,6 +102,8 @@ class DockActionsMixin:
                 create_local_uip_workspace(path, self.crs.crs())
             elif scope == "YEREL_NIP":
                 create_local_nip_workspace(path, self.crs.crs())
+            elif scope == "MSP_EK1E":
+                create_msp_workspace(path, self.crs.crs())
             else:
                 create_mpyy_workspace(path, self.crs.crs(), str(scope).split(":", 1)[1])
             self.load_workspace(path)
@@ -231,7 +237,14 @@ class DockActionsMixin:
         level = self.plan_type.currentData()
         try:
             if level in ("MPYY_MSP", "MSP"):
-                raise ValueError('MSP gösterimi bu sürümde etkin değil.')
+                res = self.msp_engine.apply(layer, field=self._styling_field(layer, MSP_FIELDS))
+                self._last_engine = self.msp_engine
+                self.status.setText(
+                    f'MSP Ek-1e + EK-1b sembolojisi uygulandı: {res.styled_codes} kod, '
+                    f'{res.pictogram_missing} piktogram çizilemedi, '
+                    f'{len(res.approximated_codes)} yaklaşık gösterim. '
+                    f'Katman, hangi kodların birebir çizilemediğini üstverisinde kaydeder.'
+                )
             elif level in ("MPYY_CDP", "CDP", "YEREL_CDP"):
                 res = self.mpyy_detail_engine.apply(
                     layer, field=self._styling_field(layer), plan_type="CDP"

@@ -22,6 +22,19 @@ numaraları geçersizdir ve bu dosyada tutulmaz.
   gösterimlerini taşıyan M serisi (MUİP, MNİP, MÇDP) dahildir.
 - **CAD/NCZ aktarımı ve şema denetimi.** Tabaka adları MPYY nesne tiplerine ve
   kodlarına çevrilir; eşleşmeyen tabakalar ile şema aykırılıkları raporlanır.
+- **Mekânsal Strateji Planı (MSP) çalışma alanı.** MPYY 1.1.7 XSD seti UİP, NİP ve
+  ÇDP taşır; MSP'nin kendi şeması yoktur, bu yüzden çalışma alanı Bakanlığın
+  Ek-1e MSP kataloğundan üretilir. Katalogun yedi strateji grubu ile üç geometri
+  türünün kesişiminden 11 çizim katmanı ve 32 kod yuvası çıkar; her katman açılır
+  listede yalnızca kendi grubunun ve kendi geometrisinin kodlarını sunar. Yanında
+  iki eşlikçi tablo gelir: çalışma alanının çizildiği kataloğun kendisi
+  (`msp_katalogu`, 28 satır) ve Madde 16 eylem planı (`msp_eylem_plani`). Katmanlar
+  MSP kademesinin istediği alanları taşır (`strateji_bolgesi`, `oncelik_durumu`) ve
+  MSP-002'nin veriye bağlı gösterimi için `yerlesme_kademesi` ile
+  `yerlesme_yogunlugu` alanlarını da açarlar; parsel düzeyinde uygulama alanı
+  (TAKS, KAKS, nizam, çekme mesafesi) hiç
+  oluşturulmaz, çünkü bir MSP parsel planı değildir ve kademe denetimi bu alanları
+  UİP üstünde reddeder.
 
 ### Gösterim
 
@@ -66,8 +79,47 @@ numaraları geçersizdir ve bu dosyada tutulmaz.
   yüklenirken kaydedilir; kullanıcının sistemine font kurması gerekmez.
 - Cihazda bulunmayan normal metin fontları, eklentiyle gelen DejaVu Sans'a
   düşer; katalog yükleme akışı sistemde Arial/Calibri bulunmasına bağlı değildir.
+- MSP çizimi Bakanlığın iki ekini birden okur ve ikisi farklı soruları yanıtlar:
+  hangi kodun hangi işaretle çizildiği, işaretin rengi, çapı ve tarama ekseni
+  `EK-1b Mekansal Strateji Planlar Gösterimleri` ekini, alan ve sınır renk
+  kodları Ek-1e detay kataloğunu ilgilendirir. Düz ve kademeli renk dolgusu, nokta
+  ve çizgi taraması, karolaj, kesik sınır, gölge ve kaynak türüne göre renkli
+  nokta bu iki kaynaktan gelen değerlerle çizilir. Bir dolgu katmanı kesik desen
+  taşıyamadığı için kesik sınır yalnızca dış halkaya sınırlanmış ayrı bir çizgi
+  katmanı olarak çizilir; aksi hâlde çok parçalı bir poligonun iç halkaları da
+  aynı kesikle çizilirdi.
+- Yerel karşılığı olmayan üç işaret (liman çapası, havalimanı uçağı, lojistik
+  merkezinin düşey yarıklı karesi) EK-1b'nin kendi çiziminden kesilip paketle
+  gelir; kalan on üç nokta işareti QGIS'in yerel işaret şekilleriyle ya da ekin
+  ölçülen çaplarından yeniden kurulur. Böylece nokta kodları eşleşmeyen kodun
+  düştüğü gri daireye artık düşmez.
+- Ek iki yerde kendi kendisiyle çelişir: MSP-024 ve MSP-025'in tarama aralığını
+  çizimi başka, altındaki yazı başka basar. Ekin yazıyla bastığı değer çizilir ve
+  çelişki kayda geçer; arada bir değer uydurulmaz.
+- Ölçü basmadığı yerlerde çizim belgelenmiş bir varsayılana düşer: tarama çizgisi
+  kalınlığı, karolajın merkez noktası, sınır kalınlığı ve MSP-002'nin üç tonunun
+  hangi yerleşme yoğunluğuna, üç işaret boyutunun hangi kademeye karşılık geldiği.
+  Katman hangi kodları Bakanlığın gösterdiğinden farklı çizdiğini kendi üst
+  verisinde kaydeder (`mpyy/msp_approximated`; `mpyy/msp_pictogram_missing`
+  yalnızca Bakanlığın çizdiği bir işaret hiçbir yolla çizilemediğinde dolar ve bu
+  sürümde hiçbir kod için dolmaz). Böylece bir ikame Bakanlığın kendi ölçüsü gibi
+  görünmez, projeyi açan planlamacı hangi sembolün ne olduğunu okur. Bu kayıt hem
+  çizim uygulanırken hem de çalışma alanı katmanı yapılandırılırken yazılır; özel
+  katman özelliği kaydedilmiş bir stille taşınmadığı için tek başına çizim yoluna
+  bırakılırsa stil yeniden uygulanmayan bir çalışma alanı bu kaydı hiç taşımazdı.
+- MSP-002'nin gösterimi veriye bağlıdır: alan tonu `yerlesme_yogunlugu`, işaret
+  boyutu `yerlesme_kademesi` alanından gelir. İki alan da ekin kendi
+  sözcükleriyle adlandırılır, değerleri 1/2/3'tür ve bağlama bir ifadeyle kurulur;
+  böylece katman sınıflandırılmış çizici türünde kalır ve kural, stil
+  kaydedildiğinde de taşınır. Üç ton ile üç çap da ekin kendi değerleridir
+  (çaplar EK-1b'de çizilen hedef işaretlerinden ölçülür); yalnızca hangi tonun en
+  alt kademe olduğu ekte yazmadığı için artan sıra bir çizici kararıdır.
 - Katman formları, görüntüleme alan adları ve değer eşlemeleri Türkçeleştirilir.
-  Kalıcı veri ve kod kimlikleri değişmez.
+  Kalıcı veri ve kod kimlikleri değişmez. MSP eylem planı tablosu bunun dışındadır:
+  alan adları Bakanlığın izleme sözleşmesindeki adlardır (`baseline_value`,
+  `target_value`, `actual_value`, `weight`, `due_date`, `responsible_institution`)
+  ve `evaluate_msp_action_monitoring` algoritması bu adlarla okur, bu yüzden
+  çevrilmezler.
 
 ### Araçlar
 
@@ -91,6 +143,15 @@ biçimlendir ve formları düzenle), `database_report` (etkin GeoPackage'ı ince
 - Bu sürümden önce üretilmiş yerel çalışma alanları ve kaydedilmiş Processing
   model dosyaları açılmaz; algoritma kimlikleri bu sürümde yeniden
   adlandırıldı.
-- Paketlenen kaynak XML'in ve sembol fontlarının yeniden dağıtım şartları
-  belgesizdir. Durum `styles/provenance.json` içinde kayıtlıdır; ayrıntı
-  `THIRD_PARTY_NOTICES.md` dosyasındadır.
+- MSP kademesinin kendi XSD'si yoktur ve MPYY 1.1.7 setini yayımlayan kaynakta
+  MSP için ayrı bir şema görülmemiştir; MSP çalışma alanı bu yüzden Ek-1e MSP
+  kataloğundan üretilir. Katalog 28 kayıttır ve başka bir makine okunur kaynakla
+  karşılaştırılamamıştır, yalnızca kendi içinde tutarlıdır.
+- MSP'nin çizim tarafı henüz gerçek QGIS masaüstünde bir planlamacı tarafından
+  gözle doğrulanmamıştır; kabul testleri katmanları, kod yuvalarını, açılır
+  listeleri, sınıflandırma değerlerini, seçilen işaret şeklini ve ölçülen tarama
+  açısını ve kaydedilen ikameleri okur, çizilen pikseli okumaz.
+- Paketlenen kaynak XML'in, Bakanlığın tarama karolarının, iki ekinden kesilen
+  sembollerin ve sembol fontlarının yeniden dağıtım şartları belgesizdir. Durum
+  `styles/provenance.json` içinde kayıtlıdır; ayrıntı `THIRD_PARTY_NOTICES.md`
+  dosyasındadır.

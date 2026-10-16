@@ -3,6 +3,7 @@
 from qgis.PyQt.QtWidgets import QDockWidget
 
 from .core.mpyy_styler import MPYYDetailStylerEngine
+from .core.msp_styler import MSPStylerEngine
 from .core.styler import MPYYStylerEngine
 
 
@@ -20,6 +21,7 @@ class MPYYDock(WorkbenchMixin, WorkflowFormsMixin, DockActionsMixin, QDockWidget
 
         self.mpyy_detail_engine = MPYYDetailStylerEngine()
         self.mpyy_engine = MPYYStylerEngine()
+        self.msp_engine = MSPStylerEngine()
         self._last_engine = None
 
         self._init_workbench()

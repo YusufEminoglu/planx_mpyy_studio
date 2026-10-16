@@ -73,3 +73,44 @@ measurements written on catalog page 171. They replace the point symbols the Min
 load from unpublished `TaramaSembol` SVGs or the unshipped `Intelli Eplan` font; the catalog
 page of every use is recorded in `styles/mpyy_detail_catalog/decisions.json`.
 
+## MSP representation symbols (EK-1b)
+
+`resources/msp_icons/*.png` are cut the same way from **EK-1b Mekânsal Strateji
+Planlar Gösterimleri** (annex to the Mekânsal Planlar Yapım Yönetmeliği, file
+`EK_1b Mekansal Strateji Planlar Gosterimleri.pdf`) by
+`tools/build_msp_shapes.py`: the SEMBOL cell of the record is rendered at
+600 dpi, near-white made transparent and the image trimmed; nothing is
+redrawn. The file's sha256 is in `styles/msp_shapes.json` and in the
+`source` block of `styles/msp_catalog.json`; the sha256 of every cut
+rectangle is recorded next to it.
+
+The annex is what draws MSP. It prints four columns per record — `ÇİZGİ TİPİ`,
+`SEMBOL`, `TARAMA` and `ALAN RENK KODU (RGB)` — and the Ek-1e catalogue that
+`styles/msp_catalog.json` was compiled from carries the colour columns but not
+the drawn ones. EK-1b is therefore the **third source** of the compiler
+(`tools/compile_msp_catalog.py`, catalogue v4): which mark a point record is
+drawn with, the colour printed in its SEMBOL cell, and the axis of its hatch
+pattern come from here.
+
+Three records are drawn with a mark QGIS has no native shape for — MSP-011
+LİMANLAR (anchor), MSP-012 HAVALİMANLARI (aeroplane) and MSP-013 LOJİSTİK
+MERKEZLER (a square with a vertical slot). Only those three ship as images:
+`limanlar.png`, `havalimanlari.png`, `lojistik_merkezler.png`.
+
+Nine of the sixteen drawn records use `Qgis.MarkerShape` names, so they stay
+sharp at any zoom and take their colour from the record. The remaining four are
+marks the annex composes rather than names — a nested-disc bullseye (MSP-002,
+MSP-004), four colour-coded energy triangles (MSP-014) and a disc under its own
+cross (MSP-022) — and each is rebuilt from the diameters and ring ratios
+measured in EK-1b, not from a QGIS shape.
+
+`styles/msp_shapes.json` is the measurement record behind all of it — the cut
+rectangle, the colour note printed in the cell, the drawn diameter, the hatch
+axis, and the sha256 of each cut. It is read by the catalogue compiler and by
+`tests/test_msp_catalog_pure.py`, **not** by shipped code: the plugin reads
+`styles/msp_catalog.json` alone. `resources/msp_icons/kanit/` holds the cut
+SEMBOL cell of every drawn record, and the cut TARAMA cell of MSP-024 and
+MSP-025, as the evidence for those measurements. Copyright and the basis for
+redistribution are recorded in
+[`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md).
+

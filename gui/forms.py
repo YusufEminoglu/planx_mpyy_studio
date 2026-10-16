@@ -10,32 +10,6 @@ from .widgets import FieldSelector, WrappedButton as QPushButton
 class WorkflowFormsMixin:
     def _build_workspace_forms(self):
 
-        # Planning workspace group
-        group_plan = QGroupBox('MPYY Çalışma Alanı')
-        form_plan = QFormLayout(group_plan)
-        form_plan.setContentsMargins(9, 8, 9, 9)
-
-        self.crs = QgsProjectionSelectionWidget()
-        self.crs.setCrs(QgsProject.instance().crs())
-        form_plan.addRow('Çalışma alanı koordinat sistemi', self.crs)
-
-        self.scope = QComboBox()
-        self.scope.addItem('Yerel UİP — MpyyUipDb çizim şablonu', "YEREL_UIP")
-        self.scope.addItem('Yerel NİP — MpyyNipDB çizim şablonu', "YEREL_NIP")
-        for code, label in (("UIP", 'UİP'), ("NIP", 'NİP'), ("CDP", 'ÇDP')):
-            self.scope.addItem(f'MPYY 1.1.7 şeması — {label} (e-Plan XSD)', "MPYY_XSD:" + code)
-        form_plan.addRow('Plan kademesi', self.scope)
-
-        btn_create = QPushButton('Çalışma alanı oluştur…')
-        btn_create.setObjectName("primaryButton")
-        btn_create.clicked.connect(self.create_workspace)
-        form_plan.addRow(btn_create)
-
-        btn_open = QPushButton('Mevcut çalışma alanını aç…')
-        btn_open.clicked.connect(self.open_workspace)
-        form_plan.addRow(btn_open)
-        self._register_inline_form("create_workspace", group_plan)
-
         # Draw by plan function: the planner picks the function, not the table
         group_fn = QGroupBox('Fonksiyon seçerek çiz')
         form_fn = QFormLayout(group_fn)
@@ -63,6 +37,33 @@ class WorkflowFormsMixin:
         form_fn.addRow(btn_fn)
         self._refresh_plan_functions()
         self._register_inline_form("draw_plan_function", group_fn)
+
+        # Planning workspace group
+        group_plan = QGroupBox('MPYY Çalışma Alanı (GeoPackage)')
+        form_plan = QFormLayout(group_plan)
+        form_plan.setContentsMargins(9, 8, 9, 9)
+
+        self.crs = QgsProjectionSelectionWidget()
+        self.crs.setCrs(QgsProject.instance().crs())
+        form_plan.addRow('Çalışma alanı koordinat sistemi', self.crs)
+
+        self.scope = QComboBox()
+        self.scope.addItem('Yerel UİP — MpyyUipDb çizim şablonu', "YEREL_UIP")
+        self.scope.addItem('Yerel NİP — MpyyNipDB çizim şablonu', "YEREL_NIP")
+        for code, label in (("UIP", 'UİP'), ("NIP", 'NİP'), ("CDP", 'ÇDP')):
+            self.scope.addItem(f'MPYY 1.1.7 şeması — {label} (e-Plan XSD)', "MPYY_XSD:" + code)
+        self.scope.addItem('Mekânsal Strateji Planı — MSP (Ek-1e kataloğu)', "MSP_EK1E")
+        form_plan.addRow('Plan kademesi', self.scope)
+
+        btn_create = QPushButton('Çalışma alanı oluştur…')
+        btn_create.setObjectName("primaryButton")
+        btn_create.clicked.connect(self.create_workspace)
+        form_plan.addRow(btn_create)
+
+        btn_open = QPushButton('Mevcut çalışma alanını aç…')
+        btn_open.clicked.connect(self.open_workspace)
+        form_plan.addRow(btn_open)
+        self._register_inline_form("create_workspace", group_plan)
 
         # Land use workspace group
         group_land = QGroupBox('Arazi Kullanımı ve Saha Anketi')
@@ -148,9 +149,12 @@ class WorkflowFormsMixin:
             self.plan_type.addItem('Uygulama imar planı (UİP, 1:1.000)', "MPYY_UIP")
             self.plan_type.addItem('Nazım imar planı (NİP, 1:5.000)', "MPYY_NIP")
             self.plan_type.addItem('Çevre düzeni planı (ÇDP)', "MPYY_CDP")
-            self.plan_type.addItem('Mekânsal Strateji Planı (MSP)', "MPYY_MSP")
+            self.plan_type.addItem('Mekânsal Strateji Planı (MSP, 1:250.000)', "MPYY_MSP")
             self.style_family_info.setText(
-                'Eklentiyle gelen MPYY / e-Plan stillerini ve kod kataloglarını kullanır.'
+                'Eklentiyle gelen MPYY / e-Plan stillerini ve kod kataloglarını kullanır. '
+                'MSP, 1.1.7 XSD setinde bulunmadığı için Ek-1e MSP kataloğundan (28 kayıt) '
+                've EK-1b gösterim ekinden (sembol şekli, tarama ekseni) türetilir; çizilemeyen '
+                'piktogram ve yaklaşık gösterimler katman üstverisine yazılır.'
             )
 
 

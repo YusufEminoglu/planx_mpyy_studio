@@ -18,6 +18,7 @@ from .db_factory import read_dataset_info
 from .fonts import register_mpyy_fonts
 from .localization import configure_localized_layer
 from .mpyy_workspace import KIND as MPYY_XSD_KIND, load_mpyy_layers
+from .msp_workspace import KIND as MSP_EK1E_KIND, load_msp_layers
 from .local_nip_workspace import KIND as LOCAL_NIP_KIND, load_local_nip_layers
 from .local_uip_workspace import (
     KIND as LOCAL_UIP_KIND,
@@ -167,6 +168,8 @@ def load_project_layers(path: str | Path, project: QgsProject | None = None) -> 
         return load_local_nip_layers(path, project, dataset_id)
     if kind == MPYY_XSD_KIND:
         return load_mpyy_layers(path, project, dataset_id, info["plan_levels"][0])
+    if kind == MSP_EK1E_KIND:
+        return load_msp_layers(path, project, dataset_id)
 
     root = project.layerTreeRoot()
     if kind != "ARAZI_KULLANIMI":

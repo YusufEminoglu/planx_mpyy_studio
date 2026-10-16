@@ -1,0 +1,445 @@
+{
+  "source": {
+    "pdf": "EK_1b Mekansal Strateji Planlar Gosterimleri.pdf",
+    "sha256": "1c08e7c78b970e1c 6d29512e1f7b70e9 028fcb5ff0c9d1a3 ed2f30e075ded161",
+    "dpi": 600,
+    "sutunlar_pt": {
+      "ÇİZGİ TİPİ": [
+        373.9,
+        480.2
+      ],
+      "SEMBOL": [
+        480.2,
+        579.5
+      ],
+      "TARAMA": [
+        579.5,
+        664.6
+      ],
+      "ALAN RENK KODU": [
+        664.6,
+        792.1
+      ]
+    },
+    "not": "EK-1b 'Mekânsal Strateji Planlar Gösterimleri'. SEMBOL ve TARAMA sütunları 600 dpi'de kesildi; kırını beyaza yakın olanı saydam yapıldı ve kırpıldı — hiçbir şey yeniden çizilmedi."
+  },
+  "shapes": {
+    "MSP-002": {
+      "sayfa": 1,
+      "baslik": "YERLEŞMELER VE KADEMELENMESİ",
+      "geometri": "POLYGON, POINT",
+      "sekli": "hedef",
+      "cizim": "katmanli",
+      "dolgu": "dolu",
+      "renk_notu": "255/170/0",
+      "renk_rgb": [
+        255,
+        170,
+        0
+      ],
+      "boyut_mm": 11.35,
+      "yukseklik_mm": 11.43,
+      "lekeler_mm": [
+        10.71,
+        8.09,
+        5.88
+      ],
+      "kontur_mm": 0.32,
+      "discler": [
+        {
+          "rol": "dolgu",
+          "cap_mm": 10.71
+        },
+        {
+          "rol": "bos",
+          "cap_mm": 8.51
+        },
+        {
+          "rol": "dolgu",
+          "cap_mm": 6.82
+        },
+        {
+          "rol": "bos",
+          "cap_mm": 4.61
+        },
+        {
+          "rol": "dolgu",
+          "cap_mm": 2.84
+        }
+      ],
+      "kanit": "resources/msp_icons/kanit/MSP-002.png",
+      "kanit_sha256": "ce056e9411f08a47 ab9162f6693169e8 71c359ff87bf86e6 fd949b6bc6beb9b1"
+    },
+    "MSP-004": {
+      "sayfa": 1,
+      "baslik": "KIRSAL GELİŞİM ODAKLARI",
+      "geometri": "POINT",
+      "sekli": "hedef",
+      "cizim": "katmanli",
+      "dolgu": "dolu",
+      "renk_notu": "205/255/50",
+      "renk_rgb": [
+        205,
+        255,
+        49
+      ],
+      "boyut_mm": 6.99,
+      "yukseklik_mm": 6.99,
+      "lekeler_mm": [
+        5.46
+      ],
+      "kontur_mm": 0.77,
+      "discler": [
+        {
+          "rol": "dolgu",
+          "cap_mm": 5.46
+        },
+        {
+          "rol": "sinir",
+          "cap_mm": 2.58
+        }
+      ],
+      "kanit": "resources/msp_icons/kanit/MSP-004.png",
+      "kanit_sha256": "8e5c0d2723ca44be 5f80e7fe8cb716a7 e3fac76874b172b4 112b3ec8e59ca058"
+    },
+    "MSP-005": {
+      "sayfa": 1,
+      "baslik": "YENİ ŞEHİRLER",
+      "geometri": "POINT",
+      "sekli": "yildiz8",
+      "cizim": "yerli",
+      "dolgu": "dolu",
+      "renk_notu": "255/0/0",
+      "renk_rgb": [
+        255,
+        0,
+        0
+      ],
+      "boyut_mm": 6.65,
+      "yukseklik_mm": 6.43,
+      "lekeler_mm": [
+        6.65
+      ],
+      "kontur_mm": null,
+      "kanit": "resources/msp_icons/kanit/MSP-005.png",
+      "kanit_sha256": "08b945866c798484 7c6d4dd9b222317c b49a07f5e57fe1ea f965bd624f8dbf85"
+    },
+    "MSP-008": {
+      "sayfa": 2,
+      "baslik": "ULAŞIM ODAĞI",
+      "geometri": "POINT",
+      "sekli": "daire",
+      "cizim": "yerli",
+      "dolgu": "dolu",
+      "renk_notu": null,
+      "renk_rgb": [
+        255,
+        0,
+        0
+      ],
+      "boyut_mm": 6.05,
+      "yukseklik_mm": 6.05,
+      "lekeler_mm": [
+        5.38
+      ],
+      "kontur_mm": 0.33,
+      "kanit": "resources/msp_icons/kanit/MSP-008.png",
+      "kanit_sha256": "f7ff322bbda99d30 22ac9169e92eff2f 62464bd77735ef48 879229c3daef66a7"
+    },
+    "MSP-011": {
+      "sayfa": 2,
+      "baslik": "LİMANLAR",
+      "geometri": "POINT",
+      "sekli": "capa",
+      "cizim": "raster",
+      "dolgu": "dolu",
+      "renk_notu": null,
+      "renk_rgb": null,
+      "boyut_mm": 8.34,
+      "yukseklik_mm": 8.47,
+      "lekeler_mm": [],
+      "ikon": "resources/msp_icons/limanlar.png",
+      "ikon_sha256": "4b7cde5a29b668cb ebb9d4d09da25ffc 84ed8106ea733124 25eef268c4e869f2",
+      "kanit": "resources/msp_icons/kanit/MSP-011.png",
+      "kanit_sha256": "4b7cde5a29b668cb ebb9d4d09da25ffc 84ed8106ea733124 25eef268c4e869f2"
+    },
+    "MSP-012": {
+      "sayfa": 2,
+      "baslik": "HAVALİMANLARI",
+      "geometri": "POINT",
+      "sekli": "ucak",
+      "cizim": "raster",
+      "dolgu": "dolu",
+      "renk_notu": null,
+      "renk_rgb": null,
+      "boyut_mm": 9.61,
+      "yukseklik_mm": 9.69,
+      "lekeler_mm": [],
+      "ikon": "resources/msp_icons/havalimanlari.png",
+      "ikon_sha256": "16676d4a516b34d9 43014ee772dd8aa6 62eba3b09dbc5b68 8a5ffc12f3f3b6d2",
+      "kanit": "resources/msp_icons/kanit/MSP-012.png",
+      "kanit_sha256": "16676d4a516b34d9 43014ee772dd8aa6 62eba3b09dbc5b68 8a5ffc12f3f3b6d2"
+    },
+    "MSP-013": {
+      "sayfa": 2,
+      "baslik": "LOJİSTİK MERKEZLER",
+      "geometri": "POINT",
+      "sekli": "lojistik_l",
+      "cizim": "raster",
+      "dolgu": "dolu",
+      "renk_notu": null,
+      "renk_rgb": [
+        255,
+        0,
+        0
+      ],
+      "boyut_mm": 8.42,
+      "yukseklik_mm": 8.47,
+      "lekeler_mm": [
+        8.42
+      ],
+      "ikon": "resources/msp_icons/lojistik_merkezler.png",
+      "ikon_sha256": "181bc5f1237ec41a 33fd7363d5430a9f 6ed7c0a88c01aa0b d87fb16b1eccf41f",
+      "kanit": "resources/msp_icons/kanit/MSP-013.png",
+      "kanit_sha256": "181bc5f1237ec41a 33fd7363d5430a9f 6ed7c0a88c01aa0b d87fb16b1eccf41f"
+    },
+    "MSP-014": {
+      "sayfa": 2,
+      "baslik": "ENERJİ ÜRETİM ALANLARI",
+      "geometri": "POINT",
+      "sekli": "dort_ucgen",
+      "cizim": "katmanli",
+      "dolgu": "dolu",
+      "renk_notu": "0/160/0",
+      "renk_rgb": [
+        0,
+        160,
+        0
+      ],
+      "boyut_mm": 15.37,
+      "yukseklik_mm": 13.29,
+      "lekeler_mm": [
+        6.86,
+        6.82
+      ],
+      "kontur_mm": null,
+      "kanit": "resources/msp_icons/kanit/MSP-014.png",
+      "kanit_sha256": "3f5a5e7c56c49245 952f2a70ee9e5b3a 2790404b5b534c88 da121b08301528bf"
+    },
+    "MSP-016": {
+      "sayfa": 3,
+      "baslik": "BÜYÜK ÖLÇEKLİ ENDÜSTRİ VE ÜRETİM ODAKLARI",
+      "geometri": "POINT",
+      "sekli": "kare",
+      "cizim": "yerli",
+      "dolgu": "dolu",
+      "renk_notu": "130/40/255",
+      "renk_rgb": [
+        130,
+        40,
+        255
+      ],
+      "boyut_mm": 8.51,
+      "yukseklik_mm": 8.51,
+      "lekeler_mm": [
+        7.45
+      ],
+      "kontur_mm": 0.53,
+      "kanit": "resources/msp_icons/kanit/MSP-016.png",
+      "kanit_sha256": "6bf669b5735bf704 c23fd1309952938e 71714def0a0e4f3d f563bf93b35e2158"
+    },
+    "MSP-017": {
+      "sayfa": 3,
+      "baslik": "TARIMSAL FAALİYET ODAKLARI",
+      "geometri": "POINT",
+      "sekli": "kare",
+      "cizim": "yerli",
+      "dolgu": "dolu",
+      "renk_notu": "255/255/0",
+      "renk_rgb": [
+        255,
+        255,
+        0
+      ],
+      "boyut_mm": 8.47,
+      "yukseklik_mm": 8.51,
+      "lekeler_mm": [
+        7.45
+      ],
+      "kontur_mm": 0.51,
+      "kanit": "resources/msp_icons/kanit/MSP-017.png",
+      "kanit_sha256": "aa3b99a0ec754d06 bd39e9a98905d6ad 7ee5f3c08febad94 45d0063ee9d3533d"
+    },
+    "MSP-018": {
+      "sayfa": 3,
+      "baslik": "STRATEJİK TABİİ KAYNAK ALANLARI",
+      "geometri": "POLYGON, POINT",
+      "sekli": "daire",
+      "cizim": "yerli",
+      "dolgu": "dolu",
+      "renk_notu": "110/50/160",
+      "renk_rgb": [
+        109,
+        49,
+        159
+      ],
+      "boyut_mm": 6.18,
+      "yukseklik_mm": 11.68,
+      "lekeler_mm": [
+        5.63
+      ],
+      "kontur_mm": 0.27,
+      "kanit": "resources/msp_icons/kanit/MSP-018.png",
+      "kanit_sha256": "f361ed63968d8470 e3cbd2d371c9f6bf d0f1c85ce68c8353 42f27f9fa0e60012"
+    },
+    "MSP-019": {
+      "sayfa": 3,
+      "baslik": "ULUSLARARASI GİRİŞ-ÇIKIŞ KAPILARI",
+      "geometri": "POINT",
+      "sekli": "yildiz5",
+      "cizim": "yerli",
+      "dolgu": "dolu",
+      "renk_notu": "255/0/0",
+      "renk_rgb": [
+        255,
+        0,
+        0
+      ],
+      "boyut_mm": 13.29,
+      "yukseklik_mm": 11.47,
+      "lekeler_mm": [
+        8.38
+      ],
+      "kontur_mm": 2.45,
+      "kanit": "resources/msp_icons/kanit/MSP-019.png",
+      "kanit_sha256": "5008c1119ab2797d 01a06f5150061726 786018d74f54b362 3f52c9fc21a0bfb9"
+    },
+    "MSP-020": {
+      "sayfa": 3,
+      "baslik": "BÖLGESEL ÖLÇEKLİ KAMU PROJELERİ VE STRATEJİK YATIRIMLAR",
+      "geometri": "POINT",
+      "sekli": "yildiz5",
+      "cizim": "yerli",
+      "dolgu": "bos",
+      "renk_notu": "80/130/190",
+      "renk_rgb": [
+        80,
+        130,
+        189
+      ],
+      "boyut_mm": 13.29,
+      "yukseklik_mm": 11.26,
+      "lekeler_mm": [
+        13.29
+      ],
+      "kontur_mm": null,
+      "kanit": "resources/msp_icons/kanit/MSP-020.png",
+      "kanit_sha256": "625abfd7a0f1f025 a77d35f406907154 6426417bb97146e4 01d8dcf6e690ede3"
+    },
+    "MSP-021": {
+      "sayfa": 3,
+      "baslik": "TURİZM GELİŞİM ODAK VE KORİDORLARI",
+      "geometri": "POLYGON, POINT",
+      "sekli": "daire",
+      "cizim": "yerli",
+      "dolgu": "dolu",
+      "renk_notu": "250/150/70",
+      "renk_rgb": [
+        249,
+        149,
+        70
+      ],
+      "boyut_mm": 6.18,
+      "yukseklik_mm": 5.84,
+      "lekeler_mm": [
+        5.67
+      ],
+      "kontur_mm": 0.25,
+      "kanit": "resources/msp_icons/kanit/MSP-021.png",
+      "kanit_sha256": "49326af6502399c5 10b41dee422bbd39 6ff0ff23b0060f66 53b05eb32f9d79ba"
+    },
+    "MSP-022": {
+      "sayfa": 3,
+      "baslik": "BÜYÜK ÖLÇEKLİ YATIRIM ALANLARI",
+      "geometri": "POLYGON, POINT",
+      "sekli": "daire_arti",
+      "cizim": "katmanli",
+      "dolgu": "dolu",
+      "renk_notu": "0/160/240",
+      "renk_rgb": [
+        0,
+        159,
+        239
+      ],
+      "boyut_mm": 6.18,
+      "yukseklik_mm": 5.84,
+      "lekeler_mm": [
+        2.75,
+        2.71
+      ],
+      "kontur_mm": null,
+      "kanit": "resources/msp_icons/kanit/MSP-022.png",
+      "kanit_sha256": "2bfdfc67a387d021 77eaa047d2b2ef69 7fd646f4f838b030 39a693fda668f196"
+    },
+    "MSP-023": {
+      "sayfa": 3,
+      "baslik": "DEPOLAMA ALANLARI",
+      "geometri": "POINT",
+      "sekli": "altigen",
+      "cizim": "yerli",
+      "dolgu": "dolu",
+      "renk_notu": "255/160/0",
+      "renk_rgb": [
+        255,
+        160,
+        0
+      ],
+      "boyut_mm": 9.06,
+      "yukseklik_mm": 7.92,
+      "lekeler_mm": [
+        8.42
+      ],
+      "kontur_mm": 0.32,
+      "kanit": "resources/msp_icons/kanit/MSP-023.png",
+      "kanit_sha256": "6751c2dfea052f3c 6138cfb4b4170e32 d1a03002f809dde2 b8f9851a82a3c275"
+    }
+  },
+  "taramalar": {
+    "MSP-024": {
+      "eksen": "nokta",
+      "aci_derece": null,
+      "olculen_aralik_mm": 3.22,
+      "murekkep_rgb": [
+        0,
+        0,
+        0
+      ],
+      "ince_bant_sayisi": [
+        9,
+        5
+      ],
+      "metin_araligi_mm": 5.0,
+      "celiski": true,
+      "kanit": "resources/msp_icons/kanit/MSP-024_tarama.png",
+      "kanit_sha256": "d508d5ee380473e1 e9cc7521e0c3669b a2f8664794552fa4 98fdb795d8d230a8"
+    },
+    "MSP-025": {
+      "eksen": "dikey",
+      "aci_derece": 90.0,
+      "olculen_aralik_mm": 1.6,
+      "murekkep_rgb": [
+        0,
+        0,
+        0
+      ],
+      "ince_bant_sayisi": [
+        17,
+        0
+      ],
+      "metin_araligi_mm": 2.0,
+      "celiski": true,
+      "kanit": "resources/msp_icons/kanit/MSP-025_tarama.png",
+      "kanit_sha256": "a7703b575d67a578 29c31d51360a29ea b4687b5510721cb1 9a9fb324f9c565fa"
+    }
+  }
+}

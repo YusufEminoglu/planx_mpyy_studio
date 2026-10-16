@@ -22,7 +22,7 @@ class ToolDescription:
 # Each row describes the user's task, its prerequisites and its result.
 _GROUPS = {
     'Çalışma alanı ve veri': (
-        ("create_workspace", 'Plan çalışma alanı oluştur', 'Yerel UİP çizim şablonundan ya da MPYY 1.1.7 şemasından taşınabilir bir çalışma alanı üretir.', 'Koordinat sistemi ile çalışma alanı türünü (Yerel UİP veya MPYY kademesi) ve yeni bir GeoPackage dosyası seçin.', 'Katmanları, formları ve gösterimi hazır GeoPackage dosyası.', False),
+        ("create_workspace", 'Plan çalışma alanı oluştur', 'Yerel UİP çizim şablonundan, MPYY 1.1.7 şemasından ya da Ek-1e MSP kataloğundan taşınabilir bir çalışma alanı üretir.', 'Koordinat sistemi ile çalışma alanı türünü (Yerel UİP, MPYY kademesi veya MSP) ve yeni bir GeoPackage dosyası seçin.', 'Katmanları, formları ve gösterimi hazır GeoPackage dosyası.', False),
         ("draw_plan_function", 'Fonksiyon seçerek çiz', 'Ek-1e kataloğundaki plan fonksiyonunu (ör. YERLEŞİK KONUT ALANI) seçtirir; doğru MPYY katmanını düzenlemeye açar, türünü ve kodunu yeni nesnelerin varsayılanı yapar ve çizim aracını başlatır.', 'Yüklü bir MPYY 1.1.7 çalışma alanı ve plan kademesi.', 'Fonksiyonu ve kodu hazır gelen yeni plan nesnesi.', False),
         ("create_land_use_workspace", 'Saha çalışma alanı oluştur', 'Arazi kullanım araştırmalarını plan kararlarından ayrı saklar.', 'Koordinat sistemi ve yeni bir GeoPackage dosyası seçin.', 'Arazi kullanımı ve saha katmanlarını içeren GeoPackage dosyası.'),
         ("ingest_vector_dataset", 'Vektör veri içe aktar', 'Mevcut CBS veya CAD vektörlerini çalışma alanına aktarır.', 'Kaynak vektör katmanı ve hedef GeoPackage katmanı.', 'Aktarılan nesneler ve içe aktarma özeti.'),

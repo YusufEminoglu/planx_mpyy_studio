@@ -22,7 +22,7 @@ No source point code mapping exists. These limitations are not filled by guesses
 
 ## Ministry tarama tiles and annex artwork
 
-Two groups of images in this package come from the Ministry's own published
+Three groups of images in this package come from the Ministry's own published
 material. None of them is this plugin's artwork, none has been redrawn, and for
 none of them has a redistribution term been established — they ship under the
 same unverified `distribution_status` as the copy above. This section records
@@ -46,8 +46,15 @@ transparent and the image trimmed. They replace point symbols the Ministry SLDs
 load from unpublished `TaramaSembol` SVGs or from the unshipped `Intelli Eplan`
 font, which this package does not substitute.
 
-Ek-1e is an annex to the Mekânsal Planlar Yapım Yönetmeliği. Its source file
-name and sha256 digest are recorded in the `source` block of
+**`resources/msp_icons/*.png`** — 21 images cut from **EK-1b Mekânsal Strateji
+Planlar Gösterimleri** by `tools/build_msp_shapes.py`, the same way and to the
+same end: three point symbols the annex draws with a mark QGIS has no native
+shape for (anchor, aeroplane, slotted square), and 18 cropped cells kept as the
+evidence for the measurements the MSP catalogue is compiled from.
+
+Both annexes are annexes to the Mekânsal Planlar Yapım Yönetmeliği. Their source
+file names and sha256 digests are recorded in the `source` block of
+`styles/msp_catalog.json`, `styles/msp_shapes.json` and
 `styles/mpyy_detail_catalog/symbols.json`.
 
 ## Embedded SVG dependencies
