@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.0] - 2026-09-20
+## [1.0.0] - 2026-10-16
 
 İlk kamusal sürüm. Eklenti bugüne kadar hiç yayınlanmadı; sürüm numarası bu
 yayınla 1.0.0 olarak başlıyor. Daha önce yalnızca yerelde kullanılan 2.x
@@ -137,6 +137,13 @@ biçimlendir ve formları düzenle), `database_report` (etkin GeoPackage'ı ince
 | Plan denetimleri | 17 |
 | Plan dosyası ve dayanaklar | 20 |
 | Raporlar ve teslim | 15 |
+
+### Arayüz
+
+- Yeni çalışma paneli: eklenti ikonu, sürüm ve çevrimiçi kılavuz bağlantısı taşıyan bir başlık;
+  planın yapılış sırasıyla beş bölüm (Çalışma, Stil, Denetim, Araçlar, Kayıt); çalışma alanı,
+  fonksiyon seçerek çizim ve saha araştırması tek sayfada numaralı kartlar olarak. QGIS'in açık ve
+  koyu temasına uyar; metinler her iki temada 4,5:1 kontrastı korur.
 
 ### Bilinen sınırlar
 
