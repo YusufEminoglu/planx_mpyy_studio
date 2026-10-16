@@ -145,6 +145,12 @@ biçimlendir ve formları düzenle), `database_report` (etkin GeoPackage'ı ince
   fonksiyon seçerek çizim ve saha araştırması tek sayfada numaralı kartlar olarak. QGIS'in açık ve
   koyu temasına uyar; metinler her iki temada 4,5:1 kontrastı korur.
 
+- **Fonksiyon seçerek çizim her çalışma alanında.** Yerel UİP ve Yerel NİP şablonlarında liste
+  şablonun kendi fonksiyon tablolarından gelir (UİP alanları ve çizgileri, NİP alanları ve yol
+  çizgileri); seçim, şablonun tanımladığı değerleri doldurur ve çizimi başlatır. MPYY 1.1.7
+  çalışma alanında Ek-1e kataloğu sunulur. Liste bir çalışma alanı yüklenince yenilenir; çizilecek
+  katman yoksa hangi çalışma alanının açılacağı açıkça söylenir.
+
 ### Bilinen sınırlar
 
 - Bu sürümden önce üretilmiş yerel çalışma alanları ve kaydedilmiş Processing

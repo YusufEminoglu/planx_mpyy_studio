@@ -77,14 +77,21 @@ class DockActionsMixin:
         from ..core.function_picker import activate, plan_functions
 
         record_id = self.fn_choice.currentData()
-        chosen = next((f for f in plan_functions(self.fn_level.currentData()) if f.record_id == record_id), None)
+        chosen = getattr(self, "_plan_functions", {}).get(record_id) or next(
+            (f for f in plan_functions(self.fn_level.currentData()) if f.record_id == record_id), None)
         if chosen is None:
             self.status.setText('Listeden bir plan fonksiyonu seçin.')
             return None
         try:
             layer = activate(chosen, iface=self.iface)
-        except LookupError as error:
-            self.status.setText(f'{error} Önce bu kademede bir MPYY çalışma alanı açın.')
+        except LookupError:
+            level = self.fn_level.currentText()
+            message = (f'Çizilecek katman yok: önce {level} kademesinde bir çalışma alanı açın '
+                       f'(Yerel {level} şablonu ya da MPYY 1.1.7 şeması).')
+            self.status.setText(message)
+            bar = self.iface.messageBar() if self.iface and hasattr(self.iface, "messageBar") else None
+            if bar is not None:
+                bar.pushWarning("PlanX MPYY Studio", message)
             return None
         self.status.setText(f'{chosen.name}: {chosen.describe()} çizmeye hazır; '
                             f'"{layer.name()}" katmanında yeni nesneler bu değerlerle gelir.')
@@ -140,6 +147,8 @@ class DockActionsMixin:
             self.layer.setLayer(target)
             self.crs.setCrs(target.crs())
             self.status.setText(f'Çalışma alanı başarıyla yüklendi: {len(layers)} katman projeye eklendi.')
+            if hasattr(self, "_refresh_plan_functions"):
+                self._refresh_plan_functions()
 
 
     def open_ingest_tool(self):

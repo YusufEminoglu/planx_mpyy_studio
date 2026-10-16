@@ -36,6 +36,9 @@ class WorkflowFormsMixin:
         btn_fn.clicked.connect(self.draw_plan_function)
         form_fn.addRow(btn_fn)
         self._refresh_plan_functions()
+        project = QgsProject.instance()
+        project.layersAdded.connect(self._on_layers_added)
+        self._ui_connections.append((project.layersAdded, self._on_layers_added))
         self._register_inline_form("draw_plan_function", group_fn)
 
         # Planning workspace group
@@ -86,13 +89,35 @@ class WorkflowFormsMixin:
 
 
     def _refresh_plan_functions(self, *_args):
-        from ..core.function_picker import plan_functions
+        """List what the loaded workspaces can draw at the chosen level.
 
+        A local template (Yerel UİP / NİP) offers its own functions; an MPYY 1.1.7
+        workspace offers the Ek-1e catalogue's. With neither loaded the catalogue
+        is shown, and drawing explains which workspace to open.
+        """
+        from ..core.function_picker import loaded_kinds, local_functions, plan_functions
+
+        level = self.fn_level.currentData()
+        kinds = loaded_kinds()
+        functions = local_functions(level)
+        if kinds["mpyy"] or not functions:
+            functions += plan_functions(level)
+        self._plan_functions = {function.record_id: function for function in functions}
+        current = self.fn_choice.currentData()
+        self.fn_choice.blockSignals(True)
         self.fn_choice.clear()
-        for function in plan_functions(self.fn_level.currentData()):
+        for function in functions:
             self.fn_choice.addItem(function.label, function.record_id)
             self.fn_choice.setItemData(self.fn_choice.count() - 1, function.describe(),
                                        Qt.ItemDataRole.ToolTipRole)
+        index = self.fn_choice.findData(current)
+        self.fn_choice.setCurrentIndex(index if index >= 0 else 0)
+        self.fn_choice.blockSignals(False)
+
+    def _on_layers_added(self, *_args):
+        """A workspace was loaded: offer what it can draw. Synchronous and cheap
+        (one lookup table); removals are left alone, drawing then says what to open."""
+        self._refresh_plan_functions()
 
     def _build_style_form(self):
         group = QGroupBox('Katman stili ve öznitelik formları')
