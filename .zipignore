@@ -1,10 +1,9 @@
 # Developer-only catalog reproduction tools; not runtime dependencies.
 tools
-# Claude Code worktrees and scratch QGIS profiles; a worktree holds a second copy
+# Local editor worktrees and scratch QGIS profiles; a worktree holds a second copy
 # of the plugin, which QGIS would try to load as a plugin of its own.
 .claude
-# Internal working document, not plugin documentation: a handoff addressed to an
-# AI agent. Nothing in the shipped code reads it.
+# Local working notes, not plugin documentation.
 HANDOFF_NEXT_AGENT.md
 # Repository-only content, not part of the installed plugin.
 # Written by tools/generate_reference_manual.py (itself already excluded) and

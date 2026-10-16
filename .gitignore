@@ -3,3 +3,5 @@ __pycache__/
 .pytest_cache/
 .idea/
 test_outputs/
+# Local working notes
+HANDOFF_NEXT_AGENT.md
