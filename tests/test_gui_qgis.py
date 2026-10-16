@@ -106,9 +106,9 @@ class GuiTests(unittest.TestCase):
         actual = {tool.id for tool in self.dock.tools if tool.processing}
         self.assertEqual(actual, described)
         self.assertEqual(len(actual), 86)
-        self.assertEqual(self.dock.tabs.count(), 3)
-        self.assertEqual([self.dock.tabs.tabText(i).replace('&', '') for i in range(3)],
-                         ['Başlangıç', 'Araçlar', 'Kayıt'])
+        self.assertEqual(self.dock.tabs.count(), 5)
+        self.assertEqual([self.dock.tabs.tabText(i).replace('&', '') for i in range(5)],
+                         ['Çalışma', 'Stil', 'Denetim', 'Araçlar', 'Kayıt'])
         self.assertEqual(self.iface.opened, [])
 
     def test_every_inline_form_and_start_target_has_a_tool_description(self):
