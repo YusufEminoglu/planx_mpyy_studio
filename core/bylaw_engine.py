@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import json
 import math
+import re
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -77,7 +78,7 @@ def load_bylaw_profiles(profile_path: str | Path | None = None) -> dict[str, Byl
             raise ValueError('Bilinmeyen belediye profili alanları: ' + ", ".join(sorted(unknown)))
         values = dict(raw_profile)
         code = str(values.get("code", "")).strip().upper()
-        if not code or any(character not in "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_" for character in code):
+        if not re.fullmatch(r"[A-Z0-9_]+", code):
             raise ValueError(f'{index} numaralı belediye profilinin kodu geçersizdir.')
         if code in profiles:
             raise ValueError("Yinelenen belediye profili kodu: " + code)

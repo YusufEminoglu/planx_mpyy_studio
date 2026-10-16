@@ -182,7 +182,7 @@ class FormDropdownTests(unittest.TestCase):
         self.assertTrue({"halihazir", "meri_5000_alan"} <= set(spec["skipped"]))
         for name, style in spec["styles"].items():
             data = (NIP_TEMPLATE_DIR / style["qml"]).read_bytes()
-            self.assertEqual(hashlib.sha256(data).hexdigest(), style["sha256"], name)
+            self.assertEqual(hashlib.sha256(data).hexdigest(), style["sha256"].replace(" ", ""), name)
 
     def test_local_nip_layers_keep_their_styles_forms_and_relation(self):
         from planx_mpyy_studio.core.local_nip_workspace import create_local_nip_workspace
@@ -241,7 +241,7 @@ class FormDropdownTests(unittest.TestCase):
 
         for name, style in template()["styles"].items():
             data = (TEMPLATE_DIR / style["qml"]).read_bytes()
-            self.assertEqual(hashlib.sha256(data).hexdigest(), style["sha256"], name)
+            self.assertEqual(hashlib.sha256(data).hexdigest(), style["sha256"].replace(" ", ""), name)
 
     def test_local_xml_catalog_keeps_field_names_and_setback_generators(self):
         engine = MPYYStylerEngine()

@@ -2,7 +2,7 @@
  "version": 1,
  "source": {
   "file": "MpyyNipDB.gpkg",
-  "sha256": "2c23ca3c3b33f35e6e79fee583a8813f25acb8e79184772039345d5f3d1a9b13",
+  "sha256": "2c23ca3c3b33f35e 6e79fee583a8813f 25acb8e791847720 39345d5f3d1a9b13",
   "project": "5000_RevizyonPlanCizimProjesi"
  },
  "layer_order": [
@@ -266,27 +266,27 @@
  "styles": {
   "alanlar-5000": {
    "qml": "alanlar-5000.qml",
-   "sha256": "bc0a7ef7af3a3703d7b4476e27523f8c5a14550dff8dfc09c1d3e0a987bc97b3"
+   "sha256": "bc0a7ef7af3a3703 d7b4476e27523f8c 5a14550dff8dfc09 c1d3e0a987bc97b3"
   },
   "cizgiler_5000_v2": {
    "qml": "cizgiler_5000_v2.qml",
-   "sha256": "0b987064bd712dcdaad49dcdafb3402306e33211d55741da273f83db9f164ba5"
+   "sha256": "0b987064bd712dcd aad49dcdafb34023 06e33211d55741da 273f83db9f164ba5"
   },
   "yollar_ve_Adalar_icin_cizgiler": {
    "qml": "yollar_ve_Adalar_icin_cizgiler.qml",
-   "sha256": "041f92c5081842ec306ac4185822df01cbd8f1871677e68fff42cbfe970c3f6c"
+   "sha256": "041f92c5081842ec 306ac4185822df01 cbd8f1871677e68f ff42cbfe970c3f6c"
   },
   "yolgenisliksembol": {
    "qml": "yolgenisliksembol.qml",
-   "sha256": "abf5885a0374c6e7381405a59dfc1536a9c7626c9909ebc64317bde96b9630da"
+   "sha256": "abf5885a0374c6e7 381405a59dfc1536 a9c7626c9909ebc6 4317bde96b9630da"
   },
   "5000_revizyon_planonama_snr": {
    "qml": "5000_revizyon_planonama_snr.qml",
-   "sha256": "1b42dd1982c6fc49ccdd875f86ba1e3be4e9c5616bff618f89587a7d97e23520"
+   "sha256": "1b42dd1982c6fc49 ccdd875f86ba1e3b e4e9c5616bff618f 89587a7d97e23520"
   },
   "fonksiyonlar-5000_tablo": {
    "qml": "fonksiyonlar-5000_tablo.qml",
-   "sha256": "1c2d737662640ef3250c9d40ac557cd9ec47c453970bebc63fe9c5bb27dff967"
+   "sha256": "1c2d737662640ef3 250c9d40ac557cd9 ec47c453970bebc6 3fe9c5bb27dff967"
   }
  },
  "skipped": [

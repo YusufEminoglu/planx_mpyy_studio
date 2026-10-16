@@ -266,7 +266,7 @@ class SymbologyGapTests(unittest.TestCase):
         symbols = json.loads((PLUGIN_ROOT / "styles" / "mpyy_detail_catalog" / "symbols.json").read_text(encoding="utf-8"))["symbols"]
         for key, entry in symbols.items():
             data = (PLUGIN_ROOT / entry["file"]).read_bytes()
-            self.assertEqual(hashlib.sha256(data).hexdigest(), entry["sha256"], key)
+            self.assertEqual(hashlib.sha256(data).hexdigest(), entry["sha256"].replace(" ", ""), key)
         cases = (
             ("UIP", "AfetHizmetAlani", "AfetLojistikAlani"),  # TaramaSembol SVG, s.136
             ("UIP", "AcikYesilAlan", "MILLET_BAHCESI"),  # Intelli Eplan glyph, s.137

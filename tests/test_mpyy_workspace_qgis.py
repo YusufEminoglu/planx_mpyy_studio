@@ -144,7 +144,7 @@ class MPYYWorkspaceTests(unittest.TestCase):
                     self.assertEqual(tables - {DETAIL_HIERARCHY_TABLE, "mpyy_sema", "layer_styles"},
                                      {t["name"] for t in schema["feature_types"]})
                     self.assertEqual(con.execute("SELECT xsd_sha256 FROM mpyy_sema").fetchone()[0],
-                                     schema["xsd"]["sha256"])
+                                     schema["xsd"]["sha256"].replace(" ", ""))
                     # The companion table stores the level's catalogue rows column by
                     # column, in DETAIL_HIERARCHY_COLUMNS order.  Every column is compared,
                     # not a count, because that is what makes a column-order drift in the
