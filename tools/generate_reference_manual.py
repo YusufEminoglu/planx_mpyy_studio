@@ -17,12 +17,16 @@ ship to users; only its output does.
 from __future__ import annotations
 
 import html
+import os
 import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "MPYY_REFERENCE_MANUAL.html"
+# The public manual lives in the portal repository (geophilo_project), not
+# in this plugin repository or its Hub zip. GEOPHILO_MANUALS overrides it.
+MANUALS = Path(os.environ.get("GEOPHILO_MANUALS") or ROOT.parents[1] / "geophilo_project" / "_manual_sources") / "planx_mpyy_studio"
+OUT = MANUALS / "MPYY_REFERENCE_MANUAL.html"
 STUB = ROOT / "docs" / "index.html"
 # The stub lives in docs/ while the manual sits in the plugin root, so the link
 # needs one "../". That spelling is correct in all three places the file lands:
@@ -656,6 +660,7 @@ def main() -> int:
 </html>
 """
 
+    OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(document, encoding="utf-8")
 
     STUB.parent.mkdir(parents=True, exist_ok=True)
