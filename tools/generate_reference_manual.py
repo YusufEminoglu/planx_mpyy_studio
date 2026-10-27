@@ -55,7 +55,7 @@ SECTIONS: list[tuple[str, str]] = [
             <tr><th>Sağlayıcı kimliği</th><td><code>planx_mpyy_studio</code></td></tr>
             <tr><th>Hedef QGIS</th><td>3.44 LTR ve 4.x (4.99'a kadar)</td></tr>
             <tr><th>Lisans</th><td>GPL-2.0-or-later</td></tr>
-            <tr><th>Yazar</th><td>Yusuf Eminoğlu</td></tr>
+            <tr><th>Yazar</th><td>Geophilo</td></tr>
             <tr><th>Kapsam</th><td>%(algo_count)s işlem algoritması, %(tool_count)s panel aracı</td></tr>
           </tbody>
         </table>
@@ -341,7 +341,7 @@ SECTIONS: list[tuple[str, str]] = [
         "lisans",
         """
         <h2 id="lisans">Lisans ve atıf</h2>
-        <p><strong>PlanX MPYY Studio</strong> — Yusuf Eminoğlu. Lisans:
+        <p><strong>PlanX MPYY Studio</strong> — Geophilo. Lisans:
         GPL-2.0-or-later.</p>
         <p>Bakanlığın e-Plan şema ve gösterim kaynakları ile üçüncü taraf bileşenlerin
         atıfları eklenti kökündeki <code>THIRD_PARTY_NOTICES.md</code> dosyasındadır.
@@ -646,7 +646,7 @@ def main() -> int:
 {catalogue_section}
 {after}
     <footer>
-      <p>PlanX MPYY Studio {VERSION} · Yusuf Eminoğlu · GPL-2.0-or-later<br>
+      <p>PlanX MPYY Studio {VERSION} · Geophilo · GPL-2.0-or-later<br>
       Bu el kitabı <code>tools/generate_reference_manual.py</code> ile eklentinin kendi
       kataloğundan üretilir; araç listesi elle yazılmaz.</p>
     </footer>

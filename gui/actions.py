@@ -302,11 +302,11 @@ class DockActionsMixin:
                     if field_name:
                         res = self.mpyy_engine.apply(layer, field_name=field_name, plan_level="UIP")
                         self._last_engine = self.mpyy_engine
-                        self.status.setText(f'Yusuf Eminoğlu özgün yerel UİP XML sembolojisi uygulandı ({res.matched} eşleşme).')
+                        self.status.setText(f'Geophilo özgün yerel UİP XML sembolojisi uygulandı ({res.matched} eşleşme).')
                     else:
                         apply_layer_style_and_form(layer)
                         self._last_engine = None
-                        self.status.setText('Yusuf Eminoğlu özgün yerel UİP sembolojisi uygulandı.')
+                        self.status.setText('Geophilo özgün yerel UİP sembolojisi uygulandı.')
             elif level == "YEREL_ARAZI":
                 apply_layer_style_and_form(layer)
                 self._last_engine = None

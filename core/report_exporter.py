@@ -119,7 +119,7 @@ def export_planning_report(
         "<body>",
         "  <div class='container'>",
         f"    <h1>{report_title}</h1>",
-        f"    <div class='meta'>Veri Kaynağı: <code>{db_file.name}</code> &bull; Raporlama Motoru: PlanX MPYY Studio &bull; Yazar: Yusuf Eminoğlu</div>",
+        f"    <div class='meta'>Veri Kaynağı: <code>{db_file.name}</code> &bull; Raporlama Motoru: PlanX MPYY Studio &bull; Yazar: Geophilo</div>",
     ]
 
     if not exported_tables:
@@ -424,7 +424,7 @@ class PlanReportEngine:
                 html.append(f"      <li>{gh}</li>")
             html.append("    </ol>")
 
-        html.append("    <div class='footer'>Raporlama Motoru: <strong>PlanX MPYY Studio</strong> &bull; Yazar: <strong>Yusuf Eminoğlu</strong></div>")
+        html.append("    <div class='footer'>Raporlama Motoru: <strong>PlanX MPYY Studio</strong> &bull; Yazar: <strong>Geophilo</strong></div>")
         html.extend(["  </div>", "</body>", "</html>"])
 
         html_file = out_folder / "plan_aciklama_raporu_kapsamli.html"
@@ -506,7 +506,7 @@ class PlanReportEngine:
         md.extend([
             "",
             "---",
-            '*Rapor üreticisi: PlanX MPYY Studio | Yazar: Yusuf Eminoğlu*',
+            '*Rapor üreticisi: PlanX MPYY Studio | Yazar: Geophilo*',
         ])
 
         md_file = out_folder / "plan_aciklama_raporu.md"

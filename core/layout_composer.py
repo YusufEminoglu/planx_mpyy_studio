@@ -171,7 +171,7 @@ class MPYYLayoutComposer:
         approval_label.setFrameEnabled(True)
         approval_label.setBackgroundEnabled(True)
 
-        approval_html = f"""<div style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 9px; padding: 4px; color: #2c3e50;">\n  <div style="font-weight: bold; text-align: center; border-bottom: 1px solid #bdc3c7; padding-bottom: 2px; margin-bottom: 4px;">BELEDİYE MECLİSİ ONAMA VE TASDİK KUTUSU</div>\n  <div>&bull; Karar Tarihi: .... / .... / 202... &nbsp;&nbsp;&bull; Karar No: ................</div>\n  <div>&bull; İmar Komisyonu Rapor Tarih/No: .......................................</div>\n  <div style="margin-top: 6px; border-top: 1px dashed #d5dbdb; padding-top: 3px;">\n    <strong>Plan Müellifi / Şehir Plancısı:</strong> Yusuf Eminoğlu<br>\n    <span>TMMOB ŞPO Sicil No: ........... &bull; Kaşe / İmza</span>\n  </div>\n</div>"""
+        approval_html = f"""<div style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 9px; padding: 4px; color: #2c3e50;">\n  <div style="font-weight: bold; text-align: center; border-bottom: 1px solid #bdc3c7; padding-bottom: 2px; margin-bottom: 4px;">BELEDİYE MECLİSİ ONAMA VE TASDİK KUTUSU</div>\n  <div>&bull; Karar Tarihi: .... / .... / 202... &nbsp;&nbsp;&bull; Karar No: ................</div>\n  <div>&bull; İmar Komisyonu Rapor Tarih/No: .......................................</div>\n  <div style="margin-top: 6px; border-top: 1px dashed #d5dbdb; padding-top: 3px;">\n    <strong>Plan Müellifi / Şehir Plancısı:</strong> Geophilo<br>\n    <span>TMMOB ŞPO Sicil No: ........... &bull; Kaşe / İmza</span>\n  </div>\n</div>"""
         approval_label.setText(approval_html)
         approval_label.setMode(QgsLayoutItemLabel.ModeHtml)
         layout.addLayoutItem(approval_label)

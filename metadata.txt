@@ -1,10 +1,10 @@
 [general]
-name=PlanX MPYY Studio
+name=MPYY Studio
 qgisMinimumVersion=3.44
 qgisMaximumVersion=4.99
 description=MPYY plan çalışma alanları (UİP, NİP, ÇDP, MSP), Ek-1e resmî gösterimi, fonksiyon seçerek çizim, plan denetimleri ve teslim araçları.
 version=1.0.0
-author=Yusuf Eminoğlu
+author=Geophilo
 email=yusuf.eminoglu@deu.edu.tr
 about=Studio for Turkish spatial planning under the Mekânsal Planlar Yapım Yönetmeliği (MPYY). Portable GeoPackage workspaces for the MPYY 1.1.7 UİP, NİP and ÇDP schemas, the local UİP and NİP drawing templates, a land-use and field-survey workspace, and a Mekânsal Strateji Planı (MSP) workspace built from the Ministry's Ek-1e catalogue with its symbols drawn after Ek-1b. Draw by plan function with the type and codes filled in; attribute forms with value lists and hard bounds; symbology from the Ministry's Ek-1e detail catalogues with the legend trimmed to the values a plan contains; level conversion (UİP to NİP and ÇDP), e-Plan GML import and CAD/NCZ transfer with schema audits; 86 Processing algorithms for plan audits and delivery: amenity standards, plan revision, density, DOP, PAİY, capacity, parking, shelter, urban transformation, plan notes, reports, print layouts and zoning certificates. The bundled symbol fonts are registered when the plugin loads, so no system font installation is needed. Online manual: https://geophilo.com/planx_mpyy_studio/
 homepage=https://geophilo.com/planx_mpyy_studio/

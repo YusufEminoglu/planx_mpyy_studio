@@ -916,7 +916,7 @@ class IntegrationTests(unittest.TestCase):
 
             html_content = Path(res_rep["html_report"]).read_text(encoding="utf-8")
             self.assertIn("Test Açıklama Raporu", html_content)
-            self.assertIn("Yusuf Eminoğlu", html_content)
+            self.assertIn("Geophilo", html_content)
 
             # 3. Algorithm Test
             alg = GenerateComprehensiveReportAlgorithm()
