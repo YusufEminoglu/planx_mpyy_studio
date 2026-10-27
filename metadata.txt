@@ -2,16 +2,19 @@
 name=MPYY Studio
 qgisMinimumVersion=3.44
 qgisMaximumVersion=4.99
-description=MPYY plan çalışma alanları (UİP, NİP, ÇDP, MSP), Ek-1e resmî gösterimi, fonksiyon seçerek çizim, plan denetimleri ve teslim araçları.
+description=Turkish-language studio for plans made under Turkey's Spatial Plans Regulation (MPYY): UİP, NİP, ÇDP and MSP GeoPackage workspaces, official Ek-1e symbology, plan audits and delivery tools.
 version=1.0.0
 author=Geophilo
 email=yusuf.eminoglu@deu.edu.tr
-about=Studio for Turkish spatial planning under the Mekânsal Planlar Yapım Yönetmeliği (MPYY). Portable GeoPackage workspaces for the MPYY 1.1.7 UİP, NİP and ÇDP schemas, the local UİP and NİP drawing templates, a land-use and field-survey workspace, and a Mekânsal Strateji Planı (MSP) workspace built from the Ministry's Ek-1e catalogue with its symbols drawn after Ek-1b. Draw by plan function with the type and codes filled in; attribute forms with value lists and hard bounds; symbology from the Ministry's Ek-1e detail catalogues with the legend trimmed to the values a plan contains; level conversion (UİP to NİP and ÇDP), e-Plan GML import and CAD/NCZ transfer with schema audits; 86 Processing algorithms for plan audits and delivery: amenity standards, plan revision, density, DOP, PAİY, capacity, parking, shelter, urban transformation, plan notes, reports, print layouts and zoning certificates. The bundled symbol fonts are registered when the plugin loads, so no system font installation is needed. Online manual: https://geophilo.com/planx_mpyy_studio/
+about=MPYY Studio, Mekânsal Planlar Yapım Yönetmeliği'ne (MPYY) göre plan üretimini tek bir çalışma alanında toplar. UİP, NİP ve ÇDP için MPYY 1.1.7 şemalarında, yerel UİP ve NİP çizim şablonlarında, arazi kullanımı ve saha etüdü için ve Bakanlığın Ek-1e kataloğundan kurulan Mekânsal Strateji Planı (MSP) için taşınabilir GeoPackage çalışma alanları kurar.
+    Çizerken plan fonksiyonunu seçersiniz; tür ve kodlar kendiliğinden dolar. Öznitelik formları değer listeleri ve sınırlarla gelir. Semboloji Bakanlığın Ek-1e detay kataloglarından uygulanır, lejant yalnızca planda geçen değerlere indirgenir. Kademe dönüşümü (UİP'ten NİP ve ÇDP'ye), e-Plan GML içe aktarma ve CAD/NCZ aktarımı şema denetimiyle yapılır.
+    Processing araçları plan denetimini ve teslimi kapsar: donatı standartları, plan revizyonu, yoğunluk, DOP, PAİY, kapasite, otopark, sığınak, kentsel dönüşüm, plan notları, raporlar, pafta düzenleri ve imar durumu belgeleri. Sembol yazı tipleri eklentiyle gelir ve açılışta kaydedilir; sisteme yazı tipi kurmanız gerekmez. Arayüz Türkçedir.
+    Kılavuz: https://geophilo.com/planx_mpyy_studio/manual.html
 homepage=https://geophilo.com/planx_mpyy_studio/
 repository=https://github.com/YusufEminoglu/planx_mpyy_studio
 tracker=https://github.com/YusufEminoglu/planx_mpyy_studio/issues
 category=Vector
-tags=planx,planning,uip,nip,cdp,msp,mpyy,e-plan,tucbs,symbology,geopackage,turkey
+tags=planx,planning,uip,nip,cdp,msp,mpyy,e-plan,tucbs,symbology,geopackage,turkey,turkish,zoning plan,spatial plan,geophilo
 icon=icons/icon.png
 experimental=False
 deprecated=False
