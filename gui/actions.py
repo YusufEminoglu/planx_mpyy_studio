@@ -358,7 +358,7 @@ class DockActionsMixin:
         try:
             res = execute_layer_crosswalk(src, tgt, fld)
             self.status.setText(
-            f"Fonksiyon eşleştirmesi tamamlandı: Toplam {res['toplam_nesne']} nesne, Otomatik: {res['otomatik_eslesen']}, Şehir Plancısı Onayı Bekleyen: {res['onay_bekleyen']} (ASLA otomatik atanmadı), Tanımsız: {res['tanimsiz']} satır bulundu."
+                f"Fonksiyon eşleştirmesi tamamlandı: Toplam {res['toplam_nesne']} nesne, Otomatik: {res['otomatik_eslesen']}, Şehir Plancısı Onayı Bekleyen: {res['onay_bekleyen']} (ASLA otomatik atanmadı), Tanımsız: {res['tanimsiz']}."
             )
         except Exception as err:
             self.status.setText(f'Fonksiyon eşleştirmesi sırasında hata: {err}')
@@ -370,7 +370,7 @@ class DockActionsMixin:
             green_m2 = float(self.edit_green.text().strip() or 0)
             res = SynthesisEngine.analyze_amenity_deficit(pop, green_m2)
             self.status.setText(
-                f'Donatı Analizi: Nüfus {res.nufus}, Gereken: {res.gerekli_yesil_alan_m2} m², Existing: {res.mevcut_yesil_alan_m2} m² ({res.kisi_basi_mevcut_m2} m²/kişi). Açık: {res.yesil_alan_acigi_m2} m² - Status: {display_label(res.yeterlilik_durumu)} satır bulundu.'
+                f'Donatı Analizi: Nüfus {res.nufus}, Gereken: {res.gerekli_yesil_alan_m2} m², Mevcut: {res.mevcut_yesil_alan_m2} m² ({res.kisi_basi_mevcut_m2} m²/kişi). Açık: {res.yesil_alan_acigi_m2} m² - Durum: {display_label(res.yeterlilik_durumu)}.'
             )
         except Exception as err:
             self.status.setText(f'Hesaplama hatası: {err}')
@@ -626,7 +626,7 @@ class DockActionsMixin:
 
         compliance_str = "UYGUN" if summary.madde_26_uygunlugu else 'UYGUN DEĞİL (Eşdeğer alan yetersiz/eksik)'
         self.status.setText(
-            f'Madde 26 Analizi Tamamlandı: {len(diff_features)} parça incelendi. Kaldırılan Donatı: {summary.kaldirilan_donati_m2:.1f} m², Yeni Donatı: {summary.yeni_eklenen_donati_m2:.1f} m². Mevzuata Uygunluk: {compliance_str} satır bulundu.'
+            f'Madde 26 Analizi Tamamlandı: {len(diff_features)} parça incelendi. Kaldırılan Donatı: {summary.kaldirilan_donati_m2:.1f} m², Yeni Donatı: {summary.yeni_eklenen_donati_m2:.1f} m². Mevzuata Uygunluk: {compliance_str}.'
         )
 
 
@@ -860,7 +860,7 @@ class DockActionsMixin:
         add_localized_layer(comp_layer)
 
         self.status.setText(
-            f'PAİY Denetimi Tamamlandı: {summary.toplam_parsel_sayisi} parsel incelendi. Yapılaşabilir: {summary.yapilasabilir_sayisi}, Tevhit gereken: {summary.tevhid_zorunlu_sayisi}, İfraz Edilebilir: {summary.ifraz_edilebilir_sayisi}, Çekme Yetersiz: {summary.cekme_yetersiz_sayisi}. Overall compliance: %{summary.uygunluk_orani_yuzde:.1f} satır bulundu.'
+            f'PAİY Denetimi Tamamlandı: {summary.toplam_parsel_sayisi} parsel incelendi. Yapılaşabilir: {summary.yapilasabilir_sayisi}, Tevhit gereken: {summary.tevhid_zorunlu_sayisi}, İfraz Edilebilir: {summary.ifraz_edilebilir_sayisi}, Çekme Yetersiz: {summary.cekme_yetersiz_sayisi}. Genel uygunluk: %{summary.uygunluk_orani_yuzde:.1f}.'
         )
 
 

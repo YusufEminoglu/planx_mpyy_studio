@@ -7,6 +7,7 @@ from typing import Any, Iterable
 
 from qgis.core import QgsFeature, QgsGeometry, QgsSpatialIndex, QgsWkbTypes
 
+from .attr_utils import reindex_features
 from .plan_stage_audit import PLAN_LEVELS, PlanStageAuditEngine
 
 
@@ -41,6 +42,8 @@ class PlanHierarchyAuditEngine:
         if not 0.0 < float(minimum_coverage) <= 1.0:
             raise ValueError('En az kapsam oranı sıfırdan büyük ve en çok bir olmalıdır.')
 
+        parent_features = reindex_features(parent_features)
+        child_features = reindex_features(child_features)
         parent_map: dict[int, QgsFeature] = {}
         index = QgsSpatialIndex()
         for parent in parent_features:
@@ -77,7 +80,7 @@ class PlanHierarchyAuditEngine:
             if dominant_parent is None or coverage + 1e-9 < minimum_coverage:
                 records.append(HierarchyAuditRecord(
                     child, child_id, "", coverage, "OUTSIDE",
-                    "Child decision is not sufficiently covered by the upper plan.",
+                    'Alt kademe plan kararı üst plan tarafından yeterli düzeyde kapsanmıyor.',
                 ))
                 continue
 
@@ -93,7 +96,7 @@ class PlanHierarchyAuditEngine:
             } - {""}
             if upper_link and parent_codes and upper_link not in parent_codes:
                 status = "CONFLICT"
-                message = "Explicit upper-group code does not match the dominant upper-plan decision."
+                message = 'Açık üst grup kodu baskın üst plan kararıyla eşleşmiyor.'
             elif not upper_link:
                 status = "UNLINKED"
                 message = 'Mekânsal kapsama geçerli, ancak alt kararın açık ust_grup_kodu bağlantısı yok.'
@@ -107,10 +110,10 @@ class PlanHierarchyAuditEngine:
 
     @staticmethod
     def _measure(geometry: QgsGeometry) -> float:
-        geometry_type = QgsWkbTypes.geometryType(geometry.wkbType())
-        if geometry_type == QgsWkbTypes.GeometryType.PolygonGeometry:
+        geom_type = int(geometry.type())
+        if geom_type == 2:  # Polygon
             return max(0.0, float(geometry.area()))
-        if geometry_type == QgsWkbTypes.GeometryType.LineGeometry:
+        if geom_type == 1:  # Line
             return max(0.0, float(geometry.length()))
         return 1.0 if geometry and not geometry.isEmpty() else 0.0
 

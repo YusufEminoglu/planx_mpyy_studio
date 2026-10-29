@@ -15,17 +15,24 @@ Implements statutory requirements of Turkish Planlı Alanlar İmar Yönetmeliği
 """
 
 from dataclasses import dataclass, field
-import re
 from typing import Any
 from qgis.core import (
     QgsFeature,
     QgsGeometry,
 )
 
+from .attr_utils import (
+    first_float,
+    first_raw,
+    first_text,
+    norm_tr,
+    normalize_nizam_code,
+    parse_floor_count,
+)
+
 
 def _norm(val: Any) -> str:
-    text = str(val or "").strip().upper().translate(str.maketrans("ÇĞİÖŞÜ", "CGIOSU"))
-    return re.sub(r"[^A-Z0-9]+", "_", text).strip("_")
+    return norm_tr(val)
 
 
 @dataclass
@@ -81,32 +88,15 @@ class ComplianceEngine:
 
     @classmethod
     def _extract_text(cls, feat: QgsFeature, preferred_keys: tuple[str, ...]) -> str:
-        fields = feat.fields()
-        for k in preferred_keys:
-            idx = fields.indexFromName(k)
-            if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                return str(feat[idx]).strip()
-        # Case-insensitive fallback
-        lower_map = {f.name().lower(): f.name() for f in fields}
-        for k in preferred_keys:
-            if k.lower() in lower_map:
-                v = feat[lower_map[k.lower()]]
-                if v not in (None, "", "NULL"):
-                    return str(v).strip()
-        return ""
+        return first_text(feat, preferred_keys)
 
     @classmethod
     def _extract_int(cls, feat: QgsFeature, preferred_keys: tuple[str, ...], default: int = 4) -> int:
-        fields = feat.fields()
-        for k in preferred_keys:
-            idx = fields.indexFromName(k)
-            if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                try:
-                    v = int(str(feat[idx]))
-                    if v > 0:
-                        return v
-                except (ValueError, TypeError):
-                    pass
+        raw = first_raw(feat, preferred_keys)
+        if raw is not None:
+            v = parse_floor_count(raw, default=0)
+            if v > 0:
+                return v
         return default
 
     @classmethod
@@ -130,9 +120,13 @@ class ComplianceEngine:
 
         ada_keys = ("ADA", "ada", "ada_no", "block", "ADANO")
         parsel_keys = ("PARSEL", "parsel", "parsel_no", "lot", "PARSELNO")
-        nizam_keys = ("NIZAM", "nizam", "yapi_nizami", "P_NIZAM", "uipnizam")
-        kat_keys = ("KAT", "kat", "kat_adedi", "P_KAT", "bina_kat", "kat_sayisi")
+        nizam_keys = ("NIZAM", "nizam", "YapiDuzeni", "yapi_nizami", "P_NIZAM", "uipnizam")
+        kat_keys = ("KAT", "kat", "KatAdedi", "katadedi", "kat_adedi", "P_KAT", "bina_kat", "kat_sayisi")
+        front_keys = ("OnBahceMesafesi", "onBahce", "onbahce", "on_bahce", "P_CEKME", "yapiYaklasmaMesafesi")
+        side_keys = ("YanBahceMesafesi", "yanBahce", "yanbahce", "yan_bahce")
+        rear_keys = ("ArkaBahceMesafesi", "arkaBahce", "arkabahce", "arka_bahce")
 
+        fallback_nizam = normalize_nizam_code(default_nizam, default="AYRIK")
         total_parcels = 0
         buildable = 0
         tevhid_req = 0
@@ -153,16 +147,9 @@ class ComplianceEngine:
             ada = cls._extract_text(feat, ada_keys) or "-"
             parsel = cls._extract_text(feat, parsel_keys) or str(fid)
 
-            # Determine typology
+            # Determine typology (supports B/BL/İ/A/Bitisik/İkiz/Ayrık across all workspace schemas)
             raw_nizam = cls._extract_text(feat, nizam_keys)
-            norm_n = _norm(raw_nizam)
-            active_nizam = "AYRIK"
-            for k in ("BITISIK", "IKIZ", "BLOK", "SERBEST", "AYRIK"):
-                if k in norm_n:
-                    active_nizam = k
-                    break
-            if not raw_nizam:
-                active_nizam = default_nizam.upper()
+            active_nizam = normalize_nizam_code(raw_nizam, default=fallback_nizam)
 
             floors = cls._extract_int(feat, kat_keys, default=default_floors)
             rule = PAIY_STANDARDS.get(active_nizam, PAIY_STANDARDS["AYRIK"])
@@ -178,19 +165,36 @@ class ComplianceEngine:
 
             # Geometric dimensions using Oriented Bounding Box
             obb_res = geom.orientedMinimumBoundingBox()
-            # obb_res: (geometry, area, angle, width, height)
             dim1 = round(float(obb_res[3]), 2)
             dim2 = round(float(obb_res[4]), 2)
-            # Frontage is usually shorter or longer depending on street orientation;
-            # in plan evaluation, frontage is typically the primary access width (min dimension in regular lots)
             cephe = min(dim1, dim2) if min(dim1, dim2) > 0 else dim1
             derinlik = max(dim1, dim2)
 
+            # Parcel-level setbacks with PAİY Bitişik side-yard exemption
+            raw_front = first_float(feat, front_keys, default=None)
+            raw_side = first_float(feat, side_keys, default=None)
+            raw_rear = first_float(feat, rear_keys, default=None)
+            front_setback = raw_front if (raw_front is not None and raw_front >= 0.0) else default_front_setback_m
+            if raw_side is not None and raw_side >= 0.0:
+                side_setback = raw_side
+            elif active_nizam == "BITISIK":
+                side_setback = 0.0
+            else:
+                side_setback = default_side_setback_m
+            rear_setback = raw_rear if (raw_rear is not None and raw_rear >= 0.0) else default_side_setback_m
+
             # Calculate building envelope with setbacks
-            # Average setback buffer
-            avg_setback = (default_front_setback_m + default_side_setback_m) / 2.0
-            envelope = geom.buffer(-avg_setback, 5)
-            envelope_area = round(envelope.area(), 2) if (envelope and not envelope.isEmpty()) else 0.0
+            if active_nizam == "BITISIK" and side_setback == 0.0:
+                # Attached order has front & rear yards only (no side-yard deduction along party walls)
+                eff_depth_ratio = max(0.0, derinlik - front_setback - rear_setback) / derinlik if derinlik > 0 else 0.0
+                envelope_area = round(area_m2 * eff_depth_ratio, 2)
+            else:
+                if raw_rear is not None and raw_rear >= 0.0:
+                    avg_setback = (front_setback + 2.0 * side_setback + rear_setback) / 4.0
+                else:
+                    avg_setback = (front_setback + side_setback) / 2.0
+                envelope = geom.buffer(-avg_setback, 5) if avg_setback > 0 else geom
+                envelope_area = round(envelope.area(), 2) if (envelope and not envelope.isEmpty()) else 0.0
 
             # Statutory Evaluation
             reasons: list[str] = []
@@ -220,7 +224,7 @@ class ComplianceEngine:
                 durum = "CEKME_YETERSIZ"
                 setback_fail += 1
                 aciklama = (
-                    f'Çekme mesafeleri ({default_front_setback_m}m ön, {default_side_setback_m}m yan) sonrası kalan yapı oturum alanı ({envelope_area:.1f} m² < {min_building_core_m2:.0f} m²) yetersizdir.'
+                    f'Çekme mesafeleri ({front_setback:.1f}m ön, {side_setback:.1f}m yan) sonrası kalan yapı oturum alanı ({envelope_area:.1f} m² < {min_building_core_m2:.0f} m²) yetersizdir.'
                 )
             elif can_subdivide:
                 durum = "IFRAZ_EDILEBILIR"

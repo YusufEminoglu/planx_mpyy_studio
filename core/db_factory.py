@@ -446,8 +446,10 @@ def _create(output_path, crs, tables, kind, levels=()):
                     qml_text = _read_qml(qml_file)
                     if qml_text:
                         con.execute(
-                            """INSERT INTO layer_styles(f_table_name, styleName, styleQML, useAsDefault, description)
-                               VALUES (?, ?, ?, 1, ?)""",
+                            """INSERT INTO layer_styles(
+                                   f_table_catalog, f_table_schema, f_table_name, f_geometry_column,
+                                   styleName, styleQML, useAsDefault, description
+                               ) VALUES ('', '', ?, 'geom', ?, ?, 1, ?)""",
                             (target_layer, target_layer, qml_text, f"{target_layer} saha anket stili"),
                         )
 
@@ -569,9 +571,9 @@ def _create(output_path, crs, tables, kind, levels=()):
 
     finally:
         for item in staging.glob("*"):
-            with contextlib.suppress(Exception):
+            with contextlib.suppress(OSError):
                 item.unlink(missing_ok=True)
-        with contextlib.suppress(Exception):
+        with contextlib.suppress(OSError):
             staging.rmdir()
 
     return str(output)
@@ -582,13 +584,29 @@ def create_land_use_workspace(output_path, crs):
     return _create(output_path, crs, LAND_TABLES, "ARAZI_KULLANIMI", ())
 
 
+def _connect_ro(path) -> sqlite3.Connection:
+    from urllib.request import pathname2url
+
+    resolved = Path(path).resolve()
+    if not resolved.is_file():
+        raise FileNotFoundError(str(resolved))
+    url_path = pathname2url(str(resolved))
+    uri = f"file:{url_path}?mode=ro" if url_path.startswith("/") else f"file:///{url_path}?mode=ro"
+    try:
+        return sqlite3.connect(uri, uri=True)
+    except (sqlite3.OperationalError, sqlite3.DatabaseError, ValueError):
+        return sqlite3.connect(str(resolved))
+
+
 def read_dataset_info(path):
     """Read metadata from a PlanX MPYY GeoPackage."""
-    uri = Path(path).resolve().as_uri() + "?mode=ro"
-    with closing(sqlite3.connect(uri, uri=True)) as con:
-        row = con.execute(
-            "SELECT dataset_id, schema_version, workspace_kind, plan_levels FROM mpyy_metadata"
-        ).fetchone()
+    try:
+        with closing(_connect_ro(path)) as con:
+            row = con.execute(
+                "SELECT dataset_id, schema_version, workspace_kind, plan_levels FROM mpyy_metadata"
+            ).fetchone()
+    except sqlite3.Error as exc:
+        raise ValueError('Geçerli bir MPYY çalışma alanı değil (mpyy_metadata okunamadı)') from exc
     if not row or row[1] != SCHEMA_VERSION:
         raise ValueError('Desteklenmeyen veya geçersiz MPYY şema sürümü')
     uuid.UUID(row[0])
@@ -596,7 +614,7 @@ def read_dataset_info(path):
         "dataset_id": row[0],
         "schema_version": row[1],
         "workspace_kind": row[2],
-        "plan_levels": tuple(filter(None, row[3].split(","))),
+        "plan_levels": tuple(filter(None, (row[3] or "").split(","))),
     }
 
 

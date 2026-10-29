@@ -10,6 +10,8 @@ from typing import Any, Iterable, Mapping
 
 from qgis.core import QgsFeature, QgsGeometry, QgsSpatialIndex
 
+from .attr_utils import linearize_geometry
+
 
 @dataclass(frozen=True)
 class BuildingMorphologyRecord:
@@ -54,17 +56,24 @@ class MPYYBuildingMorphologyEngine:
             long_side = max(width, height)
             short_side = min(width, height)
             shared = 0.0
-            boundary = QgsGeometry(geometry.constGet().boundary())
-            for neighbor_id in index.intersects(geometry.boundingBox()):
-                if neighbor_id == feature.id():
-                    continue
-                neighbor = by_id.get(neighbor_id)
-                if neighbor is None or not geometry.intersects(neighbor.geometry()):
-                    continue
-                other_boundary = QgsGeometry(neighbor.geometry().constGet().boundary())
-                intersection = boundary.intersection(other_boundary)
-                if intersection and not intersection.isEmpty():
-                    shared += intersection.length()
+            bnd = geometry.constGet().boundary()
+            boundary = QgsGeometry(bnd) if bnd is not None else None
+            if boundary and not boundary.isEmpty():
+                for neighbor_id in index.intersects(geometry.boundingBox()):
+                    if neighbor_id == feature.id():
+                        continue
+                    neighbor = by_id.get(neighbor_id)
+                    if neighbor is None or not geometry.intersects(neighbor.geometry()):
+                        continue
+                    n_bnd = neighbor.geometry().constGet().boundary()
+                    if n_bnd is None:
+                        continue
+                    other_boundary = QgsGeometry(n_bnd)
+                    if other_boundary.isEmpty():
+                        continue
+                    intersection = boundary.intersection(other_boundary)
+                    if intersection and not intersection.isEmpty():
+                        shared += intersection.length()
             records.append(BuildingMorphologyRecord(
                 feature, area, perimeter,
                 4.0 * math.pi * area / (perimeter * perimeter) if perimeter > 0 else 0.0,
@@ -192,7 +201,8 @@ class MPYYStreetMorphologyEngine:
             geometry = feature.geometry()
             if not geometry or geometry.isEmpty():
                 continue
-            lines = geometry.asMultiPolyline() if geometry.isMultipart() else [geometry.asPolyline()]
+            geom_lin = linearize_geometry(geometry)
+            lines = geom_lin.asMultiPolyline() if geom_lin.isMultipart() else [geom_lin.asPolyline()]
             for line in lines:
                 for index in range(len(line) - 1):
                     first, second = line[index], line[index + 1]

@@ -7,6 +7,8 @@ from typing import Iterable
 
 from qgis.core import QgsFeature, QgsGeometry, QgsSpatialIndex, QgsWkbTypes
 
+from .attr_utils import reindex_features
+
 
 @dataclass(frozen=True)
 class AdjacentBoundaryRecord:
@@ -36,6 +38,8 @@ class AdjacentBoundaryAuditEngine:
     ) -> list[AdjacentBoundaryRecord]:
         if tolerance <= 0 or not 0.0 < minimum_coverage <= 1.0:
             raise ValueError('Tolerans pozitif, kapsam oranı sıfır ile bir arasında olmalıdır.')
+        reference_features = reindex_features(reference_features)
+        adjacent_features = reindex_features(adjacent_features)
         adjacent_map = {}
         index = QgsSpatialIndex()
         for feature in adjacent_features:
@@ -83,10 +87,10 @@ class AdjacentBoundaryAuditEngine:
                 message = 'Komşu sınır kapsaması, yapılandırılmış asgari değerin altında.'
             elif reference_code and adjacent_code and reference_code != adjacent_code:
                 status = "CODE_CONFLICT"
-                message = "Boundary geometry matches, but adjacent decision codes conflict."
+                message = 'Sınır geometrisi eşleşiyor, ancak bitişik plan kararı kodları çelişiyor.'
             else:
                 status = "MATCH"
-                message = "Adjacent boundary geometry and available decision codes are consistent."
+                message = 'Bitişik plan sınırı geometrisi ve mevcut karar kodları tutarlı.'
             records.append(AdjacentBoundaryRecord(
                 reference, str(candidate.id()), status, distance, matched, coverage,
                 reference_code, adjacent_code, message,
@@ -97,10 +101,10 @@ class AdjacentBoundaryAuditEngine:
     def _line_geometry(geometry: QgsGeometry) -> QgsGeometry | None:
         if not geometry or geometry.isEmpty():
             return None
-        geometry_type = QgsWkbTypes.geometryType(geometry.wkbType())
-        if geometry_type == QgsWkbTypes.GeometryType.PolygonGeometry:
+        geom_type = int(geometry.type())
+        if geom_type == 2:  # Polygon
             return geometry.boundary()
-        if geometry_type == QgsWkbTypes.GeometryType.LineGeometry:
+        if geom_type == 1:  # Line
             return geometry
         return None
 

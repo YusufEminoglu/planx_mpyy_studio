@@ -17,6 +17,17 @@ from qgis.core import (
     QgsVectorLayer,
 )
 
+from .attr_utils import (
+    extract_plan_function,
+    field_index_ci,
+    first_raw,
+    first_text,
+    is_null_value,
+    norm_tr,
+    parse_floor_count,
+    reindex_features_with_map,
+)
+
 
 @dataclass(frozen=True)
 class ParcelSynthesisResult:
@@ -84,19 +95,11 @@ class SynthesisEngine:
                 continue
             intersection = feature_geom.intersection(c_geom)
             if not intersection.isEmpty():
-                fn_val = "TANIMSIZ"
-                c_fields = candidate.fields()
-                if c_fields.indexFromName(function_field) >= 0:
-                    val = candidate[function_field]
-                    if val is not None and str(val).strip():
-                        fn_val = str(val).strip()
-                if fn_val == "TANIMSIZ":
-                    for alt in ("uipfonksiyon", "P_FONK", "B_FONK", "fonksiyon_kodu", "catalog_id"):
-                        if c_fields.indexFromName(alt) >= 0:
-                            val = candidate[alt]
-                            if val is not None and str(val).strip():
-                                fn_val = str(val).strip()
-                                break
+                fn_val = extract_plan_function(
+                    candidate,
+                    extra_keys=(function_field,) if function_field else (),
+                    default="TANIMSIZ",
+                )
                 overlap_by_func[fn_val] = overlap_by_func.get(fn_val, 0.0) + intersection.area()
 
         if not overlap_by_func:
@@ -138,6 +141,10 @@ class SynthesisEngine:
         kat_listesi = []
         riskli_bina = 0
 
+        floor_keys = (floor_field, "B_KAT", "kat_adedi", "KatAdedi", "katadedi", "kat_sayisi", "KAT")
+        cond_keys = (condition_field, "B_HASAR_DURUMU", "B_DURUM", "hasar_durumu", "fiziki_durum", "DURUM")
+        risk_tokens = ("KOTU", "HARAP", "HARABE", "METRUK", "RISKLI", "AGIR", "AGIR_HASARLI", "YIKIK", "ACIL_YIKILACAK", "COKUK")
+
         for b_feat in eval_buildings:
             b_geom = b_feat.geometry()
             # If building center or majority is inside parcel
@@ -146,28 +153,32 @@ class SynthesisEngine:
 
             inter = b_geom.intersection(parcel_geom)
             inter_area = inter.area()
+            b_area = b_geom.area()
             # If at least 40% of building footprint is inside this parcel
-            if b_geom.area() > 0 and (inter_area / b_geom.area()) >= 0.4:
+            if b_area > 0 and (inter_area / b_area) >= 0.4:
                 bina_sayisi += 1
-                footprint = b_geom.area()
+                footprint = b_area if (inter_area / b_area) >= 0.999 else inter_area
                 toplam_taban += footprint
 
-                kat = 1
-                if b_feat.fields().indexFromName(floor_field) >= 0:
-                    raw_kat = b_feat[floor_field]
-                    try:
-                        kat = int(raw_kat) if raw_kat is not None and raw_kat != "" else 1
-                    except (ValueError, TypeError):
-                        kat = 1
-                if kat <= 0:
-                    kat = 1
+                raw_kat = first_raw(b_feat, floor_keys)
+                parsed_kat = parse_floor_count(raw_kat)
+                kat = parsed_kat if (parsed_kat is not None and parsed_kat >= 1) else 1
                 kat_listesi.append(kat)
                 toplam_insaat += footprint * kat
 
-                if b_feat.fields().indexFromName(condition_field) >= 0:
-                    durum = str(b_feat[condition_field] or "").upper()
-                    if durum in ("KÖTÜ", "HARAP", "METRUK", "KOTU", "RISKLI", "AĞIR_HASARLI", "ACİL_YIKILACAK"):
-                        riskli_bina += 1
+                b_fields = b_feat.fields()
+                is_risky = False
+                for ck in cond_keys:
+                    if not ck:
+                        continue
+                    c_idx = field_index_ci(b_fields, ck)
+                    if c_idx >= 0 and not is_null_value(b_feat[c_idx]):
+                        norm_cond = norm_tr(b_feat[c_idx])
+                        if any(tok in norm_cond for tok in risk_tokens):
+                            is_risky = True
+                            break
+                if is_risky:
+                    riskli_bina += 1
 
         hakim_kat = Counter(kat_listesi).most_common(1)[0][0] if kat_listesi else 0
         maks_kat = max(kat_listesi) if kat_listesi else 0
@@ -197,10 +208,11 @@ class SynthesisEngine:
         p_geom = parcel_feature.geometry()
         p_area = p_geom.area() if p_geom else 0.0
 
-        fid = parcel_feature.id()
-        if parcel_feature.fields().indexFromName("PARSEL") >= 0 and parcel_feature["PARSEL"]:
-            ada = parcel_feature["ADA"] if parcel_feature.fields().indexFromName("ADA") >= 0 else ""
-            fid = f"{ada}/{parcel_feature['PARSEL']}" if ada else str(parcel_feature["PARSEL"])
+        fid: str | int = parcel_feature.id()
+        parsel_txt = first_text(parcel_feature, ("PARSEL", "parsel", "parsel_no", "PARSEL_NO"))
+        if parsel_txt:
+            ada_txt = first_text(parcel_feature, ("ADA", "ada", "ada_no", "ADA_NO"))
+            fid = f"{ada_txt}/{parsel_txt}" if ada_txt else parsel_txt
 
         # 1. Majority Overlap
         best_func, ratio = cls.calculate_majority_overlap(
@@ -247,27 +259,25 @@ class SynthesisEngine:
         feedback: Any = None,
     ) -> list[ParcelSynthesisResult]:
         """Perform O(N log M) batch synthesis across all parcels using pre-indexed spatial structures."""
-        # 1. Build spatial index for plan features
+        # 1. Build spatial index for plan features using safe sequential IDs
         plan_idx = QgsSpatialIndex()
         plan_map: dict[int | str, QgsFeature] = {}
-        for idx_p, pf in enumerate(plan_features, start=1):
-            if pf.hasGeometry() and not pf.geometry().isEmpty():
-                fid = pf.id() if pf.id() >= 0 else idx_p
-                if pf.id() < 0:
-                    pf.setId(fid)
-                plan_idx.addFeature(pf)
-                plan_map[fid] = pf
+        indexed_plans, _ = reindex_features_with_map(
+            pf for pf in plan_features if pf.hasGeometry() and not pf.geometry().isEmpty()
+        )
+        for pf in indexed_plans:
+            plan_idx.addFeature(pf)
+            plan_map[pf.id()] = pf
 
-        # 2. Build spatial index for buildings
+        # 2. Build spatial index for buildings using safe sequential IDs
         b_idx = QgsSpatialIndex()
         b_map: dict[int | str, QgsFeature] = {}
-        for idx_b, bf in enumerate(building_features, start=1):
-            if bf.hasGeometry() and not bf.geometry().isEmpty():
-                fid = bf.id() if bf.id() >= 0 else idx_b
-                if bf.id() < 0:
-                    bf.setId(fid)
-                b_idx.addFeature(bf)
-                b_map[fid] = bf
+        indexed_buildings, _ = reindex_features_with_map(
+            bf for bf in building_features if bf.hasGeometry() and not bf.geometry().isEmpty()
+        )
+        for bf in indexed_buildings:
+            b_idx.addFeature(bf)
+            b_map[bf.id()] = bf
 
         results: list[ParcelSynthesisResult] = []
         total = len(parcel_features)
@@ -330,8 +340,8 @@ class SynthesisEngine:
         """Classify and sum areas (m2) of all plan features into statutory MPYY Ek-2 amenity groups."""
         from .plan_diff import classify_amenity_category
 
-        fn_keys = (function_field,) if function_field else ("uipfonksiyon", "fonksiyon_adi", "P_FONK", "B_FONK", "plan_fonk", "catalog_id")
-        grp_keys = ("ustkonugrup", "ust_konu_grup", "ust_grup_adi", "ana_grup")
+        extra_fn = (function_field,) if function_field else ()
+        grp_keys = ("ustkonugrup", "ust_konu_grup", "ust_grup_adi", "ust_grup_kodu", "ana_grup")
 
         display_names = {
             "YESIL": "Açık ve Yeşil Alan",
@@ -351,19 +361,8 @@ class SynthesisEngine:
             if not geom or geom.isEmpty():
                 continue
 
-            fn_val = ""
-            for k in fn_keys:
-                idx = feat.fields().indexFromName(k)
-                if idx >= 0 and feat[idx]:
-                    fn_val = str(feat[idx]).strip()
-                    break
-
-            grp_val = ""
-            for k in grp_keys:
-                idx = feat.fields().indexFromName(k)
-                if idx >= 0 and feat[idx]:
-                    grp_val = str(feat[idx]).strip()
-                    break
+            fn_val = extract_plan_function(feat, extra_keys=extra_fn)
+            grp_val = first_text(feat, grp_keys)
 
             cat_code = classify_amenity_category(fn_val, grp_val)
             if cat_code and cat_code in display_names:

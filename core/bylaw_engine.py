@@ -11,6 +11,8 @@ from typing import Any, Mapping
 
 from qgis.core import QgsFeature
 
+from .attr_utils import is_null_value, parse_float
+
 
 @dataclass(frozen=True)
 class BylawProfile:
@@ -125,7 +127,7 @@ def _validated_bounded_number(value: Any, field_name: str, minimum: float, maxim
     except (TypeError, ValueError) as error:
         raise ValueError(field_name + ' sayısal olmalıdır.') from error
     if not math.isfinite(number) or number < minimum or number > maximum:
-        raise ValueError(field_name + " is outside its permitted range.")
+        raise ValueError(field_name + ' izin verilen aralığın dışındadır.')
     return number
 
 
@@ -248,7 +250,7 @@ class MunicipalBylawEngine:
     def _first_value(data: Mapping[str, Any], names: tuple[str, ...]) -> Any:
         for name in names:
             value = data.get(name.lower())
-            if value not in (None, ""):
+            if not is_null_value(value):
                 return value
         return None
 
@@ -262,11 +264,8 @@ class MunicipalBylawEngine:
         value = cls._first_value(data, names)
         if value is None:
             return None, "MISSING"
-        try:
-            number = float(str(value).replace(",", ' satır bulundu.'))
-        except (TypeError, ValueError):
-            return None, "INVALID"
-        if number != number or number in (float("inf"), float("-inf")):
+        number = parse_float(value)
+        if number is None:
             return None, "INVALID"
         return number, "VALID"
 
@@ -282,7 +281,7 @@ class MunicipalBylawEngine:
         if value + 1e-9 < minimum:
             violations.append(BylawViolation(
                 code, names[0], str(value), str(minimum),
-                f"{names[0]} is below the configured minimum.",
+                f"{names[0]} yapılandırılmış asgari değerin ({minimum}) altındadır.",
             ))
         return 1
 

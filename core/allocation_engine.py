@@ -2,28 +2,23 @@
 
 from __future__ import annotations
 
-import contextlib
 from dataclasses import dataclass, field
 from datetime import datetime
-import re
+import html
 from typing import Any
 
 from qgis.core import (
     QgsFeature,
-    QgsField,
     QgsGeometry,
-    QgsPointXY,
     QgsSpatialIndex,
     QgsVectorLayer,
-    QgsWkbTypes,
 )
-from qgis.PyQt.QtCore import QMetaType
+
+from .attr_utils import clean_text, first_float, first_text
 
 
 def _clean_str(val: Any, default: str = "") -> str:
-    if val is None or str(val).strip() in ("", "NULL", "None"):
-        return default
-    return str(val).strip()
+    return clean_text(val, default=default)
 
 
 @dataclass
@@ -61,12 +56,7 @@ class AllocationEngine:
 
     @classmethod
     def _extract_text(cls, feat: QgsFeature, keys: tuple[str, ...], default: str = "") -> str:
-        fields = feat.fields()
-        for k in keys:
-            idx = fields.indexFromName(k)
-            if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                return str(feat[idx]).strip()
-        return default
+        return first_text(feat, keys, default=default)
 
     @classmethod
     def calculate_allocation_matrix(
@@ -77,6 +67,7 @@ class AllocationEngine:
         feedback: Any = None,
     ) -> AllocationReport:
         """Executes statutory allocation of cadastral holdings to designated zoning parcels."""
+        dop_ratio = max(0.0, min(0.99, float(dop_ratio)))
         report = AllocationReport(dop_orani=round(dop_ratio, 4))
 
         if not cadastral_features or not zoning_parcels:
@@ -85,12 +76,17 @@ class AllocationEngine:
         ada_keys = ("ADA", "ada", "ada_no", "ADA_NO", "k_ada")
         parsel_keys = ("PARSEL", "parsel", "parsel_no", "PARSEL_NO", "k_parsel")
         malik_keys = ("malik", "MALIK", "ad_soyad", "AD_SOYAD", "ad", "sahip")
+        area_keys = ("TAPU_ALANI", "tapu_alani", "alan_m2", "AlanM2", "yuzolcum", "alan", "ALAN")
 
         # 1. Prepare cadastral entitlements
         cad_records: list[dict[str, Any]] = []
         for feat in cadastral_features:
             geom = feat.geometry()
             area_m2 = round(geom.area(), 2) if geom and not geom.isEmpty() else 0.0
+            if area_m2 <= 0.05:
+                attr_area = first_float(feat, area_keys, default=0.0)
+                if attr_area is not None and attr_area > 0.05:
+                    area_m2 = round(attr_area, 2)
             if area_m2 <= 0.05:
                 continue
 
@@ -185,12 +181,20 @@ class AllocationEngine:
                     "tahsis_m2": allocation_amt,
                 })
 
-        # Second attempt: For any remaining unallocated rights, allocate to zoning parcels with remaining capacity
+        # Second attempt: For any remaining unallocated rights, allocate to spatially closest zoning parcels with remaining capacity
         for c_rec in cad_records:
             if c_rec["kalan_hak"] <= 0.01:
                 continue
-
-            for z_rec in zoning_records:
+            c_geom = c_rec["geom"]
+            ordered_z = sorted(
+                zoning_records,
+                key=lambda z: (
+                    c_geom.distance(z["geom"])
+                    if (c_geom and not c_geom.isEmpty() and z["geom"] and not z["geom"].isEmpty())
+                    else 0.0
+                ),
+            )
+            for z_rec in ordered_z:
                 if c_rec["kalan_hak"] <= 0.01:
                     break
                 if z_rec["kalan_kapasite"] <= 0.01:
@@ -209,10 +213,18 @@ class AllocationEngine:
                     "tahsis_m2": allocation_amt,
                 })
 
-        # Fallback: If zoning capacity was completely filled or insufficient, attach remaining share to closest zoning parcel
+        # Fallback: If zoning capacity was completely filled or insufficient, attach remaining share to spatially closest zoning parcel
         for c_rec in cad_records:
             if c_rec["kalan_hak"] > 0.01 and zoning_records:
-                target_z = zoning_records[-1]
+                c_geom = c_rec["geom"]
+                target_z = min(
+                    zoning_records,
+                    key=lambda z: (
+                        c_geom.distance(z["geom"])
+                        if (c_geom and not c_geom.isEmpty() and z["geom"] and not z["geom"].isEmpty())
+                        else 0.0
+                    ),
+                )
                 allocation_amt = c_rec["kalan_hak"]
                 c_rec["kalan_hak"] = 0.0
                 target_z["allocations"].append({
@@ -220,15 +232,17 @@ class AllocationEngine:
                     "tahsis_m2": allocation_amt,
                 })
 
-        # 4. Build output allocation items
+        # 4. Build output allocation items (normalize share denominator so parcel shares never exceed 1.0)
         items: list[AllocationItem] = []
         sira = 1
         for z_rec in zoning_records:
             total_z_area = z_rec["area"]
+            allocated_sum = sum(a["tahsis_m2"] for a in z_rec["allocations"])
+            share_denom = max(total_z_area, allocated_sum)
             for alloc in z_rec["allocations"]:
                 c_rec = alloc["cad_rec"]
                 tahsis_m2 = alloc["tahsis_m2"]
-                hisse = round(tahsis_m2 / total_z_area, 4) if total_z_area > 0 else 1.0
+                hisse = round(tahsis_m2 / share_denom, 4) if share_denom > 0 else 1.0
 
                 item = AllocationItem(
                     sira_no=sira,
@@ -266,7 +280,9 @@ class AllocationEngine:
     @classmethod
     def generate_html_report(cls, report: AllocationReport) -> str:
         """Constructs an official, publication-ready Land Readjustment Allocation Report."""
-        today = datetime.now().strftime("%d.%m.%Y")
+        now = datetime.now()
+        today = now.strftime("%d.%m.%Y")
+        year = now.year
 
         rows = []
         for it in report.items:
@@ -274,19 +290,25 @@ class AllocationEngine:
             rows.append(
                 f"<tr>"
                 f"<td>{it.sira_no}</td>"
-                f"<td><b>{it.kadastro_ada} / {it.kadastro_parsel}</b></td>"
-                f"<td>{it.malik}</td>"
+                f"<td><b>{html.escape(str(it.kadastro_ada))} / {html.escape(str(it.kadastro_parsel))}</b></td>"
+                f"<td>{html.escape(str(it.malik))}</td>"
                 f"<td style='text-align:right;'>{it.kadastro_alan_m2:,.2f}</td>"
                 f"<td style='text-align:right;'>{it.dop_kesinti_m2:,.2f}</td>"
                 f"<td style='text-align:right;'><b>{it.tahsis_hak_m2:,.2f}</b></td>"
-                f"<td style='background:#f0f7ff;'><b>{it.tahsis_imar_ada} / {it.tahsis_imar_parsel}</b></td>"
+                f"<td style='background:#f0f7ff;'><b>{html.escape(str(it.tahsis_imar_ada))} / {html.escape(str(it.tahsis_imar_parsel))}</b></td>"
                 f"<td style='text-align:right; background:#f0f7ff;'><b>{it.tahsis_imar_m2:,.2f}</b></td>"
                 f"<td style='text-align:center;'>{hisse_str}</td>"
                 f"</tr>"
             )
 
-        html = f"""<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<title>İmar Kanunu Madde 18 Parselasyon Dağıtım ve Tahsis Cetveli</title>\n<style>\n  body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 25px; color: #1e293b; background: #fff; }}\n  .header {{ text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 20px; }}\n  .header h2 {{ margin: 0; color: #0f172a; font-size: 18pt; text-transform: uppercase; }}\n  .header h3 {{ margin: 5px 0 0 0; color: #475569; font-size: 13pt; font-weight: normal; }}\n  .summary-grid {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }}\n  .summary-card {{ background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; text-align: center; }}\n  .summary-card .num {{ font-size: 15pt; font-weight: bold; color: #0369a1; }}\n  .summary-card .lbl {{ font-size: 9pt; color: #64748b; margin-top: 4px; }}\n  table {{ width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 9pt; }}\n  th, td {{ border: 1px solid #cbd5e1; padding: 6px 8px; }}\n  th {{ background: #0f172a; color: #fff; font-weight: 600; text-align: center; }}\n  tr:nth-child(even) {{ background: #f8fafc; }}\n  .footer-signatures {{ display: flex; justify-content: space-between; margin-top: 40px; padding: 0 40px; }}\n  .sign-box {{ text-align: center; width: 200px; }}\n  .sign-line {{ border-top: 1px solid #0f172a; margin-top: 45px; padding-top: 5px; font-size: 9pt; }}\n</style>\n</head>\n<body>\n  <div class="header">\n    <h2>T.C. BELEDİYE BAŞKANLIĞI / İMAR VE ŞEHİRCİLİK MÜDÜRLÜĞÜ</h2>\n    <h3>3194 Sayılı İmar Kanunu 18. Madde Uygulaması Dağıtım ve Tahsis Cetveli</h3>\n    <p style="font-size: 9pt; color: #64748b; margin: 4px 0 0 0;">Tanzim Tarihi: {today} | Yasal Dayanak: 3194 s. İmar Kanunu Md. 18 ve İlgili Yönetmelik</p>\n  </div>\n\n  <div class="summary-grid">\n    <div class="summary-card">\n      <div class="num">{report.toplam_kadastro_m2:,.2f} m²</div>\n      <div class="lbl">Toplam Kadastro Alanı</div>\n    </div>\n    <div class="summary-card">\n      <div class="num">{report.dop_orani * 100:.2f} yuzde</div>\n      <div class="lbl">DOP Kesinti Oranı (Azami yuzde 45)</div>\n    </div>\n    <div class="summary-card">\n      <div class="num">{report.toplam_dop_kesinti_m2:,.2f} m²</div>\n      <div class="lbl">Toplam DOP Kesintisi (Kamu Terki)</div>\n    </div>\n    <div class="summary-card">\n      <div class="num">{report.toplam_tahsis_imar_m2:,.2f} m²</div>\n      <div class="lbl">Net Tahsis Edilen İmar Alanı</div>\n    </div>\n  </div>\n\n  <table>\n    <thead>\n      <tr>\n        <th rowspan="2">No.</th>\n        <th colspan="5">GİREN KADASTRO PARSELİ BİLGİLERİ</th>\n        <th colspan="3">ÇIKAN İMAR PARSELİ VE TAHSİS</th>\n      </tr>\n      <tr>\n        <th>Ada / Parsel</th>\n        <th>Taşınmaz Maliki</th>\n        <th>Kadastro Alanı (m²)</th>\n        <th>DOP Kesintisi (m²)</th>\n        <th>Net Hak (m²)</th>\n        <th>İmar Ada / Parsel</th>\n        <th>Planda Ayrılan (m²)</th>\n        <th>Hisse Oranı</th>\n      </tr>\n    </thead>\n    <tbody>\n      {''.join(rows)}\n    </tbody>\n    <tfoot>\n      <tr style="background: #e2e8f0; font-weight: bold;">\n        <td colspan="3" style="text-align:center;">GENEL TOPLAM</td>\n        <td style="text-align:right;">{report.toplam_kadastro_m2:,.2f}</td>\n        <td style="text-align:right;">{report.toplam_dop_kesinti_m2:,.2f}</td>\n        <td style="text-align:right;">{report.toplam_kadastro_m2 - report.toplam_dop_kesinti_m2:,.2f}</td>\n        <td style="text-align:center;">-</td>\n        <td style="text-align:right;">{report.toplam_tahsis_imar_m2:,.2f}</td>\n        <td style="text-align:center;">1.0000</td>\n      </tr>\n    </tfoot>\n  </table>\n\n  <div class="footer-signatures">\n    <div class="sign-box">\n      <p><b>Düzenleyen</b><br>Harita / Şehir Plancısı</p>\n      <div class="sign-line">İmza / Kaşe</div>\n    </div>\n    <div class="sign-box">\n      <p><b>Kontrol Eden</b><br>Harita Şube Müdürü</p>\n      <div class="sign-line">İmza / Mühür</div>\n    </div>\n    <div class="sign-box">\n      <p><b>Onaylayan</b><br>Belediye Encümeni</p>\n      <div class="sign-line">Karar No: ....... / 2026</div>\n    </div>\n  </div>\n</body>\n</html>\n"""
-        return html
+        total_share_display = (
+            f"{min(1.0, report.toplam_tahsis_imar_m2 / report.toplam_imar_parsel_alani_m2):.4f}"
+            if report.toplam_imar_parsel_alani_m2 > 0
+            else "0.0000"
+        )
+
+        html_out = f"""<!DOCTYPE html>\n<html lang="tr">\n<head>\n<meta charset="UTF-8">\n<title>İmar Kanunu Madde 18 Parselasyon Dağıtım ve Tahsis Cetveli</title>\n<style>\n  body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 25px; color: #1e293b; background: #fff; }}\n  .header {{ text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 20px; }}\n  .header h2 {{ margin: 0; color: #0f172a; font-size: 18pt; text-transform: uppercase; }}\n  .header h3 {{ margin: 5px 0 0 0; color: #475569; font-size: 13pt; font-weight: normal; }}\n  .summary-grid {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }}\n  .summary-card {{ background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; text-align: center; }}\n  .summary-card .num {{ font-size: 15pt; font-weight: bold; color: #0369a1; }}\n  .summary-card .lbl {{ font-size: 9pt; color: #64748b; margin-top: 4px; }}\n  table {{ width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 9pt; }}\n  th, td {{ border: 1px solid #cbd5e1; padding: 6px 8px; }}\n  th {{ background: #0f172a; color: #fff; font-weight: 600; text-align: center; }}\n  tr:nth-child(even) {{ background: #f8fafc; }}\n  .footer-signatures {{ display: flex; justify-content: space-between; margin-top: 40px; padding: 0 40px; }}\n  .sign-box {{ text-align: center; width: 200px; }}\n  .sign-line {{ border-top: 1px solid #0f172a; margin-top: 45px; padding-top: 5px; font-size: 9pt; }}\n</style>\n</head>\n<body>\n  <div class="header">\n    <h2>T.C. BELEDİYE BAŞKANLIĞI / İMAR VE ŞEHİRCİLİK MÜDÜRLÜĞÜ</h2>\n    <h3>3194 Sayılı İmar Kanunu 18. Madde Uygulaması Dağıtım ve Tahsis Cetveli</h3>\n    <p style="font-size: 9pt; color: #64748b; margin: 4px 0 0 0;">Tanzim Tarihi: {today} | Yasal Dayanak: 3194 s. İmar Kanunu Md. 18 ve İlgili Yönetmelik</p>\n  </div>\n\n  <div class="summary-grid">\n    <div class="summary-card">\n      <div class="num">{report.toplam_kadastro_m2:,.2f} m²</div>\n      <div class="lbl">Toplam Kadastro Alanı</div>\n    </div>\n    <div class="summary-card">\n      <div class="num">%{report.dop_orani * 100:.2f}</div>\n      <div class="lbl">DOP Kesinti Oranı (Azami %45)</div>\n    </div>\n    <div class="summary-card">\n      <div class="num">{report.toplam_dop_kesinti_m2:,.2f} m²</div>\n      <div class="lbl">Toplam DOP Kesintisi (Kamu Terki)</div>\n    </div>\n    <div class="summary-card">\n      <div class="num">{report.toplam_tahsis_imar_m2:,.2f} m²</div>\n      <div class="lbl">Net Tahsis Edilen İmar Alanı</div>\n    </div>\n  </div>\n\n  <table>\n    <thead>\n      <tr>\n        <th rowspan="2">No.</th>\n        <th colspan="5">GİREN KADASTRO PARSELİ BİLGİLERİ</th>\n        <th colspan="3">ÇIKAN İMAR PARSELİ VE TAHSİS</th>\n      </tr>\n      <tr>\n        <th>Ada / Parsel</th>\n        <th>Taşınmaz Maliki</th>\n        <th>Kadastro Alanı (m²)</th>\n        <th>DOP Kesintisi (m²)</th>\n        <th>Net Hak (m²)</th>\n        <th>İmar Ada / Parsel</th>\n        <th>Planda Ayrılan (m²)</th>\n        <th>Hisse Oranı</th>\n      </tr>\n    </thead>\n    <tbody>\n      {''.join(rows)}\n    </tbody>\n    <tfoot>\n      <tr style="background: #e2e8f0; font-weight: bold;">\n        <td colspan="3" style="text-align:center;">GENEL TOPLAM</td>\n        <td style="text-align:right;">{report.toplam_kadastro_m2:,.2f}</td>\n        <td style="text-align:right;">{report.toplam_dop_kesinti_m2:,.2f}</td>\n        <td style="text-align:right;">{report.toplam_kadastro_m2 - report.toplam_dop_kesinti_m2:,.2f}</td>\n        <td style="text-align:center;">-</td>\n        <td style="text-align:right;">{report.toplam_tahsis_imar_m2:,.2f}</td>\n        <td style="text-align:center;">{total_share_display}</td>\n      </tr>\n    </tfoot>\n  </table>\n\n  <div class="footer-signatures">\n    <div class="sign-box">\n      <p><b>Düzenleyen</b><br>Harita / Şehir Plancısı</p>\n      <div class="sign-line">İmza / Kaşe</div>\n    </div>\n    <div class="sign-box">\n      <p><b>Kontrol Eden</b><br>Harita Şube Müdürü</p>\n      <div class="sign-line">İmza / Mühür</div>\n    </div>\n    <div class="sign-box">\n      <p><b>Onaylayan</b><br>Belediye Encümeni</p>\n      <div class="sign-line">Karar No: ....... / {year}</div>\n    </div>\n  </div>\n</body>\n</html>\n"""
+        return html_out
 
     @classmethod
     def create_allocation_memory_layer(

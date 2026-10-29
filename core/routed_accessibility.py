@@ -9,6 +9,8 @@ from typing import Iterable
 
 from qgis.core import QgsFeature, QgsGeometry, QgsPointXY, QgsSpatialIndex
 
+from .attr_utils import linearize_geometry
+
 
 @dataclass(frozen=True)
 class RoutedAccessibilityRecord:
@@ -85,7 +87,7 @@ class RoutedAccessibilityEngine:
             if snapped is None or snapped[1] > maximum_snap_distance_m:
                 records.append(RoutedAccessibilityRecord(
                     demand, "UNSNAPPED", None, "", snapped[1] if snapped else None,
-                    "Demand feature is outside the maximum network snap distance.",
+                    'Talep nesnesi maksimum ağ yakalama mesafesinin dışındadır.',
                 ))
                 continue
             node, snap_distance = snapped
@@ -102,7 +104,7 @@ class RoutedAccessibilityEngine:
                 demand, status, total_distance, facility_for_node.get(node, ""), snap_distance,
                 'Bir donatıya güzergâh eşiği içinde ulaşılabilmektedir.'
                 if status == "ACCESSIBLE"
-                else "Nearest routed facility exceeds the route threshold.",
+                else 'En yakın erişilebilir donatı güzergâh eşiğini aşmaktadır.',
             ))
         record_tuple = tuple(records)
         return RoutedAccessibilityResult(
@@ -122,7 +124,8 @@ class RoutedAccessibilityEngine:
             geometry = feature.geometry()
             if not geometry or geometry.isEmpty():
                 continue
-            lines = geometry.asMultiPolyline() if geometry.isMultipart() else [geometry.asPolyline()]
+            geom_lin = linearize_geometry(geometry)
+            lines = geom_lin.asMultiPolyline() if geom_lin.isMultipart() else [geom_lin.asPolyline()]
             for line in lines:
                 for index in range(len(line) - 1):
                     first, second = line[index], line[index + 1]

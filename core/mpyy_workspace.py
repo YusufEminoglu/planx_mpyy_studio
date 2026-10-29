@@ -43,8 +43,9 @@ from qgis.core import (
 )
 from qgis.PyQt.QtGui import QColor, QFont
 
-from .schema import SCHEMA_VERSION
+from .attr_utils import is_null_value
 from .legend_scope import limit_to_present, watch as watch_legend
+from .schema import SCHEMA_VERSION
 
 gdal.UseExceptions()
 
@@ -304,11 +305,28 @@ def _store_default_forms(path, schema):
         del layer
 
 
+def _connect_ro(path):
+    """Open an existing GeoPackage read-only safely across UNC, `#`, `?`, `%` paths."""
+    from urllib.parse import quote
+
+    resolved = Path(path).resolve()
+    if not resolved.is_file():
+        raise FileNotFoundError(str(resolved))
+    posix = resolved.as_posix()
+    if not posix.startswith("//"):
+        with contextlib.suppress(sqlite3.OperationalError):
+            return sqlite3.connect(f"file:{quote(posix, safe='/:')}?mode=ro", uri=True)
+    return sqlite3.connect(str(resolved))
+
+
 def load_mpyy_layers(path, project=None, dataset_id=None, level=None):
     project = project or QgsProject.instance()
     if level is None:
-        with closing(sqlite3.connect(f"file:{Path(path).resolve().as_posix()}?mode=ro", uri=True)) as con:
-            level = con.execute("SELECT plan_kademesi FROM mpyy_sema").fetchone()[0]
+        with closing(_connect_ro(path)) as con:
+            row = con.execute("SELECT plan_kademesi FROM mpyy_sema").fetchone()
+            if not row:
+                raise ValueError("mpyy_sema tablosunda plan_kademesi kaydı bulunamadı.")
+            level = row[0]
     schema = level_schema(level)
     gpkg = str(Path(path).resolve())
     root = project.layerTreeRoot()
@@ -343,7 +361,7 @@ def load_mpyy_layers(path, project=None, dataset_id=None, level=None):
             project.addMapLayer(layer, False)
             group.addLayer(layer)
             loaded.append(layer)
-    with closing(sqlite3.connect(f"file:{Path(path).resolve().as_posix()}?mode=ro", uri=True)) as con:
+    with closing(_connect_ro(path)) as con:
         has_catalog = con.execute(
             "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (DETAIL_HIERARCHY_TABLE,)
         ).fetchone() is not None
@@ -376,7 +394,7 @@ def audit_required_fields(layers):
         for feature in layer.getFeatures():
             for field in required:
                 value = feature[field]
-                if value is None or value == "" or (hasattr(value, "isNull") and value.isNull()):
+                if is_null_value(value):
                     missing[field] = missing.get(field, 0) + 1
         if missing:
             report[layer.name()] = missing
@@ -404,7 +422,9 @@ def _sld_graphics(sld_text, line_layer=False):
     from qgis.PyQt.QtXml import QDomDocument
 
     doc = QDomDocument()
-    doc.setContent(sld_text, True)  # namespace aware
+    parsed = doc.setContent(sld_text, True)  # namespace aware
+    if not (parsed[0] if isinstance(parsed, tuple) else parsed):
+        return []
     sld = "http://www.opengis.net/sld"
     rules = []
     rule_nodes = doc.elementsByTagNameNS(sld, "Rule")
@@ -451,7 +471,9 @@ def _sld_field_widths(sld_text):
     from qgis.PyQt.QtXml import QDomDocument
 
     doc = QDomDocument()
-    doc.setContent(sld_text, True)
+    parsed = doc.setContent(sld_text, True)
+    if not (parsed[0] if isinstance(parsed, tuple) else parsed):
+        return []
     sld, ogc = "http://www.opengis.net/sld", "http://www.opengis.net/ogc"
     found = []
     rules = doc.elementsByTagNameNS(sld, "Rule")
@@ -634,12 +656,13 @@ def apply_eplan_symbology(layer, level, type_name, centre_sizes=True):
     renderer = layer.renderer()
     if isinstance(renderer, QgsRuleBasedRenderer):
         root = renderer.rootRule()
-        symbols = [rule.symbol() for rule in root.children()]
+        symbols = [rule.symbol().clone() if rule.symbol() is not None else None for rule in root.children()]
         labels = [rule.label() for rule in root.children()]
         setters = [rule.setSymbol for rule in root.children()]
     else:
         # A single rule without a filter (ManiaSiniri, CDP StratejikKarar ...) comes in as a single symbol.
-        root, symbols = None, [renderer.symbol()] if hasattr(renderer, "symbol") else []
+        root = None
+        symbols = [renderer.symbol().clone()] if hasattr(renderer, "symbol") and renderer.symbol() is not None else []
         labels = ["*"] * len(symbols)
         setters = [renderer.setSymbol] * len(symbols)
     for symbol in symbols:
@@ -661,7 +684,11 @@ def apply_eplan_symbology(layer, level, type_name, centre_sizes=True):
                     continue
                 index = path[-1]
                 old = _owner_of(symbol, path).symbolLayer(index)
-                family, character, color = mark["font"][0], mark["font"][1], old.color()
+                old_size = old.size()
+                old_unit = old.sizeUnit()
+                old_angle = old.angle()
+                old_color = QColor(old.color())
+                family, character, color = mark["font"][0], mark["font"][1], old_color
                 # The Ek-1e catalog is the authority, so its symbol of the same item replaces the
                 # SLD's own glyph wherever one is registered. That is the only repair for a family
                 # the Ministry never shipped (Intelli Eplan) and for their 0x003f "we never mapped
@@ -672,7 +699,7 @@ def apply_eplan_symbology(layer, level, type_name, centre_sizes=True):
                 # arboretum trees, uygulama_imar_07_2 a "KSM" box, UIP_10_2 a beach parasol. With
                 # no catalog symbol registered the glyph is drawn as it stands, never greyed out.
                 if (family not in families or character == "?") and symbol_for_glyph(family, character):
-                    replacement = raster_marker(symbol_for_glyph(family, character), old.size(), old.sizeUnit(), old.angle())
+                    replacement = raster_marker(symbol_for_glyph(family, character), old_size, old_unit, old_angle)
                     _owner_of(symbol, path).changeSymbolLayer(index, replacement)
                     continue
                 if family not in families:
@@ -683,18 +710,18 @@ def apply_eplan_symbology(layer, level, type_name, centre_sizes=True):
                         # another font would draw a wrong symbol, so mark the gap instead.
                         missing.setdefault(label, set()).add(family)
                         family, character, color = "DejaVu Sans", "?", QColor("#8a8f96")
-                font = QgsFontMarkerSymbolLayer(family, character, old.size(), color, old.angle())
-                font.setSizeUnit(old.sizeUnit())
+                font = QgsFontMarkerSymbolLayer(family, character, old_size, color, old_angle)
+                font.setSizeUnit(old_unit)
                 font.setStrokeWidth(0)
                 font.setStrokeColor(QColor(0, 0, 0, 0))
                 _owner_of(symbol, path).changeSymbolLayer(index, font)
         sized = _sized_symbol(symbol, rule_marks)
         if sized is not None:
-            setter(sized)
             symbol = sized
         _embed_images(symbol)
         if rule_index < len(field_widths) and field_widths[rule_index]:
             _apply_field_width(symbol, *field_widths[rule_index])
+        setter(symbol)
 
     applied, redrawn, border_text, line_text = apply_catalog_overrides(layer, level, type_name)
     from .mpyy_detail_catalog import catalog_labels
@@ -723,7 +750,9 @@ def apply_eplan_symbology(layer, level, type_name, centre_sizes=True):
     if level == "UIP" and type_name == "BuyuksehirSiniri" and root is not None:
         for rule in root.children():
             if rule.label() == "UIP_BUYUKSEHIR_SINIRI" and rule.symbol() is not None:
-                _restore_source_ground_units(rule.symbol())
+                sym_clone = rule.symbol().clone()
+                _restore_source_ground_units(sym_clone)
+                rule.setSymbol(sym_clone)
     _combine_catalog_rules(layer, type_name)
     from .mpyy_detail_hierarchy import apply_renderer_hierarchy
 
@@ -1017,11 +1046,13 @@ def _mark_missing_svg_symbols(symbol):
         path = str(layer.path() if hasattr(layer, "path") else "")
         name = path.split(MISSING_SYMBOL_PLACEHOLDER, 1)[-1].rsplit("/", 1)[-1]
         if (MISSING_SYMBOL_PLACEHOLDER in path or "TaramaSembol" in path) and symbol_for_svg(name):
-            symbol.changeSymbolLayer(index, raster_marker(symbol_for_svg(name), layer.size(), layer.sizeUnit(), layer.angle()))
+            old_size, old_unit, old_angle = layer.size(), layer.sizeUnit(), layer.angle()
+            symbol.changeSymbolLayer(index, raster_marker(symbol_for_svg(name), old_size, old_unit, old_angle))
             continue
         if MISSING_SYMBOL_PLACEHOLDER in path or "TaramaSembol" in path:
-            gap = QgsFontMarkerSymbolLayer("DejaVu Sans", "?", layer.size(), QColor("#8a8f96"), layer.angle())
-            gap.setSizeUnit(layer.sizeUnit())
+            old_size, old_unit, old_angle = layer.size(), layer.sizeUnit(), layer.angle()
+            gap = QgsFontMarkerSymbolLayer("DejaVu Sans", "?", old_size, QColor("#8a8f96"), old_angle)
+            gap.setSizeUnit(old_unit)
             symbol.changeSymbolLayer(index, gap)  # deletes ``layer``; do not touch it afterwards
             found = True
             continue

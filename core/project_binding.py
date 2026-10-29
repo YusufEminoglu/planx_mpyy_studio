@@ -19,7 +19,12 @@ from .fonts import register_mpyy_fonts
 from .localization import configure_localized_layer
 from .mpyy_workspace import KIND as MPYY_XSD_KIND, load_mpyy_layers
 from .msp_workspace import KIND as MSP_EK1E_KIND, load_msp_layers
-from .local_nip_workspace import KIND as LOCAL_NIP_KIND, load_local_nip_layers
+from .local_nip_workspace import (
+    KIND as LOCAL_NIP_KIND,
+    import_template_style as import_nip_template_style,
+    load_local_nip_layers,
+    template as nip_template,
+)
 from .local_uip_workspace import (
     KIND as LOCAL_UIP_KIND,
     bind_function_relation,
@@ -80,6 +85,11 @@ def apply_layer_style_and_form(layer: QgsVectorLayer) -> None:
         import_template_style(layer, template_table)
         return
 
+    # 1b. NIP layers use the frozen MpyyNipDB drawing template
+    if name in nip_template()["styles"]:
+        import_nip_template_style(layer, name)
+        return
+
     # 2. Arazi Kullanımı Layers
     arazi_qmls = {
         "parsel_saha": fdir / "arazi" / "01_parsel_saha.qml",
@@ -89,9 +99,10 @@ def apply_layer_style_and_form(layer: QgsVectorLayer) -> None:
         "yol_saha": fdir / "arazi" / "05_yol_saha.qml",
     }
     if name in arazi_qmls and arazi_qmls[name].exists():
-        layer.loadNamedStyle(str(arazi_qmls[name]))
-        layer.setCustomProperty("mpyy/form", f"Saha Anket Formu: {name}")
-        layer.triggerRepaint()
+        _msg, ok = layer.loadNamedStyle(str(arazi_qmls[name]))
+        if ok:
+            layer.setCustomProperty("mpyy/form", f"Saha Anket Formu: {name}")
+            layer.triggerRepaint()
 
 
 def setup_project_relations(project: QgsProject) -> None:
@@ -120,16 +131,21 @@ def setup_project_relations(project: QgsProject) -> None:
 
     if cizgi_layer and line_table_layer and cizgi_layer.isValid() and line_table_layer.isValid():
         line_rel_id = "uipLine_uipfonksiyon_uipLine_uip_fonksiyon"
-        existing_line = project.relationManager().relation(line_rel_id)
-        if not existing_line.isValid():
-            rel_c = QgsRelation()
-            rel_c.setId(line_rel_id)
-            rel_c.setName('UİP Çizgi ve Yol Platformu Hiyerarşisi')
-            rel_c.setReferencingLayer(cizgi_layer.id())
-            rel_c.setReferencedLayer(line_table_layer.id())
-            rel_c.addFieldPair("uipfonksiyon", "uip_fonksiyon")
-            if rel_c.isValid():
-                project.relationManager().addRelation(rel_c)
+        bind_function_relation(
+            project,
+            cizgi_layer,
+            line_table_layer,
+            {"uipfonksiyon": "uip_fonksiyon"},
+            line_rel_id,
+        )
+
+    # Connect Yerel NİP relations (alanlar-5000 -> fonksiyonlar-5000_tablo) if present
+    by_name = {lyr.name(): lyr for lyr in project.mapLayers().values() if lyr.isValid()}
+    for rel in nip_template().get("relations", ()):
+        referencing = by_name.get(rel["referencing"])
+        referenced = by_name.get(rel["referenced"])
+        if referencing is not None and referenced is not None:
+            bind_function_relation(project, referencing, referenced, rel["pairs"], rel["id"])
 
 
     # Connect parsel_saha and yapi_saha if both exist in project
@@ -167,7 +183,8 @@ def load_project_layers(path: str | Path, project: QgsProject | None = None) -> 
     if kind == LOCAL_NIP_KIND:
         return load_local_nip_layers(path, project, dataset_id)
     if kind == MPYY_XSD_KIND:
-        return load_mpyy_layers(path, project, dataset_id, info["plan_levels"][0])
+        levels = info.get("plan_levels") or ()
+        return load_mpyy_layers(path, project, dataset_id, levels[0] if levels else None)
     if kind == MSP_EK1E_KIND:
         return load_msp_layers(path, project, dataset_id)
 

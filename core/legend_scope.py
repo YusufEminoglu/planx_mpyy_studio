@@ -20,6 +20,9 @@ the edits are saved.
 from __future__ import annotations
 
 import base64
+import binascii
+import contextlib
+import weakref
 import zlib
 
 from qgis.core import (
@@ -31,6 +34,8 @@ from qgis.core import (
     QgsRuleBasedRenderer,
 )
 from qgis.PyQt.QtXml import QDomDocument
+
+from .attr_utils import is_null_value
 
 FULL_PROPERTY = "mpyy/legend_full_renderer"
 MODE_PROPERTY = "mpyy/legend"            # "mevcut" when trimmed, "tam" when full
@@ -46,7 +51,13 @@ def _encode(renderer) -> str:
 
 def _decode(text: str):
     doc = QDomDocument()
-    doc.setContent(zlib.decompress(base64.b64decode(text)).decode("utf-8"))
+    try:
+        xml_text = zlib.decompress(base64.b64decode(text)).decode("utf-8")
+    except (ValueError, zlib.error, binascii.Error, UnicodeDecodeError):
+        return None
+    parsed = doc.setContent(xml_text)
+    if not (parsed[0] if isinstance(parsed, tuple) else parsed):
+        return None
     return QgsFeatureRenderer.load(doc.documentElement(), QgsReadWriteContext())
 
 
@@ -79,7 +90,7 @@ def _used_values(layer, attribute: str) -> set[str]:
     for feature in layer.getFeatures(QgsFeatureRequest().setFlags(QgsFeatureRequest.Flag.NoGeometry)):
         context.setFeature(feature)
         value = expression.evaluate(context)
-        values.add("" if value is None or str(value) == "NULL" else str(value))
+        values.add("" if is_null_value(value) else str(value))
     return values
 
 
@@ -134,11 +145,16 @@ def limit_to_present(layer) -> tuple[int, int]:
     elif isinstance(trimmed, QgsCategorizedSymbolRenderer):
         total = len(trimmed.categories())
         values = _used_values(layer, trimmed.classAttribute())
-        known = {str(c.value()) for c in trimmed.categories() if str(c.value()) not in ("", "NULL")}
+        known = {
+            str(c.value())
+            for c in trimmed.categories()
+            if not is_null_value(c.value())
+        }
         unmatched = any(v not in known for v in values)
         for index in reversed(range(total)):
-            value = str(trimmed.categories()[index].value())
-            if value in ("", "NULL"):
+            cat_raw = trimmed.categories()[index].value()
+            value = "" if is_null_value(cat_raw) else str(cat_raw)
+            if value == "":
                 keep = unmatched          # the "all other values" category
             else:
                 keep = value in values
@@ -172,7 +188,21 @@ def watch(layer) -> None:
     if layer_id in _WATCHED:
         return
     _WATCHED.add(layer_id)
-    layer.editingStarted.connect(lambda: show_full(layer))
-    layer.editingStopped.connect(lambda: limit_to_present(layer))
+    layer_ref = weakref.ref(layer)
+
+    def _on_start() -> None:
+        target = layer_ref()
+        if target is not None:
+            with contextlib.suppress(RuntimeError):
+                show_full(target)
+
+    def _on_stop() -> None:
+        target = layer_ref()
+        if target is not None:
+            with contextlib.suppress(RuntimeError):
+                limit_to_present(target)
+
+    layer.editingStarted.connect(_on_start)
+    layer.editingStopped.connect(_on_stop)
     # The id is captured now: a layer being deleted must not be called back into.
     layer.willBeDeleted.connect(lambda: _WATCHED.discard(layer_id))

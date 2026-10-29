@@ -26,6 +26,26 @@ TEMPLATE_DIR = Path(__file__).resolve().parents[1] / "forms" / "yerel_nip"
 GROUP_NAME = "Yerel NİP (MpyyNipDB şablonu)"
 STYLE_NAME = "MpyyNipDB çizim şablonu"
 
+_STALE_AUTHORING_IDS = {
+    "alanlar_5000_036a85d6_1692_4ff4_a30f_a9f24e60068f": "alanlar-5000",
+    "cizgiler_5000_v2_a86154de_7425_4232_a5be_f10abd851137": "cizgiler_5000_v2",
+    "fonksiyonlar_5000_tablo_9eb58dc6_fc07_4e4c_b15b_cf0ffd2c07b5": "fonksiyonlar-5000_tablo",
+}
+
+
+def _normalize_nip_qml(text: str, rename_layers: dict | None = None) -> str:
+    """Rewrite authoring-time layer UUIDs in memory while keeping disk QML hashes intact."""
+    for old_id, canonical_name in _STALE_AUTHORING_IDS.items():
+        text = text.replace(f"'{old_id}'", f"'{canonical_name}'")
+    # Ensure aggregate filters match both trimmed and trailing-space lookup value for Çok Yüksek
+    text = text.replace(
+        "'GELİŞME KONUT ALANI (ÇOK YÜKSEK)', 'MEVCUT KONUT ALANI",
+        "'GELİŞME KONUT ALANI (ÇOK YÜKSEK)', 'GELİŞME KONUT ALANI (ÇOK YÜKSEK) ', 'MEVCUT KONUT ALANI",
+    )
+    for old, new in (rename_layers or {}).items():
+        text = text.replace(f"'{old}'", f"'{new}'")
+    return text
+
 
 def template():
     return json.loads((TEMPLATE_DIR / "template.json").read_text(encoding="utf-8"))
@@ -96,6 +116,9 @@ def create_local_nip_workspace(output_path, crs):
             )
             for table in spec["tables"]:
                 name = table["table"]
+                qml_text = _normalize_nip_qml(
+                    (TEMPLATE_DIR / spec["styles"][name]["qml"]).read_text(encoding="utf-8")
+                )
                 con.execute(
                     "INSERT INTO layer_styles(f_table_catalog, f_table_schema, f_table_name, f_geometry_column, "
                     "styleName, styleQML, useAsDefault, description) VALUES ('', '', ?, ?, ?, ?, 1, ?)",
@@ -103,7 +126,7 @@ def create_local_nip_workspace(output_path, crs):
                         name,
                         "geom" if table["geometry"] else "",
                         name,
-                        (TEMPLATE_DIR / spec["styles"][name]["qml"]).read_text(encoding="utf-8"),
+                        qml_text,
                         STYLE_NAME,
                     ),
                 )
@@ -120,11 +143,17 @@ def create_local_nip_workspace(output_path, crs):
     return str(output)
 
 
-def import_template_style(layer, template_table):
+def import_template_style(layer, template_table, rename_layers=None):
     """Apply one frozen MpyyNipDB layer definition to ``layer``."""
     spec = template()["styles"][template_table]
+    text = _normalize_nip_qml(
+        (TEMPLATE_DIR / spec["qml"]).read_text(encoding="utf-8"),
+        rename_layers=rename_layers,
+    )
     document = QDomDocument("qgis")
-    document.setContent((TEMPLATE_DIR / spec["qml"]).read_text(encoding="utf-8"))
+    parsed = document.setContent(text)
+    if not (parsed[0] if isinstance(parsed, tuple) else parsed):
+        raise ValueError(f"{template_table}: QML şablonu ayrıştırılamadı.")
     ok, message = layer.importNamedStyle(document)
     if not ok:
         raise RuntimeError(f"{layer.name()}: {message}")
@@ -146,6 +175,7 @@ def load_local_nip_layers(path, project=None, dataset_id=None):
         if not layer.isValid():
             raise RuntimeError('Katman açılamadı: ' + name)
         import_template_style(layer, name)
+        layer.setCustomProperty("mpyy/workspace_kind", KIND)
         if dataset_id:
             layer.setCustomProperty("mpyy/dataset_id", dataset_id)
         project.addMapLayer(layer, False)

@@ -28,6 +28,8 @@ from qgis.core import (
     QgsVectorLayer,
 )
 
+from .attr_utils import clean_text, is_null_value, lower_tr
+
 
 @dataclass
 class AtlasExportResult:
@@ -57,6 +59,16 @@ def _distance_meters() -> Any:
     if unit is None and hasattr(QgsUnitTypes, "DistanceUnit"):
         unit = getattr(QgsUnitTypes.DistanceUnit, "Meters", None)
     return unit
+
+
+def _label_html_mode() -> Any:
+    mode_ns = getattr(QgsLayoutItemLabel, "Mode", QgsLayoutItemLabel)
+    return getattr(mode_ns, "ModeHtml", getattr(QgsLayoutItemLabel, "ModeHtml", 1))
+
+
+def _export_success_code() -> Any:
+    res_ns = getattr(QgsLayoutExporter, "ExportResult", QgsLayoutExporter)
+    return getattr(res_ns, "Success")
 
 
 class OfficialPrintAtlasEngine:
@@ -110,21 +122,21 @@ class OfficialPrintAtlasEngine:
         y = margin
         cls._add_html_label(
             layout, x, y, side_width, 34.0,
-            f"<b>{html.escape(str(municipality))}</b><br>PLANNING AND URBAN DEVELOPMENT DIRECTORATE"
-            f"<br><b>OFFICIAL ZONING STATUS / PARCEL ATLAS</b>", mm,
+            f"<b>{html.escape(str(municipality))}</b><br>İMAR VE ŞEHİRCİLİK MÜDÜRLÜĞÜ"
+            f"<br><b>RESMİ İMAR DURUMU / PARSEL ATLASI</b>", mm,
         )
         y += 38.0
 
         fields = cls._feature_values(feature)
         attribute_rows = [
-            ("Block / Parcel", cls._pick(fields, "ada", "ada_no") + " / " + cls._pick(fields, "parsel", "parsel_no")),
-            ("Area", f"{geometry.area():,.2f} m2"),
-            ("KAKS / TAKS", cls._pick(fields, "kaks", "emsal") + " / " + cls._pick(fields, "taks")),
-            ("Hmax", cls._pick(fields, "yencok", "hmax")),
-            ("Setbacks", cls._setback_text(fields)),
-            ("CRS", layer.crs().authid() or layer.crs().description()),
-            ("Approx. scale", "1:" + f"{max(1, round(map_item.scale())):,}"),
-            ("Document No", document_number),
+            ("Ada / Parsel", (cls._pick(fields, "ada", "ada_no", "adano") or "-") + " / " + (cls._pick(fields, "parsel", "parsel_no", "parselno") or "-")),
+            ("Alan", f"{geometry.area():,.2f} m²"),
+            ("KAKS / TAKS", (cls._pick(fields, "kaks", "emsal", "emsalkaks", "p_kaks", "p_emsal") or "-") + " / " + (cls._pick(fields, "taks", "p_taks") or "-")),
+            ("Yençok / Kat", cls._pick(fields, "yencok", "hmax", "yukseklik", "katadedi", "kat_adedi", "p_kat") or "-"),
+            ("Çekme Mesafeleri", cls._setback_text(fields)),
+            ("KRS", layer.crs().authid() or layer.crs().description()),
+            ("Yaklaşık Ölçek", "1:" + f"{max(1, round(map_item.scale())):,}"),
+            ("Belge No", document_number),
         ]
         rows = "".join(
             f"<tr><td><b>{html.escape(str(name))}</b></td>"
@@ -135,7 +147,7 @@ class OfficialPrintAtlasEngine:
         y += 80.0
 
         legend = QgsLayoutItemLegend(layout)
-        legend.setTitle("MAP LEGEND")
+        legend.setTitle("HARİTA LEJANTI")
         legend.setLinkedMap(map_item)
         legend.attemptMove(QgsLayoutPoint(x, y, mm))
         legend.attemptResize(QgsLayoutSize(side_width, 30.0, mm))
@@ -163,7 +175,7 @@ class OfficialPrintAtlasEngine:
         remaining = max(28.0, height - margin - y)
         cls._add_html_label(
             layout, x, y, side_width, remaining,
-            "<b>DIGITAL DOCUMENT VERIFICATION</b>"
+            "<b>DİJİTAL BELGE DOĞRULAMA</b>"
             f"<br><span style='font-size:7px'>planx://verify/{document_hash}</span>"
             f"<br><span style='font-size:6px'>SHA-256: {document_hash}</span>", mm,
         )
@@ -192,8 +204,9 @@ class OfficialPrintAtlasEngine:
             result = exporter.exportToImage(str(output), settings)
         else:
             raise ValueError('Atlas çıktısı PDF, PNG, TIF veya TIFF olmalıdır.')
-        if result != QgsLayoutExporter.Success:
-            raise RuntimeError(f'QGIS pafta dışa aktarımı {int(result)} koduyla başarısız oldu')
+        if result != _export_success_code():
+            code_val = getattr(result, "value", result)
+            raise RuntimeError(f'QGIS pafta dışa aktarımı {code_val} koduyla başarısız oldu')
         if not output.is_file() or output.stat().st_size <= 0:
             raise RuntimeError('QGIS işlemi başarılı bildirdi ancak atlas dosyası üretmedi.')
         return AtlasExportResult(
@@ -297,22 +310,27 @@ class OfficialPrintAtlasEngine:
 
     @staticmethod
     def _feature_values(feature: QgsFeature) -> dict[str, Any]:
-        return {field.name().lower(): feature[field.name()] for field in feature.fields()}
+        result: dict[str, Any] = {}
+        for field in feature.fields():
+            raw = feature[field.name()]
+            result[lower_tr(field.name())] = None if is_null_value(raw) else raw
+        return result
 
     @staticmethod
     def _pick(values: dict[str, Any], *names: str) -> str:
         for name in names:
-            value = values.get(name)
-            if value not in (None, ""):
-                return str(value)
+            value = values.get(lower_tr(name))
+            text = clean_text(value)
+            if text:
+                return text
         return ""
 
     @classmethod
     def _setback_text(cls, values: dict[str, Any]) -> str:
-        front = cls._pick(values, "onbahce", "on_bahce") or "-"
-        side = cls._pick(values, "yanbahce", "yan_bahce") or "-"
-        rear = cls._pick(values, "arkabahce", "arka_bahce") or "-"
-        return f"Front {front} / Side {side} / Rear {rear} m"
+        front = cls._pick(values, "onbahce", "on_bahce", "onbahcemesafesi", "p_on_bahce", "yapiyaklasmamesafesi") or "-"
+        side = cls._pick(values, "yanbahce", "yan_bahce", "yanbahcemesafesi", "p_yan_bahce") or "-"
+        rear = cls._pick(values, "arkabahce", "arka_bahce", "arkabahcemesafesi", "p_arka_bahce") or "-"
+        return f"Ön {front} / Yan {side} / Arka {rear} m"
 
     @staticmethod
     def _safe_filename(value: str) -> str:
@@ -335,7 +353,7 @@ class OfficialPrintAtlasEngine:
         label.setFrameEnabled(True)
         label.setBackgroundEnabled(True)
         label.setText(html)
-        label.setMode(QgsLayoutItemLabel.ModeHtml)
+        label.setMode(_label_html_mode())
         layout.addLayoutItem(label)
         return label
 

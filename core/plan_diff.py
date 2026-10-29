@@ -26,10 +26,11 @@ from qgis.core import (
     QgsRectangle,
 )
 
+from .attr_utils import extract_plan_function, norm_tr, reindex_features
+
 
 def _norm(val: Any) -> str:
-    text = str(val or "").strip().upper().translate(str.maketrans("ÇĞİÖŞÜ", "CGIOSU"))
-    return re.sub(r"[^A-Z0-9]+", "_", text).strip("_")
+    return norm_tr(val)
 
 
 DONATI_KEYWORDS = {
@@ -133,6 +134,9 @@ class PlanRevisionDiffEngine:
         if not current_features or not revised_features:
             return diff_features, summary
 
+        current_features = reindex_features(current_features)
+        revised_features = reindex_features(revised_features)
+
         # 1. Build spatial index for revised and current features
         rev_index = QgsSpatialIndex()
         rev_map: dict[int, QgsFeature] = {}
@@ -148,13 +152,10 @@ class PlanRevisionDiffEngine:
                 curr_index.addFeature(cf)
                 curr_map[cf.id()] = cf
 
-        # Helper to extract function and group
-        fn_keys = ("uipfonksiyon", "fonksiyon_adi", "P_FONK", "B_FONK", "plan_fonk", "catalog_id", "detay_katalogu")
-        grp_keys = ("ustkonugrup", "ust_konu_grup", "ust_grup_adi", "ana_grup")
-
         # Track added amenities for equivalent area proximity lookups
         added_amenity_geoms: list[tuple[str, QgsGeometry, float]] = []
 
+        grp_keys = ("ustkonugrup", "ust_konu_grup", "ust_grup_adi", "ana_grup")
         total_curr = len(current_features)
         # 2. Overlay each current feature against intersecting revised features
         for idx, cf in enumerate(current_features):
@@ -165,7 +166,7 @@ class PlanRevisionDiffEngine:
             if not c_geom or c_geom.isEmpty():
                 continue
 
-            c_fonk = cls._extract_field(cf, fn_keys) or "BELIRTILMEMIS"
+            c_fonk = extract_plan_function(cf) or "BELIRTILMEMIS"
             c_grp = cls._extract_field(cf, grp_keys)
             c_donati = classify_amenity_category(c_fonk, c_grp)
 
@@ -207,7 +208,7 @@ class PlanRevisionDiffEngine:
                     rem_c = rem_c.difference(r_geom)
 
                 inter_area = round(inter.area(), 2)
-                r_fonk = cls._extract_field(rf, fn_keys) or "BELIRTILMEMIS"
+                r_fonk = extract_plan_function(rf) or "BELIRTILMEMIS"
                 r_grp = cls._extract_field(rf, grp_keys)
                 r_donati = classify_amenity_category(r_fonk, r_grp)
 
@@ -276,7 +277,7 @@ class PlanRevisionDiffEngine:
             if not r_geom or r_geom.isEmpty():
                 continue
 
-            r_fonk = cls._extract_field(rf, fn_keys) or "BELIRTILMEMIS"
+            r_fonk = extract_plan_function(rf) or "BELIRTILMEMIS"
             r_grp = cls._extract_field(rf, grp_keys)
             r_donati = classify_amenity_category(r_fonk, r_grp)
 

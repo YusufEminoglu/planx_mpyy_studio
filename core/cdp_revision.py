@@ -7,6 +7,8 @@ from typing import Iterable, Mapping
 
 from qgis.core import QgsFeature, QgsGeometry
 
+from .attr_utils import extract_plan_function
+
 
 @dataclass(frozen=True)
 class CDPRevisionAssessment:
@@ -80,7 +82,7 @@ class CDPRevisionEngine:
         if classification != "NO_SPATIAL_CHANGE" and not infrastructure_impact_documented:
             findings.append('Altyapı etkileri ve hizmet dengesi belgelenmemiş.')
         if active_triggers:
-            findings.append("One or more Article 18 whole-plan revision triggers were declared.")
+            findings.append('Bir veya daha fazla Madde 18 kapsamlı plan revizyonu tetikleyicisi beyan edilmiştir.')
         return CDPRevisionAssessment(
             classification, current_area, proposed_area, changed_area, changed_ratio,
             active_triggers, tuple(findings),
@@ -101,13 +103,7 @@ class CDPRevisionEngine:
         for feature in features:
             if not feature.hasGeometry() or feature.geometry().isEmpty():
                 continue
-            data = {field.name().lower(): feature[field.name()] for field in feature.fields()}
-            code = ""
-            for field_name in ("fonksiyon_kodu", "catalog_id", "detay_grup_kodu", "lejant_kodu"):
-                if data.get(field_name) not in (None, "", "NULL"):
-                    code = str(data[field_name]).strip().upper()
-                    break
-            code = code or "UNCLASSIFIED"
+            code = extract_plan_function(feature) or "UNCLASSIFIED"
             geometry = feature.geometry()
             geometry = geometry.makeValid() if not geometry.isGeosValid() else geometry
             grouped.setdefault(code, []).append(geometry)

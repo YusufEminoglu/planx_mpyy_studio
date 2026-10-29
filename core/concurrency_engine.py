@@ -2,15 +2,66 @@
 
 from __future__ import annotations
 
-from contextlib import closing
+from contextlib import closing, suppress
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 from pathlib import Path
 import sqlite3
+import struct
 import uuid
 from typing import Any
+
+from osgeo import ogr
+
+
+_GPKG_ENVELOPE_DOUBLES = {0: 0, 1: 4, 2: 6, 3: 6, 4: 8}
+
+
+def _gpkg_geom_bounds(blob: Any) -> tuple[bool, tuple[float, float, float, float] | None]:
+    """Parse OGC GeoPackage Binary ('GP') or WKB blob into (is_empty, (minx, maxx, miny, maxy))."""
+    if blob is None or not isinstance(blob, (bytes, bytearray, memoryview)):
+        return True, None
+    raw = bytes(blob)
+    if len(raw) < 8:
+        return True, None
+    wkb = raw
+    if raw[:2] == b"GP":
+        flags = raw[3]
+        if (flags >> 4) & 0x01:
+            return True, None
+        env_code = (flags >> 1) & 0x07
+        env_count = _GPKG_ENVELOPE_DOUBLES.get(env_code, 0)
+        header_len = 8 + env_count * 8
+        if len(raw) < header_len:
+            return True, None
+        if env_count >= 4:
+            endian = "<" if (flags & 0x01) else ">"
+            minx, maxx, miny, maxy = struct.unpack_from(f"{endian}4d", raw, 8)
+            if any(math.isnan(v) for v in (minx, maxx, miny, maxy)):
+                return True, None
+            return False, (minx, maxx, miny, maxy)
+        wkb = raw[header_len:]
+    if not wkb:
+        return True, None
+    with suppress(Exception):
+        geom = ogr.CreateGeometryFromWkb(wkb)
+        if geom is not None and not geom.IsEmpty():
+            minx, maxx, miny, maxy = geom.GetEnvelope()
+            return False, (float(minx), float(maxx), float(miny), float(maxy))
+    return True, None
+
+
+def _register_gpkg_spatial_functions(connection: sqlite3.Connection) -> None:
+    """Register OGC GeoPackage SQLite functions required by OGR RTree triggers."""
+    connection.create_function("ST_IsEmpty", 1, lambda b: 1 if _gpkg_geom_bounds(b)[0] else 0)
+    connection.create_function("IsEmpty", 1, lambda b: 1 if _gpkg_geom_bounds(b)[0] else 0)
+    connection.create_function("ST_MinX", 1, lambda b: (_gpkg_geom_bounds(b)[1] or (None, None, None, None))[0])
+    connection.create_function("ST_MaxX", 1, lambda b: (_gpkg_geom_bounds(b)[1] or (None, None, None, None))[1])
+    connection.create_function("ST_MinY", 1, lambda b: (_gpkg_geom_bounds(b)[1] or (None, None, None, None))[2])
+    connection.create_function("ST_MaxY", 1, lambda b: (_gpkg_geom_bounds(b)[1] or (None, None, None, None))[3])
 
 
 _SQL_ADD_UUID = "ALTER TABLE __TABLE__ ADD COLUMN uuid_version TEXT"
@@ -29,7 +80,7 @@ _SQL_INSERT_ROW = "INSERT INTO __TABLE__ (__COLUMNS__) VALUES (__PLACEHOLDERS__)
 _SQL_UPDATE_ROW = "UPDATE __TABLE__ SET __ASSIGNMENTS__ WHERE __PRIMARY_KEY__=?"
 _SQL_TRACKING_TRIGGER = """
 CREATE TRIGGER IF NOT EXISTS "__TRIGGER__" AFTER UPDATE ON "__TABLE_NAME__"
-WHEN NEW.uuid_version = OLD.uuid_version
+WHEN NEW.uuid_version IS OLD.uuid_version
 BEGIN
     UPDATE "__TABLE_NAME__"
     SET uuid_version = lower(hex(randomblob(16))),
@@ -107,6 +158,7 @@ class GeoPackageConcurrencyEngine:
         path = cls._validate_workspace(workspace_path)
         prepared: list[str] = []
         with closing(sqlite3.connect(path, timeout=5.0)) as connection, connection:
+            _register_gpkg_spatial_functions(connection)
             connection.execute("PRAGMA journal_mode=WAL")
             connection.execute("PRAGMA busy_timeout=5000")
             for table in cls._content_tables(connection):
@@ -182,7 +234,15 @@ class GeoPackageConcurrencyEngine:
         if output.exists():
             raise FileExistsError(str(output))
         output.parent.mkdir(parents=True, exist_ok=True)
-        core_payload = {
+        report = {
+            "schema_version": 1,
+            "audit_type": "WORKSPACE_RECONCILIATION_PREVIEW",
+            "status": (
+                "REVIEW_REQUIRED"
+                if (preview.divergent_rows > 0 or preview.schema_mismatches)
+                else "COMPLIANT"
+            ),
+            "generated_at": cls._utc_now(),
             "base_path": preview.base_path,
             "incoming_path": preview.incoming_path,
             "tables_processed": preview.tables_processed,
@@ -194,14 +254,11 @@ class GeoPackageConcurrencyEngine:
             "warnings": preview.warnings,
             "table_summaries": preview.table_summaries,
         }
-        canonical = json.dumps(core_payload, ensure_ascii=True, sort_keys=True)
-        report = dict(core_payload)
-        report["schema_version"] = 1
-        report["generated_at"] = cls._utc_now()
+        canonical = json.dumps(report, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
         report["content_sha256"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
-        temporary = output.with_name(' satır bulundu.' + output.name + ' satır bulundu.' + uuid.uuid4().hex + ".tmp")
+        temporary = output.with_name(f".{output.name}.{uuid.uuid4().hex}.tmp")
         temporary.write_text(
-            json.dumps(report, ensure_ascii=True, indent=2, sort_keys=True), encoding="utf-8"
+            json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8"
         )
         temporary.replace(output)
         return str(output)
@@ -238,6 +295,7 @@ class GeoPackageConcurrencyEngine:
             with closing(sqlite3.connect(output, timeout=5.0)) as target, closing(
                 sqlite3.connect(incoming, timeout=5.0)
             ) as source, target:
+                _register_gpkg_spatial_functions(target)
                 target.execute("PRAGMA busy_timeout=5000")
                 cls._ensure_conflict_table(target)
                 shared = sorted(set(cls._content_tables(target)) & set(cls._content_tables(source)))

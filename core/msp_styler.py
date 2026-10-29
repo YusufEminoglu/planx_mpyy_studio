@@ -55,6 +55,7 @@ from qgis.core import (
 from qgis.PyQt.QtCore import QPointF, Qt
 from qgis.PyQt.QtGui import QColor, QImage
 
+from .legend_scope import FULL_PROPERTY, MODE_PROPERTY, full_renderer
 from .localization import localized_category
 from .msp_catalog import (
     APPROXIMATED_PROPERTY,
@@ -189,7 +190,7 @@ class MSPStylerEngine:
 
         line = QgsSimpleLineSymbolLayer(_color(colour), _mm(width_mm))
         line.setWidthUnit(MAP_METERS)
-        line.setRingFilter(QgsLineSymbolLayer.ExteriorRingOnly)
+        line.setRingFilter(QgsLineSymbolLayer.RenderRingFilter.ExteriorRingOnly)
         if dashed:
             line.setCustomDashVector([_mm(row.dash_mm[0]), _mm(row.dash_mm[1])])
             line.setCustomDashPatternUnit(MAP_METERS)
@@ -471,7 +472,7 @@ class MSPStylerEngine:
             return
         fallback = row.fill[:3] if row.fill else tones[0]
         layer.setDataDefinedProperty(
-            QgsSymbolLayer.PropertyFillColor,
+            QgsSymbolLayer.Property.FillColor,
             QgsProperty.fromExpression(_tone_expression(field, tones, fallback)),
         )
 
@@ -499,7 +500,7 @@ class MSPStylerEngine:
                 for index, size in enumerate(sizes)
             )
             layer.setDataDefinedProperty(
-                QgsSymbolLayer.PropertySize,
+                QgsSymbolLayer.Property.Size,
                 QgsProperty.fromExpression(
                     f"CASE {branches} ELSE {_mm(base_mm) * ratio} END"
                 ),
@@ -588,7 +589,12 @@ class MSPStylerEngine:
         categories.append(
             localized_category(None, _fallback_symbol(geometry), 'Eşleşmeyen / boş')
         )
-        self._previous[layer.id()] = layer.renderer().clone()
+        if layer.id() not in self._previous:
+            base_renderer = full_renderer(layer)
+            if base_renderer is not None:
+                self._previous[layer.id()] = base_renderer
+        layer.removeCustomProperty(FULL_PROPERTY)
+        layer.removeCustomProperty(MODE_PROPERTY)
         layer.setRenderer(QgsCategorizedSymbolRenderer(field, categories))
         layer.triggerRepaint()
 
@@ -606,6 +612,8 @@ class MSPStylerEngine:
         renderer = self._previous.pop(layer.id(), None)
         if renderer is None:
             return False
+        layer.removeCustomProperty(FULL_PROPERTY)
+        layer.removeCustomProperty(MODE_PROPERTY)
         layer.setRenderer(renderer)
         layer.triggerRepaint()
         return True

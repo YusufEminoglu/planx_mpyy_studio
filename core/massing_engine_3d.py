@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import contextlib
 from dataclasses import dataclass, field
 import math
 
-from qgis.core import QgsGeometry, QgsPointXY
+from qgis.core import QgsGeometry, QgsPointXY, QgsWkbTypes
 
 from .actions import calculate_setback_envelope
 
@@ -57,9 +58,21 @@ class ProceduralMassingEngine:
         if roof_slope_percent < 0 or roof_slope_percent > 100:
             raise ValueError('Çatı eğimi sıfır ile yüz arasında olmalıdır.')
 
-        footprint = calculate_setback_envelope(parcel_geometry, setback_m)
+        work_parcel = QgsGeometry(parcel_geometry)
+        if QgsWkbTypes.isCurvedType(work_parcel.wkbType()):
+            with contextlib.suppress(TypeError, ValueError, RuntimeError, AttributeError):
+                abs_geom = work_parcel.constGet()
+                if abs_geom is not None and hasattr(abs_geom, "segmentize"):
+                    work_parcel = QgsGeometry(abs_geom.segmentize())
+
+        footprint = calculate_setback_envelope(work_parcel, setback_m)
         if not footprint or footprint.isEmpty():
             raise ValueError('Çekme mesafeleri yapılaşabilir taban alanı bırakmıyor.')
+        if QgsWkbTypes.isCurvedType(footprint.wkbType()):
+            with contextlib.suppress(TypeError, ValueError, RuntimeError, AttributeError):
+                abs_fp = footprint.constGet()
+                if abs_fp is not None and hasattr(abs_fp, "segmentize"):
+                    footprint = QgsGeometry(abs_fp.segmentize())
         warnings: list[str] = []
         if footprint.isMultipart():
             parts = footprint.asGeometryCollection()
@@ -78,8 +91,11 @@ class ProceduralMassingEngine:
         if not polygons or len(polygons[0]) < 4:
             raise ValueError('Yapılaşabilir taban alanı geçerli bir poligon değildir.')
         ring = [QgsPointXY(point) for point in polygons[0]]
-        if len(polygons) > 1:
-            warnings.append("FOOTPRINT_HOLES_OMITTED_FROM_3D_SHELL")
+        hole_rings = [
+            [QgsPointXY(point) for point in hole]
+            for hole in polygons[1:]
+            if len(hole) >= 4
+        ]
 
         if max_height_m + 1e-9 < ground_floor_height_m:
             typical_count = 0
@@ -109,41 +125,56 @@ class ProceduralMassingEngine:
             warnings.append("ROOF_RISE_CAPPED")
         roof_top_z = wall_top_z + roof_rise
 
-        surfaces: list[list[tuple[float, float, float]]] = []
-        surfaces.append([(point.x(), point.y(), 0.0) for point in reversed(ring)])
-        for index in range(len(ring) - 1):
-            first, second = ring[index], ring[index + 1]
-            surfaces.append([
-                (first.x(), first.y(), 0.0),
-                (second.x(), second.y(), 0.0),
-                (second.x(), second.y(), wall_top_z),
-                (first.x(), first.y(), wall_top_z),
-                (first.x(), first.y(), 0.0),
-            ])
+        surfaces: list[list[list[tuple[float, float, float]]]] = []
+        base_rings = [[(point.x(), point.y(), 0.0) for point in reversed(ring)]]
+        for h_ring in hole_rings:
+            base_rings.append([(point.x(), point.y(), 0.0) for point in reversed(h_ring)])
+        surfaces.append(base_rings)
+
+        for active_ring in [ring, *hole_rings]:
+            for index in range(len(active_ring) - 1):
+                first, second = active_ring[index], active_ring[index + 1]
+                surfaces.append([[
+                    (first.x(), first.y(), 0.0),
+                    (second.x(), second.y(), 0.0),
+                    (second.x(), second.y(), wall_top_z),
+                    (first.x(), first.y(), wall_top_z),
+                    (first.x(), first.y(), 0.0),
+                ]])
         for elevation in floor_elevations:
             if elevation + 1e-7 < wall_top_z:
-                surfaces.append([(point.x(), point.y(), elevation) for point in ring])
+                slab_rings = [[(point.x(), point.y(), elevation) for point in ring]]
+                for h_ring in hole_rings:
+                    slab_rings.append([(point.x(), point.y(), elevation) for point in h_ring])
+                surfaces.append(slab_rings)
 
-        if include_roof and roof_rise > 0:
+        if include_roof and roof_rise > 0 and not hole_rings:
             center = footprint.pointOnSurface().asPoint()
             for index in range(len(ring) - 1):
                 first, second = ring[index], ring[index + 1]
-                surfaces.append([
+                surfaces.append([[
                     (first.x(), first.y(), wall_top_z),
                     (second.x(), second.y(), wall_top_z),
                     (center.x(), center.y(), roof_top_z),
                     (first.x(), first.y(), wall_top_z),
-                ])
+                ]])
         else:
-            surfaces.append([(point.x(), point.y(), wall_top_z) for point in ring])
+            if include_roof and roof_rise > 0 and hole_rings:
+                roof_rise = 0.0
+                roof_top_z = wall_top_z
+                warnings.append("COURTYARD_FOOTPRINT_FLAT_ROOF_APPLIED")
+            top_rings = [[(point.x(), point.y(), wall_top_z) for point in ring]]
+            for h_ring in hole_rings:
+                top_rings.append([(point.x(), point.y(), wall_top_z) for point in h_ring])
+            surfaces.append(top_rings)
 
         shell = QgsGeometry.fromWkt(cls._multipolygon_z_wkt(surfaces))
         if not shell or shell.isEmpty():
             raise ValueError('QGIS PolygonZ yapı kütlesi kabuğunu oluşturamadı.')
         volume = footprint_area * wall_top_z
-        if include_roof:
+        if include_roof and roof_rise > 0:
             volume += footprint_area * roof_rise / 3.0
-        parcel_area = max(float(parcel_geometry.area()), 1e-9)
+        parcel_area = max(float(work_parcel.area()), 1e-9)
         gross_floor_area = footprint_area * floor_count
         return MassingResult(
             geometry=shell,
@@ -161,9 +192,12 @@ class ProceduralMassingEngine:
         )
 
     @staticmethod
-    def _multipolygon_z_wkt(surfaces: list[list[tuple[float, float, float]]]) -> str:
+    def _multipolygon_z_wkt(surfaces: list[list[list[tuple[float, float, float]]]]) -> str:
         polygons = []
-        for surface in surfaces:
-            coords = ", ".join(f"{x:.9f} {y:.9f} {z:.9f}" for x, y, z in surface)
-            polygons.append(f"(({coords}))")
+        for poly_rings in surfaces:
+            ring_wkts = []
+            for ring_coords in poly_rings:
+                coords = ", ".join(f"{x:.9f} {y:.9f} {z:.9f}" for x, y, z in ring_coords)
+                ring_wkts.append(f"({coords})")
+            polygons.append("(" + ", ".join(ring_wkts) + ")")
         return "MULTIPOLYGON Z (" + ", ".join(polygons) + ")"

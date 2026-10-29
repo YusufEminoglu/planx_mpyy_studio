@@ -14,7 +14,6 @@ not match the schema is guessed: unknown elements, unknown attributes, codes
 outside a code list and unreadable geometries are counted in the report.
 """
 
-import re
 from pathlib import Path
 
 from qgis.core import (
@@ -157,13 +156,37 @@ def _value(text, field):
     return text
 
 
+def _detect_document_crs(document) -> QgsCoordinateReferenceSystem:
+    """Find the first valid srsName attribute in the GML DOM without serializing the full XML."""
+    def walk(element):
+        if element.hasAttribute("srsName"):
+            srs = element.attribute("srsName").strip()
+            if srs:
+                candidate = QgsCoordinateReferenceSystem.fromOgcWmsCrs(srs)
+                if not candidate.isValid():
+                    candidate = QgsCoordinateReferenceSystem(srs)
+                if candidate.isValid():
+                    return candidate
+        for child in _children(element):
+            found = walk(child)
+            if found is not None and found.isValid():
+                return found
+        return None
+
+    detected = walk(document.documentElement())
+    return detected if detected is not None else QgsCoordinateReferenceSystem()
+
+
 def import_mpyy_gml(gml_path, output_path, level=None, crs=None, feedback=None, project=None):
     project = project or QgsProject.instance()
     document = load_document(gml_path)
     reason = "kullanıcı seçimi"
+    levels = all_levels()
     if level is None:
         level, reason = detect_level(document)
-    schema = all_levels()[level]
+    elif level not in levels:
+        raise ValueError(f'Geçersiz MPYY plan kademesi: {level}')
+    schema = levels[level]
     types = {t["name"]: t for t in schema["feature_types"]}
     elements, unknown_elements = feature_elements(document, set(types))
     if not elements:
@@ -171,9 +194,7 @@ def import_mpyy_gml(gml_path, output_path, level=None, crs=None, feedback=None, 
 
     default_crs = crs if crs is not None and crs.isValid() else QgsCoordinateReferenceSystem()
     if not default_crs.isValid():
-        srs = re.search(r'srsName="([^"]+)"', document.toString())
-        if srs:
-            default_crs = QgsCoordinateReferenceSystem.fromOgcWmsCrs(srs.group(1))
+        default_crs = _detect_document_crs(document)
     if not default_crs.isValid():
         raise ValueError('GML dosyasında koordinat sistemi (srsName) yok; koordinat sistemini seçin.')
     create_mpyy_workspace(output_path, default_crs, level)

@@ -12,7 +12,7 @@ import uuid
 class MPYYComplianceBundleEngine:
     FAILURE_STATUSES = {"INCOMPLETE", "NON_COMPLIANT", "INVALID"}
     REVIEW_STATUSES = {"REVIEW_REQUIRED", "PENDING", "EXCEPTION_REVIEW"}
-    SUCCESS_STATUSES = {"COMPLETE", "COMPLIANT"}
+    SUCCESS_STATUSES = {"COMPLETE", "COMPLIANT", "NOT_APPLICABLE"}
 
     @classmethod
     def consolidate(cls, input_directory: str | Path, output_path: str | Path) -> dict[str, Any]:
@@ -68,7 +68,7 @@ class MPYYComplianceBundleEngine:
         canonical = json.dumps(result, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
         result["content_sha256"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
         output.parent.mkdir(parents=True, exist_ok=True)
-        temporary = output.with_name(output.name + ' satır bulundu.' + uuid.uuid4().hex + ".tmp")
+        temporary = output.with_name(f".{output.name}.{uuid.uuid4().hex}.tmp")
         temporary.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
         temporary.replace(output)
         return result

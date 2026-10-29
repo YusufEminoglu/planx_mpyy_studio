@@ -15,18 +15,17 @@ Implements statutory land readjustment requirements of Turkish Planning Law No. 
 """
 
 from dataclasses import dataclass, field
-import re
 from typing import Any
 from qgis.core import (
     QgsFeature,
     QgsGeometry,
-    QgsSpatialIndex,
 )
+
+from .attr_utils import first_float, first_text, norm_tr
 
 
 def _norm(val: Any) -> str:
-    text = str(val or "").strip().upper().translate(str.maketrans("ÇĞİÖŞÜ", "CGIOSU"))
-    return re.sub(r"[^A-Z0-9]+", "_", text).strip("_")
+    return norm_tr(val)
 
 
 @dataclass
@@ -56,6 +55,10 @@ class DOPSummary:
     parsel_sayisi: int = 0
     uyarilar: list[str] = field(default_factory=list)
 
+    @property
+    def dop_orani_yuzde(self) -> float:
+        return round(self.dop_orani * 100.0, 2)
+
 
 class DOPEngine:
     """Statutory Article 18 / DOP reallocation computation engine."""
@@ -64,20 +67,7 @@ class DOPEngine:
 
     @classmethod
     def _extract_text(cls, feat: QgsFeature, preferred_keys: tuple[str, ...]) -> str:
-        fields = feat.fields()
-        for k in preferred_keys:
-            idx = fields.indexFromName(k)
-            if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                return str(feat[idx]).strip()
-        # Case-insensitive fallback
-        lower_names = {f.name().lower(): f.name() for f in fields}
-        for k in preferred_keys:
-            if k.lower() in lower_names:
-                real_name = lower_names[k.lower()]
-                val = feat[real_name]
-                if val not in (None, "", "NULL"):
-                    return str(val).strip()
-        return ""
+        return first_text(feat, preferred_keys)
 
     @classmethod
     def calculate_dop(
@@ -103,20 +93,15 @@ class DOPEngine:
         ada_keys = ("ADA", "ada", "ada_no", "block", "ADANO")
         parsel_keys = ("PARSEL", "parsel", "parsel_no", "lot", "PARSELNO")
         malik_keys = ("MALIK", "malik", "sahip", "ad_soyad", "owner", "ad")
+        area_keys = ("TAPU_ALANI", "tapu_alani", "alan_m2", "AlanM2", "yuzolcum", "alan", "ALAN")
 
         for feat in cadastral_features:
             geom = feat.geometry()
             area_m2 = geom.area() if (geom and not geom.isEmpty()) else 0.0
             if area_m2 <= 0.0:
-                # Try reading from attribute field if geometry is missing
-                for k in ("alan_m2", "yuzolcum", "alan", "ALAN"):
-                    idx = feat.fields().indexFromName(k)
-                    if idx >= 0 and feat[idx]:
-                        try:
-                            area_m2 = float(feat[idx])
-                            break
-                        except (ValueError, TypeError):
-                            pass
+                attr_area = first_float(feat, area_keys, default=0.0)
+                if attr_area is not None and attr_area > 0.0:
+                    area_m2 = attr_area
 
             if area_m2 <= 0.0:
                 continue
@@ -149,9 +134,9 @@ class DOPEngine:
 
         summary.toplam_terk_m2 = round(total_public, 2)
 
-        # Calculate DOPO
-        if forced_dop_ratio is not None and forced_dop_ratio > 0:
-            dop_ratio = round(forced_dop_ratio, 6)
+        # Calculate DOPO (honor explicit forced_dop_ratio = 0.0 as well)
+        if forced_dop_ratio is not None and forced_dop_ratio >= 0.0:
+            dop_ratio = round(float(forced_dop_ratio), 6)
         elif total_cadastre > 0:
             dop_ratio = round(total_public / total_cadastre, 6)
         else:
@@ -170,16 +155,20 @@ class DOPEngine:
         else:
             summary.yasal_uygun = True
 
+        # Cap landowner deduction at statutory 45% ceiling so net_tahsis_m2 never turns negative
+        effective_deduction_ratio = min(cls.STATUTORY_CEILING, max(0.0, dop_ratio))
         total_tahsis = 0.0
-        # Calculate per-parcel deduction and allocation
         for fid, ada, parsel, malik, area_m2, geom in cadastre_data:
-            kesinti = round(area_m2 * dop_ratio, 2)
-            net_tahsis = round(area_m2 - kesinti, 2)
+            kesinti = round(area_m2 * effective_deduction_ratio, 2)
+            net_tahsis = round(max(0.0, area_m2 - kesinti), 2)
             total_tahsis += net_tahsis
 
             if dop_ratio > cls.STATUTORY_CEILING:
                 durum = "YASAL_SINIR_ASILDI"
-                aciklama = f'DOP Kesintisi: %{dop_ratio * 100:.2f} (Yasal tavan %45 aşılmıştır)'
+                aciklama = (
+                    f'Hesaplanan DOP: %{dop_ratio * 100:.2f} (Yasal tavan %45.00 ile sınırlandırıldı; '
+                    f'aşan kısım KOP/kamulaştırma ile karşılanmalıdır)'
+                )
             else:
                 durum = "UYGUN"
                 aciklama = f'DOP Kesintisi: %{dop_ratio * 100:.2f} (Madde 18 uyarınca hakediş tahsis edildi)'

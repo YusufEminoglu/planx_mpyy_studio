@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import contextlib
 from dataclasses import dataclass, field
 import math
 from typing import Iterable
 
-from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
+from qgis.core import QgsFeature, QgsGeometry, QgsPointXY, QgsWkbTypes
+
+from .attr_utils import clean_text, first_text, norm_tr, normalize_nizam_code
 
 
 @dataclass(frozen=True)
@@ -59,14 +62,18 @@ class SubdivisionEngine:
         floors: int = 3,
         max_parcels: int = 100,
     ) -> SubdivisionConstraint:
-        use_key = str(land_use or "").strip().upper()
-        nizam_key = str(nizam or "").strip().upper()
+        use_key = norm_tr(land_use)
+        raw_nizam = clean_text(nizam)
+        nizam_norm = norm_tr(raw_nizam)
+        nizam_key = normalize_nizam_code(raw_nizam, default="AYRIK") if raw_nizam else "AYRIK"
         if "SANAYI" in use_key:
             return SubdivisionConstraint(nizam_key, 20.0, 30.0, 2000.0, max_parcels)
-        if nizam_key.startswith("BITISIK"):
-            return SubdivisionConstraint(nizam_key, 9.0 if floors >= 4 else 6.0, 14.0, 0.0, max_parcels)
-        if nizam_key.startswith("BLOK"):
-            return SubdivisionConstraint(nizam_key, 18.0, 18.0, 0.0, max_parcels)
+        if nizam_norm in ("B", "BITISIK", "BITISIK_NIZAM") or nizam_key == "BITISIK":
+            return SubdivisionConstraint("BITISIK", 9.0 if floors >= 4 else 6.0, 14.0, 0.0, max_parcels)
+        if nizam_norm in ("BL", "BLOK", "BLOK_NIZAM") or nizam_key == "BLOK":
+            return SubdivisionConstraint("BLOK", 18.0, 18.0, 0.0, max_parcels)
+        if nizam_norm in ("I", "IK", "IKIZ", "IKIZ_NIZAM") or nizam_key == "IKIZ":
+            return SubdivisionConstraint("IKIZ", 9.0, 18.0, 250.0, max_parcels)
         return SubdivisionConstraint(nizam_key or "AYRIK", 12.0, 18.0, 500.0, max_parcels)
 
     @classmethod
@@ -98,6 +105,11 @@ class SubdivisionEngine:
         if not geometry or geometry.isEmpty():
             return SubdivisionResult(source_parcel_id, 0, 0.0, [], ["EMPTY_GEOMETRY"])
         geom = QgsGeometry(geometry)
+        if QgsWkbTypes.isCurvedType(geom.wkbType()):
+            with contextlib.suppress(TypeError, ValueError, RuntimeError, AttributeError):
+                abs_geom = geom.constGet()
+                if abs_geom is not None and hasattr(abs_geom, "segmentize"):
+                    geom = QgsGeometry(abs_geom.segmentize())
         warnings: list[str] = []
         source_area = float(geom.area())
         if not geom.isGeosValid():
@@ -122,6 +134,11 @@ class SubdivisionEngine:
         roads = [road for road in (road_geometries or []) if road and not road.isEmpty()]
         frontage_start, frontage_end, depth = cls._frontage_axis(corners, roads)
         frontage_length = cls._distance(frontage_start, frontage_end)
+        if frontage_length <= 1e-9:
+            return SubdivisionResult(
+                source_parcel_id, 1, source_area, [geom],
+                warnings + ["OMBB_COULD_NOT_BE_COMPUTED"], area_balance_error_m2=area - source_area,
+            )
         ux = (frontage_end.x() - frontage_start.x()) / frontage_length
         uy = (frontage_end.y() - frontage_start.y()) / frontage_length
         vx, vy = -uy, ux
@@ -179,11 +196,8 @@ class SubdivisionEngine:
 
     @staticmethod
     def _feature_identifier(feature: QgsFeature) -> str:
-        for name in ("global_id", "parsel_id", "PARSEL", "parsel"):
-            index = feature.fields().indexFromName(name)
-            if index >= 0 and feature[index] not in (None, ""):
-                return str(feature[index])
-        return str(feature.id())
+        found = first_text(feature, ("global_id", "parsel_id", "PARSEL", "parsel", "parsel_no", "PARSEL_NO"))
+        return found or str(feature.id())
 
     @staticmethod
     def _ombb_corners(geometry: QgsGeometry) -> list[QgsPointXY]:
@@ -281,7 +295,7 @@ class SubdivisionEngine:
             if not candidates:
                 warnings.append("ISOLATED_SLIVER_REQUIRES_REVIEW")
                 break
-            _, neighbor_index = min(candidates, key=lambda item: item[0])
+            _, neighbor_index = max(candidates, key=lambda item: item[0])
             merged = legal[neighbor_index].combine(remnant)
             for remove_index in sorted((index, neighbor_index), reverse=True):
                 legal.pop(remove_index)

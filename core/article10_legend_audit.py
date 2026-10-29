@@ -47,7 +47,7 @@ class Article10LegendAuditEngine:
             elif code in official:
                 status = "OFFICIAL_MATCH"
                 source = sources.get(code, "MPYY EK-1")
-                message = "Display code matches a shipped official catalog entry."
+                message = 'Gösterim kodu resmî mevzuat kataloğu kaydı ile eşleşmektedir.'
             else:
                 status = "UNMAPPED_REVIEW"
                 source = ""

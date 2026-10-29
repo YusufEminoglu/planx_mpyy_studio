@@ -65,7 +65,7 @@ class MPYYMixedUseAuditEngine:
             if not cls._boolean(normalized.get("residential_infrastructure_allocated")):
                 findings.append(MixedUseFinding(
                     "MISSING_RESIDENTIAL_INFRASTRUCTURE", "ERROR", "MPYY 21/10",
-                    "Social and technical infrastructure for residential use is not evidenced.",
+                    'Konut kullanımına yönelik sosyal ve teknik altyapı ayrımı belgelenmemiştir.',
                 ))
         if cls._boolean(normalized.get("independent_unit_count_required")):
             units = cls._integer(normalized.get("independent_unit_count"))

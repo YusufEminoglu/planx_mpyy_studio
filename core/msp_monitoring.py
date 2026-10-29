@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import date
 import math
 from typing import Any, Iterable
 
 from qgis.core import QgsFeature
+
+from .attr_utils import parse_float, parse_iso_date
 
 
 @dataclass(frozen=True)
@@ -95,9 +97,8 @@ class MSPMonitoringEngine:
 
     @staticmethod
     def _number(value: Any) -> float | None:
-        try:
-            number = float(value)
-        except (TypeError, ValueError):
+        number = parse_float(value)
+        if number is None:
             return None
         return number if math.isfinite(number) else None
 
@@ -105,11 +106,9 @@ class MSPMonitoringEngine:
     def _date(value: Any, allow_none: bool = False) -> date | None:
         if value in (None, "", "NULL") and allow_none:
             return None
-        if isinstance(value, date):
-            return value
-        try:
-            return datetime.strptime(str(value), "%Y-%m-%d").date()
-        except (TypeError, ValueError) as error:
-            if allow_none:
-                return None
-            raise ValueError('Değerlendirme tarihi YYYY-AA-GG biçimini kullanmalıdır.') from error
+        dt = parse_iso_date(value)
+        if dt is not None:
+            return dt
+        if allow_none:
+            return None
+        raise ValueError('Değerlendirme tarihi YYYY-AA-GG biçimini kullanmalıdır.')

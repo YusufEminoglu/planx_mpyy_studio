@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import contextlib
+from contextlib import closing
 from pathlib import Path
 import shutil
 import sqlite3
-import uuid
 
 from qgis.core import (
     QgsCoordinateReferenceSystem,
@@ -18,12 +18,20 @@ from qgis.core import (
 )
 
 
+_SKIP_ATTRIBUTE_TABLES = {
+    "layer_styles",
+    "mpyy_sema",
+    "mpyy_metadata",
+    "_reconciliation_conflicts",
+}
+
+
 def _read_layer_style_from_gpkg(gpkg_path: Path, table_name: str) -> str:
     """Retrieve embedded QML style text from GeoPackage layer_styles table if present."""
     if not gpkg_path.is_file():
         return ""
     with contextlib.suppress(sqlite3.Error):
-        with sqlite3.connect(gpkg_path) as con:
+        with closing(sqlite3.connect(gpkg_path)) as con:
             cur = con.cursor()
             cur.execute(
                 "SELECT styleQML FROM layer_styles WHERE f_table_name = ? ORDER BY useAsDefault DESC, id DESC LIMIT 1",
@@ -55,39 +63,67 @@ def package_for_qfield(
 
     output_gpkg_path = out_dir / "data.gpkg"
     if copy_gpkg and src_gpkg != output_gpkg_path:
-        shutil.copy2(src_gpkg, output_gpkg_path)
+        output_gpkg_path.unlink(missing_ok=True)
+        try:
+            with closing(sqlite3.connect(src_gpkg)) as src_con, closing(
+                sqlite3.connect(output_gpkg_path)
+            ) as dst_con:
+                src_con.backup(dst_con)
+        except sqlite3.Error:
+            shutil.copy2(src_gpkg, output_gpkg_path)
     elif not copy_gpkg and src_gpkg != output_gpkg_path:
         output_gpkg_path = src_gpkg
 
-    # Inspect tables inside GeoPackage
+    # Inspect spatial and lookup attribute tables inside GeoPackage
     spatial_tables: list[tuple[str, str, str]] = []
-    with sqlite3.connect(output_gpkg_path) as con:
+    attribute_tables: list[tuple[str, str, str]] = []
+    with closing(sqlite3.connect(output_gpkg_path)) as con:
         cur = con.cursor()
         cur.execute(
-            "SELECT table_name, data_type, identifier FROM gpkg_contents WHERE data_type = 'features' ORDER BY table_name"
+            "SELECT table_name, data_type, identifier FROM gpkg_contents "
+            "WHERE data_type IN ('features', 'attributes') ORDER BY table_name"
         )
         for row in cur.fetchall():
-            tbl_name, data_type, ident = row[0], row[1], row[2] or row[0]
-            spatial_tables.append((tbl_name, data_type, ident))
+            tbl_name, data_type, ident = str(row[0]), str(row[1]), str(row[2] or row[0])
+            if data_type == "features":
+                spatial_tables.append((tbl_name, data_type, ident))
+            elif tbl_name not in _SKIP_ATTRIBUTE_TABLES and not tbl_name.startswith("v_saha_"):
+                attribute_tables.append((tbl_name, data_type, ident))
 
-    # Determine CRS from GeoPackage
+    # Determine CRS from actual feature layers in GeoPackage (avoiding default 4326 SRS row)
     crs = QgsCoordinateReferenceSystem("EPSG:4326")
     with contextlib.suppress(sqlite3.Error, ValueError):
-        with sqlite3.connect(output_gpkg_path) as con:
+        with closing(sqlite3.connect(output_gpkg_path)) as con:
             cur = con.cursor()
-            cur.execute("SELECT srs_id, organization, organization_coordsys_id FROM gpkg_spatial_ref_sys WHERE srs_id > 0 LIMIT 1")
+            cur.execute(
+                """SELECT s.organization, s.organization_coordsys_id, s.definition
+                   FROM gpkg_contents c
+                   JOIN gpkg_spatial_ref_sys s ON c.srs_id = s.srs_id
+                   WHERE c.data_type = 'features' AND s.srs_id > 0
+                   ORDER BY (s.srs_id != 4326) DESC, c.table_name ASC
+                   LIMIT 1"""
+            )
             srs_row = cur.fetchone()
+            if not srs_row:
+                cur.execute(
+                    "SELECT organization, organization_coordsys_id, definition "
+                    "FROM gpkg_spatial_ref_sys WHERE srs_id > 0 "
+                    "ORDER BY (srs_id != 4326) DESC LIMIT 1"
+                )
+                srs_row = cur.fetchone()
             if srs_row:
-                org, org_id = srs_row[1], srs_row[2]
-                auth_id = f"{org}:{org_id}"
-                c = QgsCoordinateReferenceSystem(auth_id)
+                org, org_id, wkt_def = srs_row[0], srs_row[1], srs_row[2]
+                c = QgsCoordinateReferenceSystem(f"{org}:{org_id}") if org and org_id else QgsCoordinateReferenceSystem()
+                if not c.isValid() and wkt_def:
+                    c = QgsCoordinateReferenceSystem(str(wkt_def))
                 if c.isValid():
                     crs = c
 
-    # Build standalone QGIS project instance
+    # Build standalone QGIS project instance with relative paths for mobile portability
     project = QgsProject()
     project.setTitle(project_title)
     project.setCrs(crs)
+    project.writeEntry("Paths", "/Absolute", False)
 
     # Configure snapping for cadastral boundaries and structures
     snap_cfg = QgsSnappingConfig()
@@ -99,15 +135,22 @@ def package_for_qfield(
     project.setSnappingConfig(snap_cfg)
 
     # Optional OSM XYZ Basemap
-    added_layers = []
+    added_layer_count = 0
     if include_osm:
         osm_uri = "type=xyz&url=https://tile.openstreetmap.org/{z}/{x}/{y}.png&zmax=19&zmin=0"
         osm_layer = QgsRasterLayer(osm_uri, 'OpenStreetMap (Altlık)', "wms")
         if osm_layer.isValid():
             project.addMapLayer(osm_layer, addToLegend=True)
-            added_layers.append(osm_layer)
+            added_layer_count += 1
 
-    # Add survey layers
+    # Add lookup attribute tables so ValueRelation / RelationReference dropdowns work offline on QField
+    for tbl_name, _, ident in attribute_tables:
+        uri = f"{output_gpkg_path}|layername={tbl_name}"
+        layer = QgsVectorLayer(uri, ident, "ogr")
+        if layer.isValid():
+            project.addMapLayer(layer, addToLegend=False)
+
+    # Add survey / spatial layers
     for tbl_name, _, ident in spatial_tables:
         uri = f"{output_gpkg_path}|layername={tbl_name}"
         layer = QgsVectorLayer(uri, ident, "ogr")
@@ -119,17 +162,19 @@ def package_for_qfield(
         if qml:
             from qgis.PyQt.QtXml import QDomDocument
             doc = QDomDocument()
-            if doc.setContent(qml):
+            parsed = doc.setContent(qml)
+            if parsed[0] if isinstance(parsed, tuple) else parsed:
                 layer.importNamedStyle(doc)
         else:
             layer.loadDefaultStyle()
 
         project.addMapLayer(layer, addToLegend=True)
-        added_layers.append(layer)
+        added_layer_count += 1
 
-    # Save .qgs project file in output_dir
+    # Save .qgs project file in output_dir and release layer file handles immediately
     project_file = out_dir / "saha_anketi.qgs"
     project.write(str(project_file))
+    project.clear()
 
     # Generate README for field crew
     readme_path = out_dir / "README_QFIELD.md"
@@ -141,5 +186,5 @@ def package_for_qfield(
         "project_file": str(project_file),
         "gpkg_file": str(output_gpkg_path),
         "photo_dir": str(photo_dir),
-        "layer_count": len(added_layers),
+        "layer_count": added_layer_count,
     }

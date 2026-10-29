@@ -163,7 +163,9 @@ def import_template_style(layer, template_table, rename_layers=None):
     for old, new in (rename_layers or {}).items():
         text = text.replace(f"'{old}'", f"'{new}'")
     doc = QDomDocument("qgis")
-    doc.setContent(text)
+    parsed = doc.setContent(text)
+    if not (parsed[0] if isinstance(parsed, tuple) else parsed):
+        raise ValueError(f"{template_table}: QML şablonu ayrıştırılamadı.")
     ok, message = layer.importNamedStyle(doc)
     if not ok:
         raise RuntimeError(f"{layer.name()}: {message}")
@@ -180,13 +182,15 @@ def bind_function_relation(project, referencing, referenced, field_pairs, relati
         manager.removeRelation(relation_id)
     relation = QgsRelation()
     relation.setId(relation_id)
-    relation.setName('UİP fonksiyon kataloğu')
+    is_nip = "5000" in str(relation_id).lower() or "nip" in str(relation_id).lower()
+    relation.setName('NİP fonksiyon kataloğu' if is_nip else 'UİP fonksiyon kataloğu')
     relation.setReferencingLayer(referencing.id())
     relation.setReferencedLayer(referenced.id())
     for child, parent in field_pairs.items():
         relation.addFieldPair(child, parent)
     if not relation.isValid():
-        raise RuntimeError('UİP fonksiyon ilişkisi kurulamadı: ' + relation.validationError())
+        label = 'NİP' if is_nip else 'UİP'
+        raise RuntimeError(f'{label} fonksiyon ilişkisi kurulamadı: ' + relation.validationError())
     manager.addRelation(relation)
     for child in field_pairs:
         index = referencing.fields().indexFromName(child)

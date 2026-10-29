@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.2] - 2026-10-30
+
+- Merkezi Türkçe normalizasyon ve geometri sink adaptörleri (`core/attr_utils.py`) entegre edildi.
+- `core/styler.py` XML Doctype filtresi `<!ENTITY>` ile sınırlandırıldı; QGIS sembolojisi yükleme hataları giderildi.
+- `core/active_mobility_audit.py`, `core/mpyy_urban_analytics.py`, `core/routed_accessibility.py` ve `core/multimodal_accessibility.py` içindeki geçersiz `geom.isCurved()` çağrıları standart doğrusallaştırma adaptörüne geçirildi.
+- `core/function_picker.py` çizim aracının tetiklenmesini engelleyen kontrol kaldırıldı.
+- `core/capacity_engine.py` ve `core/parking_engine.py`: KDKÇA ve çalışma alanları konut kapasitesinden ayrıştırıldı.
+- `core/zoning_certificate.py`: 7221 sayılı Kanun Md. 8 uyumu, BÖHYY/ITRF96 koordinat tablosu ve HTML/Markdown imar çapı çıktısı güncellendi.
+- `core/plan_diff.py`: MPYY Madde 26 eşdeğer alan denetimi ve donatı bilançosu hesaplamaları güçlendirildi.
+- `provider.py`: Threading bayrakları ve Processing metin bildirimleri onarıldı.
+- UI ve analiz çıktılarındaki tüm yabancı dil sızıntıları mevzuata uygun Türkçe terminolojiye çevrildi.
+
 ## [1.0.1] - 2026-10-27
 
 - Hub listing text rewritten; author Geophilo; university affiliation removed; documentation links use the standard geophilo.com pages (manual.html, guide/); manual HTML no longer ships in the plugin package.

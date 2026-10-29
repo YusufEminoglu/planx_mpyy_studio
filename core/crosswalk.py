@@ -8,12 +8,14 @@ olarak atanmaz; 'ONAY_BEKLIYOR' statüsüyle işaretlenerek şehir plancısını
 from dataclasses import dataclass
 from typing import Any
 from qgis.core import (
+    QgsCoordinateTransform,
     QgsFeature,
-    QgsField,
-    QgsFields,
+    QgsGeometry,
+    QgsProject,
     QgsVectorLayer,
-    QgsVariantUtils,
 )
+
+from .attr_utils import adapt_geometry_for_sink, clean_text, field_index_ci
 
 # Doğrudan / Tekil Eşleşmeler (Deterministic Mappings)
 DETERMINISTIC_CROSSWALK = {
@@ -255,13 +257,12 @@ def execute_layer_crosswalk(
     if not source_layer.isValid() or not target_plan_layer.isValid():
         raise ValueError('Geçersiz kaynak veya hedef katman')
 
-    f_idx = source_layer.fields().indexFromName(source_field_name)
+    f_idx = field_index_ci(source_layer.fields(), source_field_name)
     if f_idx < 0:
-        # Fallback fields
-        for alt in ("tucbs_sinifi", "B_FONK", "Y_TIP"):
-            f_idx = source_layer.fields().indexFromName(alt)
+        for alt in ("tucbs_sinifi", "P_FONK", "B_FONK", "Y_TIP"):
+            f_idx = field_index_ci(source_layer.fields(), alt)
             if f_idx >= 0:
-                source_field_name = alt
+                source_field_name = source_layer.fields().at(f_idx).name()
                 break
     if f_idx < 0:
         raise ValueError(f'Kaynak alanda {source_field_name} sütunu bulunamadı')
@@ -270,16 +271,30 @@ def execute_layer_crosswalk(
     pending_count = 0
     unresolved_count = 0
 
-    target_plan_layer.startEditing()
+    src_crs = source_layer.crs()
+    dst_crs = target_plan_layer.crs()
+    transform = (
+        QgsCoordinateTransform(src_crs, dst_crs, QgsProject.instance().transformContext())
+        if src_crs.isValid() and dst_crs.isValid() and src_crs != dst_crs
+        else None
+    )
+    target_wkb = target_plan_layer.wkbType()
+    target_fields = target_plan_layer.fields()
+    target_field_names = set(target_fields.names())
+
+    was_editable = target_plan_layer.isEditable()
+    if not was_editable and not target_plan_layer.startEditing():
+        raise RuntimeError('Hedef plan katmanı düzenleme moduna alınamadı.')
     try:
         for feat in source_layer.getFeatures():
-            src_val = str(feat.attributes()[f_idx] or "")
+            src_val = clean_text(feat.attributes()[f_idx])
             match = evaluate_crosswalk(src_val)
 
-            new_feat = QgsFeature(target_plan_layer.fields())
-            new_feat.setGeometry(feat.geometry())
-
-            target_field_names = set(target_plan_layer.fields().names())
+            new_feat = QgsFeature(target_fields)
+            geom = QgsGeometry(feat.geometry())
+            if transform is not None and not geom.isEmpty():
+                geom.transform(transform)
+            new_feat.setGeometry(adapt_geometry_for_sink(geom, target_wkb))
 
             def safe_set(f_name, val):
                 if f_name in target_field_names:
@@ -291,6 +306,7 @@ def execute_layer_crosswalk(
                 safe_set("fonksiyon_adi", match.eslesen_fonksiyon)
                 safe_set("ust_grup_adi", match.ust_grup)
                 safe_set("uipfonksiyon", match.eslesen_fonksiyon)
+                safe_set("nipfonksiyon", match.eslesen_fonksiyon)
                 safe_set("ustkonugrup", match.ust_grup)
                 safe_set("aciklama", f'TUCBS Saha Aktarımı: {src_val}')
             elif match.durum == "ONAY_BEKLIYOR":
@@ -299,18 +315,24 @@ def execute_layer_crosswalk(
                 candidates_str = ", ".join(match.aday_fonksiyonlar)
                 safe_set("fonksiyon_adi", "")
                 safe_set("uipfonksiyon", "")
+                safe_set("nipfonksiyon", "")
                 safe_set("aciklama", f"ONAY_BEKLIYOR: Saha='{src_val}' Adaylar: [{candidates_str}]")
             else:
                 unresolved_count += 1
                 safe_set("fonksiyon_adi", "")
                 safe_set("uipfonksiyon", "")
+                safe_set("nipfonksiyon", "")
                 safe_set("aciklama", f"TANIMSIZ: Saha='{src_val}'")
 
-            target_plan_layer.addFeature(new_feat)
+            if not target_plan_layer.addFeature(new_feat):
+                raise RuntimeError('Hedef plan katmanına nesne eklenemedi.')
 
-        target_plan_layer.commitChanges()
+        if not was_editable and not target_plan_layer.commitChanges():
+            errors = "; ".join(target_plan_layer.commitErrors()[-3:])
+            raise RuntimeError(f'Hedef plan katmanı değişiklikleri kaydedilemedi: {errors}')
     except Exception as exc:
-        target_plan_layer.rollBack()
+        if not was_editable and target_plan_layer.isEditable():
+            target_plan_layer.rollBack()
         raise RuntimeError(f'Fonksiyon eşleştirmesi sırasında hata: {exc}') from exc
 
     return {

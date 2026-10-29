@@ -20,16 +20,24 @@ Calculates a composite statutory risk score (0-100) and classifies priorities:
 
 from __future__ import annotations
 
-import contextlib
 from dataclasses import dataclass, field
-import re
 from typing import Any
 from qgis.core import QgsFeature
 
+from .attr_utils import (
+    field_index_ci,
+    first_raw,
+    first_text,
+    is_null_value,
+    lower_tr,
+    norm_tr,
+    parse_floor_count,
+    parse_int,
+)
+
 
 def _norm_text(val: Any) -> str:
-    text = str(val or "").strip().upper().translate(str.maketrans("ÇĞİÖŞÜ", "CGIOSU"))
-    return re.sub(r"[^A-Z0-9]+", "_", text).strip("_")
+    return norm_tr(val)
 
 
 @dataclass
@@ -83,38 +91,40 @@ class UrbanTransformationRiskEngine:
         results: list[BuildingRiskResult] = []
         summary = RiskSummary()
 
-        age_keys = ("yapim_yili", "bina_yasi", "insaat_yili", "B_YIL", "YAPIM_YILI")
-        struct_keys = ("B_YAPI_CINSI", "yapi_cinsi", "tasiyici_sistem", "yapi_turu", "STRUKTUR")
-        damage_keys = ("B_HASAR_DURUMU", "B_DURUM", "hasar_durumu", "fiziki_durum", "DURUM")
-        floor_keys = ("kat_adedi", "kat_sayisi", "B_KAT", "KAT", "kat")
-        geo_keys = ("yerlesime_uygunluk", "P_JEOLOJI", "jeoloji", "zemin_durumu", "UYGUNLUK")
-        id_keys = ("bina_kodu", "B_KOD", "bina_no", "id", "fid", "ada_parsel")
+        age_keys = ("yapim_yili", "bina_yasi", "B_YAS", "insaat_yili", "B_YIL", "YAPIM_YILI")
+        age_delta_fields = frozenset({"bina_yasi", "b_yas"})
+        struct_keys = ("B_YAPI_CINSI", "yapi_cinsi", "tasiyici_sistem", "yapi_turu", "STRUKTUR", "YapiCinsi")
+        damage_keys = ("B_HASAR_DURUMU", "B_DURUM", "hasar_durumu", "fiziki_durum", "DURUM", "HasarDurumu")
+        floor_keys = ("kat_adedi", "kat_sayisi", "B_KAT", "KatAdedi", "katadedi", "P_KAT", "KAT", "kat")
+        geo_keys = ("yerlesime_uygunluk", "P_JEOLOJI", "ZEMIN_TIP", "jeoloji", "zemin_durumu", "UYGUNLUK", "JeolojikDurum")
+        id_keys = ("bina_kodu", "B_KOD", "bina_no", "global_id", "id", "fid", "ada_parsel")
 
         for feat in features:
             geom = feat.geometry()
             area_m2 = round(geom.area(), 2) if geom and not geom.isEmpty() else 0.0
 
             # 1. Bina Kodu
-            bina_kodu = str(feat.id())
-            for k in id_keys:
-                idx = feat.fields().indexFromName(k)
-                if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                    bina_kodu = str(feat[idx]).strip()
-                    break
+            bina_kodu = first_text(feat, id_keys) or str(feat.id())
 
             # 2. Yapım Yılı / Yaş
             yapim_yili: int | None = None
+            fields = feat.fields()
             for k in age_keys:
-                idx = feat.fields().indexFromName(k)
-                if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                    with contextlib.suppress(ValueError, TypeError):
-                        val = int(float(feat[idx]))
-                        if 1800 <= val <= reference_year + 5:
-                            yapim_yili = val
-                            break
-                        if 0 < val <= 150:
-                            yapim_yili = reference_year - val
-                            break
+                idx = field_index_ci(fields, k)
+                if idx >= 0 and not is_null_value(feat[idx]):
+                    val = parse_int(feat[idx])
+                    if val is None:
+                        continue
+                    is_age_col = lower_tr(k) in age_delta_fields
+                    if 1800 <= val <= reference_year + 5:
+                        yapim_yili = val
+                        break
+                    if is_age_col and 0 <= val <= 150:
+                        yapim_yili = reference_year - val
+                        break
+                    if not is_age_col and 0 < val <= 150:
+                        yapim_yili = reference_year - val
+                        break
 
             # Age score (max 30 pts)
             skor_yas = 15.0  # default moderate
@@ -129,18 +139,13 @@ class UrbanTransformationRiskEngine:
                     skor_yas = 2.0   # 2018 TBDY modern code
 
             # 3. Yapı Cinsi (max 25 pts)
-            yapi_cinsi = ""
-            for k in struct_keys:
-                idx = feat.fields().indexFromName(k)
-                if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                    yapi_cinsi = str(feat[idx]).strip()
-                    break
+            yapi_cinsi = first_text(feat, struct_keys)
 
             norm_yapi = _norm_text(yapi_cinsi)
             skor_yapi = 15.0  # default
             if any(w in norm_yapi for w in ("KERPIC", "AHSAP", "TAS", "KERPIC_YIGMA")):
                 skor_yapi = 25.0
-            elif "YIGMA" in norm_yapi or "BRICKET" in norm_yapi or "TUGLA" in norm_yapi:
+            elif "YIGMA" in norm_yapi or "BRICKET" in norm_yapi or "BRIKET" in norm_yapi or "TUGLA" in norm_yapi:
                 skor_yapi = 22.0
             elif "BETONARME" in norm_yapi or "KARKAS" in norm_yapi:
                 skor_yapi = 15.0
@@ -148,34 +153,26 @@ class UrbanTransformationRiskEngine:
                 skor_yapi = 5.0
 
             # 4. Hasar / Fiziki Durum (max 25 pts)
-            hasar_durumu = ""
-            for k in damage_keys:
-                idx = feat.fields().indexFromName(k)
-                if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                    hasar_durumu = str(feat[idx]).strip()
-                    break
+            hasar_durumu = first_text(feat, damage_keys)
 
             norm_hasar = _norm_text(hasar_durumu)
+            padded_hasar = f"_{norm_hasar}_"
             skor_hasar = 5.0  # default
-            if any(w in norm_hasar for w in ("AGIR", "YIKIK", "ACIL_YIKILACAK", "METRUK", "HARABE")):
+            if any(w in norm_hasar for w in ("AGIR", "YIKIK", "ACIL_YIKILACAK", "METRUK", "HARABE", "COKUK")):
                 skor_hasar = 25.0
-            elif any(w in norm_hasar for w in ("ORTA", "HASARLI", "BAKIMSIZ", "ESKI")):
-                skor_hasar = 16.0
-            elif any(w in norm_hasar for w in ("AZ", "HAFIF")):
-                skor_hasar = 8.0
             elif any(w in norm_hasar for w in ("HASARSIZ", "IYI", "YENI", "SAGLAM")):
                 skor_hasar = 1.0
+            elif any(f"_{w}_" in padded_hasar for w in ("AZ", "AZ_HASARLI", "HAFIF", "HAFIF_HASARLI")):
+                skor_hasar = 8.0
+            elif any(w in norm_hasar for w in ("ORTA", "HASARLI", "BAKIMSIZ", "ESKI", "KOTU")):
+                skor_hasar = 16.0
 
             # 5. Kat Adedi ve Geometrik Zafiyet (max 10 pts)
             kat_adedi = 1
-            for k in floor_keys:
-                idx = feat.fields().indexFromName(k)
-                if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                    with contextlib.suppress(ValueError, TypeError):
-                        k_val = int(float(feat[idx]))
-                        if k_val >= 1:
-                            kat_adedi = k_val
-                            break
+            raw_floor = first_raw(feat, floor_keys)
+            parsed_floor = parse_floor_count(raw_floor)
+            if parsed_floor is not None and parsed_floor >= 1:
+                kat_adedi = parsed_floor
 
             skor_kat = 2.0
             if kat_adedi >= 8:
@@ -190,20 +187,16 @@ class UrbanTransformationRiskEngine:
                 skor_kat = min(10.0, skor_kat + 4.0)
 
             # 6. Yerleşime Uygunluk / Zemin (max 10 pts)
-            yerlesime_uygunluk = ""
-            for k in geo_keys:
-                idx = feat.fields().indexFromName(k)
-                if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                    yerlesime_uygunluk = str(feat[idx]).strip()
-                    break
+            yerlesime_uygunluk = first_text(feat, geo_keys)
 
             norm_geo = _norm_text(yerlesime_uygunluk)
+            padded_geo = f"_{norm_geo}_"
             skor_jeoloji = 2.0
-            if any(w in norm_geo for w in ("UOA", "UYGUN_OLMAYAN", "HEYELAN", "FAY", "SIVILASMA", "TASKIN")):
+            if "_UOA_" in padded_geo or any(w in norm_geo for w in ("UOA", "UYGUN_OLMAYAN", "HEYELAN", "FAY", "SIVILASMA", "TASKIN")):
                 skor_jeoloji = 10.0
-            elif any(w in norm_geo for w in ("OA", "ONLEMLI", "ONLEM")):
+            elif "_OA_" in padded_geo or any(w in norm_geo for w in ("ONLEMLI", "ONLEM")):
                 skor_jeoloji = 6.0
-            elif any(w in norm_geo for w in ("UA", "UYGUN")):
+            elif "_UA_" in padded_geo or "UYGUN" in norm_geo:
                 skor_jeoloji = 1.0
 
             # Total score

@@ -12,19 +12,23 @@ for zoning master plans (NİP) and implementation plans (UİP) under MPYY princi
 """
 
 from dataclasses import dataclass, field
-import re
 from typing import Any
 from qgis.core import (
     QgsFeature,
     QgsGeometry,
 )
 
+from .attr_utils import (
+    extract_plan_function,
+    first_float,
+    is_non_residential_work_zone,
+    norm_tr,
+)
 from .synthesis import AmenityDeficitResult, SynthesisEngine
 
 
 def _norm(val: Any) -> str:
-    text = str(val or "").strip().upper().translate(str.maketrans("ÇĞİÖŞÜ", "CGIOSU"))
-    return re.sub(r"[^A-Z0-9]+", "_", text).strip("_")
+    return norm_tr(val)
 
 
 @dataclass
@@ -74,26 +78,14 @@ class PlanCapacityEngine:
 
     @classmethod
     def _extract_float(cls, feat: QgsFeature, preferred_keys: tuple[str, ...], default: float) -> float:
-        fields = feat.fields()
-        for k in preferred_keys:
-            idx = fields.indexFromName(k)
-            if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                try:
-                    v = float(str(feat[idx]).replace(",", ' satır bulundu.'))
-                    if v > 0:
-                        return v
-                except (ValueError, TypeError):
-                    pass
+        val = first_float(feat, preferred_keys, default=None)
+        if val is not None and val >= 0.0:
+            return val
         return default
 
     @classmethod
     def _extract_text(cls, feat: QgsFeature, preferred_keys: tuple[str, ...]) -> str:
-        fields = feat.fields()
-        for k in preferred_keys:
-            idx = fields.indexFromName(k)
-            if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                return str(feat[idx]).strip()
-        return ""
+        return extract_plan_function(feat, extra_keys=preferred_keys)
 
     @classmethod
     def estimate_capacity(
@@ -116,9 +108,16 @@ class PlanCapacityEngine:
             summary.uyarilar.append('Hesaplama için plan katmanında poligon bulunamadı.')
             return items, summary
 
-        fn_keys = ("uipfonksiyon", "fonksiyon_adi", "P_FONK", "B_FONK", "plan_fonk", "catalog_id", "detay_katalogu")
-        kaks_keys = ("KAKS", "kaks", "EMSAL", "emsal", "E", "e", "katsayisi")
-        taks_keys = ("TAKS", "taks", "tabankatsayisi", "T", "t")
+        fn_keys = (
+            "uipfonksiyon", "nipfonksiyon", "fonksiyon_adi", "P_FONK", "B_FONK",
+            "plan_fonk", "catalog_id", "detay_katalogu",
+        )
+        kaks_keys = ("KAKS", "kaks", "EmsalKaks", "EMSAL", "emsal", "P_KAKS", "P_EMSAL", "E", "e", "katsayisi")
+        taks_keys = ("TAKS", "taks", "Taks", "P_TAKS", "tabankatsayisi", "T", "t")
+        nip_pop_min_keys = ("ALT_NUFUS", "alt_nufus")
+        nip_pop_max_keys = ("UST_NUFUS", "ust_nufus")
+        nip_dens_min_keys = ("ALT_SNR", "alt_snr", "Yogunluk", "yogunluk", "kisi_ha")
+        nip_dens_max_keys = ("UST_SNR", "ust_snr")
 
         total_area = 0.0
         total_res_area = 0.0
@@ -138,8 +137,11 @@ class PlanCapacityEngine:
                 continue
 
             total_area += area_m2
-            fn_val = cls._extract_text(feat, fn_keys) or "BELIRTILMEMIS"
+            fn_val = extract_plan_function(feat, extra_keys=fn_keys) or "BELIRTILMEMIS"
             norm_fn = _norm(fn_val)
+
+            if is_non_residential_work_zone(norm_fn):
+                continue
 
             is_mixed = any(kw in norm_fn for kw in cls.MIXED_USE_KEYWORDS)
             is_res = not is_mixed and any(kw in norm_fn for kw in cls.RESIDENTIAL_KEYWORDS)
@@ -148,20 +150,43 @@ class PlanCapacityEngine:
                 continue  # Non-residential zoning (park, school, industrial, road, etc.)
 
             total_res_area += area_m2
-            kaks = cls._extract_float(feat, kaks_keys, default_kaks)
+            res_ratio = 1.0 if is_res else 0.60  # Mixed-use assumes 60% residential, 40% commercial
+
+            raw_kaks = first_float(feat, kaks_keys, default=None)
             taks = cls._extract_float(feat, taks_keys, default_taks)
 
-            taban_m2 = round(area_m2 * taks, 2)
-            insaat_m2 = round(area_m2 * kaks, 2)
-            # PAİY Madde 5: Azami %30 emsal harici alan (sığınak, otopark, yangın holleri, ortak alanlar)
-            emsal_harici_m2 = round(insaat_m2 * 0.30, 2)
-            ruhsat_m2 = round(insaat_m2 + emsal_harici_m2, 2)
+            # Support 1/5000 NİP target population / density fields when explicit KAKS is absent
+            alt_pop = first_float(feat, nip_pop_min_keys, default=None)
+            ust_pop = first_float(feat, nip_pop_max_keys, default=None)
+            alt_dens = first_float(feat, nip_dens_min_keys, default=None)
+            ust_dens = first_float(feat, nip_dens_max_keys, default=None)
 
-            res_ratio = 1.0 if is_res else 0.60  # Mixed-use assumes 60% residential, 40% commercial
-            konut_insaat = round(insaat_m2 * res_ratio, 2)
+            nip_pop_vals = [v for v in (alt_pop, ust_pop) if v is not None and v > 0]
+            nip_dens_vals = [v for v in (alt_dens, ust_dens) if v is not None and v > 0]
 
-            units = int(konut_insaat / max(10.0, avg_unit_m2))
-            pop = int(units * household_size)
+            if (raw_kaks is None or raw_kaks < 0.0) and (nip_pop_vals or nip_dens_vals):
+                if nip_pop_vals:
+                    pop = int(round(sum(nip_pop_vals) / len(nip_pop_vals)))
+                else:
+                    avg_dens = sum(nip_dens_vals) / len(nip_dens_vals)
+                    pop = int(round((area_m2 / 10000.0) * avg_dens * res_ratio))
+                units = int(round(pop / max(1.0, household_size))) if pop > 0 else 0
+                konut_insaat = round(units * max(10.0, avg_unit_m2), 2)
+                insaat_m2 = round(konut_insaat / res_ratio, 2) if res_ratio > 0 else konut_insaat
+                kaks = round(insaat_m2 / area_m2, 2) if area_m2 > 0 else default_kaks
+                taban_m2 = round(area_m2 * taks, 2)
+                emsal_harici_m2 = round(insaat_m2 * 0.30, 2)
+                ruhsat_m2 = round(insaat_m2 + emsal_harici_m2, 2)
+            else:
+                kaks = raw_kaks if (raw_kaks is not None and raw_kaks >= 0.0) else default_kaks
+                taban_m2 = round(area_m2 * taks, 2)
+                insaat_m2 = round(area_m2 * kaks, 2)
+                # PAİY Madde 5: Azami %30 emsal harici alan (sığınak, otopark, yangın holleri, ortak alanlar)
+                emsal_harici_m2 = round(insaat_m2 * 0.30, 2)
+                ruhsat_m2 = round(insaat_m2 + emsal_harici_m2, 2)
+                konut_insaat = round(insaat_m2 * res_ratio, 2)
+                units = int(konut_insaat / max(10.0, avg_unit_m2))
+                pop = int(units * household_size)
 
             total_construction += insaat_m2
             total_emsal_harici += emsal_harici_m2

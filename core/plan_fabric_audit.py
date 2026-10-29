@@ -7,6 +7,8 @@ from typing import Iterable
 
 from qgis.core import QgsFeature, QgsGeometry, QgsSpatialIndex
 
+from .attr_utils import reindex_features
+
 
 @dataclass(frozen=True)
 class PlanFabricRecord:
@@ -40,7 +42,7 @@ class PlanFabricAuditEngine:
     ) -> PlanFabricAuditResult:
         if area_tolerance < 0:
             raise ValueError('Alan toleransı negatif olamaz.')
-        features = list(decision_features)
+        features = reindex_features(decision_features)
         feature_map = {}
         geometries = {}
         index = QgsSpatialIndex()
@@ -89,8 +91,8 @@ class PlanFabricAuditEngine:
                 feature, status, feature_area, overlap_area,
                 min(1.0, overlap_area / feature_area) if feature_area else 0.0,
                 tuple(sorted(conflicts)),
-                "Decision overlaps another plan polygon."
-                    if status == "OVERLAP" else 'Alan toleransını aşan iç çakışma yoktur.',
+                'Karar geometrisi başka bir plan poligonu ile çakışmaktadır.'
+                if status == "OVERLAP" else 'Alan toleransını aşan iç çakışma yoktur.',
             ))
 
         decision_union = QgsGeometry.unaryUnion(list(geometries.values())) if geometries else None

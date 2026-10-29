@@ -9,15 +9,22 @@ Detects legislative and spatial anomalies:
 """
 
 from dataclasses import dataclass
-from typing import Any
 from qgis.core import (
     QgsFeature,
     QgsGeometry,
-    QgsPointXY,
     QgsSpatialIndex,
-    QgsVectorLayer,
 )
 from .actions import calculate_setback_envelope
+from .attr_utils import (
+    clean_text,
+    field_index_ci,
+    first_float,
+    first_text,
+    is_null_value,
+    normalize_nizam_code,
+    reindex_features,
+    upper_tr,
+)
 
 
 @dataclass(frozen=True)
@@ -77,11 +84,15 @@ class QualityControlEngine:
         if not parcel_features or len(parcel_features) < 2:
             return anomalies
 
-        idx = _build_spatial_index(parcel_features)
-        p_map = {p.id(): p for p in parcel_features}
+        orig_ids = [p.id() for p in parcel_features]
+        indexed_parcels = reindex_features(parcel_features)
+        orig_by_uid = {feat.id(): orig_ids[pos] for pos, feat in enumerate(indexed_parcels)}
+
+        idx = _build_spatial_index(indexed_parcels)
+        p_map = {p.id(): p for p in indexed_parcels}
         seen_pairs = set()
 
-        for p1 in parcel_features:
+        for p1 in indexed_parcels:
             g1 = p1.geometry()
             if not g1 or g1.isEmpty():
                 continue
@@ -109,7 +120,7 @@ class QualityControlEngine:
                             QCAnomaly(
                                 tur="PARSEL_CAKISMA",
                                 ciddiyet="HATA",
-                                nesne_id=f"{p1.id()} - {p2.id()}",
+                                nesne_id=f"{orig_by_uid[p1.id()]} - {orig_by_uid[p2.id()]}",
                                 aciklama=f'İki parsel arasında {inter.area():.2f} m² çakışma/mükerrer alan tespit edildi.',
                                 geometri=inter,
                             )
@@ -125,8 +136,9 @@ class QualityControlEngine:
         if not building_features:
             return anomalies
 
-        idx_parcels = _build_spatial_index(parcel_features)
-        p_map = {p.id(): p for p in parcel_features}
+        indexed_parcels = reindex_features(parcel_features) if parcel_features else []
+        idx_parcels = _build_spatial_index(indexed_parcels)
+        p_map = {p.id(): p for p in indexed_parcels}
 
         for b in building_features:
             b_geom = b.geometry()
@@ -182,23 +194,35 @@ class QualityControlEngine:
         if not parcel_features or not building_features:
             return anomalies
 
-        idx_b = _build_spatial_index(building_features)
-        b_map = {b.id(): b for b in building_features}
+        orig_b_ids = [b.id() for b in building_features]
+        indexed_buildings = reindex_features(building_features)
+        orig_b_by_uid = {feat.id(): orig_b_ids[pos] for pos, feat in enumerate(indexed_buildings)}
+        idx_b = _build_spatial_index(indexed_buildings)
+        b_map = {b.id(): b for b in indexed_buildings}
+
+        setback_keys = (
+            "P_CEKME", "OnBahceMesafesi", "onBahce", "onbahce", "on_bahce", "yapiYaklasmaMesafesi",
+        )
+        nizam_keys = ("NIZAM", "nizam", "YapiDuzeni", "yapi_nizami", "P_NIZAM", "uipnizam")
 
         for p in parcel_features:
             p_geom = p.geometry()
             if not p_geom or p_geom.isEmpty():
                 continue
 
-            # Check if parcel specifies custom setback
-            setback_m = default_setback_m
-            if p.fields().indexFromName("P_CEKME") >= 0 and p["P_CEKME"]:
-                try:
-                    val = float(p["P_CEKME"])
-                    if val > 0:
-                        setback_m = val
-                except (ValueError, TypeError):
-                    pass
+            # Check if parcel specifies custom setback (honoring explicit 0.0)
+            raw_setback = first_float(p, setback_keys, default=None)
+            if raw_setback is not None and raw_setback >= 0.0:
+                setback_m = raw_setback
+            else:
+                raw_nizam = first_text(p, nizam_keys)
+                if raw_nizam and normalize_nizam_code(raw_nizam, default="") == "BITISIK":
+                    setback_m = 0.0
+                else:
+                    setback_m = default_setback_m
+
+            if setback_m <= 0.0:
+                continue
 
             # Calculate setback envelope (inner allowed footprint)
             envelope = calculate_setback_envelope(p_geom, setback_m)
@@ -227,7 +251,7 @@ class QualityControlEngine:
                             QCAnomaly(
                                 tur="CEKME_IHLALI",
                                 ciddiyet="UYARI",
-                                nesne_id=f"Bina {b.id()} / Parsel {p.id()}",
+                                nesne_id=f"Bina {orig_b_by_uid[bid]} / Parsel {p.id()}",
                                 aciklama=(
                                     f'Bina {setback_m:.1f}m çekme mesafesi koridoruna taşıyor ({violation.area():.2f} m² ihlal).'
                                 ),
@@ -240,33 +264,45 @@ class QualityControlEngine:
     def check_free_height_violations(features: list[QgsFeature]) -> list[QCAnomaly]:
         """Audit planning zones against Law No. 7221 prohibiting unrestricted building heights (Yençok: Serbest)."""
         anomalies = []
-        height_keys = ("yencok", "YENCOK", "katadedi", "kat_adedi", "P_KAT", "HMAX", "hmax", "kat", "KAT")
+        height_keys = (
+            "yencok", "YENCOK", "Yukseklik", "katadedi", "KatAdedi", "kat_adedi",
+            "P_KAT", "HMAX", "hmax", "kat", "KAT",
+        )
         prohibited_tokens = {"SERBEST", "SER", "H:SERBEST", "YENCOK:SERBEST", "YENCOK_SERBEST", "H_SERBEST"}
 
         for feat in features:
             fid = feat.id()
             fields = feat.fields()
-            found_height_val = ""
+            violating_val = ""
+            checked_indices: set[int] = set()
             for k in height_keys:
-                idx = fields.indexFromName(k)
-                if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                    found_height_val = str(feat[idx]).strip()
+                idx = field_index_ci(fields, k)
+                if idx < 0 or idx in checked_indices:
+                    continue
+                checked_indices.add(idx)
+                raw = feat[idx]
+                if is_null_value(raw):
+                    continue
+                candidate = clean_text(raw)
+                if not candidate:
+                    continue
+                norm_h = upper_tr(candidate).translate(str.maketrans("ÇĞİÖŞÜ", "CGIOSU")).replace(" ", "_")
+                if norm_h in prohibited_tokens or any(t in norm_h for t in ("SERBEST", "SER.")):
+                    violating_val = candidate
                     break
 
-            if found_height_val:
-                norm_h = found_height_val.upper().translate(str.maketrans("ÇĞİÖŞÜ", "CGIOSU")).replace(" ", "_")
-                if norm_h in prohibited_tokens or any(t in norm_h for t in ("SERBEST", "SER.")):
-                    anomalies.append(
-                        QCAnomaly(
-                            tur="HUKUKA_AYKIRI_SERBEST_YUKSEKLIK",
-                            ciddiyet="HATA",
-                            nesne_id=fid,
-                            aciklama=(
-                                f"7221 sayılı Kanun ve 3194 s. İmar Kanunu Md. 8 ihlali: Bina yüksekliği 'Yençok: Serbest' ({found_height_val}) olarak belirlenemez. Sayısal kat adedi veya azami bina yüksekliği (Hmax metre) belirlenmelidir."
-                            ),
-                            geometri=feat.geometry() if feat.hasGeometry() else QgsGeometry(),
-                        )
+            if violating_val:
+                anomalies.append(
+                    QCAnomaly(
+                        tur="HUKUKA_AYKIRI_SERBEST_YUKSEKLIK",
+                        ciddiyet="HATA",
+                        nesne_id=fid,
+                        aciklama=(
+                            f"7221 sayılı Kanun ve 3194 s. İmar Kanunu Md. 8 ihlali: Bina yüksekliği 'Yençok: Serbest' ({violating_val}) olarak belirlenemez. Sayısal kat adedi veya azami bina yüksekliği (Hmax metre) belirlenmelidir."
+                        ),
+                        geometri=feat.geometry() if feat.hasGeometry() else QgsGeometry(),
                     )
+                )
         return anomalies
 
     @classmethod

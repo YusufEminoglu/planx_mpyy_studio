@@ -21,8 +21,10 @@ from qgis.PyQt.QtCore import QTemporaryFile
 from qgis.PyQt.QtXml import QDomDocument
 
 
-from .localization import localized_category
+from .attr_utils import is_null_value
 from .fonts import register_mpyy_fonts
+from .legend_scope import FULL_PROPERTY, MODE_PROPERTY, full_renderer
+from .localization import localized_category
 
 @dataclass(frozen=True)
 class StyleResult:
@@ -70,7 +72,7 @@ class MPYYStylerEngine:
                 data = stream.read(32 * 1024 * 1024 + 1)
         if len(data) > 32 * 1024 * 1024:
             raise ValueError('Katalog 32 MiB içe aktarma sınırını aşıyor.')
-        if b"<!ENTITY" in data.upper() or b"SYSTEM" in data.upper():
+        if b"<!ENTITY" in data.upper():
             raise ValueError('Harici XML varlıkları desteklenmiyor.')
         original_hash = hashlib.sha256(data).hexdigest()
         dependencies = Path(__file__).resolve().parents[1] / "styles"
@@ -201,18 +203,22 @@ class MPYYStylerEngine:
         index = layer.fields().lookupField(field_name)
         if index < 0:
             raise ValueError('Fonksiyon kodu alanı bulunamadı.')
-        geometry = {0: "POINT", 1: "LINE", 2: "POLYGON"}.get(int(layer.geometryType()))
+        geometry = {
+            Qgis.GeometryType.Point: "POINT",
+            Qgis.GeometryType.Line: "LINE",
+            Qgis.GeometryType.Polygon: "POLYGON",
+        }.get(layer.geometryType())
         if geometry is None:
             raise ValueError("Desteklenmeyen geometri.")
         categories, unknown = [], []
         warnings = [
-            "Text font substituted: " + name
+            "Yazı tipi ikame edildi: " + name
             for name in self.inventory.get("missing_fonts", [])
         ]
         matched = null_count = 0
         values = list(layer.uniqueValues(index))
         present_codes = {
-            str(value) for value in values if not QgsVariantUtils.isNull(value)
+            str(value) for value in values if not is_null_value(value)
         }
         # Include valid catalog codes even on an empty layer, so newly drawn
         # features immediately receive their mapped style without a second click.
@@ -224,17 +230,22 @@ class MPYYStylerEngine:
                 if level == plan_level and kind == geometry and (symbol if by_name else code) not in present_codes
             )
         )
-        values.sort(key=lambda value: str(value))
+        values.sort(key=lambda value: "" if is_null_value(value) else str(value))
+        symbol_geom_map = {
+            Qgis.SymbolType.Marker: Qgis.GeometryType.Point,
+            Qgis.SymbolType.Line: Qgis.GeometryType.Line,
+            Qgis.SymbolType.Fill: Qgis.GeometryType.Polygon,
+        }
         for value in values:
-            is_null = QgsVariantUtils.isNull(value)
+            is_null = is_null_value(value)
             code = None if is_null else str(value)
             name = self._mappings.get((plan_level, geometry, code))
             if name is None and code and self._style.symbol(code) is not None:
                 # uipfonksiyon stores the function name, which is the symbol name.
                 name = code
             symbol = self._style.symbol(name) if name else None
-            if symbol is not None and int(symbol.type()) != int(layer.geometryType()):
-                warnings.append('Geometri uyumsuzluğu: ' + code)
+            if symbol is not None and symbol_geom_map.get(symbol.type()) != layer.geometryType():
+                warnings.append('Geometri uyumsuzluğu: ' + (code or ""))
                 symbol = None
             if symbol is None:
                 symbol = QgsSymbol.defaultSymbol(layer.geometryType())
@@ -250,15 +261,18 @@ class MPYYStylerEngine:
         # A final catch-all also makes newly entered codes visible.
         fallback = QgsSymbol.defaultSymbol(layer.geometryType())
         fallback.setColor(QColor("#a7adb5"))
-        categories.append(localized_category("", fallback, "Other / unmapped"))
+        categories.append(localized_category("", fallback, "Diğer / eşleşmeyen"))
         renderer = QgsCategorizedSymbolRenderer(field_name, categories)
         if layer.id() not in self._previous:
+            base_renderer = full_renderer(layer)
             self._previous[layer.id()] = (
-                layer.renderer().clone(),
+                base_renderer if base_renderer is not None else (layer.renderer().clone() if layer.renderer() else None),
                 layer.hasScaleBasedVisibility(),
                 layer.minimumScale(),
                 layer.maximumScale(),
             )
+        layer.removeCustomProperty(FULL_PROPERTY)
+        layer.removeCustomProperty(MODE_PROPERTY)
         layer.setRenderer(renderer)
         layer.setScaleBasedVisibility(False)
         layer.triggerRepaint()
@@ -269,7 +283,10 @@ class MPYYStylerEngine:
         if previous is None:
             return False
         renderer, enabled, minimum, maximum = previous
-        layer.setRenderer(renderer)
+        layer.removeCustomProperty(FULL_PROPERTY)
+        layer.removeCustomProperty(MODE_PROPERTY)
+        if renderer is not None:
+            layer.setRenderer(renderer)
         layer.setMinimumScale(minimum)
         layer.setMaximumScale(maximum)
         layer.setScaleBasedVisibility(enabled)

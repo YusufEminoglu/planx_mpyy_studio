@@ -6,6 +6,8 @@ from dataclasses import dataclass
 import math
 from typing import Any, Mapping
 
+from .attr_utils import parse_float
+
 
 @dataclass(frozen=True)
 class RoadChangeFinding:
@@ -74,9 +76,8 @@ class RoadChangeAuditEngine:
 
     @staticmethod
     def _number(value: Any) -> float | None:
-        try:
-            number = float(value)
-        except (TypeError, ValueError):
+        number = parse_float(value)
+        if number is None:
             return None
         return number if math.isfinite(number) and number >= 0.0 else None
 

@@ -304,9 +304,10 @@ def configure_msp_layer(layer, spec=None):
         layer.setDefaultValueDefinition(kademe, QgsDefaultValue(f"'{PLAN_KADEMESI}'"))
     if spec is not None:
         rule = class_rule()
+        null_option = [{"(boş)": "{2839923C-8B7D-419E-B84B-CA2FE9B80EC7}"}]
         entries_by_field = {
-            "yerlesme_kademesi": _class_entries(rule.get("simge_boyutlari_mm"), "kademe"),
-            "yerlesme_yogunlugu": _class_entries(rule.get("tonlar"), "yoğunluk"),
+            "yerlesme_kademesi": null_option + _class_entries(rule.get("simge_boyutlari_mm"), "kademe"),
+            "yerlesme_yogunlugu": null_option + _class_entries(rule.get("tonlar"), "yoğunluk"),
         }
         for name, entries in (
             ("msp_kodu", [{code.caption: code.id} for code in spec.codes]),
@@ -370,8 +371,17 @@ def configure_msp_action_table(table):
     baseline, and a value can be negative.
     """
     fields = table.fields()
+    gid = fields.indexFromName("global_id")
+    if gid >= 0:
+        table.setDefaultValueDefinition(
+            gid, QgsDefaultValue("replace(replace(uuid(),'{',''),'}','')")
+        )
+    kademe = fields.indexFromName("plan_kademesi")
+    if kademe >= 0:
+        table.setDefaultValueDefinition(kademe, QgsDefaultValue(f"'{PLAN_KADEMESI}'"))
     weight = fields.indexFromName("weight")
     if weight >= 0:
+        table.setDefaultValueDefinition(weight, QgsDefaultValue("1.0"))
         table.setEditorWidgetSetup(weight, QgsEditorWidgetSetup(
             "Range", {"Min": 0.0, "Max": 1000000.0, "Step": 0.1, "Precision": 2,
                       "AllowNull": True, "Style": "SpinBox"}))

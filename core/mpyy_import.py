@@ -24,9 +24,10 @@ from qgis.core import (
     QgsWkbTypes,
 )
 
+from .attr_utils import clean_text, is_null_value
 from .form_rules import cross_field_findings, rule_for, value_in_rule
 from .tabaka_matching import load_user_mappings, normalize_tabaka as _normalize_tabaka, resolve
-from .mpyy_workspace import all_levels, level_schema
+from .mpyy_workspace import DETAIL_HIERARCHY_TABLE, _connect_ro, all_levels, level_schema
 
 CROSSWALK_PATH = Path(__file__).resolve().parents[1] / "styles" / "mpyy_tabaka_crosswalk.json"
 FAMILY = {
@@ -38,7 +39,13 @@ FAMILY = {
     "MultiPoint": Qgis.GeometryType.Point,
 }
 FAMILY_NAME = {Qgis.GeometryType.Polygon: "alan", Qgis.GeometryType.Line: "çizgi", Qgis.GeometryType.Point: "nokta"}
-SYSTEM_TABLES = {"mpyy_sema", "layer_styles", "mpyy_metadata"}
+SYSTEM_TABLES = {
+    "mpyy_sema",
+    "layer_styles",
+    "mpyy_metadata",
+    DETAIL_HIERARCHY_TABLE,
+    "_reconciliation_conflicts",
+}
 
 
 # One spelling rule for every caller: the matcher owns it.
@@ -50,11 +57,12 @@ def crosswalk(level):
 
 
 def workspace_level(path):
-    with closing(sqlite3.connect(f"file:{Path(path).resolve().as_posix()}?mode=ro", uri=True)) as con:
-        try:
-            return con.execute("SELECT plan_kademesi FROM mpyy_sema").fetchone()[0]
-        except sqlite3.Error:
-            return None
+    try:
+        with closing(_connect_ro(path)) as con:
+            row = con.execute("SELECT plan_kademesi FROM mpyy_sema").fetchone()
+            return row[0] if row else None
+    except (sqlite3.Error, OSError):
+        return None
 
 
 def _fit_geometry(geometry, target):
@@ -64,6 +72,13 @@ def _fit_geometry(geometry, target):
     single-part types (LineString, Point, Polygon)."""
     if geometry is None or geometry.isEmpty():
         return []
+    geometry = QgsGeometry(geometry)
+    abstract = geometry.get()
+    if abstract is not None:
+        abstract.dropZValue()
+        abstract.dropMValue()
+        if QgsWkbTypes.isCurvedType(geometry.wkbType()):
+            geometry = QgsGeometry(abstract.segmentize())
     family = FAMILY[target]
     if geometry.type() == Qgis.GeometryType.Line and family == Qgis.GeometryType.Polygon:
         parts = geometry.asGeometryCollection() if geometry.isMultipart() else [geometry]
@@ -96,7 +111,7 @@ def carry_value(value, field, codelists):
     a number only when the form's bounds accept it, so a TAKS read as ``35``
     never lands in the workspace as a plan decision.
     """
-    if value is None or str(value) in ("", "NULL"):
+    if is_null_value(value):
         return None, None
     kind = field["type"]
     if kind == "enum":
@@ -139,7 +154,7 @@ def import_cad_layer(source, tabaka_field, workspace, feedback=None, project=Non
     source_names = set(source.fields().names())
     groups = {}
     for feature in source.getFeatures(QgsFeatureRequest()):
-        groups.setdefault(str(feature[tabaka_field] or ""), []).append(feature)
+        groups.setdefault(clean_text(feature[tabaka_field]), []).append(feature)
 
     targets, report = {}, []
     project = project or QgsProject.instance()
@@ -176,7 +191,8 @@ def import_cad_layer(source, tabaka_field, workspace, feedback=None, project=Non
             if not target.isValid():
                 raise RuntimeError('Hedef tablo açılamadı: ' + type_name)
             targets[type_name] = target
-        transform = QgsCoordinateTransform(source.crs(), target.crs(), project)
+        can_reproject = source.crs().isValid() and target.crs().isValid() and source.crs() != target.crs()
+        transform = QgsCoordinateTransform(source.crs(), target.crs(), project) if can_reproject else None
         # Plan values the source already carries under the schema's own field
         # names (KatAdedi, Taks, YapiDuzeni ... read from the drawing's texts):
         # carried over, but only as the form would accept them.
@@ -191,7 +207,7 @@ def import_cad_layer(source, tabaka_field, workspace, feedback=None, project=Non
             if geometry.isNull():
                 row["geometri_uyusmayan"] += 1
                 continue
-            if source.crs() != target.crs():
+            if transform is not None:
                 geometry.transform(transform)
             parts = _fit_geometry(geometry, types[type_name]["geometry"])
             if not parts:
@@ -203,13 +219,14 @@ def import_cad_layer(source, tabaka_field, workspace, feedback=None, project=Non
                 for field, value in entry["attrs"].items():
                     out[field] = value
                 for field in carried:
-                    value, why = carry_value(feature[aliases.get(field["name"], field["name"])],
-                                             field, schema["codelists"])
+                    src_col = aliases.get(field["name"], field["name"])
+                    raw_value = feature[src_col]
+                    value, why = carry_value(raw_value, field, schema["codelists"])
                     if value is not None:
                         out[field["name"]] = value
                         row["tasinan_deger"] += 1
                     elif why and len(row["atlanan_deger"]) < 10:
-                        row["atlanan_deger"].append(f'{field["name"]}={feature[field["name"]]}: {why}')
+                        row["atlanan_deger"].append(f'{field["name"]}={raw_value}: {why}')
                 new_features.append(out)
         if new_features:
             ok, _ = target.dataProvider().addFeatures(new_features)
@@ -235,11 +252,12 @@ def audit_mpyy_workspace(path, level=None):
     schema = level_schema(level)
     types = {t["name"]: t for t in schema["feature_types"]}
     findings = []
-    with closing(sqlite3.connect(f"file:{Path(path).resolve().as_posix()}?mode=ro", uri=True)) as con:
+    with closing(_connect_ro(path)) as con:
         tables = dict(con.execute("SELECT table_name, data_type FROM gpkg_contents"))
         with contextlib.suppress(sqlite3.Error):
-            stored = con.execute("SELECT xsd_dosyasi FROM mpyy_sema").fetchone()[0]
-            if stored != schema["xsd"]["file"]:
+            sema_row = con.execute("SELECT xsd_dosyasi FROM mpyy_sema").fetchone()
+            if sema_row and sema_row[0] != schema["xsd"]["file"]:
+                stored = sema_row[0]
                 findings.append({"katman": "mpyy_sema", "fid": "", "sorun": "Şema sürümü farklı",
                                  "ayrinti": f"Çalışma alanı {stored} ile oluşturulmuş; eklentinin şeması {schema['xsd']['file']}. "
                                             "Yeni tipler ve alanlar bu dosyada yok."})
@@ -279,7 +297,7 @@ def audit_mpyy_workspace(path, level=None):
                 if field["name"] not in columns[type_name]:
                     continue
                 value = feature[field["name"]]
-                empty = value is None or value == "" or (hasattr(value, "isNull") and value.isNull())
+                empty = is_null_value(value)
                 if empty:
                     if field["required"]:
                         findings.append({"katman": type_name, "fid": fid, "sorun": "Zorunlu alan boş", "ayrinti": field["name"]})

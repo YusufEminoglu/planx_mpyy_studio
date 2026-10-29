@@ -16,17 +16,23 @@ and reports parking surplus/deficit across the planning area.
 
 from __future__ import annotations
 
-import contextlib
 from dataclasses import dataclass, field
 import math
-import re
 from typing import Any
-from qgis.core import QgsFeature, QgsGeometry
+from qgis.core import QgsFeature
+
+from .attr_utils import (
+    extract_plan_function,
+    first_float,
+    first_text,
+    is_non_buildable_open_space,
+    is_non_residential_work_zone,
+    norm_tr,
+)
 
 
 def _norm_text(val: Any) -> str:
-    text = str(val or "").strip().upper().translate(str.maketrans("ÇĞİÖŞÜ", "CGIOSU"))
-    return re.sub(r"[^A-Z0-9]+", "_", text).strip("_")
+    return norm_tr(val)
 
 
 # Statutory rates: gross m2 per required vehicle space
@@ -46,17 +52,17 @@ PARKING_RATES_M2_PER_VEHICLE: dict[str, float] = {
 }
 
 PARKING_KEYWORDS: dict[str, tuple[str, ...]] = {
-    "KONUT": ("KONUT", "GELISME_KONUT", "MESKUN", "YERLESIK_KONUT", "DUSUK_YOGUNLUK", "ORTA_YOGUNLUK", "YUKSEK_YOGUNLUK"),
-    "TICARET": ("TICARET", "TICARI", "CARSI", "IS_MERKEZI", "OFIS", "BURO", "AVM"),
-    "KARMA": ("TICARET_KONUT", "KARMA", "TICK", "KONUT_TICARET"),
-    "SANAYI": ("SANAYI", "ORGANIZED_SANAYI", "OSB", "ENDUSTRI", "FABRIKA"),
+    "KARMA": ("TICARET_KONUT", "TICARET_TURIZM_KONUT", "KARMA", "TICK", "TICKONUT", "KONUT_TICARET"),
     "KUCUK_SANAYI": ("KUCUK_SANAYI", "KSS", "IMALATHANE", "TAMIRHANE"),
-    "TURIZM": ("TURIZM", "OTEL", "MOTEL", "PANSIYON", "TATIL_KOYU"),
+    "SANAYI": ("SANAYI", "ORGANIZE_SANAYI", "ORGANIZED_SANAYI", "OSB", "ENDUSTRI", "FABRIKA", "DEPOLAMA", "LOJISTIK"),
+    "TICARET": ("TICARET", "TICARI", "CARSI", "IS_MERKEZI", "OFIS", "BURO", "AVM", "TOPTAN_TICARET", "MERKEZI_IS", "MIA", "PAZAR"),
+    "TURIZM": ("TURIZM", "OTEL", "MOTEL", "PANSIYON", "TATIL_KOYU", "GUNUBIRLIK"),
     "SAGLIK": ("SAGLIK", "HASTANE", "AILE_SAGLIGI", "ASM", "POLIKLINIK"),
-    "EGITIM": ("EGITIM", "ILKOKUL", "ORTAOKUL", "LISE", "ANAOKULU", "OKUL", "KAMPUS"),
-    "SOSYAL_KULTUR": ("SOSYAL", "KULTUR", "KUTUPHANE", "MUZE", "YURT", "GENCLIK_MERKEZI"),
-    "IBADET": ("IBADET", "CAMI", "MESCIT", "DINI"),
-    "KAMU_BELEDIYE": ("BHA", "BELEDIYE_HIZMET", "KHA", "KAMU_HIZMET", "RESMI_KURUM"),
+    "EGITIM": ("EGITIM", "ILKOKUL", "ORTAOKUL", "LISE", "ANAOKULU", "KRES", "OKUL", "KAMPUS", "UNIVERSITE"),
+    "SOSYAL_KULTUR": ("SOSYAL", "KULTUR", "KUTUPHANE", "MUZE", "YURT", "GENCLIK_MERKEZI", "HUZUREVI"),
+    "IBADET": ("IBADET", "CAMI", "MESCIT", "DINI", "CEMEVI"),
+    "KAMU_BELEDIYE": ("BHA", "BELEDIYE_HIZMET", "KHA", "KAMU_HIZMET", "RESMI_KURUM", "IDARI"),
+    "KONUT": ("KONUT", "GELISME_KONUT", "MESKUN", "YERLESIK_KONUT", "DUSUK_YOGUNLUK", "ORTA_YOGUNLUK", "YUKSEK_YOGUNLUK"),
 }
 
 PUBLIC_PARKING_KEYWORDS = (
@@ -65,7 +71,11 @@ PUBLIC_PARKING_KEYWORDS = (
 
 
 def classify_parking_category(function_name: str, group_name: str = "") -> str:
-    combined = f"{_norm_text(function_name)}_{_norm_text(group_name)}"
+    combined = "_".join(part for part in (_norm_text(function_name), _norm_text(group_name)) if part)
+    if not combined:
+        return "DIGER"
+    if is_non_residential_work_zone(combined):
+        return "SANAYI" if "SANAYI" in combined else "TICARET"
     for cat, kws in PARKING_KEYWORDS.items():
         for kw in kws:
             if f"_{kw}_" in f"_{combined}_" or combined == kw:
@@ -111,15 +121,19 @@ class ParkingEngine:
         area_per_car_m2: float = 25.0,
     ) -> tuple[list[ParcelParkingResult], ParkingSummary]:
         """Compute parking requirements and compare against public parking polygons."""
-        fn_keys = ("uipfonksiyon", "fonksiyon_adi", "P_FONK", "B_FONK", "plan_fonk", "catalog_id", "detay_katalogu")
-        grp_keys = ("ustkonugrup", "ust_konu_grup", "ust_grup_adi", "ana_grup")
-        kaks_keys = ("kaks", "emsal", "P_EMSAL", "P_KAKS")
+        fn_keys = (
+            "uipfonksiyon", "nipfonksiyon", "fonksiyon_adi", "P_FONK", "B_FONK",
+            "plan_fonk", "catalog_id", "detay_katalogu",
+        )
+        grp_keys = ("ustkonugrup", "ust_konu_grup", "ust_grup_adi", "ana_grup", "strateji_bolgesi")
+        kaks_keys = ("kaks", "KAKS", "emsal", "EMSAL", "EmsalKaks", "P_EMSAL", "P_KAKS")
 
         results: list[ParcelParkingResult] = []
         summary = ParkingSummary()
 
         cat_aggregates: dict[str, dict[str, Any]] = {}
         total_public_parking_m2 = 0.0
+        safe_area_per_car = max(1.0, float(area_per_car_m2))
 
         for feat in features:
             geom = feat.geometry()
@@ -130,21 +144,8 @@ class ParkingEngine:
             if area_m2 <= 0:
                 continue
 
-            # Extract Function
-            fn_val = ""
-            for k in fn_keys:
-                idx = feat.fields().indexFromName(k)
-                if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                    fn_val = str(feat[idx]).strip()
-                    break
-
-            grp_val = ""
-            for gk in grp_keys:
-                idx = feat.fields().indexFromName(gk)
-                if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                    grp_val = str(feat[idx]).strip()
-                    break
-
+            fn_val = extract_plan_function(feat, extra_keys=fn_keys)
+            grp_val = first_text(feat, grp_keys)
             norm_fn = _norm_text(fn_val)
 
             # Check if this polygon is a dedicated public parking lot
@@ -153,18 +154,14 @@ class ParkingEngine:
                 total_public_parking_m2 += area_m2
                 continue
 
-            # Extract KAKS / Emsal
-            emsal = default_kaks
-            for kk in kaks_keys:
-                idx = feat.fields().indexFromName(kk)
-                if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                    try:
-                        val = float(feat[idx])
-                        if val > 0:
-                            emsal = val
-                            break
-                    except (ValueError, TypeError):
-                        pass
+            # Extract KAKS / Emsal (preserve explicit 0.0; exempt open spaces without explicit KAKS > 0)
+            raw_kaks = first_float(feat, kaks_keys, default=None)
+            if raw_kaks is not None and raw_kaks >= 0.0:
+                emsal = raw_kaks
+            elif is_non_buildable_open_space(norm_fn):
+                continue
+            else:
+                emsal = default_kaks
 
             cat = classify_parking_category(fn_val, grp_val)
             insaat_m2 = round(area_m2 * emsal, 2)
@@ -172,7 +169,7 @@ class ParkingEngine:
 
             # Required parking vehicles (rounded up)
             req_cars = max(1, math.ceil(insaat_m2 / rate_m2)) if insaat_m2 >= 30.0 else 0
-            req_m2 = round(req_cars * area_per_car_m2, 2)
+            req_m2 = round(req_cars * safe_area_per_car, 2)
 
             results.append(
                 ParcelParkingResult(
@@ -202,10 +199,10 @@ class ParkingEngine:
         summary.toplam_plan_alani_m2 = round(sum(r.alan_m2 for r in results) + total_public_parking_m2, 2)
         summary.toplam_insaat_alani_m2 = round(sum(r.insaat_alani_m2 for r in results), 2)
         summary.toplam_otopark_ihtiyaci_arac = sum(r.otopark_ihtiyaci_arac for r in results)
-        summary.toplam_otopark_ihtiyaci_m2 = round(summary.toplam_otopark_ihtiyaci_arac * area_per_car_m2, 2)
+        summary.toplam_otopark_ihtiyaci_m2 = round(summary.toplam_otopark_ihtiyaci_arac * safe_area_per_car, 2)
 
         summary.planda_ayrilan_otopark_m2 = round(total_public_parking_m2, 2)
-        summary.planda_ayrilan_otopark_kapasite_arac = int(total_public_parking_m2 // area_per_car_m2)
+        summary.planda_ayrilan_otopark_kapasite_arac = int(total_public_parking_m2 // safe_area_per_car)
 
         summary.otopark_acigi_fazlasi_arac = summary.planda_ayrilan_otopark_kapasite_arac - summary.toplam_otopark_ihtiyaci_arac
         summary.otopark_acigi_fazlasi_m2 = round(summary.planda_ayrilan_otopark_m2 - summary.toplam_otopark_ihtiyaci_m2, 2)

@@ -10,12 +10,9 @@ Implements statutory corner truncation requirements of Planlı Alanlar İmar Yö
 
 from __future__ import annotations
 
-import contextlib
 from dataclasses import dataclass
 import math
-from typing import Any
 from qgis.core import (
-    QgsFeature,
     QgsGeometry,
     QgsPointXY,
     QgsWkbTypes,
@@ -47,10 +44,16 @@ class ChamferEngine:
         if len(ring) < 4:  # At least triangle + closing vertex
             return ring, 0
 
-        # Unique vertices (exclude closing vertex if identical to first)
-        pts = ring[:-1] if ring[0] == ring[-1] else list(ring)
+        # Unique vertices (exclude closing vertex and consecutive micro-duplicates)
+        raw_pts = ring[:-1] if ring[0] == ring[-1] else list(ring)
+        pts: list[QgsPointXY] = []
+        for pt in raw_pts:
+            if not pts or math.hypot(pt.x() - pts[-1].x(), pt.y() - pts[-1].y()) > 1e-6:
+                pts.append(pt)
+        if len(pts) >= 2 and math.hypot(pts[0].x() - pts[-1].x(), pts[0].y() - pts[-1].y()) <= 1e-6:
+            pts.pop()
         n = len(pts)
-        if n < 3:
+        if n < 3 or chamfer_dist <= 0:
             return ring, 0
 
         new_pts: list[QgsPointXY] = []
@@ -82,21 +85,25 @@ class ChamferEngine:
                 new_pts.append(v_curr)
                 continue
 
+            # Clamp chamfer offset to < 48% of short edges (< 2 * chamfer_dist) so adjacent chamfers never cross
+            eff_a = chamfer_dist if la >= (2.0 * chamfer_dist) else (la * 0.48)
+            eff_b = chamfer_dist if lb >= (2.0 * chamfer_dist) else (lb * 0.48)
+
             # Offset points along incoming and outgoing edges
             p1 = QgsPointXY(
-                v_curr.x() + (chamfer_dist / la) * ax,
-                v_curr.y() + (chamfer_dist / la) * ay,
+                v_curr.x() + (eff_a / la) * ax,
+                v_curr.y() + (eff_a / la) * ay,
             )
             p2 = QgsPointXY(
-                v_curr.x() + (chamfer_dist / lb) * bx,
-                v_curr.y() + (chamfer_dist / lb) * by,
+                v_curr.x() + (eff_b / lb) * bx,
+                v_curr.y() + (eff_b / lb) * by,
             )
 
-            # Midpoint test: must be INSIDE parent polygon to ensure corner is convex
+            # Midpoint test: must be strictly INSIDE parent polygon to ensure corner is convex
             mid = QgsPointXY((p1.x() + p2.x()) / 2.0, (p1.y() + p2.y()) / 2.0)
             mid_geom = QgsGeometry.fromPointXY(mid)
 
-            if parent_geom.contains(mid_geom) or parent_geom.intersects(mid_geom):
+            if parent_geom.contains(mid_geom):
                 # Valid convex corner to chamfer
                 new_pts.append(p1)
                 new_pts.append(p2)
@@ -129,18 +136,34 @@ class ChamferEngine:
                 yeni_alan_m2=0.0,
             )
 
-        orig_area = round(geometry.area(), 2)
+        work = QgsGeometry(geometry)
+        abstract = work.get()
+        if abstract is not None:
+            abstract.dropZValue()
+            abstract.dropMValue()
+            if QgsWkbTypes.isCurvedType(work.wkbType()):
+                work = QgsGeometry(abstract.segmentize())
+        if work.type() != QgsWkbTypes.GeometryType.PolygonGeometry:
+            return ChamferResult(
+                geometri=QgsGeometry(geometry),
+                kesilen_alan_m2=0.0,
+                pah_adedi=0,
+                orijinal_alan_m2=0.0,
+                yeni_alan_m2=0.0,
+            )
+
+        orig_area = round(work.area(), 2)
         total_chamfers = 0
 
-        if geometry.isMultipart():
-            multi_poly = geometry.asMultiPolygon()
+        if work.isMultipart():
+            multi_poly = work.asMultiPolygon()
             new_multi_poly = []
             for poly in multi_poly:
                 new_poly = []
                 for idx, ring in enumerate(poly):
                     if idx == 0:  # Only chamfer exterior ring
                         c_ring, count = cls.chamfer_ring(
-                            ring, geometry, chamfer_dist, min_angle_deg, max_angle_deg
+                            ring, work, chamfer_dist, min_angle_deg, max_angle_deg
                         )
                         new_poly.append(c_ring)
                         total_chamfers += count
@@ -149,12 +172,12 @@ class ChamferEngine:
                 new_multi_poly.append(new_poly)
             new_geom = QgsGeometry.fromMultiPolygonXY(new_multi_poly)
         else:
-            poly = geometry.asPolygon()
+            poly = work.asPolygon()
             new_poly = []
             for idx, ring in enumerate(poly):
                 if idx == 0:  # Only chamfer exterior ring
                     c_ring, count = cls.chamfer_ring(
-                        ring, geometry, chamfer_dist, min_angle_deg, max_angle_deg
+                        ring, work, chamfer_dist, min_angle_deg, max_angle_deg
                     )
                     new_poly.append(c_ring)
                     total_chamfers += count

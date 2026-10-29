@@ -20,86 +20,89 @@ from qgis.core import (
 # Standard statutory domain value mappings (PAİY & MPYY)
 STATUTORY_VALUE_MAPS: dict[str, list[dict[str, str]]] = {
     "nizam": [
-        {'Detached (A)': "AYRIK"},
-        {'Attached (B)': "BITISIK"},
-        {'Semi-detached (I)': "IKIZ"},
-        {'Block (BL)': "BLOK"},
-        {'Free arrangement (S)': "SERBEST"},
+        {'Ayrık Nizam (A)': "AYRIK"},
+        {'Bitişik Nizam (B)': "BITISIK"},
+        {'İkiz Nizam (İ)': "IKIZ"},
+        {'Blok Nizam (BL)': "BLOK"},
+        {'Serbest Nizam (S)': "SERBEST"},
     ],
     "yapiYaklasmaDurumu": [
-        {'Setback specified': "VAR"},
-        {'No specific setback': "YOK"},
+        {'Çekme Mesafesi Var': "VAR"},
+        {'Özel Çekme Mesafesi Yok': "YOK"},
     ],
     "MULKIYET_TURU": [
-        {'Private ownership': "OZEL"},
-        {'State treasury': "HAZINE"},
-        {'Municipal ownership': "BELEDIYE"},
-        {'Foundation ownership': "VAKIF"},
-        {'Public dedication / amenity': "KAMU_TERKI"},
-        {'Shared ownership': "HISSELI"},
+        {'Özel Mülkiyet': "OZEL"},
+        {'Hazine Mülkiyeti': "HAZINE"},
+        {'Belediye Mülkiyeti': "BELEDIYE"},
+        {'Vakıf Mülkiyeti': "VAKIF"},
+        {'Kamu Terki / Donatı': "KAMU_TERKI"},
+        {'Hisseli Mülkiyet': "HISSELI"},
     ],
     "mulkiyet": [
-        {'Private ownership': "OZEL"},
-        {'State treasury': "HAZINE"},
-        {'Municipal ownership': "BELEDIYE"},
-        {'Foundation ownership': "VAKIF"},
-        {'Public dedication / amenity': "KAMU_TERKI"},
-        {'Shared ownership': "HISSELI"},
+        {'Özel Mülkiyet': "OZEL"},
+        {'Hazine Mülkiyeti': "HAZINE"},
+        {'Belediye Mülkiyeti': "BELEDIYE"},
+        {'Vakıf Mülkiyeti': "VAKIF"},
+        {'Kamu Terki / Donatı': "KAMU_TERKI"},
+        {'Hisseli Mülkiyet': "HISSELI"},
     ],
     "dop_durumu": [
-        {'Article 18 DOP applied (zoning parcel)': "UYGULANDI"},
-        {'Article 18 DOP pending (cadastre)': "BEKLIYOR"},
-        {'Amenity requiring KOP / expropriation': "KAMULASTIRMA"},
-        {'Outside readjustment / exempt': "MUAF"},
+        {'Madde 18 DOP Uygulandı (İmar Parseli)': "UYGULANDI"},
+        {'Madde 18 DOP Bekliyor (Kadastro)': "BEKLIYOR"},
+        {'KOP / Kamulaştırma Gerektiren Donatı': "KAMULASTIRMA"},
+        {'Düzenleme Dışı / Muaf': "MUAF"},
     ],
     "yerlesime_uygunluk": [
-        {'Suitable areas (UA)': "UA"},
-        {'Areas requiring mitigation (OA)': "OA"},
-        {'Areas requiring detailed geotechnical study (AJE)': "AJE"},
-        {'Unsuitable settlement areas (UOA)': "UOA"},
+        {'Yerleşime Uygun Alanlar (UA)': "UA"},
+        {'Önlemli Alanlar (ÖA)': "OA"},
+        {'Ayrıntılı Jeoteknik Etüt Gerektiren Alanlar (AJE)': "AJE"},
+        {'Yerleşime Uygun Olmayan Alanlar (UOA)': "UOA"},
     ],
     "B_YAPI_CINSI": [
-        {'Reinforced concrete frame': "BETONARME"},
-        {'Steel structure': "CELIK"},
-        {'Masonry': "YIGMA"},
-        {'Timber': "AHSAP"},
-        {'Prefabricated / light steel': "PREFABRIK"},
+        {'Betonarme Karkas': "BETONARME"},
+        {'Çelik Konstrüksiyon': "CELIK"},
+        {'Yığma Yapı': "YIGMA"},
+        {'Ahşap Yapı': "AHSAP"},
+        {'Prefabrik / Hafif Çelik': "PREFABRIK"},
     ],
     "B_DURUM": [
-        {'Good condition (maintained)': "IYI"},
-        {'Average condition': "ORTA"},
-        {'Poor condition (unmaintained)': "KOTU"},
-        {'Abandoned / ruined': "METRUK"},
+        {'İyi Durumda (Bakımlı)': "IYI"},
+        {'Orta Durumda': "ORTA"},
+        {'Kötü Durumda (Bakımsız)': "KOTU"},
+        {'Metruk / Harabe': "METRUK"},
     ],
     "B_HASAR_DURUMU": [
-        {'Undamaged': "HASARSIZ"},
-        {'Slight damage': "AZ_HASARLI"},
-        {'Moderate damage': "ORTA_HASARLI"},
-        {'Severe damage / demolition required': "AGIR_HASARLI"},
+        {'Hasarsız': "HASARSIZ"},
+        {'Az Hasarlı': "AZ_HASARLI"},
+        {'Orta Hasarlı': "ORTA_HASARLI"},
+        {'Ağır Hasarlı / Yıkılacak': "AGIR_HASARLI"},
     ],
     "B_TESCIL": [
-        {'Unlisted standard building': "HAYIR"},
-        {'Listed heritage property': "EVET"},
+        {'Tescilsiz Standart Yapı': "HAYIR"},
+        {'Tescilli Kültür Varlığı': "EVET"},
     ],
     "yol_kademesi": [
         {"1. Derece Ana Arter / Bulvar (≥30m)": "ANA_ARTER"},
-        {'Secondary / collector road (15m - 25m)': "TOPLAYICI"},
-        {'Local / service road (10m - 12m)': "SERVIS"},
-        {'Residential / cul-de-sac street (7m - 8m)': "KONUT_YOLU"},
-        {'Pedestrian route / square / zone': "YAYA_YOLU"},
+        {'2. Derece Toplayıcı Yol (15m - 25m)': "TOPLAYICI"},
+        {'3. Derece Servis Yolu (10m - 12m)': "SERVIS"},
+        {'Konut / Çıkmaz Sokak (7m - 8m)': "KONUT_YOLU"},
+        {'Yaya Yolu / Meydan / Bölge': "YAYA_YOLU"},
         {"Bisiklet Yolu": "BISIKLET_YOLU"},
     ],
     "kaplama_turu": [
-        {'Hot mix asphalt': "ASFALT"},
-        {'Interlocking pavers': "KILIT_PARKE"},
+        {'Sıcak Karışım Asfalt (BSK)': "ASFALT"},
+        {'Kilitli Parke Taşı': "KILIT_PARKE"},
         {"Beton Kaplama": "BETON"},
-        {'Natural stone / granite / cobblestones': "DOGAL_TAS"},
+        {'Doğal Taş / Granit / Küp Taş': "DOGAL_TAS"},
         {"Stabilize / Toprak": "TOPRAK"},
     ],
 }
 
 STATUTORY_FIELD_ALIASES: dict[str, str] = {
     "uipfonksiyon": '🏛️ Plan Fonksiyonu (UİP)',
+    "nipfonksiyon": '🏛️ Plan Fonksiyonu (NİP)',
+    "gosterim_adi": 'Gösterim Adı',
+    "msp_kodu": 'MSP Kodu',
     "fonksiyon_adi": 'Fonksiyon Adı',
     "ustkonugrup": 'Üst Konu Grubu',
     "ust_konu_grup": 'Üst Konu Grubu',
@@ -249,7 +252,12 @@ class MPYYFormDesigner:
             return
 
         form_config = layer.editFormConfig()
-        form_config.setLayout(QgsEditFormConfig.TabLayout)
+        layout_val = (
+            Qgis.AttributeFormLayout.DragAndDrop
+            if hasattr(Qgis, "AttributeFormLayout")
+            else QgsEditFormConfig.TabLayout
+        )
+        form_config.setLayout(layout_val)
         form_config.clearTabs()
 
         root = form_config.invisibleRootContainer()
@@ -258,7 +266,7 @@ class MPYYFormDesigner:
             (
                 'Plan fonksiyonu ve alanı',
                 [
-                    ('Fonksiyon ve imar tanımı', ["uipfonksiyon", "fonksiyon_adi", "ustkonugrup", "ust_konu_grup", "detay_katalogu", "P_FONK", "B_FONK", "aciklama"]),
+                    ('Fonksiyon ve imar tanımı', ["uipfonksiyon", "nipfonksiyon", "fonksiyon_adi", "gosterim_adi", "msp_kodu", "ustkonugrup", "ust_konu_grup", "detay_katalogu", "P_FONK", "B_FONK", "aciklama"]),
                     ('Boyutlar ve alan', ["alan_m2", "AlanM2", "ALAN", "alan_hektar", "yogunluk_kademesi", "brut_yogunluk_kisi_ha"]),
                 ],
             ),

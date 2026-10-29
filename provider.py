@@ -59,6 +59,9 @@ class CreateLandUseWorkspace(LocalizedProcessingAlgorithm):
     def createInstance(self):
         return CreateLandUseWorkspace()
 
+    def flags(self):
+        return super().flags() | QgsProcessingAlgorithm.FlagNoThreading
+
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterCrs('KRS', 'Çalışma alanı koordinat sistemi'))
         self.addParameter(
@@ -703,6 +706,7 @@ class CleanPlanningGeometriesAlgorithm(LocalizedProcessingAlgorithm):
         source = self.parameterAsSource(parameters, "INPUT", context)
         snap_tol = self.parameterAsDouble(parameters, "SNAP_TOLERANCE", context)
         min_area = self.parameterAsDouble(parameters, "MIN_AREA", context)
+        auto_heal = self.parameterAsBool(parameters, "AUTO_HEAL_GAPS", context)
 
         sink, dest_id = self.parameterAsSink(
             parameters,
@@ -721,6 +725,7 @@ class CleanPlanningGeometriesAlgorithm(LocalizedProcessingAlgorithm):
             snap_tolerance=snap_tol,
             min_area_m2=min_area,
             feedback=feedback,
+            auto_heal_gaps=auto_heal,
         )
 
         feedback.pushInfo(
@@ -1222,7 +1227,7 @@ class CalculateDOPAlgorithm(LocalizedProcessingAlgorithm):
             feedback.pushWarning(u)
 
         feedback.pushInfo(
-            f'DOP hesabı tamamlandı. Toplam kadastro alanı: {summary.toplam_kadastro_m2} m², Terk: {summary.toplam_terk_m2} m², DOPO: %{summary.dop_orani * 100:.2f} satır bulundu.'
+            f'DOP hesabı tamamlandı. Toplam kadastro alanı: {summary.toplam_kadastro_m2} m², Terk: {summary.toplam_terk_m2} m², DOPO: %{summary.dop_orani * 100:.2f}.'
         )
 
         return {
@@ -1561,7 +1566,7 @@ class ValidatePAIYComplianceAlgorithm(LocalizedProcessingAlgorithm):
             feedback.pushWarning(u)
 
         feedback.pushInfo(
-            f'PAİY Denetimi Tamamlandı: {summary.toplam_parsel_sayisi} parsel incelendi. Yapılaşabilir: {summary.yapilasabilir_sayisi}, Tevhit gereken: {summary.tevhid_zorunlu_sayisi}, İfraz Edilebilir: {summary.ifraz_edilebilir_sayisi}, Çekme Yetersiz: {summary.cekme_yetersiz_sayisi} satır bulundu.'
+            f'PAİY Denetimi Tamamlandı: {summary.toplam_parsel_sayisi} parsel incelendi. Yapılaşabilir: {summary.yapilasabilir_sayisi}, Tevhit gereken: {summary.tevhid_zorunlu_sayisi}, İfraz Edilebilir: {summary.ifraz_edilebilir_sayisi}, Çekme Yetersiz: {summary.cekme_yetersiz_sayisi}.'
         )
 
         return {
@@ -2063,6 +2068,9 @@ class GeneratePrintLayoutAlgorithm(LocalizedProcessingAlgorithm):
 
     def createInstance(self):
         return GeneratePrintLayoutAlgorithm()
+
+    def flags(self):
+        return super().flags() | QgsProcessingAlgorithm.FlagNoThreading
 
     def initAlgorithm(self, config=None) -> None:
         self.addParameter(
@@ -3105,6 +3113,9 @@ class ExportOfficialZoningAtlasBatchAlgorithm(LocalizedProcessingAlgorithm):
 
     def createInstance(self):
         return ExportOfficialZoningAtlasBatchAlgorithm()
+
+    def flags(self):
+        return super().flags() | QgsProcessingAlgorithm.FlagNoThreading
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterVectorLayer(

@@ -11,7 +11,6 @@
 ) EXCEEDS THE ARTICLE 18 STATUTORY MAXIMUM (45.00%). THE EXCESS	), İmar Kanunu Madde 18 yasal azami sınırını (%45.00) aşmaktadır! Aşan 
 ). SPECIFY A NUMERIC FLOOR COUNT OR MAXIMUM BUILDING HEIGHT (HMAX IN METERS).	) olarak belirlenemez. Sayısal kat adedi veya azami bina yüksekliği (Hmax metre) belirlenmelidir.
 **DATE:**	**Tarih:**
-.	 satır bulundu.
 . CONSOLIDATION WITH THE NEIGHBORING PARCEL IS REQUIRED.	. Komşu parsel ile tevhit zorunludur.
 . THE ALLOCATION SCHEDULE WAS ADDED TO THE PROJECT.	. Tahsis Cetveli projeye eklendi.
 ... SEE ACTIVITY.	... Ayrıntılar İşlem Kaydı sekmesinde.
@@ -51,7 +50,7 @@
 16-30 YIL	16-30 Yıl
 1:1,000 (500M × 500M - UIP)	1:1.000 (500 m × 500 m - UİP)
 1:1,000 (UIP)	1:1.000 (UİP)
-1:1,000 IMPLEMENTATION PLAN (UIP)	1/1.000 Implementation plan (UİP)
+1:1,000 IMPLEMENTATION PLAN (UIP)	1/1.000 Uygulama İmar Planı (UİP)
 1:1,000 PLAN DETAIL CLASS AND FUNCTION	1000 PLAN DETAY ALT SINIFI VE FONKSİYONU
 1:100,000 (CDP)	1:100.000 (ÇDP)
 1:2,000 (1,000M × 1,000M)	1:2.000 (1.000 m × 1.000 m)
@@ -510,7 +509,7 @@ AVERAGE CONDITION	Orta Durumda (Normal)
 AVERAGE DWELLING AREA	Ortalama konut alanı
 AVERAGE DWELLING AREA (M2)	Ortalama konut alanı (m²)
 AVERAGE ENTITLEMENT COEFFICIENT	Ortalama Hak Sahipliği Katsayısı
-AVERAGE FLOOR AREA RATIO	Ortalama Floor area ratio
+AVERAGE FLOOR AREA RATIO	Ortalama Emsal (KAKS)
 AVERAGE HOUSEHOLD SIZE	Ortalama hane halkı büyüklüğü
 AVLAK ALANI	AVLAK ALANI
 AYDINLATMA DURUMU	Aydınlatma Durumu
@@ -2768,7 +2767,7 @@ PARCELS ASSESSED; AVERAGE ENTITLEMENT:	 parsel analiz edildi. Ortalama Hakediş:
 PARCELS REQUIRING CONSOLIDATION	Tevhit Zorunlu Parseller
 PARCELS REQUIRING CONSOLIDATION (INSUFFICIENT FRONTAGE / DEPTH)	Tevhit Zorunlu Parseller (Yetersiz Cephe/Derinlik)
 PARCELS REVIEWED. BUILDABLE:	 parsel incelendi. Yapılaşabilir: 
-PARCELS REVIEWED. TOTAL CADASTRAL AREA:	 parsel analiz edildi. Total cadastral area: 
+PARCELS REVIEWED. TOTAL CADASTRAL AREA:	 parsel incelendi. Toplam kadastro alanı: 
 PARCELS SUITABLE FOR SUBDIVISION	İfraz Edilebilir Parseller
 PARCELS WITH HIGH GROUNDWATER LEVELS SHALL RECEIVE CONTINUOUS FOUNDATION WATERPROOFING AND PERIMETER DRAINAGE.	Yeraltı suyu seviyesi yüksek parsellerde temel altı bohçalama su yalıtımı ve çevre drenajı yapılacaktır.
 PARCELS WITH ZONING ATTRIBUTES AND A CHOICE TO INCLUDE ROOFS.	İmar öznitelikli parseller ve çatı oluşturma tercihi.

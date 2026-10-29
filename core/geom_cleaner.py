@@ -13,10 +13,12 @@ from __future__ import annotations
 import contextlib
 import math
 from qgis.core import (
+    QgsDistanceArea,
     QgsFeature,
     QgsFeatureSink,
     QgsGeometry,
     QgsPointXY,
+    QgsProject,
     QgsVectorLayer,
     QgsWkbTypes,
 )
@@ -26,6 +28,7 @@ def clean_planning_geometry(
     geom: QgsGeometry,
     snap_tolerance: float = 0.0,
     min_area_m2: float = 0.5,
+    duplicate_node_tolerance: float = 0.001,
 ) -> tuple[QgsGeometry, bool]:
     """Clean, fix GEOS defects, eliminate micro-slivers, and snap vertices of a geometry.
 
@@ -37,6 +40,20 @@ def clean_planning_geometry(
 
     was_repaired = False
     working_geom = QgsGeometry(geom)
+    orig_family = working_geom.type()
+
+    # 0. Enforce 2D linear geometry (drop Z/M and linearize CAD curves)
+    abstract = working_geom.get()
+    if abstract is not None:
+        if abstract.is3D():
+            abstract.dropZValue()
+            was_repaired = True
+        if abstract.isMeasure():
+            abstract.dropMValue()
+            was_repaired = True
+        if QgsWkbTypes.isCurvedType(working_geom.wkbType()):
+            working_geom = QgsGeometry(abstract.segmentize())
+            was_repaired = True
 
     # 1. GEOS validity repair (resolves self-intersections, bowties, unclosed rings)
     if not working_geom.isGeosValid():
@@ -46,32 +63,37 @@ def clean_planning_geometry(
     if not working_geom or working_geom.isEmpty():
         return QgsGeometry(), True
 
-    # 2. Remove duplicate consecutive vertices within 1 mm
-    working_geom.removeDuplicateNodes(0.001, True)
-
-    # 3. Optional grid/vertex snapping
-    if snap_tolerance > 0:
-        working_geom = working_geom.snappedToGrid(snap_tolerance, snap_tolerance)
+    # 2. Remove duplicate consecutive vertices within tolerance (default 1 mm)
+    if duplicate_node_tolerance > 0 and working_geom.removeDuplicateNodes(duplicate_node_tolerance, True):
         was_repaired = True
 
+    # 3. Optional grid/vertex snapping + post-snap validity check
+    if snap_tolerance > 0:
+        working_geom = working_geom.snappedToGrid(snap_tolerance, snap_tolerance)
+        if not working_geom.isGeosValid():
+            working_geom = working_geom.makeValid()
+        was_repaired = True
+
+    if not working_geom or working_geom.isEmpty():
+        return QgsGeometry(), True
+
     # 4. Enforce strict polygon dimensionality and sliver elimination
-    geom_type = working_geom.type()
-    if geom_type == QgsWkbTypes.GeometryType.PolygonGeometry and min_area_m2 > 0:
-        if working_geom.isMultipart():
+    is_collection = QgsWkbTypes.flatType(working_geom.wkbType()) == QgsWkbTypes.Type.GeometryCollection
+    if orig_family == QgsWkbTypes.GeometryType.PolygonGeometry or working_geom.type() == QgsWkbTypes.GeometryType.PolygonGeometry:
+        if working_geom.isMultipart() or is_collection:
             sub_geoms = working_geom.asGeometryCollection()
-            # Retain only valid polygonal components that meet the minimum area threshold
             valid_parts = [
                 part for part in sub_geoms
-                if part.type() == QgsWkbTypes.GeometryType.PolygonGeometry and part.area() >= min_area_m2
+                if part.type() == QgsWkbTypes.GeometryType.PolygonGeometry
+                and (min_area_m2 <= 0 or part.area() >= min_area_m2)
             ]
-            if len(valid_parts) < len(sub_geoms):
+            if len(valid_parts) < len(sub_geoms) or is_collection:
                 was_repaired = True
                 if not valid_parts:
                     return QgsGeometry(), True
                 working_geom = QgsGeometry.unaryUnion(valid_parts)
-        else:
-            if working_geom.area() < min_area_m2:
-                return QgsGeometry(), True
+        elif min_area_m2 > 0 and working_geom.area() < min_area_m2:
+            return QgsGeometry(), True
 
     return working_geom, was_repaired
 
@@ -82,6 +104,7 @@ def clean_layer_geometries(
     snap_tolerance: float = 0.05,
     min_area_m2: float = 1.0,
     feedback=None,
+    auto_heal_gaps: bool = False,
 ) -> tuple[int, int, int]:
     """Clean all features of a layer into a sink.
 
@@ -91,6 +114,23 @@ def clean_layer_geometries(
     total = source_layer.featureCount()
     fields = source_layer.fields()
     field_names = set(fields.names())
+
+    crs = source_layer.crs()
+    is_geographic = crs.isValid() and crs.isGeographic()
+    da = QgsDistanceArea()
+    if crs.isValid():
+        da.setSourceCrs(crs, QgsProject.instance().transformContext())
+        if QgsProject.instance().ellipsoid():
+            da.setEllipsoid(QgsProject.instance().ellipsoid())
+    # Convert planar meter tolerances approximately to degrees if source CRS is geographic
+    deg_per_meter = 1.0 / 111_320.0
+    eff_dup_tol = 0.001 * deg_per_meter if is_geographic else 0.001
+    eff_snap_tol = (
+        snap_tolerance * deg_per_meter
+        if (is_geographic and snap_tolerance >= 0.001)
+        else snap_tolerance
+    )
+    eff_min_area = 0.0 if is_geographic else min_area_m2
 
     processed = 0
     repaired = 0
@@ -108,11 +148,21 @@ def clean_layer_geometries(
 
         cleaned_geom, was_mod = clean_planning_geometry(
             src_geom,
-            snap_tolerance=snap_tolerance,
-            min_area_m2=min_area_m2,
+            snap_tolerance=eff_snap_tol,
+            min_area_m2=eff_min_area,
+            duplicate_node_tolerance=eff_dup_tol,
         )
 
         if not cleaned_geom or cleaned_geom.isEmpty():
+            removed += 1
+            continue
+
+        area_m2 = float(da.measureArea(cleaned_geom)) if is_geographic else float(cleaned_geom.area())
+        if (
+            min_area_m2 > 0
+            and cleaned_geom.type() == QgsWkbTypes.GeometryType.PolygonGeometry
+            and area_m2 < min_area_m2
+        ):
             removed += 1
             continue
 
@@ -123,15 +173,19 @@ def clean_layer_geometries(
         out_feat.setAttributes(feat.attributes())
         out_feat.setGeometry(cleaned_geom)
 
+        length_m = float(da.measureLength(cleaned_geom)) if is_geographic else float(cleaned_geom.length())
+
         # Update metric fields if present
         if "alan_m2" in field_names:
-            out_feat["alan_m2"] = round(cleaned_geom.area(), 2)
+            out_feat["alan_m2"] = round(area_m2, 2)
         if "AlanM2" in field_names:
-            out_feat["AlanM2"] = round(cleaned_geom.area(), 2)
+            out_feat["AlanM2"] = round(area_m2, 2)
+        if "AlanHa" in field_names:
+            out_feat["AlanHa"] = round(area_m2 / 10000.0, 4)
         if "uzunluk_m" in field_names:
-            out_feat["uzunluk_m"] = round(cleaned_geom.length(), 2)
+            out_feat["uzunluk_m"] = round(length_m, 2)
         if "Uzunluk(m)" in field_names:
-            out_feat["Uzunluk(m)"] = round(cleaned_geom.length(), 2)
+            out_feat["Uzunluk(m)"] = round(length_m, 2)
 
         sink.addFeature(out_feat, QgsFeatureSink.Flag.FastInsert)
 

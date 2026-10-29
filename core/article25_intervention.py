@@ -82,7 +82,7 @@ class Article25InterventionEngine:
                 findings.append('Genel arazi kullanım sürekliliği, bütünlüğü ve uyumu belgelenmemiştir.')
         elif changed_area > adjacency_tolerance:
             classification = "PLAN_CHANGE_REVIEW"
-            findings.append("Code-aware plan decisions changed without a declared Article 25 revision basis.")
+            findings.append('Madde 25 revizyon dayanağı beyan edilmeksizin plan kararlarında değişiklik yapılmıştır.')
         else:
             classification = "NO_CHANGE"
         return Article25Assessment(

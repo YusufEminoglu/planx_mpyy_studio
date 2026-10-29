@@ -21,17 +21,22 @@ Statutory Dimensioning Standards:
 
 from __future__ import annotations
 
-import contextlib
 from dataclasses import dataclass, field
-import math
-import re
 from typing import Any
 from qgis.core import QgsFeature
 
+from .attr_utils import (
+    extract_plan_function,
+    first_float,
+    first_int,
+    is_non_buildable_open_space,
+    is_non_residential_work_zone,
+    norm_tr,
+)
+
 
 def _norm_text(val: Any) -> str:
-    text = str(val or "").strip().upper().translate(str.maketrans("ÇĞİÖŞÜ", "CGIOSU"))
-    return re.sub(r"[^A-Z0-9]+", "_", text).strip("_")
+    return norm_tr(val)
 
 
 @dataclass
@@ -77,9 +82,13 @@ class ShelterEngine:
         results: list[ParcelShelterResult] = []
         summary = ShelterSummary()
 
-        fn_keys = ("uipfonksiyon", "fonksiyon_adi", "P_FONK", "B_FONK", "plan_fonk", "catalog_id", "detay_katalogu")
-        kaks_keys = ("kaks", "emsal", "P_EMSAL", "P_KAKS")
-        unit_keys = ("bagimsiz_bolum_sayisi", "konut_sayisi", "daire_sayisi", "P_BAGIMSIZ_BOLUM")
+        fn_keys = (
+            "uipfonksiyon", "nipfonksiyon", "fonksiyon_adi", "P_FONK", "B_FONK",
+            "plan_fonk", "catalog_id", "detay_katalogu",
+        )
+        kaks_keys = ("kaks", "KAKS", "emsal", "EMSAL", "EmsalKaks", "P_EMSAL", "P_KAKS")
+        unit_keys = ("bagimsiz_bolum_sayisi", "konut_sayisi", "daire_sayisi", "P_BAGIMSIZ_BOLUM", "B_B_BOLUM")
+        safe_area_per_person = max(0.1, float(area_per_person_m2))
 
         for feat in features:
             geom = feat.geometry()
@@ -87,44 +96,37 @@ class ShelterEngine:
             if area_m2 <= 0:
                 continue
 
-            # Extract Function
-            fn_val = ""
-            for k in fn_keys:
-                idx = feat.fields().indexFromName(k)
-                if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                    fn_val = str(feat[idx]).strip()
-                    break
-
+            fn_val = extract_plan_function(feat, extra_keys=fn_keys)
             norm_fn = _norm_text(fn_val)
+            non_res_work = is_non_residential_work_zone(norm_fn)
 
-            # Extract KAKS
-            emsal = default_kaks
-            for kk in kaks_keys:
-                idx = feat.fields().indexFromName(kk)
-                if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                    with contextlib.suppress(ValueError, TypeError):
-                        val = float(feat[idx])
-                        if val > 0:
-                            emsal = val
-                            break
+            # Extract KAKS (preserve explicit 0.0 and exempt open spaces without explicit KAKS > 0)
+            raw_kaks = first_float(feat, kaks_keys, default=None)
+            if raw_kaks is not None and raw_kaks >= 0.0:
+                emsal = raw_kaks
+            elif is_non_buildable_open_space(norm_fn):
+                emsal = 0.0
+            else:
+                emsal = default_kaks
 
             # Extract Units
-            units = 0
-            for uk in unit_keys:
-                idx = feat.fields().indexFromName(uk)
-                if idx >= 0 and feat[idx] not in (None, "", "NULL"):
-                    with contextlib.suppress(ValueError, TypeError):
-                        units = int(float(feat[idx]))
-                        if units > 0:
-                            break
+            raw_units = first_int(feat, unit_keys, default=0)
+            units = raw_units if (raw_units is not None and raw_units > 0) else 0
 
             insaat_m2 = round(area_m2 * emsal, 2)
-            if units == 0 and "KONUT" in norm_fn:
+            is_mixed = not non_res_work and any(w in norm_fn for w in ("TICARET_KONUT", "TICKONUT", "KARMA", "KONUT_TICARET"))
+            is_residential = not non_res_work and not is_mixed and any(
+                w in norm_fn for w in ("KONUT", "MESKEN", "GELISME_KONUT", "YERLESIK_KONUT")
+            )
+            if units == 0 and is_residential and insaat_m2 > 0:
                 units = max(1, int(insaat_m2 // 110))
+            elif units == 0 and is_mixed and insaat_m2 > 0:
+                units = max(1, int((insaat_m2 * 0.60) // 110))
 
             # Threshold and calculation by category
-            is_residential = any(w in norm_fn for w in ("KONUT", "MESKEN", "GELISME_KONUT", "YERLESIK_KONUT"))
-            is_commercial = any(w in norm_fn for w in ("TICARET", "OFIS", "CARSI", "IS_MERKEZI", "AVM", "BURO"))
+            is_commercial = non_res_work or is_mixed or any(
+                w in norm_fn for w in ("TICARET", "OFIS", "CARSI", "IS_MERKEZI", "AVM", "BURO", "MERKEZI_IS", "MIA")
+            )
             is_industrial = any(w in norm_fn for w in ("SANAYI", "FABRIKA", "IMALATHANE", "KSS", "DEPO"))
             is_hotel = any(w in norm_fn for w in ("OTEL", "MOTEL", "PANSIYON", "TURIZM", "YURT"))
             is_public_edu_health = any(w in norm_fn for w in ("KAMU", "RESMI", "BELEDIYE", "OKUL", "EGITIM", "SAGLIK", "HASTANE"))
@@ -184,7 +186,7 @@ class ShelterEngine:
                     dayanak = "Md. 7: Muaf"
 
             durum = "SIGINAK_ZORUNLU" if is_mandatory else "SIGINAK_MUAFIYET"
-            shelter_cap = int(req_m2 // area_per_person_m2) if is_mandatory else 0
+            shelter_cap = int(req_m2 // safe_area_per_person) if is_mandatory else 0
 
             item = ParcelShelterResult(
                 feature_id=feat.id(),

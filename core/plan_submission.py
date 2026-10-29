@@ -126,7 +126,7 @@ class PlanSubmissionAuditEngine:
         report["schema_version"] = 1
         report["generated_at"] = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
         report["content_sha256"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
-        temporary = output.with_name(' satır bulundu.' + output.name + ' satır bulundu.' + uuid.uuid4().hex + ".tmp")
+        temporary = output.with_name(f"{output.name}.{uuid.uuid4().hex}.tmp")
         temporary.write_text(
             json.dumps(report, ensure_ascii=True, indent=2, sort_keys=True), encoding="utf-8"
         )

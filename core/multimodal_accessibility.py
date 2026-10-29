@@ -9,6 +9,8 @@ from typing import Any, Callable, Iterable, Mapping
 
 from qgis.core import QgsFeature, QgsGeometry, QgsPointXY, QgsSpatialIndex
 
+from .attr_utils import linearize_geometry
+
 
 @dataclass(frozen=True)
 class MultimodalAccessibilityRecord:
@@ -41,6 +43,12 @@ class _ModeChain:
 
 class MPYYMultimodalAccessibilityEngine:
     MODES = {"WALK", "BICYCLE", "TRANSIT"}
+    MODE_MAP = {
+        "WALK": "WALK", "YAYA": "WALK", "PEDESTRIAN": "WALK",
+        "BICYCLE": "BICYCLE", "BISIKLET": "BICYCLE", "BIKE": "BICYCLE",
+        "TRANSIT": "TRANSIT", "TOPLU_TASIMA": "TRANSIT", "BUS": "TRANSIT",
+        "METRO": "TRANSIT", "TRAMVAY": "TRANSIT",
+    }
 
     @classmethod
     def analyze(
@@ -133,7 +141,7 @@ class MPYYMultimodalAccessibilityEngine:
             if snapped is None or snapped[1] > maximum_snap_distance_m:
                 records.append(MultimodalAccessibilityRecord(
                     demand, "UNSNAPPED", None, "", "", snapped[1] if snapped else None,
-                    "Demand feature is outside the maximum network snap distance.",
+                    'Talep nesnesi maksimum ağ yakalama mesafesinin dışındadır.',
                 ))
                 continue
             node, snap_distance = snapped
@@ -161,7 +169,7 @@ class MPYYMultimodalAccessibilityEngine:
                 mode_text[chain], snap_distance,
                 'Bir donatıya beyan edilen yolculuk süresi eşiği içinde ulaşılabilmektedir.'
                 if status == "ACCESSIBLE"
-                else "Nearest multimodal facility exceeds the declared travel-time threshold.",
+                else 'En yakın çok türlü erişilebilir donatı beyan edilen yolculuk süresi eşiğini aşmaktadır.',
             ))
         records_tuple = tuple(records)
         return MultimodalAccessibilityResult(
@@ -185,7 +193,8 @@ class MPYYMultimodalAccessibilityEngine:
         for feature in features:
             cls._check_canceled(cancel_check)
             values = cls._attributes(feature)
-            mode = str(values.get(mode_field.lower(), "")).strip().upper()
+            raw_mode = str(values.get(mode_field.lower(), "")).strip().upper()
+            mode = cls.MODE_MAP.get(raw_mode, raw_mode)
             direction = str(values.get(direction_field.lower(), "BOTH") or "BOTH").strip().upper()
             geometry = feature.geometry()
             if mode not in cls.MODES or direction not in {"BOTH", "FT", "TF", "FORWARD", "REVERSE"}:
@@ -197,7 +206,8 @@ class MPYYMultimodalAccessibilityEngine:
             speed = cls._positive(values.get(speed_field.lower())) or speeds[mode]
             explicit_time = cls._positive(values.get(time_field.lower()))
             total_length = geometry.length()
-            lines = geometry.asMultiPolyline() if geometry.isMultipart() else [geometry.asPolyline()]
+            geom_lin = linearize_geometry(geometry)
+            lines = geom_lin.asMultiPolyline() if geom_lin.isMultipart() else [geom_lin.asPolyline()]
             feature_added = False
             for line in lines:
                 for index in range(len(line) - 1):
@@ -277,4 +287,4 @@ class MPYYMultimodalAccessibilityEngine:
     @staticmethod
     def _check_canceled(cancel_check: Callable[[], bool] | None) -> None:
         if cancel_check is not None and cancel_check():
-            raise ValueError("Accessibility analysis was canceled.")
+            raise ValueError("Erişilebilirlik analizi iptal edildi (canceled).")

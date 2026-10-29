@@ -164,19 +164,19 @@ class MPYYGeoPackageProfileEngine:
             if expected_type and not fields[name]["type"].startswith(expected_type):
                 findings.append(GovernanceFinding(
                     "FIELD_TYPE_MISMATCH", "ERROR", "MPYY 34-35",
-                    table + ' satır bulundu.' + name + " does not match declared type " + expected_type + ' satır bulundu.',
+                    f"{table}.{name} alanı bildirilen {expected_type} veri tipi ile eşleşmiyor.",
                 ))
             if item.get("not_null") is True and not (
                 fields[name]["not_null"] or fields[name]["primary_key"]
             ):
                 findings.append(GovernanceFinding(
                     "FIELD_NULLABILITY_MISMATCH", "ERROR", "MPYY 34-35",
-                    table + ' satır bulundu.' + name + " is not declared NOT NULL.",
+                    f"{table}.{name} alanı NOT NULL olarak tanımlanmamış.",
                 ))
             if item.get("primary_key") is True and not fields[name]["primary_key"]:
                 findings.append(GovernanceFinding(
                     "FIELD_PRIMARY_KEY_MISMATCH", "ERROR", "MPYY 34-35",
-                    table + ' satır bulundu.' + name + " is not declared as a primary key.",
+                    f"{table}.{name} alanı birincil anahtar (PRIMARY KEY) olarak tanımlanmamış.",
                 ))
 
     @staticmethod
@@ -393,7 +393,7 @@ def write_governance_report(result: GovernanceAuditResult, output_path: str | Pa
     canonical = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     payload["content_sha256"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_name(path.name + ' satır bulundu.' + uuid.uuid4().hex + ".tmp")
+    temporary = path.with_name(f"{path.name}.{uuid.uuid4().hex}.tmp")
     temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     temporary.replace(path)
     return str(path)

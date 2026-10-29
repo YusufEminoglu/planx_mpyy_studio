@@ -2,16 +2,22 @@
 
 from __future__ import annotations
 
-import contextlib
 from dataclasses import dataclass, field
-import re
+import html as _html
 from typing import Any
 from qgis.core import QgsFeature, QgsVectorLayer
 
+from .attr_utils import (
+    extract_plan_function,
+    first_text,
+    is_non_residential_work_zone,
+    norm_tr,
+    upper_tr,
+)
+
 
 def _norm_text(val: Any) -> str:
-    text = str(val or "").strip().upper().translate(str.maketrans("ÇĞİÖŞÜ", "CGIOSU"))
-    return re.sub(r"[^A-Z0-9]+", "_", text).strip("_")
+    return norm_tr(val)
 
 
 # Statutory function classifications for custom clause dispatching
@@ -22,12 +28,13 @@ FUNCTION_TAXONOMY: dict[str, tuple[str, ...]] = {
     ),
     "TICARET": (
         "TICARET", "TICARI", "CARSI", "IS_MERKEZI", "OFIS", "BURO", "AVM",
+        "KONUT_DISI_KENTSEL_CALISMA", "KDKCA", "KENTSEL_CALISMA",
     ),
     "KARMA_TICARET_KONUT": (
         "TICARET_KONUT", "KARMA", "TICK", "TICARET_VE_KONUT", "KONUT_TICARET",
     ),
     "SANAYI": (
-        "SANAYI", "ORGANIZED_SANAYI", "OSB", "ENDUSTRI", "FABRIKA",
+        "SANAYI", "ORGANIZE_SANAYI", "ORGANIZED_SANAYI", "OSB", "ENDUSTRI", "FABRIKA",
     ),
     "KUCUK_SANAYI": (
         "KUCUK_SANAYI", "KSS", "SANAYI_SITESI", "IMALATHANE", "TAMIRHANE",
@@ -37,7 +44,7 @@ FUNCTION_TAXONOMY: dict[str, tuple[str, ...]] = {
     ),
     "PARK_YESIL": (
         "PARK", "COCUK_BAHCESI", "OYUN_ALANI", "REKREASYON", "MEYDAN", "BOTANIK",
-        "MESIRE", "AGACLANDIRILACAK", "YESIL_ALAN", "ARBORETUM", "KENT_PARKI",
+        "MESIRE", "AGACLANDIRILACAK", "YESIL_ALAN", "ACIK_YESIL", "ARBORETUM", "KENT_PARKI",
     ),
     "EGITIM": (
         "ANAOKULU", "KRES", "ILKOKUL", "ORTAOKUL", "LISE", "EGITIM", "TEMEL_EGITIM",
@@ -55,14 +62,15 @@ FUNCTION_TAXONOMY: dict[str, tuple[str, ...]] = {
         "IBADET", "CAMI", "MESCIT", "KILISE", "SINAGOG", "HAVRA", "DINI",
     ),
     "SPOR": (
-        "SPOR", "STADYUM", "KAPALI_SPOR", "HIPODROM", "YUZME_HAVUZU", "SAHA",
+        "SPOR", "STADYUM", "KAPALI_SPOR", "ACIK_SPOR", "SPOR_SAHASI", "SPOR_TESISI",
+        "HIPODROM", "YUZME_HAVUZU",
     ),
     "TEKNIK_ALTYAPI": (
         "TEKNIK_ALTYAPI", "TRAFO", "SU_DEPOSU", "ARITMA", "TERFI", "TELEKOM",
         "KATI_ATIK", "REGULATOR", "DOGALGAZ_DAGITIM",
     ),
     "KAMU_BELEDIYE": (
-        "BHA", "BELEDIYE_HIZMET", "KHA", "KAMU_HIZMET", "RESMI_KURUM", "IDARI_TESIS",
+        "BHA", "BELEDIYE_HIZMET", "KHA", "KAMU_HIZMET", "RESMI_KURUM", "IDARI_TESIS", "IDARI_HIZMET",
     ),
 }
 
@@ -86,28 +94,39 @@ class PlanNotesEngine:
 
     @classmethod
     def detect_categories(cls, features: list[QgsFeature]) -> list[str]:
-        """Inspect features and return matching taxonomy categories."""
-        keys = (
-            "uipfonksiyon", "fonksiyon_adi", "P_FONK", "B_FONK", "plan_fonk",
-            "catalog_id", "detay_katalogu", "ustkonugrup", "ust_konu_grup",
-        )
-        detected = set()
+        """Inspect features across all 5 MPYY Studio schemas and return matching taxonomy categories."""
+        grp_keys = ("ustkonugrup", "ust_konu_grup", "ust_grup_adi", "ust_grup_kodu")
+        detected: set[str] = set()
 
         for feat in features:
-            val_str = ""
-            for k in keys:
-                idx = feat.fields().indexFromName(k)
-                if idx >= 0:
-                    v = feat[idx]
-                    if v not in (None, "", "NULL"):
-                        val_str += f" {_norm_text(v)}"
-
-            if not val_str:
+            fn_raw = extract_plan_function(feat)
+            grp_raw = first_text(feat, grp_keys)
+            combined_raw = " ".join(part for part in (fn_raw, grp_raw) if part)
+            norm_val = norm_tr(combined_raw)
+            if not norm_val:
                 continue
 
+            padded = f"_{norm_val}_"
+            is_kdkca = is_non_residential_work_zone(combined_raw)
+            is_karma = any(f"_{kw}_" in padded for kw in FUNCTION_TAXONOMY["KARMA_TICARET_KONUT"])
+            is_kss = any(f"_{kw}_" in padded for kw in FUNCTION_TAXONOMY["KUCUK_SANAYI"])
+
+            if is_karma:
+                detected.add("KARMA_TICARET_KONUT")
+            if is_kss:
+                detected.add("KUCUK_SANAYI")
+
             for cat, kws in FUNCTION_TAXONOMY.items():
+                if cat in ("KARMA_TICARET_KONUT", "KUCUK_SANAYI"):
+                    continue
+                if cat == "KONUT" and (is_kdkca or is_karma):
+                    continue
+                if cat == "TICARET" and is_karma:
+                    continue
+                if cat == "SANAYI" and is_kss:
+                    continue
                 for kw in kws:
-                    if f"_{kw}_" in f"_{val_str}_" or kw in val_str:
+                    if f"_{kw}_" in padded:
                         detected.add(cat)
                         break
 
@@ -219,6 +238,12 @@ class PlanNotesEngine:
                 'Cami avlusu afet anında acil toplanma alanı olarak kullanılabilecek şekilde planlanacaktır.',
             ]
 
+        if "SPOR" in categories:
+            res.ozel_hukumler['Spor Alanları'] = [
+                'Açık ve kapalı spor tesis alanlarında beden eğitimi, müsabaka sahaları, yüzme havuzu ve rekreatif spor üniteleri yer alabilir.',
+                'Tribün, soyunma odası ve acil tahliye düzenlemeleri ilgili spor federasyonu normlarına ve yangın güvenliği mevzuatına uygun projelendirilecektir.',
+            ]
+
         if "TEKNIK_ALTYAPI" in categories:
             res.ozel_hukumler['Teknik Altyapı ve Tesis Alanları'] = [
                 'Trafo, terfi istasyonu, su deposu, regülatör vb. teknik tesislerin çevresinde ilgili dağıtım şirketinin güvenlik mesafesi şartı aranır.',
@@ -258,12 +283,12 @@ class PlanNotesEngine:
     @staticmethod
     def _build_markdown(res: PlanNotesResult) -> str:
         md = [
-            f'# {res.plan_adi.upper()} — PLAN NOTES AND IMPLEMENTATION PROVISIONS',
-            f'**Scale:** {res.plan_olcegi} | **Mevzuat:** 3194 sayılı İmar Kanunu ve MPYY',
+            f'# {upper_tr(res.plan_adi)} — PLAN NOTLARI VE UYGULAMA HÜKÜMLERİ',
+            f'**Ölçek:** {res.plan_olcegi} | **Mevzuat:** 3194 sayılı İmar Kanunu ve MPYY',
             "",
             "---",
             "",
-            '## 1. GENERAL PROVISIONS',
+            '## 1. GENEL HÜKÜMLER',
         ]
         for idx, rule in enumerate(res.genel_hukumler, 1):
             md.append(f"1.{idx}. {rule}")
@@ -273,20 +298,20 @@ class PlanNotesEngine:
         for f_idx, (group, rules) in enumerate(res.ozel_hukumler.items(), 1):
             md.append(f"### 2.{f_idx}. {group}")
             for r_idx, rule in enumerate(rules, 1):
-                md.append(f'- **2.{f_idx} satır bulundu.{r_idx}.** {rule}')
+                md.append(f'- **2.{f_idx}.{r_idx}.** {rule}')
             md.append("")
 
         if res.jeolojik_hukumler:
-            md.append('## 3. GEOLOGICAL AND HAZARD PROVISIONS')
+            md.append('## 3. JEOLOJİK VE AFET HÜKÜMLERİ')
             for idx, rule in enumerate(res.jeolojik_hukumler, 1):
                 md.append(f"3.{idx}. {rule}")
             md.append("")
 
         if res.uygulama_hukumleri:
             sec_no = 4 if res.jeolojik_hukumler else 3
-            md.append(f'## {sec_no}. IMPLEMENTATION AND LAND READJUSTMENT PROVISIONS')
+            md.append(f'## {sec_no}. UYGULAMA VE PARSELASYON HÜKÜMLERİ')
             for idx, rule in enumerate(res.uygulama_hukumleri, 1):
-                md.append(f'{sec_no} satır bulundu.{idx}. {rule}')
+                md.append(f'{sec_no}.{idx}. {rule}')
             md.append("")
 
         return "\n".join(md)
@@ -294,27 +319,27 @@ class PlanNotesEngine:
     @staticmethod
     def _build_plain(res: PlanNotesResult) -> str:
         lines = [
-            f"{res.plan_adi.upper()} PLAN NOTLARI",
+            f"{upper_tr(res.plan_adi)} PLAN NOTLARI",
             f'Ölçek: {res.plan_olcegi}',
             "=" * 60,
             "",
-            '1. GENERAL PROVISIONS',
+            '1. GENEL HÜKÜMLER',
             "-" * 40,
         ]
         for idx, rule in enumerate(res.genel_hukumler, 1):
             lines.append(f"1.{idx}. {rule}")
 
         lines.append("")
-        lines.append('2. SPECIFIC PROVISIONS')
+        lines.append('2. FONKSİYONA ÖZGÜ ÖZEL HÜKÜMLER')
         lines.append("-" * 40)
         for f_idx, (group, rules) in enumerate(res.ozel_hukumler.items(), 1):
             lines.append(f"2.{f_idx}. {group}:")
             for r_idx, rule in enumerate(rules, 1):
-                lines.append(f'   2.{f_idx} satır bulundu.{r_idx}. {rule}')
+                lines.append(f'   2.{f_idx}.{r_idx}. {rule}')
 
         if res.jeolojik_hukumler:
             lines.append("")
-            lines.append('3. GEOLOGICAL AND HAZARD PROVISIONS')
+            lines.append('3. JEOLOJİK VE AFET HÜKÜMLERİ')
             lines.append("-" * 40)
             for idx, rule in enumerate(res.jeolojik_hukumler, 1):
                 lines.append(f"3.{idx}. {rule}")
@@ -322,21 +347,23 @@ class PlanNotesEngine:
         if res.uygulama_hukumleri:
             sec_no = 4 if res.jeolojik_hukumler else 3
             lines.append("")
-            lines.append(f'{sec_no}. IMPLEMENTATION AND LAND READJUSTMENT PROVISIONS')
+            lines.append(f'{sec_no}. UYGULAMA VE PARSELASYON HÜKÜMLERİ')
             lines.append("-" * 40)
             for idx, rule in enumerate(res.uygulama_hukumleri, 1):
-                lines.append(f'{sec_no} satır bulundu.{idx}. {rule}')
+                lines.append(f'{sec_no}.{idx}. {rule}')
 
         return "\n".join(lines)
 
     @staticmethod
     def _build_html(res: PlanNotesResult) -> str:
+        esc_title = _html.escape(str(res.plan_adi))
+        esc_scale = _html.escape(str(res.plan_olcegi))
         html = [
             "<!DOCTYPE html>",
-            "<html lang='en'>",
+            "<html lang='tr'>",
             "<head>",
             "  <meta charset='UTF-8'>",
-            f'  <title>{res.plan_adi} Plan Notları</title>',
+            f'  <title>{esc_title} Plan Notları</title>',
             "  <style>",
             "    body { font-family: 'Segoe UI', -apple-system, Roboto, sans-serif; background: #fdfefe; color: #2c3e50; padding: 28px; }",
             "    .container { max-width: 960px; margin: 0 auto; background: #fff; border: 1px solid #d5dbdb; padding: 36px; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }",
@@ -351,28 +378,28 @@ class PlanNotesEngine:
             "</head>",
             "<body>",
             "  <div class='container'>",
-            f"    <h1>{res.plan_adi}</h1>",
-            f"    <p><span class='badge'>Ölçek: {res.plan_olcegi}</span> &nbsp; <span class='badge'>Mevzuat: MPYY & PAİY</span></p>",
+            f"    <h1>{esc_title}</h1>",
+            f"    <p><span class='badge'>Ölçek: {esc_scale}</span> &nbsp; <span class='badge'>Mevzuat: MPYY &amp; PAİY</span></p>",
             '    <h2>1. GENEL HÜKÜMLER</h2>',
             "    <ol>",
         ]
         for rule in res.genel_hukumler:
-            html.append(f"      <li>{rule}</li>")
+            html.append(f"      <li>{_html.escape(str(rule))}</li>")
         html.append("    </ol>")
 
         html.append('    <h2>2. FONKSİYONLARA ÖZEL HÜKÜMLER</h2>')
         for group, rules in res.ozel_hukumler.items():
-            html.append(f"    <h3>{group}</h3>")
+            html.append(f"    <h3>{_html.escape(str(group))}</h3>")
             html.append("    <ul>")
             for rule in rules:
-                html.append(f"      <li>{rule}</li>")
+                html.append(f"      <li>{_html.escape(str(rule))}</li>")
             html.append("    </ul>")
 
         if res.jeolojik_hukumler:
             html.append('    <h2>3. JEOLOJİK VE AFET HÜKÜMLERİ</h2>')
             html.append("    <ol>")
             for rule in res.jeolojik_hukumler:
-                html.append(f"      <li>{rule}</li>")
+                html.append(f"      <li>{_html.escape(str(rule))}</li>")
             html.append("    </ol>")
 
         if res.uygulama_hukumleri:
@@ -380,7 +407,7 @@ class PlanNotesEngine:
             html.append(f'    <h2>{sec_no}. UYGULAMA VE PARSELASYON HÜKÜMLERİ</h2>')
             html.append("    <ol>")
             for rule in res.uygulama_hukumleri:
-                html.append(f"      <li>{rule}</li>")
+                html.append(f"      <li>{_html.escape(str(rule))}</li>")
             html.append("    </ol>")
 
         html.extend(["  </div>", "</body>", "</html>"])

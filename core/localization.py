@@ -58,12 +58,54 @@ def display_label(value):
 FIELD_WORDS = {'alan': 'alan', 'alani': 'alanı', 'adi': 'adı', 'ad': 'ad', 'kodu': 'kodu', 'kod': 'kod', 'ust': 'üst', 'alt': 'alt', 'grup': 'grup', 'konu': 'konu', 'fonksiyon': 'fonksiyon', 'detay': 'ayrıntı', 'katalogu': 'kataloğu', 'kademesi': 'kademesi', 'yerlesme': 'yerleşme', 'yogunlugu': 'yoğunluğu', 'asamasi': 'aşaması', 'olusturan': 'oluşturan', 'olusturma': 'oluşturma', 'guncelleyen': 'güncelleyen', 'guncelleme': 'güncelleme', 'tarihi': 'tarihi', 'tarih': 'tarih', 'aciklama': 'açıklama', 'gosterim': 'gösterim', 'lejant': 'lejant', 'parsel': 'parsel', 'ada': 'ada', 'mahalle': 'mahalle', 'yapi': 'yapı', 'yapiyaklasma': 'yapı yaklaşma', 'yaklasma': 'yaklaşma', 'mesafesi': 'mesafesi', 'durumu': 'durumu', 'durum': 'durum', 'yol': 'yol', 'tipi': 'tipi', 'turu': 'türü', 'nizam': 'nizam', 'kat': 'kat', 'adedi': 'adedi', 'adet': 'adet', 'sayisi': 'sayısı', 'yencok': 'en çok yükseklik', 'katadedi': 'kat adedi', 'katadeti': 'kat adedi', 'kullanim': 'kullanım', 'mulkiyet': 'mülkiyet', 'malik': 'malik', 'yan': 'yan', 'on': 'ön', 'arka': 'arka', 'bahce': 'bahçe', 'brut': 'brüt', 'yogunluk': 'yoğunluk', 'kisi': 'kişi', 'nufus': 'nüfus', 'toplam': 'toplam', 'ortalama': 'ortalama', 'taban': 'taban', 'insaat': 'inşaat', 'bagimsiz': 'bağımsız', 'bolum': 'bölüm', 'bina': 'bina', 'sinif': 'sınıf', 'cinsi': 'cinsi', 'tasiyici': 'taşıyıcı', 'hasar': 'hasar', 'isitma': 'ısıtma', 'cati': 'çatı', 'yas': 'yaş', 'yasi': 'yaşı', 'kalite': 'kalite', 'kalitesi': 'kalitesi', 'kaplama': 'kaplama', 'koruma': 'koruma', 'saha': 'saha', 'genislik': 'genişlik', 'genisligi': 'genişliği', 'uzunluk': 'uzunluk', 'refuj': 'refüj', 'kaldirim': 'kaldırım', 'serit': 'şerit', 'sol': 'sol', 'sag': 'sağ', 'tapu': 'tapu', 'tescil': 'tescil', 'yerlesime': 'yerleşime', 'uygunluk': 'uygunluk', 'uygunlugu': 'uygunluğu', 'emsal': 'emsal', 'kaks': 'emsal (KAKS)', 'taks': 'taban alanı oranı (TAKS)', 'fark': 'fark', 'sonuc': 'sonuç', 'not': 'not', 'notlar': 'notlar', 'kontrol': 'denetim', 'hata': 'hata', 'oran': 'oran', 'orani': 'oranı', 'gereken': 'gereken', 'mevcut': 'mevcut', 'eksik': 'eksik', 'konut': 'konut', 'ticaret': 'ticaret', 'donati': 'donatı', 'net': 'net', 'otopark': 'otopark', 'siginak': 'sığınak', 'hak': 'hak', 'hakedis': 'hakediş', 'sinifi': 'sınıfı', 'geometri': 'geometri', 'tarama': 'tarama', 'sinir': 'sınır', 'tabaka': 'tabaka', 'tanim': 'tanım', 'kural': 'kural', 'strateji': 'strateji', 'bolgesi': 'bölgesi', 'bolge': 'bölge', 'oncelik': 'öncelik', 'hat': 'hat', 'koridor': 'koridor', 'odak': 'odak', 'kademelenme': 'kademelenme', 'etiket': 'etiket', 'ozel': 'özel', 'hukum': 'hüküm', 'var': 'var', 'mi': 'mi', 'kusak': 'kuşak', 'merkez': 'merkez', 'etap': 'etap', 'basina': 'başına', 'kullanici': 'kullanıcı', 'tarihilk': 'ilk kayıt tarihi', 'tarihson': 'son güncelleme tarihi', 'ongorulen': 'öngörülen', 'ana': 'ana', 'renk': 'renk', 'fotograf': 'fotoğraf', 'duzenleyen': 'düzenleyen', 'fonk': 'fonksiyon', 'fiziki': 'fiziki', 'fiziksel': 'fiziksel', 'afet': 'afet', 'cadde': 'cadde', 'sokak': 'sokak', 'acigi': 'açığı', 'yesil': 'yeşil', 'gerekli': 'gerekli', 'hesaplanan': 'hesaplanan', 'hakim': 'hâkim', 'maks': 'azami', 'riskli': 'riskli', 'uygun': 'uygun', 'yapilasabilir': 'yapılaşabilir', 'tevhid': 'tevhit', 'zorunlu': 'zorunlu', 'ifraz': 'ifraz', 'edilebilir': 'edilebilir', 'cekme': 'çekme', 'yetersiz': 'yetersiz', 'fonksiyonu': 'fonksiyonu', 'grubu': 'grubu', 'poligon': 'poligon', 'cizgi': 'çizgi', 'esdeger': 'eşdeğer', 'madde': 'madde', 'notu': 'notu', 'miktari': 'miktarı', 'puan': 'puan', 'puani': 'puanı', 'oneri': 'öneri', 'kaynak': 'kaynak', 'area': 'alan', 'name': 'ad', 'title': 'başlık', 'code': 'kod', 'function': 'fonksiyon', 'status': 'durum', 'result': 'sonuç', 'layer': 'katman', 'source': 'kaynak', 'target': 'hedef', 'network': 'ağ', 'node': 'düğüm', 'edge': 'kenar', 'distance': 'mesafe', 'length': 'uzunluk', 'width': 'genişlik', 'height': 'yükseklik', 'floor': 'kat', 'floors': 'katlar', 'count': 'sayı', 'total': 'toplam', 'mean': 'ortalama', 'average': 'ortalama', 'population': 'nüfus', 'weight': 'ağırlık', 'value': 'değer', 'ratio': 'oran', 'baseline': 'başlangıç', 'proposed': 'önerilen', 'scenario': 'senaryo', 'facility': 'tesis', 'demand': 'talep', 'mode': 'ulaşım türü', 'time': 'süre', 'speed': 'hız', 'access': 'erişim', 'accessibility': 'erişilebilirlik', 'equity': 'eşitlik', 'score': 'puan', 'priority': 'öncelik', 'type': 'tür', 'class': 'sınıf', 'group': 'grup', 'description': 'açıklama', 'note': 'not', 'issue': 'sorun', 'error': 'hata', 'date': 'tarih', 'year': 'yıl', 'version': 'sürüm', 'parcel': 'parsel', 'building': 'yapı', 'road': 'yol', 'land': 'arazi', 'use': 'kullanım', 'id': 'kimlik', 'added': 'eklenen', 'addition': 'ilave', 'adjacent': 'komşu', 'agirligi': 'ağırlığı', 'arac': 'araç', 'article': 'madde', 'article12': '12. madde', 'articles': 'maddeler', 'aspect': 'en-boy', 'audit': 'denetim', 'basis': 'dayanak', 'birim': 'birim', 'bylaw': 'belediye düzenlemesi', 'catalog': 'katalog', 'categories': 'kategoriler', 'changed': 'değişen', 'ciddiyet': 'ciddiyet', 'codes': 'kodlar', 'compactness': 'kompaktlık', 'compliant': 'uygun', 'component': 'bileşen', 'conflicting': 'çakışan', 'contiguous': 'bitişik', 'coverage': 'kapsama', 'crosswalk': 'kod eşlemesi', 'dead': 'çıkmaz', 'degeri': 'değeri', 'degisim': 'değişim', 'delta': 'fark', 'depth': 'derinlik', 'effective': 'geçerli', 'end': 'uç', 'esik': 'eşik', 'esitlik': 'eşitlik', 'exception': 'istisna', 'fabric': 'doku', 'farki': 'farkı', 'finding': 'bulgu', 'findings': 'bulgular', 'footprint': 'taban alanı', 'front': 'ön', 'frontage': 'cephe', 'gap': 'boşluk', 'gosterge': 'gösterge', 'gross': 'brüt', 'ihtiyaci': 'ihtiyacı', 'intervention': 'müdahale', 'invalid': 'geçersiz', 'is': 'durumu', 'karsilama': 'karşılama', 'legend': 'lejant', 'levels': 'kat sayısı', 'link': 'bağlantı', 'matched': 'eşleşen', 'max': 'azami', 'min': 'asgari', 'missing': 'eksik', 'mix': 'karma', 'modes': 'ulaşım türleri', 'monitor': 'izleme', 'muteahhit': 'müteahhit', 'normalized': 'normalleştirilmiş', 'notes': 'notlar', 'onceki': 'önceki', 'overlap': 'örtüşme', 'parent': 'üst', 'part': 'parça', 'profile': 'profil', 'progress': 'ilerleme', 'removed': 'kaldırılan', 'required': 'gerekli', 'revision': 'revizyon', 'rise': 'yükselme', 'roof': 'çatı', 'route': 'güzergâh', 'rule': 'kural', 'rules': 'kurallar', 'satir': 'satır', 'scope': 'kapsam', 'seam': 'ortak sınır', 'service': 'hizmet', 'sira': 'sıra', 'size': 'boyut', 'snap': 'yakalama', 'sutun': 'sütun', 'threshold': 'eşik', 'top': 'üst', 'triggers': 'tetikleyiciler', 'violation': 'ihlal', 'violations': 'ihlaller', 'volume': 'hacim', 'wall': 'duvar', 'warning': 'uyarı', 'warnings': 'uyarılar', 'yonu': 'yönü', 'acik': 'açık', 'adaylar': 'adaylar', 'analiz': 'analiz', 'cephe': 'cephe', 'ciro': 'ciro', 'dayanak': 'dayanak', 'derinlik': 'derinlik', 'dop': 'DOP', 'edilen': 'edilen', 'fid': 'FID', 'fiili': 'fiilî', 'fizibilite': 'fizibilite', 'ha': 'ha', 'hisse': 'hisse', 'ids': 'kimlikler', 'jeoloji': 'jeoloji', 'kadastro': 'kadastro', 'kar': 'kâr', 'kategori': 'kategori', 'kes': 'kes', 'kesinti': 'kesinti', 'm2': 'm²', 'm3': 'm³', 'maliyet': 'maliyet', 'mpyy': 'MPYY', 'nesne': 'nesne', 'no': 'no', 'pafta': 'pafta', 'pah': 'pah', 'plan': 'plan', 'risk': 'risk', 'sahibi': 'sahibi', 'skor': 'puan', 'standart': 'standart', 'tahsis': 'tahsis', 'tercih': 'tercih', 'tl': 'TL', 'yasal': 'yasal', 'yeni': 'yeni', 'yeterlilik': 'yeterlilik', 'yoksun': 'yoksun', 'zarar': 'zarar', 'zarf': 'zarf'}
 
 
+EXACT_FIELD_ALIASES = {
+    'time_change_min': 'Süre farkı (dk)',
+    'time_a_min': 'Süre A (dk)',
+    'time_b_min': 'Süre B (dk)',
+    'route_time_min': 'Güzergâh süresi (dk)',
+    'effective_res_ratio': 'Geçerli konut oranı',
+    'floor_levels': 'Kat sayısı',
+    'change': 'Değişim',
+    'gsi': 'GSI (Taban oranı)',
+    'fsi': 'FSI (Emsal)',
+    'osr': 'OSR (Açık alan oranı)',
+}
+
+
 def field_alias(name):
+    key_lower = str(name).strip().lower()
+    if key_lower in EXACT_FIELD_ALIASES:
+        return EXACT_FIELD_ALIASES[key_lower]
     direct = display_label(name)
     if direct != name:
         return direct
     words = re.sub(r'([a-z])([A-Z])', r'\1_\2', name).replace('(', '_').replace(')', '').split('_')
-    label = ' '.join(FIELD_WORDS.get(label_key(word).lower(), word) for word in words if word)
+    extra_words = {
+        'kompaktlik': 'kompaktlık',
+        'dikdortgenlik': 'dikdörtgenlik',
+        'konvekslik': 'dışbükeylik',
+        'cevre': 'çevre',
+        'yonelim': 'yönelim',
+        'derece': 'derece',
+        'duzeni': 'düzeni',
+        'entropi': 'entropi',
+        'dugum': 'düğüm',
+        'bilesen': 'bileşen',
+        'kavsak': 'kavşak',
+        'agirlikli': 'ağırlıklı',
+        'medyan': 'medyan',
+        'katsayisi': 'katsayısı',
+        'payi': 'payı',
+        'change': 'değişim',
+        'res': 'konut',
+        'nipfonksiyon': 'NİP fonksiyonu',
+        'uipfonksiyon': 'UİP fonksiyonu',
+    }
+    label = ' '.join(
+        extra_words.get(label_key(word).lower(), FIELD_WORDS.get(label_key(word).lower(), word))
+        for word in words
+        if word
+    )
     return label[:1].replace('i', 'İ').upper() + label[1:]
 
 
@@ -92,12 +134,14 @@ def add_localized_layer(layer, project=None):
 def display_expression(column, values=None, translations=None):
     """Portable native expression: requires no registered Python function."""
     from qgis.core import QgsExpression
+    from .attr_utils import is_null_value
     original = QgsExpression.quotedColumnRef(column)
     if values is not None:
+        clean_values = [v for v in values if not is_null_value(v)]
         branches = ' '.join(
             f'WHEN {original} = {QgsExpression.quotedString(str(value))} THEN {QgsExpression.quotedString((translations or {}).get(str(value), display_label(value)))}'
-            for value in sorted(values, key=str)
-            if value is not None and (translations or {}).get(str(value), display_label(value)) != str(value)
+            for value in sorted(clean_values, key=str)
+            if (translations or {}).get(str(value), display_label(value)) != str(value)
         )
         return f'CASE {branches} ELSE {original} END' if branches else original
     key = f'upper(replace({original}, {QgsExpression.quotedString("ı")}, \'i\'))'

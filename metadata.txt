@@ -3,7 +3,7 @@ name=MPYY Studio
 qgisMinimumVersion=3.44
 qgisMaximumVersion=4.99
 description=Turkish-language studio for plans made under Turkey's Spatial Plans Regulation (MPYY): UİP, NİP, ÇDP and MSP GeoPackage workspaces, official Ek-1e symbology, plan audits and delivery tools.
-version=1.0.1
+version=1.0.2
 author=Geophilo
 email=yusuf.eminoglu@deu.edu.tr
 about=MPYY Studio, Mekânsal Planlar Yapım Yönetmeliği'ne (MPYY) göre plan üretimini tek bir çalışma alanında toplar. UİP, NİP ve ÇDP için MPYY 1.1.7 şemalarında, yerel UİP ve NİP çizim şablonlarında, arazi kullanımı ve saha etüdü için ve Bakanlığın Ek-1e kataloğundan kurulan Mekânsal Strateji Planı (MSP) için taşınabilir GeoPackage çalışma alanları kurar.
@@ -21,5 +21,6 @@ deprecated=False
 hasProcessingProvider=yes
 license=GPL-2.0-or-later
 changelog=
+    1.0.2 - Merkezi Türkçe normalizasyon ve geometri sink adaptörleri (core/attr_utils.py); styler XML Doctype filtresi ve kavisli geometri API onarımları; PAİY, 7221 s. Kanun Md. 8 imar çapı, KDKÇA kapasite ayrımı ve Madde 26 eşdeğer alan denetim motorları iyileştirmeleri; arayüz ve analiz raporlarında tam Türkçe terminoloji uyumu.
     1.0.1 - Hub listing text rewritten; author Geophilo; university affiliation removed; documentation links use the standard geophilo.com pages (manual.html, guide/); manual HTML no longer ships in the plugin package.
     1.0.0 - İlk kamusal sürüm: MPYY 1.1.7 çalışma alanları (UİP, NİP, ÇDP), Mekânsal Strateji Planı (MSP) çalışma alanı, Yerel UİP ve Yerel NİP çizim şablonları, fonksiyon seçerek çizim, Ek-1e ve Ek-1b'ye göre semboloji, değer listeli ve sınırları denetlenen formlar, planda bulunan değerlerle sınırlı lejant, 86 Processing algoritması, plan denetim iş akışları ve yeni çalışma paneli. Sembol fontları paketle gelir ve eklenti yüklenirken kaydedilir; sisteme font kurmak gerekmez.

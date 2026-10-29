@@ -9,6 +9,7 @@ from typing import Any, Iterable
 
 from qgis.core import QgsFeature
 
+from .attr_utils import norm_tr, parse_float
 from .routed_accessibility import RoutedAccessibilityEngine
 
 
@@ -101,7 +102,7 @@ class Article12AccessibilityEngine:
                 exception_basis = cls._exception_basis(route.feature)
                 if route.status == "ACCESSIBLE":
                     status = "COMPLIANT_SCREENING"
-                    message = "Demand is within the approximate Article 12 walking distance."
+                    message = 'Talep noktası yaklaşık Madde 12 yürüme mesafesi içindedir.'
                 elif exception_basis:
                     status = "EXCEPTION_REVIEW"
                     message = (
@@ -162,9 +163,8 @@ class Article12AccessibilityEngine:
 
     @staticmethod
     def _number(value: Any) -> float | None:
-        try:
-            number = float(value)
-        except (TypeError, ValueError):
+        number = parse_float(value)
+        if number is None:
             return None
         return number if math.isfinite(number) else None
 

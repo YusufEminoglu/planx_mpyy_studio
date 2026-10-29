@@ -5,7 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable
 
-from qgis.core import QgsFeature, QgsGeometry
+from qgis.core import QgsFeature, QgsGeometry, QgsSpatialIndex
+
+from .attr_utils import linearize_geometry, reindex_features
 
 
 @dataclass(frozen=True)
@@ -40,7 +42,7 @@ class ActiveMobilityAuditEngine:
     ) -> ActiveMobilityAuditResult:
         if snap_tolerance <= 0.0 or center_access_distance < 0.0:
             raise ValueError('Yakalama toleransı pozitif olmalı ve merkez mesafesi negatif olmamalıdır.')
-        features = list(network_features)
+        features = reindex_features(network_features)
         nodes_by_feature = {}
         adjacency = {}
         for feature in features:
@@ -49,8 +51,11 @@ class ActiveMobilityAuditEngine:
             for first, last in endpoint_pairs:
                 first_key = cls._node_key(first.x(), first.y(), snap_tolerance)
                 last_key = cls._node_key(last.x(), last.y(), snap_tolerance)
-                adjacency.setdefault(first_key, set()).add(last_key)
-                adjacency.setdefault(last_key, set()).add(first_key)
+                if first_key != last_key:
+                    adjacency.setdefault(first_key, set()).add(last_key)
+                    adjacency.setdefault(last_key, set()).add(first_key)
+                else:
+                    adjacency.setdefault(first_key, set())
                 feature_nodes.update((first_key, last_key))
             nodes_by_feature[feature.id()] = feature_nodes
 
@@ -102,19 +107,32 @@ class ActiveMobilityAuditEngine:
                 status, dead_ends, message,
             ))
 
-        network_geometries = [
-            feature.geometry() for feature in features
-            if feature.hasGeometry() and not feature.geometry().isEmpty()
+        network_valid = [
+            f for f in features
+            if f.hasGeometry() and not f.geometry().isEmpty()
         ]
+        sindex = QgsSpatialIndex()
+        geom_map = {}
+        for feat in network_valid:
+            sindex.addFeature(feat)
+            geom_map[feat.id()] = feat.geometry()
+
         centers = list(center_features)
         unserved = 0
         for center in centers:
             geometry = center.geometry()
-            if not geometry or geometry.isEmpty() or not network_geometries:
+            if not geometry or geometry.isEmpty() or not network_valid:
                 unserved += 1
                 continue
-            point_geometry = QgsGeometry.fromPointXY(geometry.pointOnSurface().asPoint())
-            if min(point_geometry.distance(line) for line in network_geometries) > center_access_distance:
+            point_surface = geometry.pointOnSurface()
+            point_geometry = QgsGeometry.fromPointXY(point_surface.asPoint())
+            bbox = point_geometry.buffer(center_access_distance, 4).boundingBox()
+            candidate_ids = sindex.intersects(bbox)
+            if not candidate_ids:
+                unserved += 1
+                continue
+            min_dist = min((point_geometry.distance(geom_map[cid]) for cid in candidate_ids), default=float("inf"))
+            if min_dist > center_access_distance:
                 unserved += 1
         record_tuple = tuple(records)
         return ActiveMobilityAuditResult(
@@ -133,7 +151,8 @@ class ActiveMobilityAuditEngine:
     def _segments(geometry: QgsGeometry):
         if not geometry or geometry.isEmpty():
             return []
-        polylines = geometry.asMultiPolyline() if geometry.isMultipart() else [geometry.asPolyline()]
+        linear_geom = linearize_geometry(geometry)
+        polylines = linear_geom.asMultiPolyline() if linear_geom.isMultipart() else [linear_geom.asPolyline()]
         return [
             (line[index], line[index + 1])
             for line in polylines

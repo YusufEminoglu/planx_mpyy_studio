@@ -96,7 +96,7 @@ class MPYYGeneralDossierEngine:
         canonical = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
         payload["content_sha256"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
         output.parent.mkdir(parents=True, exist_ok=True)
-        temporary = output.with_name(output.name + ' satır bulundu.' + uuid.uuid4().hex + ".tmp")
+        temporary = output.with_name(f"{output.name}.{uuid.uuid4().hex}.tmp")
         temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
         temporary.replace(output)
         return str(output)
@@ -106,7 +106,7 @@ class MPYYGeneralDossierEngine:
         return [
             GeneralDossierFinding(
                 "MISSING_" + field.upper(), "ERROR", article,
-                field + " is not evidenced in the dossier.",
+                f"{field} dosyada belgelenmemiştir.",
             )
             for field, article in requirements.items() if not cls._present(manifest.get(field))
         ]

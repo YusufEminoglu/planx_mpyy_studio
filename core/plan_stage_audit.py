@@ -224,14 +224,14 @@ class PlanStageAuditEngine:
         findings: list[PlanAuditFinding] = []
         checks = (
             (("nizam",), "MISSING_BUILDING_ORDER", 'yapı nizamı'),
-            (("taks", "kaks", "emsal"), "MISSING_INTENSITY", "TAKS, KAKS, or emsal"),
+            (("taks", "kaks", "emsal"), "MISSING_INTENSITY", 'TAKS, KAKS veya emsal'),
             (("katadedi", "yencok"), "MISSING_HEIGHT", 'kat sayısı veya yapı yüksekliği'),
             (("onbahce", "yapiyaklasmamesafesi"), "MISSING_SETBACK", 'yapı çekme mesafesi'),
         )
         for names, code, label in checks:
             findings.extend(cls._require_any(
                 data, names, code, "ERROR", "MPYY 24/4",
-                "Buildable UIP decisions require " + label + ' satır bulundu.',
+                f"Yapılaşma kararı içeren UİP kararları için {label} gereklidir.",
             ))
         return findings
 
@@ -239,15 +239,17 @@ class PlanStageAuditEngine:
     def _symbol_level_findings(cls, data, level, catalog) -> list[PlanAuditFinding]:
         text = cls.normalize(" ".join(str(data.get(name, "")) for name in CLASSIFICATION_FIELDS))
         findings = []
-        for symbol in catalog["symbols"]:
+        for symbol in catalog.get("symbols", []):
             code = cls.normalize(symbol.get("code", ""))
             name = cls.normalize(symbol.get("name", ""))
-            if code and code not in text and (not name or name not in text):
+            if not code and not name:
+                continue
+            if (code and code not in text) and (not name or name not in text):
                 continue
             if level not in symbol.get("levels", []):
                 findings.append(PlanAuditFinding(
                     "SYMBOL_LEVEL_MISMATCH", "ERROR", "MPYY EK-1 (22.01.2026)",
-                    f"{symbol.get('code')} is not defined for the {level} plan level.",
+                    f"{symbol.get('code')} sembolü {level} plan kademesi için tanımlı değildir.",
                 ))
         return findings
 
@@ -266,7 +268,7 @@ class PlanStageAuditEngine:
             return None
         return PlanAuditFinding(
             "SCALE_LEVEL_MISMATCH", "ERROR", "MPYY 4, 6",
-            f'1:{int(map_scale)} is outside the configured {level} scale range 1:{minimum}-1:{maximum} satır bulundu.',
+            f"1:{int(map_scale)} ölçeği, tanımlanan {level} ölçek aralığı (1:{minimum} - 1:{maximum}) dışındadır.",
         )
 
     @classmethod

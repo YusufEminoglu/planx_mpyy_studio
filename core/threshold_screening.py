@@ -7,6 +7,8 @@ from typing import Iterable, Mapping
 
 from qgis.core import QgsFeature, QgsGeometry, QgsSpatialIndex
 
+from .attr_utils import reindex_features
+
 
 @dataclass(frozen=True)
 class ThresholdScreeningRecord:
@@ -47,21 +49,22 @@ class ThresholdScreeningEngine:
             category = str(raw_category).upper()
             if category not in cls.CATEGORIES:
                 raise ValueError('Bilinmeyen eşik kategorisi: ' + category)
+            reindexed_constraints = reindex_features(features)
             feature_map = {}
             index = QgsSpatialIndex()
-            for feature in features:
+            for feature in reindexed_constraints:
                 if feature.hasGeometry() and not feature.geometry().isEmpty():
                     feature_map[feature.id()] = feature
                     index.addFeature(feature)
             stores[category] = (index, feature_map)
 
         records = []
-        for feature in proposal_features:
+        for feature in reindex_features(proposal_features):
             geometry = feature.geometry()
             if not geometry or geometry.isEmpty():
                 records.append(ThresholdScreeningRecord(
                     feature, "INVALID_GEOMETRY", 0.0, 0.0, 0.0, {}, (),
-                    "Proposal geometry is empty; threshold screening could not be completed.",
+                    'Öneri geometrisi boştur; eşik taraması tamamlanamadı.',
                 ))
                 continue
             if not geometry.isGeosValid():

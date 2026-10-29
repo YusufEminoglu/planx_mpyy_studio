@@ -12,8 +12,9 @@ blocks is a planning decision.
 import json
 from pathlib import Path
 
-from qgis.core import QgsFeature, QgsVectorLayer
+from qgis.core import QgsFeature, QgsGeometry, QgsVectorLayer
 
+from .attr_utils import is_null_value
 from .mpyy_import import FAMILY, workspace_level
 from .mpyy_workspace import create_mpyy_workspace, level_schema
 
@@ -35,7 +36,7 @@ def _identities(feature, feature_type):
     for field in feature_type["fields"]:
         if field["type"] == "enum":
             value = feature[field["name"]]
-            if value not in (None, "") and not (hasattr(value, "isNull") and value.isNull()):
+            if not is_null_value(value):
                 keys.append(f'{feature_type["name"]}|{field["name"]}={value}')
     return keys + [feature_type["name"]]
 
@@ -44,6 +45,12 @@ def convert_workspace(source_path, target_path, target_level, feedback=None):
     source_level = workspace_level(source_path)
     if source_level is None:
         raise ValueError('Kaynak dosya MPYY 1.1.7 çalışma alanı değil.')
+    if source_level not in ORDER:
+        raise ValueError(
+            f'Kaynak kademe ({source_level}) kademe dönüşümünü desteklemiyor; yalnız UİP → NİP → ÇDP desteklenir.'
+        )
+    if target_level not in ORDER:
+        raise ValueError(f'Geçersiz hedef plan kademesi: {target_level}')
     if ORDER.index(target_level) <= ORDER.index(source_level):
         raise ValueError('Hedef kademe kaynaktan daha üst ölçekli olmalıdır (UİP → NİP → ÇDP).')
     table = _rules(source_level, target_level)
@@ -54,9 +61,11 @@ def convert_workspace(source_path, target_path, target_level, feedback=None):
     for feature_type in source_types:
         if feature_type["geometry"]:
             probe = QgsVectorLayer(f"{Path(source_path).resolve()}|layername={feature_type['name']}", "probe", "ogr")
-            if probe.isValid():
+            if probe.isValid() and probe.crs().isValid():
                 crs = probe.crs()
                 break
+    if crs is None or not crs.isValid():
+        raise ValueError('Kaynak çalışma alanının koordinat sistemi okunamadı.')
     create_mpyy_workspace(target_path, crs, target_level)
 
     report, targets, batches = {}, {}, {}
@@ -90,19 +99,28 @@ def convert_workspace(source_path, target_path, target_level, feedback=None):
                 target = QgsVectorLayer(f"{Path(target_path).resolve()}|layername={rule['feature']}", rule["feature"], "ogr")
                 targets[rule["feature"]] = target
                 batches[rule["feature"]] = []
-            out = QgsFeature(target.fields())
-            geometry = feature.geometry()
-            if target_type["geometry"].startswith("Multi"):
+            geometry = QgsGeometry(feature.geometry())
+            target_geom_type = target_type["geometry"] or ""
+            if target_geom_type.startswith("Multi"):
                 geometry.convertToMultiType()
-            out.setGeometry(geometry)
+                parts = [geometry]
+            elif geometry.isMultipart():
+                parts = [part for part in geometry.asGeometryCollection() if not part.isEmpty()]
+            else:
+                parts = [geometry]
             target_fields = {f["name"] for f in target_type["fields"]}
-            for field in feature_type["fields"]:
-                if field["name"] in target_fields and field["type"] != "enum":
-                    out[field["name"]] = feature[field["name"]]
-            for name, value in rule["attrs"].items():
-                out[name] = value
-            batches[rule["feature"]].append(out)
-            row["aktarilan"] += 1
+            for part in parts:
+                out = QgsFeature(target.fields())
+                out.setGeometry(part)
+                for field in feature_type["fields"]:
+                    if field["name"] in target_fields and field["type"] != "enum":
+                        val = feature[field["name"]]
+                        if not is_null_value(val):
+                            out[field["name"]] = val
+                for name, value in rule["attrs"].items():
+                    out[name] = value
+                batches[rule["feature"]].append(out)
+            row["aktarilan"] += len(parts)
             row["durum"] = "aktarıldı" + ("; " + row["doldurulacak"] + " girilmeli" if row["doldurulacak"] else "")
     for name, features in batches.items():
         ok, _ = targets[name].dataProvider().addFeatures(features)

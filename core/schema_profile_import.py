@@ -47,13 +47,13 @@ class MPYYSchemaProfileImportEngine:
             row_count = 0
             for row_count, row in enumerate(reader, start=1):
                 if None in row or any(value is None for value in row.values()):
-                    raise ValueError("CSV row has the wrong number of columns: " + str(row_count))
+                    raise ValueError(f"CSV satırında sütun sayısı hatalı: {row_count}")
                 values = {key: row[column].strip() for key, column in columns.items()}
                 table, name, field_type = values["table"], values["field"], values["type"].upper()
                 if not table or not name or not field_type:
-                    raise ValueError("Table, field and type cannot be empty at row " + str(row_count))
+                    raise ValueError(f"{row_count}. satırda tablo, alan ve tür boş olamaz.")
                 if (table, name) in seen:
-                    raise ValueError("Duplicate dictionary field: " + table + ' satır bulundu.' + name)
+                    raise ValueError(f"Yinelenen sözlük alanı: {table}.{name}")
                 seen.add((table, name))
                 definition = tables.setdefault(table, {"name": table, "fields": []})
                 field = {"name": name, "type": field_type}
@@ -61,7 +61,7 @@ class MPYYSchemaProfileImportEngine:
                     if values.get(key, ""):
                         text = values[key].lower()
                         if text not in {"true", "false", "1", "0", "yes", "no"}:
-                            raise ValueError('Geçersiz mantıksal değer: ' + table + ' satır bulundu.' + name + ": " + key)
+                            raise ValueError(f"Geçersiz mantıksal değer: {table}.{name}: {key}")
                         field[key] = text in {"true", "1", "yes"}
                 definition["fields"].append(field)
                 for key in ("geometry_type", "srs_id"):
@@ -69,7 +69,7 @@ class MPYYSchemaProfileImportEngine:
                         continue
                     value = values[key].upper() if key == "geometry_type" else int(values[key])
                     if key in definition and definition[key] != value:
-                        raise ValueError("Conflicting table geometry declaration: " + table)
+                        raise ValueError(f"Çelişkili tablo geometri tanımı: {table}")
                     definition[key] = value
             if not row_count:
                 raise ValueError('CSV sözlüğü en az bir alan içermelidir.')
@@ -96,7 +96,7 @@ class MPYYSchemaProfileImportEngine:
     def write(profile: Mapping[str, Any], output_path: str | Path) -> str:
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        temporary = path.with_name(path.name + ' satır bulundu.' + uuid.uuid4().hex + ".tmp")
+        temporary = path.with_name(f"{path.name}.{uuid.uuid4().hex}.tmp")
         temporary.write_text(json.dumps(profile, ensure_ascii=False, indent=2), encoding="utf-8")
         temporary.replace(path)
         return str(path)

@@ -25,15 +25,19 @@ mapped across vocabularies and nothing is invented.
 
 from __future__ import annotations
 
+import contextlib
 import json
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 
+from .attr_utils import is_null_value
+
 PLUGIN_ROOT = Path(__file__).resolve().parents[1]
 HIERARCHY_PATH = PLUGIN_ROOT / "styles" / "mpyy_detail_hierarchy.json"
 MAPPING_PATH = PLUGIN_ROOT / "styles" / "mpyy_sld" / "mapping.json"
 ACTIVE_PROPERTY = "mpyy/aktif_fonksiyon"
+ORIG_DEFAULTS_PROPERTY = "mpyy/orijinal_varsayilanlar"
 
 
 @dataclass(frozen=True)
@@ -74,6 +78,32 @@ def _records() -> tuple:
 
 def plan_functions(level: str) -> list[PlanFunction]:
     """Every catalogue function of a plan level, in catalogue order."""
+    if level == "MSP":
+        from .msp_catalog import decode_rows, msp_layer_specs
+
+        msp_out = []
+        for spec in msp_layer_specs(decode_rows()):
+            for code in spec.codes:
+                msp_out.append(
+                    PlanFunction(
+                        record_id=f"msp:{spec.name}:{code.id}",
+                        name=code.detay_adi,
+                        group=spec.group,
+                        subgroup=f"{spec.group} · {code.id}",
+                        level="MSP",
+                        feature_type=spec.name,
+                        attrs=(
+                            ("msp_kodu", code.id),
+                            ("gosterim_adi", code.detay_adi),
+                            ("strateji_bolgesi", spec.group),
+                        ),
+                        page=int(code.page or 0),
+                        layer_mark="msp:" + spec.name,
+                        source="ek1e",
+                    )
+                )
+        return msp_out
+
     types = _mapping()["levels"].get(level, {}).get("types", {})
     out = []
     for record in _records():
@@ -143,7 +173,7 @@ def _value_map(layer, field: str) -> list:
 
 
 def _blank(value) -> bool:
-    return value is None or str(value) in ("", "NULL")
+    return is_null_value(value)
 
 
 def local_functions(level: str, project=None) -> list:
@@ -201,8 +231,9 @@ def activate(function: PlanFunction, project=None, iface=None):
 
     Returns the layer, or raises ``LookupError`` when the workspace has no such
     layer loaded. Defaults set by an earlier choice on the same layer are
-    cleared first, so switching from YERLEŞİK to GELİŞME konut never leaves
-    the old value behind.
+    restored to their original template definitions first, so switching from
+    YERLEŞİK to GELİŞME konut never leaves the old value behind or wipes
+    authored template expressions.
     """
     from qgis.core import QgsDefaultValue
 
@@ -210,15 +241,33 @@ def activate(function: PlanFunction, project=None, iface=None):
     if layer is None:
         raise LookupError(
             f"'{function.feature_type}' katmanı yüklü bir MPYY çalışma alanında bulunamadı.")
+
+    raw_orig = layer.customProperty(ORIG_DEFAULTS_PROPERTY)
+    orig_defaults: dict[str, list] = {}
+    if raw_orig:
+        with contextlib.suppress(ValueError, TypeError):
+            parsed = json.loads(str(raw_orig))
+            if isinstance(parsed, dict):
+                orig_defaults = parsed
+
     previous = layer.customProperty(ACTIVE_PROPERTY) or ""
     for field in [f for f in str(previous).split(",") if f]:
         index = layer.fields().indexFromName(field)
         if index >= 0:
-            layer.setDefaultValueDefinition(index, QgsDefaultValue())
+            saved = orig_defaults.get(field)
+            if isinstance(saved, list) and len(saved) == 2 and saved[0]:
+                layer.setDefaultValueDefinition(index, QgsDefaultValue(str(saved[0]), bool(saved[1])))
+            else:
+                layer.setDefaultValueDefinition(index, QgsDefaultValue())
+
+    applied_fields: list[str] = []
     for field, code in function.attrs:
         index = layer.fields().indexFromName(field)
         if index < 0:
             continue
+        if field not in orig_defaults:
+            current_def = layer.defaultValueDefinition(index)
+            orig_defaults[field] = [current_def.expression(), bool(current_def.applyOnUpdate())]
         if layer.fields().at(index).isNumeric():
             try:
                 literal = repr(float(code)) if "." in str(code) else str(int(code))
@@ -227,10 +276,13 @@ def activate(function: PlanFunction, project=None, iface=None):
         else:
             literal = "'" + str(code).replace("'", "''") + "'"
         layer.setDefaultValueDefinition(index, QgsDefaultValue(literal))
-    layer.setCustomProperty(ACTIVE_PROPERTY, ",".join(field for field, _code in function.attrs))
+        applied_fields.append(field)
+
+    layer.setCustomProperty(ORIG_DEFAULTS_PROPERTY, json.dumps(orig_defaults, ensure_ascii=False))
+    layer.setCustomProperty(ACTIVE_PROPERTY, ",".join(applied_fields))
     layer.setCustomProperty("mpyy/aktif_fonksiyon_adi", function.name)
-    if not layer.isEditable():
-        layer.startEditing()
+    if not layer.isEditable() and not layer.startEditing():
+        raise RuntimeError(f"'{layer.name()}' katmanı düzenleme moduna alınamadı.")
     if iface is not None:
         iface.setActiveLayer(layer)
         action = iface.actionAddFeature()

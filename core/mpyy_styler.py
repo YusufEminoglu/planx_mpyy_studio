@@ -19,9 +19,9 @@ from qgis.core import (
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QColor
 
-from .localization import localized_category
-
 from .eplan_catalog import EPLAN_CATALOG
+from .legend_scope import FULL_PROPERTY, MODE_PROPERTY, full_renderer
+from .localization import localized_category
 
 
 @dataclass(frozen=True)
@@ -189,20 +189,25 @@ class MPYYDetailStylerEngine:
             raw_tabaka,
         )
 
+        def _token_subset_match(tokens: list[str], mapping: dict):
+            matches = []
+            for key, entry in mapping.items():
+                key_tokens = key.split("_")
+                if "DISI" in tokens and "DISI" not in key_tokens and "KONUT" in key_tokens:
+                    continue
+                if all(part in tokens for part in key_tokens):
+                    matches.append((len(key), entry))
+            return max(matches, key=lambda item: item[0])[1] if matches else None
+
         # 1. Official EPLAN_CATALOG for primary plan_type
         entries = EPLAN_CATALOG.get(plan_type, {})
         for candidate in candidates:
             if candidate in entries:
                 return entries[candidate]
         for candidate in candidates:
-            tokens = candidate.split("_")
-            matches = [
-                (len(key), entry)
-                for key, entry in entries.items()
-                if all(part in tokens for part in key.split("_"))
-            ]
-            if matches:
-                return max(matches, key=lambda item: item[0])[1]
+            found = _token_subset_match(candidate.split("_"), entries)
+            if found is not None:
+                return found
 
         # 2. Cross-level fallback across other plan levels in EPLAN_CATALOG
         for other_plan in ("NIP", "CDP", "UIP"):
@@ -212,14 +217,9 @@ class MPYYDetailStylerEngine:
             for candidate in candidates:
                 if candidate in other_entries:
                     return other_entries[candidate]
-                tokens = candidate.split("_")
-                matches = [
-                    (len(key), entry)
-                    for key, entry in other_entries.items()
-                    if all(part in tokens for part in key.split("_"))
-                ]
-                if matches:
-                    return max(matches, key=lambda item: item[0])[1]
+                found = _token_subset_match(candidate.split("_"), other_entries)
+                if found is not None:
+                    return found
 
         # 3. Dedicated MPYY Function Palettes
         for candidate in candidates:
@@ -319,7 +319,12 @@ class MPYYDetailStylerEngine:
         categories.append(
             localized_category(None, self._symbol(geometry, None), 'Eşleşmeyen / boş')
         )
-        self._previous[layer.id()] = layer.renderer().clone()
+        if layer.id() not in self._previous:
+            base_renderer = full_renderer(layer)
+            if base_renderer is not None:
+                self._previous[layer.id()] = base_renderer
+        layer.removeCustomProperty(FULL_PROPERTY)
+        layer.removeCustomProperty(MODE_PROPERTY)
         layer.setRenderer(QgsCategorizedSymbolRenderer(field, categories))
         layer.triggerRepaint()
         ambiguous = tuple(
@@ -331,6 +336,8 @@ class MPYYDetailStylerEngine:
         renderer = self._previous.pop(layer.id(), None)
         if renderer is None:
             return False
+        layer.removeCustomProperty(FULL_PROPERTY)
+        layer.removeCustomProperty(MODE_PROPERTY)
         layer.setRenderer(renderer)
         layer.triggerRepaint()
         return True
