@@ -9,7 +9,6 @@ from qgis.core import (
     QgsAttributeEditorContainer,
     QgsAttributeEditorField,
     QgsDefaultValue,
-    QgsEditFormConfig,
     QgsEditorWidgetSetup,
     QgsExpression,
     QgsOptionalExpression,
@@ -252,12 +251,8 @@ class MPYYFormDesigner:
             return
 
         form_config = layer.editFormConfig()
-        layout_val = (
-            Qgis.AttributeFormLayout.DragAndDrop
-            if hasattr(Qgis, "AttributeFormLayout")
-            else QgsEditFormConfig.TabLayout
-        )
-        form_config.setLayout(layout_val)
+        # Qgis.AttributeFormLayout exists since QGIS 3.32; metadata requires 3.44.
+        form_config.setLayout(Qgis.AttributeFormLayout.DragAndDrop)
         form_config.clearTabs()
 
         root = form_config.invisibleRootContainer()

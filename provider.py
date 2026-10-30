@@ -8,6 +8,7 @@ import math
 import sqlite3
 import uuid
 from qgis.core import (
+    Qgis,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QgsFeature,
@@ -60,7 +61,7 @@ class CreateLandUseWorkspace(LocalizedProcessingAlgorithm):
         return CreateLandUseWorkspace()
 
     def flags(self):
-        return super().flags() | QgsProcessingAlgorithm.FlagNoThreading
+        return super().flags() | Qgis.ProcessingAlgorithmFlag.NoThreading
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterCrs('KRS', 'Çalışma alanı koordinat sistemi'))
@@ -2070,7 +2071,7 @@ class GeneratePrintLayoutAlgorithm(LocalizedProcessingAlgorithm):
         return GeneratePrintLayoutAlgorithm()
 
     def flags(self):
-        return super().flags() | QgsProcessingAlgorithm.FlagNoThreading
+        return super().flags() | Qgis.ProcessingAlgorithmFlag.NoThreading
 
     def initAlgorithm(self, config=None) -> None:
         self.addParameter(
@@ -3115,7 +3116,7 @@ class ExportOfficialZoningAtlasBatchAlgorithm(LocalizedProcessingAlgorithm):
         return ExportOfficialZoningAtlasBatchAlgorithm()
 
     def flags(self):
-        return super().flags() | QgsProcessingAlgorithm.FlagNoThreading
+        return super().flags() | Qgis.ProcessingAlgorithmFlag.NoThreading
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterVectorLayer(
@@ -3241,7 +3242,7 @@ class GenerateProcedural3DMassingAlgorithm(LocalizedProcessingAlgorithm):
         fields.append(QgsField("gross_floor_m2", QMetaType.Type.Double, prec=2))
         fields.append(QgsField("floor_area_ratio", QMetaType.Type.Double, prec=4))
         fields.append(QgsField("floor_levels", QMetaType.Type.QString, len=254))
-        output_type = QgsWkbTypes.addZ(QgsWkbTypes.MultiPolygon)
+        output_type = QgsWkbTypes.addZ(Qgis.WkbType.MultiPolygon)
         sink, destination = self.parameterAsSink(
             parameters, "OUTPUT", context, fields, output_type, source.sourceCrs()
         )
@@ -3302,7 +3303,7 @@ class AuditMunicipalBylawComplianceAlgorithm(LocalizedProcessingAlgorithm):
         ))
         self.addParameter(QgsProcessingParameterFile(
             "CUSTOM_PROFILE_FILE", 'Özel profil kayıt dosyası (isteğe bağlı)',
-            behavior=QgsProcessingParameterFile.File, extension="json", optional=True,
+            behavior=Qgis.ProcessingFileParameterBehavior.File, extension="json", optional=True,
         ))
         self.addParameter(QgsProcessingParameterString(
             "CUSTOM_PROFILE_CODE", 'Özel profil kodu', optional=True,
@@ -3385,10 +3386,10 @@ class ReconcileWorkspaceVersionsAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "BASE_WORKSPACE", 'Başlangıç GeoPackage dosyası', behavior=QgsProcessingParameterFile.File, extension="gpkg"
+            "BASE_WORKSPACE", 'Başlangıç GeoPackage dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File, extension="gpkg"
         ))
         self.addParameter(QgsProcessingParameterFile(
-            "INCOMING_WORKSPACE", 'Gelen GeoPackage dosyası', behavior=QgsProcessingParameterFile.File, extension="gpkg"
+            "INCOMING_WORKSPACE", 'Gelen GeoPackage dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File, extension="gpkg"
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
             "OUTPUT", 'Çıktı katmanı', 'GeoPackage (*.gpkg)'
@@ -3448,11 +3449,11 @@ class PreviewWorkspaceReconciliationAlgorithm(LocalizedProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
             "BASE_WORKSPACE", 'Başlangıç GeoPackage dosyası',
-            behavior=QgsProcessingParameterFile.File, extension="gpkg",
+            behavior=Qgis.ProcessingFileParameterBehavior.File, extension="gpkg",
         ))
         self.addParameter(QgsProcessingParameterFile(
             "INCOMING_WORKSPACE", 'Gelen GeoPackage dosyası',
-            behavior=QgsProcessingParameterFile.File, extension="gpkg",
+            behavior=Qgis.ProcessingFileParameterBehavior.File, extension="gpkg",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
             "OUTPUT_REPORT", 'JSON rapor dosyası', 'JSON (*.json)'
@@ -3696,7 +3697,7 @@ class AuditPlanSubmissionDossierAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "MANIFEST", 'JSON içerik listesi dosyası', behavior=QgsProcessingParameterFile.File,
+            "MANIFEST", 'JSON içerik listesi dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
@@ -4206,7 +4207,7 @@ class AuditMPYYEvidenceProvenanceAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "MANIFEST", 'JSON içerik listesi dosyası', behavior=QgsProcessingParameterFile.File,
+            "MANIFEST", 'JSON içerik listesi dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterBoolean(
@@ -4260,7 +4261,7 @@ class AuditInstitutionOpinionRegisterAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "REGISTER", 'JSON kayıt dosyası', behavior=QgsProcessingParameterFile.File,
+            "REGISTER", 'JSON kayıt dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterString(
@@ -4601,7 +4602,7 @@ class AuditMPYYPlanReportContentAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "MANIFEST", 'JSON içerik listesi dosyası', behavior=QgsProcessingParameterFile.File,
+            "MANIFEST", 'JSON içerik listesi dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
@@ -4750,7 +4751,7 @@ class _SpecialPlanDossierAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "MANIFEST", self.DISPLAY_NAME + " bildirimi", behavior=QgsProcessingParameterFile.File,
+            "MANIFEST", self.DISPLAY_NAME + " bildirimi", behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
@@ -4826,7 +4827,7 @@ class _MPYYGeneralDossierAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "MANIFEST", self.DISPLAY_NAME + " bildirimi", behavior=QgsProcessingParameterFile.File,
+            "MANIFEST", self.DISPLAY_NAME + " bildirimi", behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
@@ -5053,7 +5054,7 @@ class ConsolidateMPYYAuditReportsAlgorithm(LocalizedProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
             "INPUT_DIRECTORY", 'Girdi klasörü',
-            behavior=QgsProcessingParameterFile.Folder,
+            behavior=Qgis.ProcessingFileParameterBehavior.Folder,
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
             "OUTPUT_REPORT", 'JSON rapor dosyası', 'JSON (*.json)'
@@ -5150,7 +5151,7 @@ class AuditMPYYDossierCompletenessAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "MANIFEST", 'JSON içerik listesi dosyası', behavior=QgsProcessingParameterFile.File,
+            "MANIFEST", 'JSON içerik listesi dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
@@ -5198,7 +5199,7 @@ class AuditMPYYEvidenceFreshnessAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "MANIFEST", 'JSON içerik listesi dosyası', behavior=QgsProcessingParameterFile.File,
+            "MANIFEST", 'JSON içerik listesi dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterString(
@@ -5312,7 +5313,7 @@ class AuditMPYYPublicationObjectionRegisterAlgorithm(LocalizedProcessingAlgorith
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
             "MANIFEST", 'JSON içerik listesi dosyası',
-            behavior=QgsProcessingParameterFile.File, extension="json",
+            behavior=Qgis.ProcessingFileParameterBehavior.File, extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
             "OUTPUT_REPORT", 'JSON rapor dosyası', 'JSON (*.json)'
@@ -5357,7 +5358,7 @@ class AuditMPYYParticipationRegisterAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "MANIFEST", 'JSON içerik listesi dosyası', behavior=QgsProcessingParameterFile.File,
+            "MANIFEST", 'JSON içerik listesi dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
@@ -5408,7 +5409,7 @@ class AuditMPYYCancelledPlanEvidenceAlgorithm(LocalizedProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
             "MANIFEST", 'JSON içerik listesi dosyası',
-            behavior=QgsProcessingParameterFile.File, extension="json",
+            behavior=Qgis.ProcessingFileParameterBehavior.File, extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
             "OUTPUT_REPORT", 'JSON rapor dosyası', 'JSON (*.json)'
@@ -5457,7 +5458,7 @@ class AuditMPYYPlanComponentConsistencyAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "MANIFEST", 'JSON içerik listesi dosyası', behavior=QgsProcessingParameterFile.File,
+            "MANIFEST", 'JSON içerik listesi dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
@@ -5507,7 +5508,7 @@ class AuditMPYYApprovalSheetRegisterAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "MANIFEST", 'JSON içerik listesi dosyası', behavior=QgsProcessingParameterFile.File,
+            "MANIFEST", 'JSON içerik listesi dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
@@ -5557,7 +5558,7 @@ class AuditMPYYDigitalDeliveryPackageAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "MANIFEST", 'JSON içerik listesi dosyası', behavior=QgsProcessingParameterFile.File,
+            "MANIFEST", 'JSON içerik listesi dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
@@ -5605,11 +5606,11 @@ class AuditMPYYGeoPackageSchemaProfileAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "GEOPACKAGE", 'GeoPackage dosyası', behavior=QgsProcessingParameterFile.File,
+            "GEOPACKAGE", 'GeoPackage dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="gpkg",
         ))
         self.addParameter(QgsProcessingParameterFile(
-            "PROFILE", 'Kural / şema profili', behavior=QgsProcessingParameterFile.File,
+            "PROFILE", 'Kural / şema profili', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
@@ -5659,7 +5660,7 @@ class GenerateMPYYDossierInventoryAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "INPUT_DIRECTORY", 'Girdi klasörü', behavior=QgsProcessingParameterFile.Folder
+            "INPUT_DIRECTORY", 'Girdi klasörü', behavior=Qgis.ProcessingFileParameterBehavior.Folder
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
             "OUTPUT_REPORT", 'JSON rapor dosyası', 'JSON (*.json)'
@@ -5703,7 +5704,7 @@ class AuditMPYYPlanNoteDecisionLinksAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "MANIFEST", 'JSON içerik listesi dosyası', behavior=QgsProcessingParameterFile.File,
+            "MANIFEST", 'JSON içerik listesi dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
@@ -5754,7 +5755,7 @@ class AuditMPYYVersionChainAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "MANIFEST", 'JSON içerik listesi dosyası', behavior=QgsProcessingParameterFile.File,
+            "MANIFEST", 'JSON içerik listesi dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFileDestination(
@@ -6059,7 +6060,7 @@ class ImportMPYYGeoPackageSchemaProfileAlgorithm(LocalizedProcessingAlgorithm):
             ("MAPPING", "Column mapping and source metadata", "json"),
         ):
             self.addParameter(QgsProcessingParameterFile(
-                key, label, behavior=QgsProcessingParameterFile.File, extension=extension
+                key, label, behavior=Qgis.ProcessingFileParameterBehavior.File, extension=extension
             ))
         self.addParameter(QgsProcessingParameterFileDestination(
             "OUTPUT_PROFILE", 'JSON şema profili çıktısı', 'JSON (*.json)'
@@ -6106,10 +6107,10 @@ class AuditMPYYSchemaProfileIdentityAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None) -> None:
         self.addParameter(QgsProcessingParameterFile(
-            "PROFILE", 'Kural / şema profili', behavior=QgsProcessingParameterFile.File, extension="json"
+            "PROFILE", 'Kural / şema profili', behavior=Qgis.ProcessingFileParameterBehavior.File, extension="json"
         ))
         self.addParameter(QgsProcessingParameterFile(
-            "DICTIONARY", 'Kaynak CSV sözlüğü (isteğe bağlı)', behavior=QgsProcessingParameterFile.File,
+            "DICTIONARY", 'Kaynak CSV sözlüğü (isteğe bağlı)', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="csv", optional=True,
         ))
         self.addParameter(QgsProcessingParameterString(
@@ -6380,11 +6381,11 @@ class CompareMPYYPlanScenariosAlgorithm(LocalizedProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterFile(
-            "SCENARIO_A", 'Başlangıç senaryosu JSON dosyası', behavior=QgsProcessingParameterFile.File,
+            "SCENARIO_A", 'Başlangıç senaryosu JSON dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFile(
-            "SCENARIO_B", 'Önerilen senaryo JSON dosyası', behavior=QgsProcessingParameterFile.File,
+            "SCENARIO_B", 'Önerilen senaryo JSON dosyası', behavior=Qgis.ProcessingFileParameterBehavior.File,
             extension="json",
         ))
         self.addParameter(QgsProcessingParameterFeatureSink(
