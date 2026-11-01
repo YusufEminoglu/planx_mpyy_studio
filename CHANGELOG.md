@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3] - 2026-11-01
+
+- `provider.py`: Processing dosya/klasör parametreleri, `NoThreading` bayrağı ve çok parçalı poligon tipi güncel `Qgis` enum'larına geçirildi; QGIS 3.44 ve QGIS 4'te aynı çalışır.
+- `core/form_designer.py`: form düzeni için eski sürüm geri dönüşü kaldırıldı; asgari sürüm 3.44 olduğundan `Qgis.AttributeFormLayout` doğrudan kullanılır.
+- `core/zoning_certificate.py`: imar durumu HTML çıktısındaki kaçış yardımcısı adlandırılmış fonksiyona taşındı (Flake8 E731).
+- `CITATION.cff` geçerli sürüme güncellendi.
+
 ## [1.0.2] - 2026-10-30
 
 - Merkezi Türkçe normalizasyon ve geometri sink adaptörleri (`core/attr_utils.py`) entegre edildi.
